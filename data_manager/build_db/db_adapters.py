@@ -6,6 +6,7 @@ from contextlib import contextmanager
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, inspect
 from sqlalchemy.orm import sessionmaker, Session
+from db_objects import DynamicCandlestickTable
 
 # Load environment variables from .env file
 load_dotenv()
@@ -61,6 +62,7 @@ class PostgresAdapter:
         self.logger = logging.getLogger(__name__)
         logging.basicConfig(level=logging.INFO)
 
+
     def provide_session(self) -> Session:
         """
         Provide a new database session.
@@ -70,6 +72,7 @@ class PostgresAdapter:
         """
         base_session = sessionmaker(bind=self.engine)
         return base_session()
+
 
     @contextmanager
     def session_scope(self):
@@ -93,14 +96,15 @@ class PostgresAdapter:
     def insert_data(self, table: Type, rows: List[Dict]):
         """
         Insert multiple rows into a table.
-
-        Args:
+         Args:
             table (Type): The SQLAlchemy ORM-mapped class representing the table.
             rows (List[Dict]): A list of dictionaries representing rows to insert.
         """
         with self.session_scope() as session:
+            print(rows)
             session.bulk_insert_mappings(table, rows)
             self.logger.info(f"Inserted data into {table.__tablename__} successfully.")
+
 
     def verify_table(self, table: Type, limit: int = 10, filters: Dict = None):
         """
@@ -128,6 +132,7 @@ class PostgresAdapter:
                 row_data = {column: getattr(row, column) for column in columns}
                 print(row_data)
 
+
     def list_tables(self):
         """
         List all table names in the connected database.
@@ -137,6 +142,7 @@ class PostgresAdapter:
         """
         inspector = inspect(self.engine)
         return inspector.get_table_names()
+
 
     def create_table(self, table: Type):
         """
@@ -148,6 +154,26 @@ class PostgresAdapter:
         table.__table__.create(bind=self.engine, checkfirst=True)
         self.logger.info(f"Table {table.__tablename__} created.")
 
+
+    def create_candlestick_table(self, symbol: str):
+        """
+        Dynamically create a candlestick table for the given symbol.
+
+        Args:
+            symbol (str): The stock symbol (e.g., "AAPL").
+        """
+        table_name = f"{symbol.lower()}"
+
+        # Dynamically create the table class
+        class CandlestickTable(DynamicCandlestickTable):
+            __tablename__ = table_name
+
+        # Bind the table to the database and create it
+        CandlestickTable.__table__.create(bind=self.engine, checkfirst=True)
+        self.logger.info(f"Table '{table_name}' created successfully.")
+        return CandlestickTable
+
+
     def drop_table(self, table: Type):
         """
         Drop a table if it exists.
@@ -157,6 +183,7 @@ class PostgresAdapter:
         """
         table.__table__.drop(bind=self.engine, checkfirst=True)
         self.logger.info(f"Table {table.__tablename__} dropped.")
+
 
     def fetch_all(self, table: Type, limit: int = None) -> List[Dict]:
         """
@@ -174,6 +201,7 @@ class PostgresAdapter:
             if limit:
                 query = query.limit(limit)
             return query.all()
+
 
     def fetch_filtered(self, table: Type, filters: Dict) -> List[Dict]:
         """

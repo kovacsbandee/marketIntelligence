@@ -1,6 +1,6 @@
 
 
-
+import yfinance as yf
 
 # Example: Get detailed info for a single company
 ticker = yf.Ticker("AAPL")
