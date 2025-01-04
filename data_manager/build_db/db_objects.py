@@ -1,6 +1,6 @@
 import uuid
 from typing import TypedDict
-from sqlalchemy import Column, Integer, String, DateTime, Float
+from sqlalchemy import Column, Integer, String, Float, TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -39,10 +39,10 @@ class DynamicCandlestickTable(Base):
     Individual tables are created dynamically with unique names per stock symbol.
     """
     __abstract__ = True  # This ensures SQLAlchemy doesn't treat this as a real table.
-    time = Column(DateTime, nullable=True, primary_key=True)
-    symbol = Column(String, nullable=False)  # Add the `symbol` column
+    time = Column(TIMESTAMP(timezone=True), nullable=True, primary_key=True)
     open = Column(Float, nullable=True)
     high = Column(Float, nullable=True)
     low = Column(Float, nullable=True)
     close = Column(Float, nullable=True)
     volume = Column(Integer, nullable=True)
+    symbol = Column(String, nullable=False)  # Add the `symbol` column

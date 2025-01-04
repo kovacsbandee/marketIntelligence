@@ -3,8 +3,9 @@ import logging
 from typing import List, Dict, Type
 from contextlib import contextmanager
 
+import pandas as pd
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, inspect
+from sqlalchemy import create_engine, inspect, func
 from sqlalchemy.orm import sessionmaker, Session
 from db_objects import DynamicCandlestickTable
 
@@ -93,17 +94,114 @@ class PostgresAdapter:
         finally:
             session.close()
 
-    def insert_data(self, table: Type, rows: List[Dict]):
+    def table_exists(self, table_name: str) -> bool:
         """
-        Insert multiple rows into a table.
-         Args:
+        Check if a table exists in the database.
+
+        Args:
+            table_name (str): The name of the table.
+
+        Returns:
+            bool: True if the table exists, False otherwise.
+        """
+        inspector = inspect(self.engine)
+        return table_name in inspector.get_table_names()
+
+    def get_existing_times(self, table: Type) -> set:
+        """
+        Fetch existing `time` values from the table.
+
+        Args:
+            table (Type): The SQLAlchemy ORM-mapped class representing the table.
+
+        Returns:
+            set: A set of existing `time` values in the table.
+        """
+        with self.session_scope() as session:
+            return {row.time for row in session.query(table.time).all()}
+
+    def get_time_range(self, table: Type) -> tuple[pd.Timestamp, pd.Timestamp]:
+        """
+        Get the minimum and maximum `time` values in the table.
+
+        Args:
+            table (Type): The SQLAlchemy ORM-mapped class representing the table.
+
+        Returns:
+            tuple: A tuple containing the minimum and maximum `time` values as pandas.Timestamp objects.
+        """
+        with self.session_scope() as session:
+            min_time = session.query(func.min(table.time)).scalar()
+            max_time = session.query(func.max(table.time)).scalar()
+            return (pd.Timestamp(min_time) if min_time else None,
+                    pd.Timestamp(max_time) if max_time else None)
+
+    def append_and_sort_data(self, table: Type, rows: List[Dict]):
+        """
+        Append new rows to the table if their `time` values do not already exist in the database,
+        and sort the table by `time`.
+
+        Args:
+            table (Type): The SQLAlchemy ORM-mapped class representing the table.
+            rows (List[Dict]): A list of dictionaries representing rows to append.
+        """
+        if not rows:
+            self.logger.info(f"No data provided for appending into {table.__tablename__}.")
+            return
+
+        with self.session_scope() as session:
+            # Step 1: Extract `time` values from the incoming rows
+            incoming_times = {pd.Timestamp(row["time"]) for row in rows}
+
+            # Step 2: Fetch only the existing `time` values from the database
+            existing_times_query = session.query(table.time).filter(table.time.in_(incoming_times))
+            existing_times = {pd.Timestamp(time[0]) for time in existing_times_query.all()}
+
+            # Step 3: Filter out rows with `time` values that already exist in the database
+            new_rows = [row for row in rows if pd.Timestamp(row["time"]) not in existing_times]
+
+            if not new_rows:
+                self.logger.info(f"No new data to append into {table.__tablename__}.")
+                return
+
+            # Step 4: Insert only the new rows
+            session.bulk_insert_mappings(table, new_rows)
+            self.logger.info(f"Appended {len(new_rows)} new rows into {table.__tablename__}.")
+
+            # Step 5: Sort the table by `time` (order rows physically in the database)
+            session.execute(f"""
+                CREATE TABLE temp_sorted AS
+                SELECT * FROM {table.__tablename__} ORDER BY time;
+            """)
+            session.execute(f"DROP TABLE {table.__tablename__};")
+            session.execute(f"ALTER TABLE temp_sorted RENAME TO {table.__tablename__};")
+
+            # Step 6: Reapply indexes or primary keys
+            session.execute(f"ALTER TABLE {table.__tablename__} ADD PRIMARY KEY (time);")
+            self.logger.info(f"Sorted table {table.__tablename__} by `time` and reapplied indexes.")
+
+
+    def insert_new_data(self, table: Type, rows: List[Dict]):
+        """
+        Insert only new rows into the table based on `time` uniqueness.
+
+        Args:
             table (Type): The SQLAlchemy ORM-mapped class representing the table.
             rows (List[Dict]): A list of dictionaries representing rows to insert.
         """
+        if not rows:
+            self.logger.info(f"No data provided for insertion into {table.__tablename__}.")
+            return
+
         with self.session_scope() as session:
-            print(rows)
-            session.bulk_insert_mappings(table, rows)
-            self.logger.info(f"Inserted data into {table.__tablename__} successfully.")
+            # Fetch existing `time` values from the database
+            try:
+                # Insert only new rows
+                session.bulk_insert_mappings(table, rows)
+                self.logger.info(f"Inserted {len(rows)} new rows into {table.__tablename__}.")
+            except Exception as e:
+                self.logger.error(f"Failed to insert new rows into {table.__tablename__}: {e}")
+                raise
 
 
     def verify_table(self, table: Type, limit: int = 10, filters: Dict = None):
