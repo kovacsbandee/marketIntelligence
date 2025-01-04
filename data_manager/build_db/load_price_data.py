@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %
 logger = logging.getLogger(__name__)
 
 
-def fetch_and_store_price_data(adapter, symbols, period="5d", interval="1m", start=None, end=None):
+def fetch_and_store_price_data(adapter, symbols, interval="1m", start=None, end=None):
     """
     Fetch price data using yfinance and store it in the database, appending only missing data.
 
@@ -65,6 +65,7 @@ def fetch_and_store_price_data(adapter, symbols, period="5d", interval="1m", sta
             for range_start, range_end in missing_ranges:
                 logger.info(f"Fetching data for {symbol} from {range_start} to {range_end}...")
                 stock_data = yf.download(symbol, start=range_start, end=range_end, interval=interval)
+                print(stock_data)
                 stock_data.columns = stock_data.columns.get_level_values(0)
                 stock_data.drop(["Adj Close"], axis=1, inplace=True)
                 if stock_data.empty:
@@ -98,12 +99,12 @@ if __name__ == "__main__":
     adapter = PostgresAdapter()
 
     # List of NASDAQ symbols (replace with actual symbols)
-    nasdaq_symbols = ["AAPL"]
+    nasdaq_symbols = ["IBM"]
 
     # Define start and end dates
-    start_date = "2024-12-05"
+    start_date = "2000-12-05"
     end_date = "2024-12-10"
 
-    fetch_and_store_price_data(adapter, nasdaq_symbols, period="5d", interval="1m", start=start_date, end=end_date)
+    fetch_and_store_price_data(adapter, nasdaq_symbols, interval="1d", start=start_date, end=end_date)
     # Fetch and store price data for each symbol, downloading only missing data
     #fetch_and_store_price_data(adapter, nasdaq_symbols, period="5d", interval="1m", start=start_date, end=end_date)
