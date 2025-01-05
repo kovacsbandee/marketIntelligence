@@ -1,3 +1,4 @@
 .env
 configs
 configs/nasdaq_screener.csv
+dev_data
