@@ -1,3 +1,9 @@
+# General steps
+## principles from the literature (Zvi Bodie, Kosztolanyi, Howard S. Marks: Mastering the market cycle)
+## real life evidences about the principles from data analysis
+## real time decisions on out of the box analitics systems
+## data feed based automated decision system???
+
 1. Explore alpha vantage capabilities. -> done
 2. Download relevant data for one stock.
 3. Create plotly graphs in a notebook for the analysis of all the downloaded data, or a dash EDA tool.
@@ -34,3 +40,6 @@ deadline February the 2nd
         - balance_sheet
         - cash flow    
     when a company reports its latest earnings and financials!
+
+
+
