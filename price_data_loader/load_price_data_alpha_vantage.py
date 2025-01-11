@@ -138,9 +138,11 @@ class LoadExampleData:
             if 'company_fundamental' in file:
                 self.fundamentals = pd.read_csv(f'{self.data_path}/{file}')
             if 'daily_time_series' in file:
-                self.daily_time_series = pd.read_csv(f'{self.data_path}/{file}')
+                self.daily_time_series = pd.read_csv(f'{self.data_path}/{file}',
+                                                     parse_dates=['date'])
             if 'dividends' in file:
-                self.dividends = pd.read_csv(f'{self.data_path}/{file}')
+                self.dividends = pd.read_csv(f'{self.data_path}/{file}',
+                                             parse_dates=['ex_dividend_date', 'declaration_date', 'record_date', 'payment_date'])
             if 'splits' in file:
                 self.splits = pd.read_csv(f'{self.data_path}/{file}')
             if 'insider_transactions' in file:

@@ -4,6 +4,7 @@
 ## real time decisions on out of the box analitics systems
 ## data feed based automated decision system???
 
+#### january plan
 1. Explore alpha vantage capabilities. -> done
 2. Download relevant data for one stock.
 3. Create plotly graphs in a notebook for the analysis of all the downloaded data, or a dash EDA tool.
