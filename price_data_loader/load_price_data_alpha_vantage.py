@@ -167,3 +167,98 @@ class LoadExampleData:
                 self.cash_flow_quaterly = pd.read_csv(f'{self.data_path}/{file}')
             if 'cash_flow_annual' in file:
                 self.cash_flow_annual = pd.read_csv(f'{self.data_path}/{file}')
+
+
+def create_desc_json_base(data_path = "/home/bandee/projects/stockAnalyzer/dev_data"):
+    column_desc = dict()
+    total_keys = 0
+    for file in os.listdir(data_path):
+        # Strip prefix and suffix to generate dictionary key
+        key = file.lstrip("IBM_").rstrip(".csv")
+        print(key)
+        
+        # Process each file based on its type
+        if 'company_fundamental' in file:
+            fundamentals = pd.read_csv(f'{data_path}/{file}')
+            meaning = ""  # Adding `meaning` as in the first row
+            column_desc[key] = [{c: meaning} for c in fundamentals.columns if c != 'Symbol']
+            total_keys += len(column_desc[key])
+        
+        elif 'daily_time_series' in file:
+            daily_time_series = pd.read_csv(f'{data_path}/{file}', parse_dates=['date'])
+            meaning = ""
+            column_desc[key] = [{c: meaning} for c in daily_time_series.columns if c != 'Symbol']
+            total_keys += len(column_desc[key])
+
+        elif 'dividends' in file:
+            dividends = pd.read_csv(f'{data_path}/{file}', parse_dates=['ex_dividend_date', 'declaration_date', 'record_date', 'payment_date'])
+            meaning = ""
+            column_desc[key] = [{c: meaning} for c in dividends.columns if c != 'Symbol']
+            total_keys += len(column_desc[key])
+
+        elif 'splits' in file:
+            splits = pd.read_csv(f'{data_path}/{file}')
+            meaning = ""
+            column_desc[key] = [{c: meaning} for c in splits.columns if c != 'Symbol']
+            total_keys += len(column_desc[key])
+
+        elif 'insider_transactions' in file:
+            insider_transactions = pd.read_csv(f'{data_path}/{file}')
+            meaning = ""
+            column_desc[key] = [{c: meaning} for c in insider_transactions.columns if c != 'Symbol']
+            total_keys += len(column_desc[key])
+
+        elif 'income_statement_quaterly' in file:
+            income_statement_quaterly = pd.read_csv(f'{data_path}/{file}')
+            meaning = ""
+            column_desc[key] = [{c: meaning} for c in income_statement_quaterly.columns if c != 'Symbol']
+            total_keys += len(column_desc[key])
+
+        elif 'income_statement_annual' in file:
+            income_statement_annual = pd.read_csv(f'{data_path}/{file}')
+            meaning = ""
+            column_desc[key] = [{c: meaning} for c in income_statement_annual.columns if c != 'Symbol']
+            total_keys += len(column_desc[key])
+
+        elif 'earnings_quaterly' in file:
+            earnings_quaterly = pd.read_csv(f'{data_path}/{file}')
+            meaning = ""
+            column_desc[key] = [{c: meaning} for c in earnings_quaterly.columns if c != 'Symbol']
+            total_keys += len(column_desc[key])
+
+        elif 'earnings_annual' in file:
+            earnings_annual = pd.read_csv(f'{data_path}/{file}')
+            meaning = ""
+            column_desc[key] = [{c: meaning} for c in earnings_annual.columns if c != 'Symbol']
+            total_keys += len(column_desc[key])
+
+        elif 'balance_sheet_quaterly' in file:
+            balance_sheet_quaterly = pd.read_csv(f'{data_path}/{file}')
+            meaning = ""
+            column_desc[key] = [{c: meaning} for c in balance_sheet_quaterly.columns if c != 'Symbol']
+            total_keys += len(column_desc[key])
+
+        elif 'balance_sheet_annual' in file:
+            balance_sheet_annual = pd.read_csv(f'{data_path}/{file}')
+            meaning = ""
+            column_desc[key] = [{c: meaning} for c in balance_sheet_annual.columns if c != 'Symbol']
+            total_keys += len(column_desc[key])
+
+        elif 'cash_flow_quaterly' in file:
+            cash_flow_quaterly = pd.read_csv(f'{data_path}/{file}')
+            meaning = ""
+            column_desc[key] = [{c: meaning} for c in cash_flow_quaterly.columns if c != 'Symbol']
+            total_keys += len(column_desc[key])
+
+        elif 'cash_flow_annual' in file:
+            cash_flow_annual = pd.read_csv(f'{data_path}/{file}')
+            meaning = ""
+            column_desc[key] = [{c: meaning} for c in cash_flow_annual.columns if c != 'Symbol']
+            total_keys += len(column_desc[key])
+    # Print the resulting dictionary
+    print(column_desc)
+
+    import json
+    output_file = os.path.join(data_path, "alpha_vantage_column_description.json")
+    with open(output_file, "w") as f:
+        json.dump(column_desc, f, indent=4)
