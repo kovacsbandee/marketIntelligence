@@ -2,6 +2,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from plotly.colors import qualitative
 
+
 def plot_price_with_indicators(price_table, dividend_table=None, 
                                include_macd=False, include_rsi=False, 
                                dividend_date_col='ex_dividend_date',
@@ -180,9 +181,6 @@ def plot_insider_transactions(insider_transaction):
     Returns:
     Plotly figure object.
     """
-    from plotly.colors import qualitative
-    from plotly.subplots import make_subplots
-    import plotly.graph_objects as go
 
     # Aggregate data
     plot_df = insider_transaction.groupby(
