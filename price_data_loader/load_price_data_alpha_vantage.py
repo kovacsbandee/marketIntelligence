@@ -129,7 +129,7 @@ def get_insider_transactions(symbol: str = SYMBOL):
 
 class LoadExampleData:
 
-    def __init__(self, data_path="/home/bandee/projects/stockAnalyzer/dev_data"):
+    def __init__(self, data_path="/home/bandee/projects/marketIntelligence/dev_data"):
         self.data_path = data_path
         self.files = os.listdir(self.data_path)
 
