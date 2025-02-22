@@ -1,12 +1,90 @@
+import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from plotly.colors import qualitative
+from price_data_loader.load_price_data_alpha_vantage import LoadExampleData
+from add_derived_data.add_price_indicators import AddPriceIndicators
 
 
-def plot_price_with_indicators(price_table, dividend_table=None, 
-                               include_macd=False, include_rsi=False, 
-                               dividend_date_col='ex_dividend_date',
-                               ):
+def add_dividends(dividend_points: pd.DataFrame,
+                  filtered_dividends: pd.DataFrame,
+                  dividend_date_col: str,
+                  figure: go.Figure) -> go.Figure:
+    figure.add_trace(
+        go.Scatter(
+            x=dividend_points['date'],
+            y=dividend_points['close'],
+            mode="markers",
+            marker=dict(size=4, color="blue"),
+            name="Dividends",
+            hovertext=[
+                f"Date: {row[dividend_date_col]}, Amount: {row['amount']}"
+                for _, row in filtered_dividends.iterrows()], 
+            hoverinfo="text" ), row=1, col=1)
+    return figure
+
+
+def add_macd_subplot(price_table: pd.DataFrame,
+                     figure: go.Figure) -> go.Figure:
+    
+    price_table = AddPriceIndicators(table=price_table).add_macd()
+
+    figure.add_trace(
+        go.Scatter(
+            x=price_table['date'],
+            y=price_table['MACD_line'],
+            mode='lines',
+            name='MACD Line'), row=2, col=1)
+    figure.add_trace(
+        go.Scatter(
+            x=price_table['date'],
+            y=price_table['signal_line'],
+            mode='lines',
+            name='Signal Line'),row=2, col=1)
+    figure.add_trace(
+        go.Bar(
+            x=price_table['date'],
+            y=price_table['MACD_histogram'],
+            name='MACD Histogram'), row=2, col=1)
+
+    return figure
+
+
+def add_rsi_subplot(price_table: pd.DataFrame,
+                    figure: go.Figure,
+                    include_macd: bool) -> go.Figure:
+    
+    price_table = AddPriceIndicators(table=price_table).add_rsi()
+    
+    figure.add_trace(
+        go.Scatter(
+            x=price_table['date'],
+            y=price_table['RSI'],
+            mode='lines',
+            name='RSI'), row=3 if include_macd else 2, col=1)
+    figure.add_trace(
+        go.Scatter(
+            x=price_table['date'],
+            y=[70] * len(price_table),  # Overbought level
+            mode='lines',
+            line=dict(dash='dash', color='red'),
+            name='Overbought (70)'), row=3 if include_macd else 2, col=1)
+    figure.add_trace(
+        go.Scatter(
+            x=price_table['date'],
+            y=[30] * len(price_table),  # Oversold level
+            mode='lines',
+            line=dict(dash='dash', color='green'),
+            name='Oversold (30)'), row=3 if include_macd else 2, col=1)
+    
+    return figure
+
+
+def plot_price_with_indicators(price_table, 
+                               dividend_table: bool = False, 
+                               include_macd: bool = False, 
+                               include_rsi: bool = False, 
+                               dividend_date_col='ex_dividend_date'):
     """
     Plots price data with optional MACD, RSI, and dividends using Plotly's make_subplots.
 
@@ -47,10 +125,14 @@ def plot_price_with_indicators(price_table, dividend_table=None,
         row=1, col=1
     )
 
-    # Add dividends as yellow dots
-    if dividend_table is not None:
+    # Add dividends as blue dots
+    if dividend_table:
         try:
             # Filter dividend table by date range if provided
+            loader = LoadExampleData(load_dividends=True)
+            loader.load()
+            dividend_table = loader.dividends
+
             filtered_dividends = dividend_table[
                 (dividend_table[dividend_date_col] >= price_table["date"].min()) &
                 (dividend_table[dividend_date_col] <= price_table["date"].max())
@@ -62,22 +144,24 @@ def plot_price_with_indicators(price_table, dividend_table=None,
                     (price_table['date'] - d).abs().idxmin()
                 ]
             )
-
-            fig.add_trace(
-                go.Scatter(
-                    x=dividend_points['date'],
-                    y=dividend_points['close'],
-                    mode="markers",
-                    marker=dict(size=4, color="yellow"),
-                    name="Dividends",
-                    hovertext=[
-                        f"Date: {row[dividend_date_col]}, Amount: {row['amount']}"
-                        for _, row in filtered_dividends.iterrows()
-                    ],
-                    hoverinfo="text"
-                ),
-                row=1, col=1
-            )
+            add_dividends(dividend_points=dividend_points,
+                          filtered_dividends=filtered_dividends,
+                          dividend_date_col=dividend_date_col)
+            # fig.add_trace(
+            #     go.Scatter(
+            #         x=dividend_points['date'],
+            #         y=dividend_points['close'],
+            #         mode="markers",
+            #         marker=dict(size=4, color="blue"),
+            #         name="Dividends",
+            #         hovertext=[
+            #             f"Date: {row[dividend_date_col]}, Amount: {row['amount']}"
+            #             for _, row in filtered_dividends.iterrows()
+            #         ],
+            #         hoverinfo="text"
+            #     ),
+            #     row=1, col=1
+            # )
         except KeyError as e:
             print(f"Error: Missing column in dividend table: {e}")
         except Exception as e:
@@ -86,86 +170,61 @@ def plot_price_with_indicators(price_table, dividend_table=None,
     # Add MACD visualization if requested
     if include_macd:
         try:
-            fig.add_trace(
-                go.Scatter(
-                    x=price_table['date'],
-                    y=price_table['MACD_line'],
-                    mode='lines',
-                    name='MACD Line'
-                ),
-                row=2, col=1
-            )
-            fig.add_trace(
-                go.Scatter(
-                    x=price_table['date'],
-                    y=price_table['signal_line'],
-                    mode='lines',
-                    name='Signal Line'
-                ),
-                row=2, col=1
-            )
-            fig.add_trace(
-                go.Bar(
-                    x=price_table['date'],
-                    y=price_table['MACD_histogram'],
-                    name='MACD Histogram'
-                ),
-                row=2, col=1
-            )
+            fig = add_macd_subplot(price_table=price_table, figure=fig)
+            # fig.add_trace(
+            #     go.Scatter(
+            #         x=price_table['date'],
+            #         y=price_table['MACD_line'],
+            #         mode='lines',
+            #         name='MACD Line'
+            #     ),
+            #     row=2, col=1
+            # )
+            # fig.add_trace(
+            #     go.Scatter(
+            #         x=price_table['date'],
+            #         y=price_table['signal_line'],
+            #         mode='lines',
+            #         name='Signal Line'
+            #     ),
+            #     row=2, col=1
+            # )
+            # fig.add_trace(
+            #     go.Bar(
+            #         x=price_table['date'],
+            #         y=price_table['MACD_histogram'],
+            #         name='MACD Histogram'
+            #     ),
+            #     row=2, col=1
+            # )
         except KeyError as e:
             print(f"Error: MACD values not found in the price table. Missing column: {e}")
 
     # Add RSI visualization if requested
     if include_rsi:
         try:
-            fig.add_trace(
-                go.Scatter(
-                    x=price_table['date'],
-                    y=price_table['RSI'],
-                    mode='lines',
-                    name='RSI'
-                ),
-                row=3 if include_macd else 2, col=1
-            )
-            fig.add_trace(
-                go.Scatter(
-                    x=price_table['date'],
-                    y=[70] * len(price_table),  # Overbought level
-                    mode='lines',
-                    line=dict(dash='dash', color='red'),
-                    name='Overbought (70)'
-                ),
-                row=3 if include_macd else 2, col=1
-            )
-            fig.add_trace(
-                go.Scatter(
-                    x=price_table['date'],
-                    y=[30] * len(price_table),  # Oversold level
-                    mode='lines',
-                    line=dict(dash='dash', color='green'),
-                    name='Oversold (30)'
-                ),
-                row=3 if include_macd else 2, col=1
-            )
+            add_rsi_subplot(price_table=price_table,
+                            figure=fig, 
+                            include_macd=include_macd)
         except KeyError as e:
             print(f"Error: RSI values not found in the price table. Missing column: {e}")
     fig.update_layout(
-    title={
-            "text": "Price Data with Indicators and Dividends",
-            "x": 0.5,  # Center the title
-            "xanchor": "center",
-            "yanchor": "top",
-            "font": {"size": 20}  # Larger title font size
-        },
-    xaxis_title="Date",
-    yaxis_title="Price",
-    xaxis_rangeslider_visible=False,
-    template="plotly_white",
-    showlegend=True,
-    width=1200,
-    height=800, 
-    margin=dict(l=50, r=50, t=80, b=50),  
-    font=dict(size=14))
+        title={
+                "text": "Price Data with Indicators and Dividends",
+                "x": 0.5,  # Center the title
+                "xanchor": "center",
+                "yanchor": "top",
+                "font": {"size": 20}  # Larger title font size
+            },
+        xaxis_title="Date",
+        yaxis_title="Price",
+        xaxis_rangeslider_visible=False,
+        template="plotly_white",
+        showlegend=True,
+        width=1800,
+        height=1800, 
+        margin=dict(l=50, r=50, t=80, b=50),  
+        font=dict(size=14))
 
     return fig
 
