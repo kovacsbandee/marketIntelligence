@@ -2,7 +2,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from plotly.colors import qualitative
-from price_data_loader.load_price_data_alpha_vantage import LoadExampleData
+from price_data_loader.load_symbol_data_alpha_vantage import LoadExampleData
 from add_derived_data.add_price_indicators import AddPriceIndicators
 
 
