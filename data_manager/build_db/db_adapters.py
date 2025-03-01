@@ -7,7 +7,8 @@ import pandas as pd
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, inspect, func
 from sqlalchemy.orm import sessionmaker, Session
-from data_manager.build_db.db_objects import DynamicCandlestickTable
+from sqlalchemy.inspection import inspect
+#from data_manager.build_db.db_objects import DynamicCandlestickTable
 
 # Load environment variables from .env file
 load_dotenv()
@@ -250,26 +251,7 @@ class PostgresAdapter:
             table (Type): The SQLAlchemy ORM-mapped class representing the table.
         """
         table.__table__.create(bind=self.engine, checkfirst=True)
-        self.logger.info(f"Table {table.__tablename__} created.")create_candlestick_table
-
-
-    def create_candlestick_table(self, symbol: str):
-        """
-        Dynamically create a candlestick table for the given symbol.
-
-        Args:
-            symbol (str): The stock symbol (e.g., "AAPL").
-        """
-        table_name = f"{symbol.lower()}"
-
-        # Dynamically create the table class
-        class CandlestickTable(DynamicCandlestickTable):
-            __tablename__ = table_name
-
-        # Bind the table to the database and create it
-        CandlestickTable.__table__.create(bind=self.engine, checkfirst=True)
-        self.logger.info(f"Table '{table_name}' created successfully.")
-        return CandlestickTable
+        self.logger.info(f"Table {table.__tablename__} created.")
 
 
     def drop_table(self, table: Type):
@@ -283,9 +265,10 @@ class PostgresAdapter:
         self.logger.info(f"Table {table.__tablename__} dropped.")
 
 
-    def fetch_all(self, table: Type, limit: int = None) -> List[Dict]:
+
+    def load_all(self, table: Type, limit: int = None) -> List[Dict]:
         """
-        Fetch all rows from a table, optionally limiting the number of rows.
+        Fetch all rows from a table and return as a list of dictionaries.
 
         Args:
             table (Type): The SQLAlchemy ORM-mapped class representing the table.
@@ -298,10 +281,13 @@ class PostgresAdapter:
             query = session.query(table)
             if limit:
                 query = query.limit(limit)
-            return query.all()
+            rows = query.all()
+
+            # Convert ORM objects to dictionaries
+            return [self._row_to_dict(row) for row in rows]
 
 
-    def fetch_filtered(self, table: Type, filters: Dict) -> List[Dict]:
+    def load_filtered_with_matching_values(self, table: Type, filters: Dict) -> List[Dict]:
         """
         Fetch rows from a table based on filter criteria.
 
@@ -316,4 +302,14 @@ class PostgresAdapter:
             query = session.query(table)
             for column, value in filters.items():
                 query = query.filter(getattr(table, column) == value)
-            return query.all()
+            rows = query.all()
+            # Convert ORM objects to dictionaries
+            return [self._row_to_dict(row) for row in rows]
+
+
+    def _row_to_dict(self, row):
+        """
+        Convert an SQLAlchemy ORM row to a dictionary.
+        """
+        return {column.key: getattr(row, column.key) for column in inspect(row).mapper.column_attrs}
+
