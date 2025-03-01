@@ -28,6 +28,7 @@ def get_daily_candlestick(symbol: str = SYMBOL,
     if db_mode:
         adapter = PostgresAdapter()
         data_df_rows = data_df.to_dict(orient="records")
+        print(data_df_rows)
         adapter.insert_new_data(table=CandlestickTable, rows=data_df_rows)
         print(f'Candlestick data for {symbol} is loaded into the database.')
     if local_store_mode:
@@ -36,7 +37,9 @@ def get_daily_candlestick(symbol: str = SYMBOL,
         print('Chose a place where you want to store the data from the API!')
 
 
-def get_company_base(symbol: str = SYMBOL):
+def get_company_base(symbol: str = SYMBOL, 
+                     db_mode: bool = False,
+                     local_store_mode: bool = False):
     """
     This could be updated when a report is arriving for a company...
     """
@@ -45,6 +48,16 @@ def get_company_base(symbol: str = SYMBOL):
     data = r.json()
     data_df = pd.DataFrame([data])
     latest_quarter = data_df.LatestQuarter.item()
+    if db_mode:
+        adapter = PostgresAdapter()
+        data_df_rows = data_df.to_dict(orient="records")
+        print(data_df_rows)
+        adapter.insert_new_data(table=CandlestickTable, rows=data_df_rows)
+        print(f'Candlestick data for {symbol} is loaded into the database.')
+    if local_store_mode:
+        data_df.to_csv(f"/home/bandee/projects/stockAnalyzer/dev_data/{symbol}_daily_time_series.csv", index=False)
+    if not db_mode and not local_store_mode:
+        print('Chose a place where you want to store the data from the API!')
     data_df.to_csv(f"/home/bandee/projects/stockAnalyzer/dev_data/{symbol}_company_fundamentals_lat_quart_{latest_quarter}.csv", index=False)
 
 
@@ -85,7 +98,10 @@ def get_time_series_intraday(month: str, symbol: str = SYMBOL, interval: str='1m
     print(f"{symbol} for {month} was successfully written out to trash_data!")
 
 
-def financials(function: str, symbol: str = SYMBOL):
+def financials(function: str, 
+               symbol: str = SYMBOL,
+               db_mode: bool = False,
+               local_store_mode: bool = False):
     """
     function can be INCOME_STATEMENT, BALANCE_SHEET, CASH_FLOW
     """
@@ -97,14 +113,45 @@ def financials(function: str, symbol: str = SYMBOL):
     annual_df["fiscalDateEnding"] = pd.to_datetime(annual_df["fiscalDateEnding"])
     annual_df.sort_values("fiscalDateEnding", inplace=True, ascending=True)
     annual_df = annual_df[['symbol'] + [col for col in annual_df.columns if col != 'symbol']]
-    annual_df.to_csv(f"/home/bandee/projects/stockAnalyzer/dev_data/{symbol}_{function.lower()}_annual.csv", index=False)
-
+    
     quaterly_df = pd.DataFrame(data=data["quarterlyReports"])
     quaterly_df["symbol"] = data["symbol"]
     quaterly_df["fiscalDateEnding"] = pd.to_datetime(quaterly_df["fiscalDateEnding"])
     quaterly_df.sort_values("fiscalDateEnding", inplace=True, ascending=True)
     quaterly_df = quaterly_df[['symbol'] + [col for col in quaterly_df.columns if col != 'symbol']]
-    quaterly_df.to_csv(f"/home/bandee/projects/stockAnalyzer/dev_data/{symbol}_{function.lower()}_quaterly.csv", index=False)
+    if db_mode:
+        adapter = PostgresAdapter()
+        annual_data_df_rows = annual_df.to_dict(orient="records")
+        if function == 'INCOME_STATEMENT':
+
+            from data_manager.build_db.db_objects import AnnualIncomeStatement as AIS
+            adapter.insert_new_data(table=AIS, rows=annual_data_df_rows)
+
+            from data_manager.build_db.db_objects import QuarterlyIncomeStatement as QIS
+            adapter.insert_new_data(table=QIS, rows=annual_data_df_rows)
+
+        if function == 'BALANCE_SHEET':
+
+            from data_manager.build_db.db_objects import AnnualBalanceSheetTable as ABS
+            adapter.insert_new_data(table=ABS, rows=annual_data_df_rows)
+
+            from data_manager.build_db.db_objects import QuarterlyBalanceSheetTable as QBS
+            adapter.insert_new_data(table=QBS, rows=annual_data_df_rows)
+
+        if function == 'CASH_FLOW':
+
+            from data_manager.build_db.db_objects import AnnualCashFlowTable as ACF
+            adapter.insert_new_data(table=ACF, rows=annual_data_df_rows)
+
+            from data_manager.build_db.db_objects import QuarterlyCashFlowTable as QCF
+            adapter.insert_new_data(table=QCF, rows=annual_data_df_rows)
+
+        print(f'Candlestick data for {symbol} is loaded into the database.')
+    if local_store_mode:
+        annual_df.to_csv(f"/home/bandee/projects/stockAnalyzer/dev_data/{symbol}_{function.lower()}_annual.csv", index=False)
+        quaterly_df.to_csv(f"/home/bandee/projects/stockAnalyzer/dev_data/{symbol}_{function.lower()}_quaterly.csv", index=False)
+    if not db_mode and not local_store_mode:
+        print('Chose a place where you want to store the data from the API!')
 
 
 def earnings(function: str, symbol: str = SYMBOL):
