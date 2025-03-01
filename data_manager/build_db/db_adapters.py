@@ -7,7 +7,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, inspect, func
 from sqlalchemy.orm import sessionmaker, Session
-from db_objects import DynamicCandlestickTable
+from data_manager.build_db.db_objects import DynamicCandlestickTable
 
 # Load environment variables from .env file
 load_dotenv()
@@ -250,7 +250,7 @@ class PostgresAdapter:
             table (Type): The SQLAlchemy ORM-mapped class representing the table.
         """
         table.__table__.create(bind=self.engine, checkfirst=True)
-        self.logger.info(f"Table {table.__tablename__} created.")
+        self.logger.info(f"Table {table.__tablename__} created.")create_candlestick_table
 
 
     def create_candlestick_table(self, symbol: str):
