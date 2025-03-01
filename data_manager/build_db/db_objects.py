@@ -5,6 +5,127 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
+class CompanyFundamentalsTable(Base):
+    """
+    ORM osztály a vállalat alapvető pénzügyi mutatóinak tárolására.
+
+    Elsődleges kulcs:
+        - symbol (String): A vállalat tőzsdei jelzése (pl.: AAPL az Apple-re, MSFT a Microsoft-ra).
+
+    Mezők:
+        - asset_type (String, nullable=True): Az eszköz típusa (pl.: Common Stock).
+        - name (String, nullable=True): A vállalat neve.
+        - description (String, nullable=True): A vállalat leírása.
+        - cik (Integer, nullable=True): A vállalat CIK azonosítója.
+        - exchange (String, nullable=True): A tőzsde, ahol az eszközt jegyzik (pl.: NYSE, NASDAQ).
+        - currency (String, nullable=True): Az eszköz kereskedésére használt valuta (pl.: USD, EUR).
+        - country (String, nullable=True): Az ország, ahol a vállalat alapvetően található.
+        - sector (String, nullable=True): A vállalat iparági szektora (pl.: Technológia).
+        - industry (String, nullable=True): A konkrét iparág (pl.: Szoftver).
+        - address (String, nullable=True): A vállalat hivatalos címe.
+        - official_site (String, nullable=True): A vállalat hivatalos weboldalának URL-je.
+        - fiscal_year_end (String, nullable=True): A vállalat pénzügyi évének utolsó napja (pl.: December).
+        - latest_quarter (Date, nullable=True): A legutóbbi pénzügyi negyedév jelentésének dátuma.
+        - market_capitalization (Float, nullable=True): A vállalat piaci kapitalizációja.
+        - ebitda (Float, nullable=True): EBITDA – adózás, kamatok, értékcsökkenés és amortizáció előtti eredmény.
+        - pe_ratio (Float, nullable=True): Ár-nyereség arány (P/E ratio).
+        - peg_ratio (Float, nullable=True): Ár-nyereség-növekedés arány (PEG ratio).
+        - book_value (Float, nullable=True): A vállalat könyv szerinti értéke.
+        - dividend_per_share (Float, nullable=True): Az egy részvényre fizetett osztalék.
+        - dividend_yield (Float, nullable=True): Osztalékhozam százalékban.
+        - eps (Float, nullable=True): Egy részvényre jutó nyereség (EPS).
+        - revenue_per_share_ttm (Float, nullable=True): Egy részvényre jutó árbevétel az utolsó 12 hónap alapján.
+        - profit_margin (Float, nullable=True): Nyereséghányad.
+        - operating_margin_ttm (Float, nullable=True): Működési nyereség az utolsó 12 hónapban.
+        - return_on_assets_ttm (Float, nullable=True): Eszközarányos megtérülés (ROA).
+        - return_on_equity_ttm (Float, nullable=True): Sajáttőke-arányos megtérülés (ROE).
+        - revenue_ttm (Float, nullable=True): Az utolsó 12 hónap teljes árbevétele.
+        - gross_profit_ttm (Float, nullable=True): Az utolsó 12 hónap bruttó nyeresége.
+        - diluted_eps_ttm (Float, nullable=True): Hígított egy részvényre jutó nyereség.
+        - quarterly_earnings_growth_yoy (Float, nullable=True): Negyedéves nyereségnövekedés az előző év azonos időszakához képest.
+        - quarterly_revenue_growth_yoy (Float, nullable=True): Negyedéves árbevétel-növekedés az előző év azonos időszakához képest.
+        - analyst_target_price (Float, nullable=True): Elemzők által megcélzott ár.
+        - analyst_rating_strong_buy (Integer, nullable=True): Erősen ajánlott vételi javaslatok száma.
+        - analyst_rating_buy (Integer, nullable=True): Vételi javaslatok száma.
+        - analyst_rating_hold (Integer, nullable=True): Megtartási javaslatok száma.
+        - analyst_rating_sell (Integer, nullable=True): Eladási javaslatok száma.
+        - analyst_rating_strong_sell (Integer, nullable=True): Erősen ajánlott eladási javaslatok száma.
+        - trailing_pe (Float, nullable=True): Az ár-nyereség arány az elmúlt 12 hónapban.
+        - forward_pe (Float, nullable=True): Az ár-nyereség arány a jövőbeli előrejelzett nyereség alapján.
+        - price_to_sales_ratio_ttm (Float, nullable=True): Ár/Értékesítés arány az utolsó 12 hónap alapján.
+        - price_to_book_ratio (Float, nullable=True): Ár/Könyv szerinti érték arány.
+        - ev_to_revenue (Float, nullable=True): Vállalati érték osztva az árbevétellel.
+        - ev_to_ebitda (Float, nullable=True): Vállalati érték osztva az EBITDA-val.
+        - beta (Float, nullable=True): A részvény piaci volatilitása.
+        - fifty_two_week_high (Float, nullable=True): Az elmúlt 52 hét legmagasabb árfolyama.
+        - fifty_two_week_low (Float, nullable=True): Az elmúlt 52 hét legalacsonyabb árfolyama.
+        - fifty_day_moving_average (Float, nullable=True): Az elmúlt 50 nap részvényárfolyamának átlaga.
+        - two_hundred_day_moving_average (Float, nullable=True): Az elmúlt 200 nap részvényárfolyamának átlaga.
+        - shares_outstanding (Integer, nullable=True): A kibocsátott részvények száma.
+        - dividend_date (Date, nullable=True): Az osztalékfizetés dátuma.
+        - ex_dividend_date (Date, nullable=True): Az osztalékra jogosító utolsó vásárlási dátum.
+
+    Megjegyzés:
+        - A `symbol` az elsődleges kulcs, mivel az egyedi azonosítást biztosítja.
+        - Az összes pénzügyi mutató `NULL` értéket vehet fel, ha az adat nem áll rendelkezésre.
+    """
+
+    __tablename__ = 'company_fundamentals'
+
+    symbol = Column(String, nullable=False, primary_key=True)
+    asset_type = Column(String, nullable=True)
+    name = Column(String, nullable=True)
+    description = Column(String, nullable=True)
+    cik = Column(Integer, nullable=True)
+    exchange = Column(String, nullable=True)
+    currency = Column(String, nullable=True)
+    country = Column(String, nullable=True)
+    sector = Column(String, nullable=True)
+    industry = Column(String, nullable=True)
+    address = Column(String, nullable=True)
+    official_site = Column(String, nullable=True)
+    fiscal_year_end = Column(String, nullable=True)
+    latest_quarter = Column(Date, nullable=True)
+    market_capitalization = Column(Float, nullable=True)
+    ebitda = Column(Float, nullable=True)
+    pe_ratio = Column(Float, nullable=True)
+    peg_ratio = Column(Float, nullable=True)
+    book_value = Column(Float, nullable=True)
+    dividend_per_share = Column(Float, nullable=True)
+    dividend_yield = Column(Float, nullable=True)
+    eps = Column(Float, nullable=True)
+    revenue_per_share_ttm = Column(Float, nullable=True)
+    profit_margin = Column(Float, nullable=True)
+    operating_margin_ttm = Column(Float, nullable=True)
+    return_on_assets_ttm = Column(Float, nullable=True)
+    return_on_equity_ttm = Column(Float, nullable=True)
+    revenue_ttm = Column(Float, nullable=True)
+    gross_profit_ttm = Column(Float, nullable=True)
+    diluted_eps_ttm = Column(Float, nullable=True)
+    quarterly_earnings_growth_yoy = Column(Float, nullable=True)
+    quarterly_revenue_growth_yoy = Column(Float, nullable=True)
+    analyst_target_price = Column(Float, nullable=True)
+    analyst_rating_strong_buy = Column(Integer, nullable=True)
+    analyst_rating_buy = Column(Integer, nullable=True)
+    analyst_rating_hold = Column(Integer, nullable=True)
+    analyst_rating_sell = Column(Integer, nullable=True)
+    analyst_rating_strong_sell = Column(Integer, nullable=True)
+    trailing_pe = Column(Float, nullable=True)
+    forward_pe = Column(Float, nullable=True)
+    price_to_sales_ratio_ttm = Column(Float, nullable=True)
+    price_to_book_ratio = Column(Float, nullable=True)
+    ev_to_revenue = Column(Float, nullable=True)
+    ev_to_ebitda = Column(Float, nullable=True)
+    beta = Column(Float, nullable=True)
+    fifty_two_week_high = Column(Float, nullable=True)
+    fifty_two_week_low = Column(Float, nullable=True)
+    fifty_day_moving_average = Column(Float, nullable=True)
+    two_hundred_day_moving_average = Column(Float, nullable=True)
+    shares_outstanding = Column(Integer, nullable=True)
+    dividend_date = Column(Date, nullable=True)
+    ex_dividend_date = Column(Date, nullable=True)
+
+
 class CandlestickTable(Base):
     """
     ORM osztály a napi kereskedési adatok (candlestick) tárolására.
