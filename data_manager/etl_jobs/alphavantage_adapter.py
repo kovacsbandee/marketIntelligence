@@ -11,30 +11,41 @@ ALPHA_API_KEY = os.getenv("ALPHA_API_KEY")
 SYMBOL = "TSLA"
 #symbol = SYMBOL
 
-def get_daily_candlestick(symbol: str = SYMBOL, 
-                          db_mode: bool = False,
-                          local_store_mode: bool = False):
-    url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol={symbol}&apikey={ALPHA_API_KEY}'
-    r = requests.get(url)
-    data = r.json()
-    data_df = pd.DataFrame.from_dict(data=data["Time Series (Daily)"], orient='index')
-    data_df.columns = ['open', 'high', 'low', 'close', 'volume']
-    data_df.index = pd.to_datetime(data_df.index)
-    data_df.sort_index(ascending=True, axis=0, inplace=True)
-    data_df.reset_index(inplace=True, names=["date"])
-    data_df["symbol"] = symbol
-    print(data_df.columns)
-    data_df = data_df[["date","symbol", "open", "high", "low", "close", "volume"]]
-    if db_mode:
-        adapter = PostgresAdapter()
-        data_df_rows = data_df.to_dict(orient="records")
-        print(data_df_rows)
-        adapter.insert_new_data(table=CandlestickTable, rows=data_df_rows)
-        print(f'Candlestick data for {symbol} is loaded into the database.')
-    if local_store_mode:
-        data_df.to_csv(f"/home/bandee/projects/stockAnalyzer/dev_data/{symbol}_daily_time_series.csv", index=False)
-    if not db_mode and not local_store_mode:
-        print('Chose a place where you want to store the data from the API!')
+
+class alphaAdapter:
+
+    def __init__(self,
+                 symbol: str,
+                 db_mode: bool = False,
+                 local_store_mode: bool = False):
+        self.symbol = symbol
+        self.db_mode = db_mode
+        self.local_store_mode = local_store_mode
+        self.base_url = "https://www.alphavantage.co/query?function="
+    
+
+    def get_daily_candlestick(self):
+        url = f"{self.base_url}TIME_SERIES_DAILY&outputsize=full&symbol={self.symbol}&apikey={ALPHA_API_KEY}"
+        r = requests.get(url)
+        data = r.json()
+        data_df = pd.DataFrame.from_dict(data=data["Time Series (Daily)"], orient='index')
+        data_df.columns = ['open', 'high', 'low', 'close', 'volume']
+        data_df.index = pd.to_datetime(data_df.index)
+        data_df.sort_index(ascending=True, axis=0, inplace=True)
+        data_df.reset_index(inplace=True, names=["date"])
+        data_df["symbol"] = self.symbol
+        print(data_df.columns)
+        data_df = data_df[["date","symbol", "open", "high", "low", "close", "volume"]]
+        if self.db_mode:
+            adapter = PostgresAdapter()
+            data_df_rows = data_df.to_dict(orient="records")
+            print(data_df_rows)
+            adapter.insert_new_data(table=CandlestickTable, rows=data_df_rows)
+            print(f'Candlestick data for {self.symbol} is loaded into the database.')
+        if self.local_store_mode:
+            data_df.to_csv(f"/home/bandee/projects/stockAnalyzer/dev_data/{self.symbol}_daily_time_series.csv", index=False)
+        if not self.db_mode and not self.local_store_mode:
+            print('Chose a place where you want to store the data from the API!')
 
 
 def get_company_base(symbol: str = SYMBOL, 
@@ -85,7 +96,9 @@ def corp_actions(symbol: str = SYMBOL, function: str = 'DIVIDENDS'):
 
 
 def get_time_series_intraday(month: str, symbol: str = SYMBOL, interval: str='1min'):
-    """    month is in YYYY-MM format   """
+    """    
+        month is in YYYY-MM format   
+    """
 
     url = f'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={symbol}&interval={interval}&month={month}&outputsize=full&apikey={ALPHA_API_KEY}'
     r = requests.get(url)
