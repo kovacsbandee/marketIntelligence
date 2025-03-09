@@ -1,7 +1,7 @@
 import inspect
 import logging
-from data_manager.build_db.postgre_adapter import PostgresAdapter
-from data_manager.build_db import postgre_objects
+from data_manager.db_builders.postgre_adapter import PostgresAdapter
+from data_manager.db_builders import postgre_objects
 
 def main():
     logging.basicConfig(level=logging.INFO)
