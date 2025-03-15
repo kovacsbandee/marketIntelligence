@@ -1,4 +1,5 @@
 import requests
+import json
 import pandas as pd
 from data_manager.db_builders.postgre_adapter import PostgresAdapter
 from data_manager.db_builders.postgre_objects import CandlestickTable
@@ -16,19 +17,18 @@ class AlphaLoader:
         self.db_mode = db_mode
         self.local_store_mode = local_store_mode
         self.base_url = "https://www.alphavantage.co/query?function="
-        self.local_store_path = "/home/bandee/projects/stockAnalyzer/dev_data"
+        self.local_store_path = "/home/bandee/projects/marketIntelligence/dev_data/jsons"
 
 
-    def get_daily_candlestick(self):
+    def get_daily_timeseries(self):
         url = f"{self.base_url}TIME_SERIES_DAILY&outputsize=full&symbol={self.symbol}&apikey={ALPHA_API_KEY}"
         print(f"Fetching data for {self.symbol}...")
 
         try:
-            r = requests.get(url)
-            r.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
-            
-            data = r.json()
-
+            # r = requests.get(url)
+            # r.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
+            # data = r.json()
+            data = json.load(open(f'{self.local_store_path}/{self.symbol}_daily_time_series.json'))
             # Handle API limit or error response
             if "Time Series (Daily)" not in data:
                 print(f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
@@ -73,10 +73,11 @@ class AlphaLoader:
         print(f"Fetching company base data for {self.symbol}...")
 
         try:
-            r = requests.get(url)
-            r.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
-
-            data = r.json()
+            # r = requests.get(url)
+            # r.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
+            # data = r.json()
+            file = [f for f in os.listdir(self.local_store_path) if 'company_fundamentals' in f][0]
+            data = json.load(open(f'{self.local_store_path}/{file}'))
 
             # Handle error in API response
             if "Error Message" in data or "Note" in data:
@@ -120,8 +121,9 @@ class AlphaLoader:
         try:
             r = requests.get(url)
             r.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
-
             data = r.json()
+            file = [f for f in os.listdir(self.local_store_path) if function.lower() in f][0]
+            data = json.load(open(f'{self.local_store_path}/{file}'))
 
             # Check if data contains expected sections
             if "annualReports" not in data or "quarterlyReports" not in data:

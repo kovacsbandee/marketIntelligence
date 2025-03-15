@@ -1,5 +1,5 @@
 .env
 configs
 configs/nasdaq_screener.csv
-dev_data
+dev_data/csvs
 trash_data
