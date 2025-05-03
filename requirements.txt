@@ -34,6 +34,7 @@ platformdirs==4.3.6
 plotly==5.24.1
 prompt_toolkit==3.0.50
 psutil==6.1.1
+psycopg2-binary==2.9.10
 ptyprocess==0.7.0
 pure_eval==0.2.3
 Pygments==2.19.1
@@ -45,6 +46,7 @@ pyzmq==26.2.0
 referencing==0.36.2
 requests==2.32.3
 rpds-py==0.22.3
+setuptools==75.8.2
 six==1.17.0
 SQLAlchemy==2.0.38
 stack-data==0.6.3
@@ -55,3 +57,4 @@ typing_extensions==4.12.2
 tzdata==2025.1
 urllib3==2.3.0
 wcwidth==0.2.13
+wheel==0.45.1

@@ -87,7 +87,8 @@ class LoadExampleData:
                 self.cash_flow_annual = pd.read_csv(file_path)
 
 
-def create_desc_json_base(data_path = "/home/bandee/projects/stockAnalyzer/dev_data"):
+def create_desc_json_base(data_path = "/home/bandee/projects/stockAnalyzer/dev_data",
+                          out_file_name = "alpha_vantage_column_description.json"):
     column_desc = dict()
     total_keys = 0
     for file in os.listdir(data_path):
@@ -177,6 +178,6 @@ def create_desc_json_base(data_path = "/home/bandee/projects/stockAnalyzer/dev_d
     print(column_desc)
 
     import json
-    output_file = os.path.join(data_path, "alpha_vantage_column_description.json")
+    output_file = os.path.join(data_path, out_file_name)
     with open(output_file, "w") as f:
         json.dump(column_desc, f, indent=4)
