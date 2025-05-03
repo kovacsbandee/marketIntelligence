@@ -11,7 +11,7 @@ def load_initial_stocks(symbols):
         try:
             loader = AlphaLoader(symbol=symbol, db_mode=True, local_store_mode=False)
             loader.get_daily_timeseries()
-            # loader.get_company_base()
+            loader.get_company_base()
             # loader.get_financials(function='INCOME_STATEMENT')
             # loader.get_financials(function='BALANCE_SHEET')
             # loader.get_financials(function="CASH_FLOW")
@@ -23,7 +23,8 @@ def load_initial_stocks(symbols):
 def main():
     # List of symbols for initial load (example)
     symbols = [
-        "MSFT"
+        "MSFT", "AAPL", 
+        "TSLA", "NVDA", "AA"
     ]
 
     # You could extend this by reading from a file or CLI args

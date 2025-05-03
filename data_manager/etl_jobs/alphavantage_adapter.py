@@ -1,11 +1,11 @@
+import os
 import requests
 import json
 import pandas as pd
-from data_manager.db_builders.postgre_adapter import PostgresAdapter
-from data_manager.db_builders.postgre_objects import CandlestickTable
-import os
 
-ALPHA_API_KEY = os.getenv("ALPHA_API_KEY")  # Ensure your API key is set in the environment variable
+from configs.config import ALPHA_API_KEY
+from data_manager.db_builders.postgre_adapter import PostgresAdapter
+from data_manager.db_builders.postgre_objects import DailyTimeSeries, CompanyFundamentalsTable
 
 # TODO: ADD  ROW FOR EACH DATA HANDLER TO CHECK FOR DATABASE COMPLIANCE AND DATA QUALITY
 # e.g. missing values, and add a logger for these stuff!
@@ -25,10 +25,10 @@ class AlphaLoader:
         print(f"Fetching data for {self.symbol}...")
 
         try:
-            # r = requests.get(url)
-            # r.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
-            # data = r.json()
-            data = json.load(open(f'{self.local_store_path}/{self.symbol}_daily_time_series.json'))
+            r = requests.get(url)
+            r.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
+            data = r.json()
+            #data = json.load(open(f'{self.local_store_path}/{self.symbol}_daily_time_series.json'))
             # Handle API limit or error response
             if "Time Series (Daily)" not in data:
                 print(f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
@@ -38,6 +38,7 @@ class AlphaLoader:
             data_df.columns = ['open', 'high', 'low', 'close', 'volume']
             data_df.index = pd.to_datetime(data_df.index)
             data_df.sort_index(ascending=True, axis=0, inplace=True)
+            data_df.dropna(inplace=True)
             data_df.reset_index(inplace=True, names=["date"])
             data_df["symbol"] = self.symbol
 
@@ -47,7 +48,7 @@ class AlphaLoader:
             if self.db_mode:
                 adapter = PostgresAdapter()
                 data_df_rows = data_df.to_dict(orient="records")
-                adapter.insert_new_data(table=CandlestickTable, rows=data_df_rows)
+                adapter.insert_new_data(table=DailyTimeSeries, rows=data_df_rows)
                 print(f"✅ Candlestick data for {self.symbol} loaded into the database.")
 
             if self.local_store_mode:
@@ -73,26 +74,35 @@ class AlphaLoader:
         print(f"Fetching company base data for {self.symbol}...")
 
         try:
-            # r = requests.get(url)
-            # r.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
-            # data = r.json()
-            file = [f for f in os.listdir(self.local_store_path) if 'company_fundamentals' in f][0]
-            data = json.load(open(f'{self.local_store_path}/{file}'))
+            r = requests.get(url)
+            r.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
+            data = r.json()
+            #file = [f for f in os.listdir(self.local_store_path) if 'company_fundamentals' in f][0]
+            #data = json.load(open(f'{self.local_store_path}/{file}'))
 
             # Handle error in API response
             if "Error Message" in data or "Note" in data:
                 print(f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
                 return
-
             # Convert the response into a DataFrame
             data_df = pd.DataFrame([data])
-            latest_quarter = data_df.LatestQuarter.item()
+            
+            # converting the datatypes:
+            data_df.replace("None", pd.NA, inplace=True)
+            data_df = data_df.apply(pd.to_numeric, errors='ignore')
+
+            from data_manager.etl_jobs.transform_utils import standardize_company_fundamentals_columns
+            data_df = standardize_company_fundamentals_columns(data_df)
 
             # Save data into the database if db_mode is enabled
             if self.db_mode:
                 adapter = PostgresAdapter()
                 data_df_rows = data_df.to_dict(orient="records")
-                adapter.insert_new_data(table=CandlestickTable, rows=data_df_rows)
+                for d in data_df_rows:
+                    for k, v in d.items():
+                        if pd.isna(v):
+                            d[k] = None
+                adapter.insert_new_data(table=CompanyFundamentalsTable, rows=data_df_rows)
                 print(f"✅ Company base data for {self.symbol} loaded into the database.")
 
             # Save data locally as a CSV if local_store_mode is enabled

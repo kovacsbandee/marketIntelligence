@@ -1,5 +1,41 @@
+# === Python cache & artifacts ===
+__pycache__/
+*.py[cod]
+*.so
+
+# === Virtual environments ===
+.venv/
+
+# === Environment & secrets ===
 .env
-configs
+.env.*
+
+# === Config files (if not needed in version control) ===
+configs/
+!configs/config.py
+!configs/__init__.py
+
+# Optional: ignore specific data configs like this
 configs/nasdaq_screener.csv
-dev_data/csvs
-trash_data
+configs/alpha_vantage_column_description_hun.json
+configs/alpha_vantage_column_description.json
+
+# === Raw and intermediate data ===
+dev_data/
+
+# === Logs & debugging ===
+*.log
+*.db
+*.sqlite3
+
+# === IDE & editor settings ===
+.vscode/
+
+# === Jupyter Notebooks ===
+.ipynb_checkpoints/
+
+# === Test/cache artifacts ===
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/

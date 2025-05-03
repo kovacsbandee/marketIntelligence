@@ -121,12 +121,12 @@ class CompanyFundamentalsTable(Base):
     fifty_two_week_low = Column(Float, nullable=True)
     fifty_day_moving_average = Column(Float, nullable=True)
     two_hundred_day_moving_average = Column(Float, nullable=True)
-    shares_outstanding = Column(Integer, nullable=True)
+    shares_outstanding = Column(BigInteger, nullable=True)
     dividend_date = Column(Date, nullable=True)
     ex_dividend_date = Column(Date, nullable=True)
 
 
-class CandlestickTable(Base):
+class DailyTimeSeries(Base):
     """
     ORM osztály a napi kereskedési adatok (candlestick) tárolására.
 
@@ -145,7 +145,7 @@ class CandlestickTable(Base):
         - A `date` és `symbol` kombináció biztosítja az egyedi rekordokat.
         - A pénzügyi mezők (`open`, `high`, `low`, `close`, `volume`) `NULL` értéket vehetnek fel, ha az adatok nem elérhetők.
     """
-    __tablename__ = 'daily_candlestick'
+    __tablename__ = 'daily_timeseries'
 
     date = Column(Date, nullable=True, primary_key=True)
     symbol = Column(String, nullable=True, primary_key=True)
