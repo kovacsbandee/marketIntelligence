@@ -554,7 +554,7 @@ class AnnualIncomeStatement(Base):
     __tablename__ = 'income_statement_annual'
 
     symbol = Column(String, primary_key=True, nullable=True)
-    fiscal_date_ending = Column(Date, nullable=True)
+    fiscal_date_ending = Column(Date, primary_key=True, nullable=True)
     reported_currency = Column(String, nullable=True)
     gross_profit = Column(Float, nullable=True)
     total_revenue = Column(Float, nullable=True)

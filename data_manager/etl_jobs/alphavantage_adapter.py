@@ -132,8 +132,8 @@ class AlphaLoader:
             r = requests.get(url)
             r.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
             data = r.json()
-            file = [f for f in os.listdir(self.local_store_path) if function.lower() in f][0]
-            data = json.load(open(f'{self.local_store_path}/{file}'))
+            # file = [f for f in os.listdir(self.local_store_path) if function.lower() in f][0]
+            # data = json.load(open(f'{self.local_store_path}/{file}'))
 
             # Check if data contains expected sections
             if "annualReports" not in data or "quarterlyReports" not in data:
@@ -147,7 +147,8 @@ class AlphaLoader:
             annual_df["fiscalDateEnding"] = pd.to_datetime(annual_df["fiscalDateEnding"])
             annual_df.sort_values("fiscalDateEnding", inplace=True, ascending=True)
             annual_df = annual_df[['symbol'] + [col for col in annual_df.columns if col != 'symbol']]
-
+            annual_df = annual_df.where(pd.notnull(annual_df), None)
+            
             # Process quarterly reports
             quaterly_df = pd.DataFrame(data=data["quarterlyReports"])
             # TODO: I need to check for the null values here, to make it compatible with the DB!
@@ -155,32 +156,73 @@ class AlphaLoader:
             quaterly_df["fiscalDateEnding"] = pd.to_datetime(quaterly_df["fiscalDateEnding"])
             quaterly_df.sort_values("fiscalDateEnding", inplace=True, ascending=True)
             quaterly_df = quaterly_df[['symbol'] + [col for col in quaterly_df.columns if col != 'symbol']]
-
+            quaterly_df = quaterly_df.where(pd.notnull(annual_df), None)
+            
             # Save data to the database if db_mode is enabled
             if self.db_mode:
                 adapter = PostgresAdapter()
                 annual_data_df_rows = annual_df.to_dict(orient="records")
 
                 if function == 'INCOME_STATEMENT':
+        
+                    from data_manager.etl_jobs.transform_utils import standardize_annual_income_statement_columns
+                    annual_df = standardize_annual_income_statement_columns(annual_df)
+                    annual_df.replace(to_replace=["None", "none", "NaN", "nan"], value=pd.NA, inplace=True)
+                    annual_df = annual_df.where(pd.notnull(annual_df), None)
+
+                    annual_data_df_rows = annual_df.to_dict(orient="records")
+                    
                     from data_manager.db_builders.postgre_objects import AnnualIncomeStatement as AIS
                     adapter.insert_new_data(table=AIS, rows=annual_data_df_rows)
 
+                    print('quaterly data df columns: ', quaterly_df.columns)
+                    quaterly_df["fiscalDateEnding"] = pd.to_datetime(quaterly_df["fiscalDateEnding"], errors="coerce")
+                    quaterly_df.dropna(subset=["fiscalDateEnding"], inplace=True)
+                    quaterly_df.replace(to_replace=["None", "none", "NaN", "nan"], value=pd.NA, inplace=True)
+                    quaterly_df = quaterly_df.where(pd.notnull(quaterly_df), None)
+
+                    from data_manager.etl_jobs.transform_utils import standardize_quarterly_income_statement_columns
+                    quaterly_df = standardize_quarterly_income_statement_columns(quaterly_df)
+                    quaterly_data_df_rows = quaterly_df.to_dict(orient="records")   
+                    
                     from data_manager.db_builders.postgre_objects import QuarterlyIncomeStatement as QIS
-                    adapter.insert_new_data(table=QIS, rows=annual_data_df_rows)
+                    adapter.insert_new_data(table=QIS, rows=quaterly_data_df_rows)
 
                 elif function == 'BALANCE_SHEET':
+                    from data_manager.etl_jobs.transform_utils import standardize_annual_balance_sheet_columns
+                    annual_df = standardize_annual_balance_sheet_columns(annual_df)
+
+                    annual_df["fiscal_date_ending"] = pd.to_datetime(annual_df["fiscal_date_ending"], errors="coerce")
+                    annual_df.dropna(subset=["fiscal_date_ending"], inplace=True)
+
+                    annual_df.replace(to_replace=["None", "none", "NaN", "nan"], value=pd.NA, inplace=True)
+                    annual_df = annual_df.where(pd.notnull(annual_df), None)
+
+                    annual_data_df_rows = annual_df.to_dict(orient="records")
+
                     from data_manager.db_builders.postgre_objects import AnnualBalanceSheetTable as ABS
                     adapter.insert_new_data(table=ABS, rows=annual_data_df_rows)
 
+                    from data_manager.etl_jobs.transform_utils import standardize_quarterly_balance_sheet_columns
+
+                    quaterly_df["fiscalDateEnding"] = pd.to_datetime(quaterly_df["fiscalDateEnding"], errors="coerce")
+                    quaterly_df.dropna(subset=["fiscalDateEnding"], inplace=True)
+
+                    quaterly_df.replace(to_replace=["None", "none", "NaN", "nan"], value=pd.NA, inplace=True)
+                    quaterly_df = quaterly_df.where(pd.notnull(quaterly_df), None)
+
+                    quaterly_df = standardize_quarterly_balance_sheet_columns(quaterly_df)
+                    quaterly_data_df_rows = quaterly_df.to_dict(orient="records")
+
                     from data_manager.db_builders.postgre_objects import QuarterlyBalanceSheetTable as QBS
-                    adapter.insert_new_data(table=QBS, rows=annual_data_df_rows)
+                    adapter.insert_new_data(table=QBS, rows=quaterly_data_df_rows)
 
                 elif function == 'CASH_FLOW':
                     from data_manager.db_builders.postgre_objects import AnnualCashFlowTable as ACF
                     adapter.insert_new_data(table=ACF, rows=annual_data_df_rows)
 
                     from data_manager.db_builders.postgre_objects import QuarterlyCashFlowTable as QCF
-                    adapter.insert_new_data(table=QCF, rows=annual_data_df_rows)
+                    adapter.insert_new_data(table=QCF, rows=quaterly_data_df_rows)
 
                 print(f"✅ {function} data for {self.symbol} loaded into the database.")
 
