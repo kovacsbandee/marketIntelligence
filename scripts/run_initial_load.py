@@ -1,10 +1,10 @@
 import logging
+import sys
+from utils.utils import get_symbols_from_csv
 from data_manager.etl_jobs.alphavantage_adapter import AlphaLoader
 
 def load_initial_stocks(symbols):
-    logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger("InitialLoader")
-
     logger.info(f"Starting initial load for {len(symbols)} symbols...")
 
     for symbol in symbols:
@@ -20,15 +20,25 @@ def load_initial_stocks(symbols):
             loader.get_stock_splits()
             loader.get_dividends()
         except Exception as e:
-            logger.error(f"❌ Error processing {symbol}: {e}")
+            logger.exception(f"❌ Error processing {symbol}")
 
     logger.info("✅ initial loader finished its running.")
 
-def main():
-    # List of symbols for initial load (example)
-    symbols = ["MSFT", "AAPL", "TSLA", "NVDA", "AA"]
+def get_symbols():
+    return get_symbols_from_csv(limit=50)  # Remove limit for prod, keep for tests/dev!
 
-    # You could extend this by reading from a file or CLI args
+def main():
+    # Logging config (file + console)
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+        handlers=[
+            logging.StreamHandler(sys.stdout),
+            logging.FileHandler("initial_load.log", mode='w')
+        ]
+    )
+
+    symbols = get_symbols()
     load_initial_stocks(symbols)
 
 if __name__ == "__main__":
