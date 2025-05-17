@@ -197,9 +197,9 @@ class AnnualBalanceSheetTable(Base):
         - treasury_stock (Float, nullable=True): A vállalat által visszavásárolt részvények értéke.
         - retained_earnings (Float, nullable=True): A vállalat által az osztalékok után megtartott nettó nyereség kumulatív összege.
         - common_stock (Float, nullable=True): A vállalat által kibocsátott közönséges részvények értéke.
-        - common_stock_shares_outstanding (Integer, nullable=True): Az összes közönséges részvény száma, amely jelenleg a piacon forgalomban van.
+        - common_stock_shares_outstanding (BigInteger, nullable=True): Az összes közönséges részvény száma, amely jelenleg a piacon forgalomban van.
     """
-    __tablename__ = 'annual_balance_sheet'
+    __tablename__ = 'balance_sheet_annual'
 
     symbol = Column(String, primary_key=True, nullable=True)
     fiscal_date_ending = Column(Date, primary_key=True, nullable=True)
@@ -235,7 +235,7 @@ class AnnualBalanceSheetTable(Base):
     treasury_stock = Column(Float, nullable=True)
     retained_earnings = Column(Float, nullable=True)
     common_stock = Column(Float, nullable=True)
-    common_stock_shares_outstanding = Column(Integer, nullable=True)
+    common_stock_shares_outstanding = Column(BigInteger, nullable=True)
 
 
 class QuarterlyBalanceSheetTable(Base):
@@ -283,9 +283,9 @@ class QuarterlyBalanceSheetTable(Base):
         - treasury_stock (Float, nullable=True): A vállalat által visszavásárolt és kincstári részvényként tartott részvények értéke.
         - retained_earnings (Float, nullable=True): A vállalat által az osztalékok kifizetése után megtartott nettó jövedelem halmozott összege.
         - common_stock (Float, nullable=True): A vállalat által kibocsátott törzsrészvények értéke.
-        - common_stock_shares_outstanding (Integer, nullable=True): A piacon jelenleg forgalomban lévő törzsrészvények száma.
+        - common_stock_shares_outstanding (BigInteger, nullable=True): A piacon jelenleg forgalomban lévő törzsrészvények száma.
     """
-    __tablename__ = 'quarterly_balance_sheet'
+    __tablename__ = 'balance_sheet_quarterly'
 
     symbol = Column(String, primary_key=True, nullable=False)
     fiscal_date_ending = Column(Date, primary_key=True, nullable=True)
@@ -307,7 +307,7 @@ class QuarterlyBalanceSheetTable(Base):
     total_liabilities = Column(Float, nullable=True)
     total_current_liabilities = Column(Float, nullable=True)
     total_shareholder_equity = Column(Float, nullable=True)
-    common_stock_shares_outstanding = Column(Integer, nullable=True)
+    common_stock_shares_outstanding = Column(BigInteger, nullable=True)
 
 
 class AnnualCashFlowTable(Base):
@@ -647,8 +647,7 @@ class QuarterlyIncomeStatement(Base):
     ebitda = Column(Float, nullable=True)
     net_income = Column(Float, nullable=True)
 
-
-class InsiderTransaction(Base):
+class InsiderTransactionTable(Base):
     """
     ORM osztály a vállalati bennfentes tranzakciók tárolására.
 
@@ -666,13 +665,13 @@ class InsiderTransaction(Base):
     """
     __tablename__ = 'insider_transactions'
 
-    symbol = Column(String, primary_key=True, nullable=True)
-    transaction_date = Column(Date, primary_key=True, nullable=True)
+    transaction_date = Column(Date, primary_key=True)
+    symbol = Column(String, primary_key=True)
     executive = Column(String, primary_key=True, nullable=True)
-    security_type = Column(String, primary_key=True, nullable=True)
     executive_title = Column(String, nullable=True)
-    acquisition_or_disposal = Column(String, nullable=True)
-    shares = Column(Integer, nullable=True)
+    security_type = Column(String, primary_key=True, nullable=True)
+    acquisition_or_disposal = Column(String, primary_key=True, nullable=True)  # 'A' (acquire) or 'D' (dispose)
+    shares = Column(Float, nullable=True)
     share_price = Column(Float, nullable=True)
 
 

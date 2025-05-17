@@ -21,7 +21,9 @@ configs/alpha_vantage_column_description_hun.json
 configs/alpha_vantage_column_description.json
 
 # === Raw and intermediate data ===
-dev_data/
+dev_data
+dev_data/jsons
+dev_data/csv
 
 # === Logs & debugging ===
 *.log

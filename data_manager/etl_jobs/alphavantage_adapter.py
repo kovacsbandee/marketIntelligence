@@ -123,7 +123,7 @@ class AlphaLoader:
 
     def get_financials(self, function: str):
         """
-        Fetch financial data (INCOME_STATEMENT, BALANCE_SHEET, or CASH_FLOW) for the given symbol.
+        Fetch financial data (INCOME_STATEMENT, BALANCE_SHEET, CASH_FLOW, or EARNINGS) for the given symbol.
         """
         url = f'{self.base_url}{function}&symbol={self.symbol}&apikey={ALPHA_API_KEY}'
         print(f"Fetching {function} data for {self.symbol}...")
@@ -132,109 +132,228 @@ class AlphaLoader:
             r = requests.get(url)
             r.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
             data = r.json()
-            # file = [f for f in os.listdir(self.local_store_path) if function.lower() in f][0]
-            # data = json.load(open(f'{self.local_store_path}/{file}'))
 
-            # Check if data contains expected sections
-            if "annualReports" not in data or "quarterlyReports" not in data:
-                print(f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
+            # === 1. Build DataFrames ===
+            if function == 'EARNINGS':
+                # EARNINGS uses different top-level keys!
+                annual_key = "annualEarnings"
+                quarterly_key = "quarterlyEarnings"
+                if annual_key not in data or quarterly_key not in data:
+                    print(f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
+                    return
+                annual_df = pd.DataFrame(data[annual_key])
+                quarterly_df = pd.DataFrame(data[quarterly_key])
+                # Attach symbol if not present
+                annual_df["symbol"] = data["symbol"]
+                quarterly_df["symbol"] = data["symbol"]
+            else:
+                if "annualReports" not in data or "quarterlyReports" not in data:
+                    print(f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
+                    return
+                annual_df = pd.DataFrame(data["annualReports"])
+                annual_df["symbol"] = data["symbol"]
+
+                quarterly_df = pd.DataFrame(data["quarterlyReports"])
+                quarterly_df["symbol"] = data["symbol"]
+
+            # === 2. Standardize and type-cast columns ===
+            if function == 'INCOME_STATEMENT':
+                from data_manager.etl_jobs.transform_utils import (
+                    standardize_annual_income_statement_columns, standardize_quarterly_income_statement_columns
+                )
+                annual_df = standardize_annual_income_statement_columns(annual_df)
+                quarterly_df = standardize_quarterly_income_statement_columns(quarterly_df)
+                annual_pk = "fiscal_date_ending"
+                quarterly_pk = "fiscal_date_ending"
+                from data_manager.db_builders.postgre_objects import (
+                    AnnualIncomeStatement as AnnualTable, QuarterlyIncomeStatement as QuarterlyTable
+                )
+            elif function == 'BALANCE_SHEET':
+                from data_manager.etl_jobs.transform_utils import (
+                    standardize_annual_balance_sheet_columns, standardize_quarterly_balance_sheet_columns
+                )
+                annual_df = standardize_annual_balance_sheet_columns(annual_df)
+                quarterly_df = standardize_quarterly_balance_sheet_columns(quarterly_df)
+                annual_pk = "fiscal_date_ending"
+                quarterly_pk = "fiscal_date_ending"
+                from data_manager.db_builders.postgre_objects import (
+                    AnnualBalanceSheetTable as AnnualTable, QuarterlyBalanceSheetTable as QuarterlyTable
+                )
+            elif function == 'CASH_FLOW':
+                from data_manager.etl_jobs.transform_utils import (
+                    standardize_annual_cash_flow_columns, standardize_quarterly_cash_flow_columns
+                )
+                annual_df = standardize_annual_cash_flow_columns(annual_df)
+                quarterly_df = standardize_quarterly_cash_flow_columns(quarterly_df)
+                annual_pk = "fiscal_date_ending"
+                quarterly_pk = "fiscal_date_ending"
+                from data_manager.db_builders.postgre_objects import (
+                    AnnualCashFlowTable as AnnualTable, QuarterlyCashFlowTable as QuarterlyTable
+                )
+            elif function == 'EARNINGS':
+                from data_manager.etl_jobs.transform_utils import (
+                    standardize_annual_earnings_columns, standardize_quarterly_earnings_columns
+                )
+                annual_df = standardize_annual_earnings_columns(annual_df)
+                quarterly_df = standardize_quarterly_earnings_columns(quarterly_df)
+                annual_pk = "fiscal_date_ending"
+                quarterly_pk = "fiscal_date_ending"
+                from data_manager.db_builders.postgre_objects import (
+                    AnnualEarningsTable as AnnualTable, QuarterlyEarningsTable as QuarterlyTable
+                )
+            else:
+                print(f"❌ Unknown function '{function}'")
                 return
 
-            # Process annual reports
-            annual_df = pd.DataFrame(data=data["annualReports"])
-            # TODO: I need to check for the null values here, to make it compatible with the DB!
-            annual_df["symbol"] = data["symbol"]
-            annual_df["fiscalDateEnding"] = pd.to_datetime(annual_df["fiscalDateEnding"])
-            annual_df.sort_values("fiscalDateEnding", inplace=True, ascending=True)
-            annual_df = annual_df[['symbol'] + [col for col in annual_df.columns if col != 'symbol']]
-            annual_df = annual_df.where(pd.notnull(annual_df), None)
-            
-            # Process quarterly reports
-            quaterly_df = pd.DataFrame(data=data["quarterlyReports"])
-            # TODO: I need to check for the null values here, to make it compatible with the DB!
-            quaterly_df["symbol"] = data["symbol"]
-            quaterly_df["fiscalDateEnding"] = pd.to_datetime(quaterly_df["fiscalDateEnding"])
-            quaterly_df.sort_values("fiscalDateEnding", inplace=True, ascending=True)
-            quaterly_df = quaterly_df[['symbol'] + [col for col in quaterly_df.columns if col != 'symbol']]
-            quaterly_df = quaterly_df.where(pd.notnull(annual_df), None)
-            
-            # Save data to the database if db_mode is enabled
+            # === 3. Final cleanup (drop rows with null PKs, reindex) ===
+            for df, pk in [(annual_df, annual_pk), (quarterly_df, quarterly_pk)]:
+                if pk in df.columns:
+                    df.dropna(subset=[pk], inplace=True)
+
+            # === 4. Save to DB if enabled ===
             if self.db_mode:
                 adapter = PostgresAdapter()
-                annual_data_df_rows = annual_df.to_dict(orient="records")
-
-                if function == 'INCOME_STATEMENT':
-        
-                    from data_manager.etl_jobs.transform_utils import standardize_annual_income_statement_columns
-                    annual_df = standardize_annual_income_statement_columns(annual_df)
-                    annual_df.replace(to_replace=["None", "none", "NaN", "nan"], value=pd.NA, inplace=True)
-                    annual_df = annual_df.where(pd.notnull(annual_df), None)
-
-                    annual_data_df_rows = annual_df.to_dict(orient="records")
-                    
-                    from data_manager.db_builders.postgre_objects import AnnualIncomeStatement as AIS
-                    adapter.insert_new_data(table=AIS, rows=annual_data_df_rows)
-
-                    print('quaterly data df columns: ', quaterly_df.columns)
-                    quaterly_df["fiscalDateEnding"] = pd.to_datetime(quaterly_df["fiscalDateEnding"], errors="coerce")
-                    quaterly_df.dropna(subset=["fiscalDateEnding"], inplace=True)
-                    quaterly_df.replace(to_replace=["None", "none", "NaN", "nan"], value=pd.NA, inplace=True)
-                    quaterly_df = quaterly_df.where(pd.notnull(quaterly_df), None)
-
-                    from data_manager.etl_jobs.transform_utils import standardize_quarterly_income_statement_columns
-                    quaterly_df = standardize_quarterly_income_statement_columns(quaterly_df)
-                    quaterly_data_df_rows = quaterly_df.to_dict(orient="records")   
-                    
-                    from data_manager.db_builders.postgre_objects import QuarterlyIncomeStatement as QIS
-                    adapter.insert_new_data(table=QIS, rows=quaterly_data_df_rows)
-
-                elif function == 'BALANCE_SHEET':
-                    from data_manager.etl_jobs.transform_utils import standardize_annual_balance_sheet_columns
-                    annual_df = standardize_annual_balance_sheet_columns(annual_df)
-
-                    annual_df["fiscal_date_ending"] = pd.to_datetime(annual_df["fiscal_date_ending"], errors="coerce")
-                    annual_df.dropna(subset=["fiscal_date_ending"], inplace=True)
-
-                    annual_df.replace(to_replace=["None", "none", "NaN", "nan"], value=pd.NA, inplace=True)
-                    annual_df = annual_df.where(pd.notnull(annual_df), None)
-
-                    annual_data_df_rows = annual_df.to_dict(orient="records")
-
-                    from data_manager.db_builders.postgre_objects import AnnualBalanceSheetTable as ABS
-                    adapter.insert_new_data(table=ABS, rows=annual_data_df_rows)
-
-                    from data_manager.etl_jobs.transform_utils import standardize_quarterly_balance_sheet_columns
-
-                    quaterly_df["fiscalDateEnding"] = pd.to_datetime(quaterly_df["fiscalDateEnding"], errors="coerce")
-                    quaterly_df.dropna(subset=["fiscalDateEnding"], inplace=True)
-
-                    quaterly_df.replace(to_replace=["None", "none", "NaN", "nan"], value=pd.NA, inplace=True)
-                    quaterly_df = quaterly_df.where(pd.notnull(quaterly_df), None)
-
-                    quaterly_df = standardize_quarterly_balance_sheet_columns(quaterly_df)
-                    quaterly_data_df_rows = quaterly_df.to_dict(orient="records")
-
-                    from data_manager.db_builders.postgre_objects import QuarterlyBalanceSheetTable as QBS
-                    adapter.insert_new_data(table=QBS, rows=quaterly_data_df_rows)
-
-                elif function == 'CASH_FLOW':
-                    from data_manager.db_builders.postgre_objects import AnnualCashFlowTable as ACF
-                    adapter.insert_new_data(table=ACF, rows=annual_data_df_rows)
-
-                    from data_manager.db_builders.postgre_objects import QuarterlyCashFlowTable as QCF
-                    adapter.insert_new_data(table=QCF, rows=quaterly_data_df_rows)
-
+                adapter.insert_new_data(table=AnnualTable, rows=annual_df.to_dict(orient="records"))
+                adapter.insert_new_data(table=QuarterlyTable, rows=quarterly_df.to_dict(orient="records"))
                 print(f"✅ {function} data for {self.symbol} loaded into the database.")
 
-            # Save data locally as CSV if local_store_mode is enabled
+            # === 5. Save as CSV locally if enabled ===
             if self.local_store_mode:
                 annual_df.to_csv(f"{self.local_store_path}/{self.symbol}_{function.lower()}_annual.csv", index=False)
-                quaterly_df.to_csv(f"{self.local_store_path}/{self.symbol}_{function.lower()}_quaterly.csv", index=False)
+                quarterly_df.to_csv(f"{self.local_store_path}/{self.symbol}_{function.lower()}_quaterly.csv", index=False)
                 print(f"✅ {function} data saved locally for {self.symbol}.")
 
-            # If neither db_mode nor local_store_mode is enabled, prompt the user
+            # === 6. Warn if nothing is enabled ===
             if not self.db_mode and not self.local_store_mode:
-                print('⚠️  Chose a place where you want to store the data from the API!')
+                print('⚠️  Choose a place where you want to store the data from the API!')
+
+        except requests.exceptions.RequestException as e:
+            print(f"❌ Request failed for {self.symbol}: {e}")
+        except Exception as e:
+            print(f"❌ An unexpected error occurred: {e}")
+
+    def get_insider_transactions(self):
+        """
+        Fetch and store insider transactions for the given symbol.
+        """
+        url = f"{self.base_url}INSIDER_TRANSACTIONS&symbol={self.symbol}&apikey={ALPHA_API_KEY}"
+        print(f"Fetching INSIDER_TRANSACTIONS data for {self.symbol}...")
+
+        try:
+            r = requests.get(url)
+            r.raise_for_status()
+            data = r.json()
+            if isinstance(data, dict) and "data" in data:
+                data = data["data"]
+
+            df = pd.DataFrame(data)
+            df["symbol"] = self.symbol
+
+            from data_manager.etl_jobs.transform_utils import standardize_insider_transaction_columns
+            df = standardize_insider_transaction_columns(df)
+            if "transaction_date" not in df.columns:
+                print("❌ 'transaction_date' column missing after standardization. Columns are:", df.columns)
+                return
+            df.dropna(subset=["transaction_date", "symbol"], inplace=True)
+
+            if self.db_mode:
+                from data_manager.db_builders.postgre_objects import InsiderTransactionTable
+                adapter = PostgresAdapter()
+                adapter.insert_new_data(table=InsiderTransactionTable, rows=df.to_dict(orient="records"))
+                print(f"✅ Insider transaction data for {self.symbol} loaded into the database.")
+
+            if self.local_store_mode:
+                df.to_csv(f"{self.local_store_path}/{self.symbol}_insider_transactions.csv", index=False)
+                print(f"✅ Insider transaction data saved locally for {self.symbol}.")
+
+            if not self.db_mode and not self.local_store_mode:
+                print('⚠️  Choose a place where you want to store the data from the API!')
+
+        except requests.exceptions.RequestException as e:
+            print(f"❌ Request failed for {self.symbol}: {e}")
+        except Exception as e:
+            print(f"❌ An unexpected error occurred: {e}")
+    
+    def get_stock_splits(self):
+        """
+        Fetch and store stock split data for the given symbol.
+        """
+        url = f"{self.base_url}SPLITS&symbol={self.symbol}&apikey={ALPHA_API_KEY}"
+        print(f"Fetching STOCK_SPLITS data for {self.symbol}...")
+
+        try:
+            r = requests.get(url)
+            r.raise_for_status()
+            data = r.json()
+            print(data)
+            # If the response is a dict with the splits in a key
+            if isinstance(data, dict) and "data" in data:
+                data = data["data"]
+            # Attach the symbol to each row if missing
+            for row in data:
+                if "symbol" not in row:
+                    row["symbol"] = self.symbol
+
+            df = pd.DataFrame(data)
+            from data_manager.etl_jobs.transform_utils import standardize_stock_split_columns
+            df = standardize_stock_split_columns(df)
+            df.dropna(subset=["symbol", "effective_date"], inplace=True)
+
+            if self.db_mode:
+                from data_manager.db_builders.postgre_objects import StockSplit
+                adapter = PostgresAdapter()
+                adapter.insert_new_data(table=StockSplit, rows=df.to_dict(orient="records"))
+                print(f"✅ Stock split data for {self.symbol} loaded into the database.")
+
+            if self.local_store_mode:
+                df.to_csv(f"{self.local_store_path}/{self.symbol}_stock_splits.csv", index=False)
+                print(f"✅ Stock split data saved locally for {self.symbol}.")
+
+            if not self.db_mode and not self.local_store_mode:
+                print('⚠️  Choose a place where you want to store the data from the API!')
+
+        except requests.exceptions.RequestException as e:
+            print(f"❌ Request failed for {self.symbol}: {e}")
+        except Exception as e:
+            print(f"❌ An unexpected error occurred: {e}")
+
+    def get_dividends(self):
+        """
+        Fetch and store dividend data for the given symbol.
+        """
+        url = f"{self.base_url}DIVIDENDS&symbol={self.symbol}&apikey={ALPHA_API_KEY}"
+        print(f"Fetching DIVIDENDS data for {self.symbol}...")
+
+        try:
+            r = requests.get(url)
+            r.raise_for_status()
+            data = r.json()
+
+            # If the response is a dict with dividends in a key
+            if isinstance(data, dict) and "data" in data:
+                data = data["data"]
+            # Attach symbol if missing
+            for row in data:
+                if "symbol" not in row:
+                    row["symbol"] = self.symbol
+
+            df = pd.DataFrame(data)
+            from data_manager.etl_jobs.transform_utils import standardize_dividends_columns
+            df = standardize_dividends_columns(df)
+            df.dropna(subset=["symbol", "ex_dividend_date"], inplace=True)
+
+            if self.db_mode:
+                from data_manager.db_builders.postgre_objects import DividendsTable
+                adapter = PostgresAdapter()
+                adapter.insert_new_data(table=DividendsTable, rows=df.to_dict(orient="records"))
+                print(f"✅ Dividend data for {self.symbol} loaded into the database.")
+
+            if self.local_store_mode:
+                df.to_csv(f"{self.local_store_path}/{self.symbol}_dividends.csv", index=False)
+                print(f"✅ Dividend data saved locally for {self.symbol}.")
+
+            if not self.db_mode and not self.local_store_mode:
+                print('⚠️  Choose a place where you want to store the data from the API!')
 
         except requests.exceptions.RequestException as e:
             print(f"❌ Request failed for {self.symbol}: {e}")
@@ -243,51 +362,6 @@ class AlphaLoader:
 
 
 
-# def get_company_base(symbol: str = SYMBOL, 
-#                      db_mode: bool = False,
-#                      local_store_mode: bool = False):
-#     """
-#     This could be updated when a report is arriving for a company...
-#     """
-#     url = f'https://www.alphavantage.co/query?function=OVERVIEW&symbol={symbol}&apikey={ALPHA_API_KEY}'
-#     r = requests.get(url)
-#     data = r.json()
-#     data_df = pd.DataFrame([data])
-#     latest_quarter = data_df.LatestQuarter.item()
-#     if db_mode:
-#         adapter = PostgresAdapter()
-#         data_df_rows = data_df.to_dict(orient="records")
-#         print(data_df_rows)
-#         adapter.insert_new_data(table=CandlestickTable, rows=data_df_rows)
-#         print(f'Candlestick data for {symbol} is loaded into the database.')
-#     if local_store_mode:
-#         data_df.to_csv(f"/home/bandee/projects/stockAnalyzer/dev_data/{symbol}_daily_time_series.csv", index=False)
-#     if not db_mode and not local_store_mode:
-#         print('Chose a place where you want to store the data from the API!')
-#     data_df.to_csv(f"/home/bandee/projects/stockAnalyzer/dev_data/{symbol}_company_fundamentals_lat_quart_{latest_quarter}.csv", index=False)
-
-
-
-
-# def corp_actions(symbol: str = SYMBOL, function: str = 'DIVIDENDS'):
-#     """
-#     function can be DIVIDENDS or SPLITS
-#     """
-#     function = 'SPLITS'
-#     url = f'https://www.alphavantage.co/query?function={function}&symbol={symbol}&apikey={ALPHA_API_KEY}'
-#     r = requests.get(url)
-#     data = r.json()
-#     data_df = pd.DataFrame(data=data["data"])
-#     data_df["symbol"] = data["symbol"]
-#     if function == 'DIVIDENDS':
-#         for c in data_df.columns:
-#             if "date" in c:
-#                 data_df[c] = pd.to_datetime(data_df[c], errors="coerce")
-#         data_df.sort_values("ex_dividend_date", inplace=True, ascending=True)
-#         data_df = data_df[['symbol', 'amount', 'ex_dividend_date', 'declaration_date', 'record_date', 'payment_date',]]
-#     if function == "SPLITS":
-#         data_df = data_df[['symbol', 'effective_date', 'split_factor']]
-#     data_df.to_csv(f"/home/bandee/projects/stockAnalyzer/dev_data/{symbol}_{function.lower()}.csv", index=False)
 
 
 # def get_time_series_intraday(month: str, symbol: str = SYMBOL, interval: str='1min'):
@@ -304,40 +378,3 @@ class AlphaLoader:
 #     data_df.sort_index(ascending=True, axis=0, inplace=True)
 #     data_df.to_csv(f"/home/bandee/projects/stockAnalyzer/dev_data/{symbol}_intraday_{month}.csv", index=True)
 #     print(f"{symbol} for {month} was successfully written out to trash_data!")
-
-
-
-
-# def earnings(function: str, symbol: str = SYMBOL):
-#     """
-#     function can be EARNINGS
-#     """
-#     url = f'https://www.alphavantage.co/query?function={function}&symbol={symbol}&apikey={ALPHA_API_KEY}'
-#     r = requests.get(url)
-#     data = r.json()
-#     annual_df = pd.DataFrame(data=data["annualEarnings"])
-#     annual_df["symbol"] = data["symbol"]
-#     annual_df["fiscalDateEnding"] = pd.to_datetime(annual_df["fiscalDateEnding"])
-#     annual_df.sort_values("fiscalDateEnding", inplace=True, ascending=True)
-#     annual_df = annual_df[['symbol'] + [col for col in annual_df.columns if col != 'symbol']]
-#     annual_df.to_csv(f"/home/bandee/projects/stockAnalyzer/dev_data/{symbol}_{function.lower()}_annual.csv", index=False)
-
-#     quaterly_df = pd.DataFrame(data=data["quarterlyEarnings"])
-#     quaterly_df["symbol"] = data["symbol"]
-#     quaterly_df["fiscalDateEnding"] = pd.to_datetime(quaterly_df["fiscalDateEnding"])
-#     quaterly_df.sort_values("fiscalDateEnding", inplace=True, ascending=True)
-#     quaterly_df = quaterly_df[['symbol'] + [col for col in quaterly_df.columns if col != 'symbol']]
-#     quaterly_df.to_csv(f"/home/bandee/projects/stockAnalyzer/dev_data/{symbol}_{function.lower()}_quaterly.csv", index=False)
-
-
-# def get_insider_transactions(symbol: str = SYMBOL):
-#     symbol = SYMBOL
-#     url = f'https://www.alphavantage.co/query?function=INSIDER_TRANSACTIONS&symbol={symbol}&apikey={ALPHA_API_KEY}'
-#     r = requests.get(url)
-#     data = r.json()
-#     insider_df = pd.DataFrame(data=data["data"])
-#     insider_df = insider_df[['ticker', 'transaction_date', 'executive', 'executive_title', 'security_type', 'acquisition_or_disposal', 'shares', 'share_price']]
-#     insider_df.rename(columns={'ticker': 'symbol'}, inplace=True)
-#     insider_df["executive"] = insider_df["executive"].str.replace(',', '')
-#     insider_df["executive_title"] = insider_df["executive_title"].str.replace(',', '')
-#     insider_df.to_csv(f"/home/bandee/projects/stockAnalyzer/dev_data/{symbol}_insider_transactions.csv", index=False)
