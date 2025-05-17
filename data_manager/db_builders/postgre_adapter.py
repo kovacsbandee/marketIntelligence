@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine, inspect, func
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.inspection import inspect
+from sqlalchemy.dialects.postgresql import insert
 #from data_manager.build_db.db_objects import DynamicCandlestickTable
 
 # Load environment variables from .env file
@@ -177,28 +178,45 @@ class PostgresAdapter:
             session.execute(f"ALTER TABLE {table.__tablename__} ADD PRIMARY KEY (time);")
             self.logger.info(f"Sorted table {table.__tablename__} by `time` and reapplied indexes.")
 
-
     def insert_new_data(self, table: Type, rows: List[Dict]):
-        """
-        Insert only new rows into the table based on `time` uniqueness.
+            """
+            Insert only new rows into the table based on time uniqueness.
 
-        Args:
-            table (Type): The SQLAlchemy ORM-mapped class representing the table.
-            rows (List[Dict]): A list of dictionaries representing rows to insert.
-        """
-        if not rows:
-            self.logger.info(f"No data provided for insertion into {table.__tablename__}.")
-            return
+            Args:
+                table (Type): The SQLAlchemy ORM-mapped class representing the table.
+                rows (List[Dict]): A list of dictionaries representing rows to insert.
+            """
+            if not rows:
+                self.logger.info(f"No data provided for insertion into {table.__tablename__}.")
+                return
 
-        with self.session_scope() as session:
-            # Fetch existing `time` values from the database
-            try:
-                # Insert only new rows
-                session.bulk_insert_mappings(table, rows)
-                self.logger.info(f"Inserted {len(rows)} new rows into {table.__tablename__}.")
-            except Exception as e:
-                self.logger.error(f"Failed to insert new rows into {table.__tablename__}: {e}")
-                raise
+            with self.session_scope() as session:
+                # Fetch existing time values from the database
+                try:
+                    # Insert only new rows
+                    session.bulk_insert_mappings(table, rows)
+                    self.logger.info(f"Inserted {len(rows)} new rows into {table.__tablename__}.")
+                except Exception as e:
+                    self.logger.error(f"Failed to insert new rows into {table.__tablename__}: {e}")
+                    raise
+
+    # def insert_new_data(self, table: Type, rows: List[Dict]):
+    #     """
+    #     Insert rows into the table. If a row already exists (based on PK), do nothing.
+    #     """
+    #     if not rows:
+    #         self.logger.info(f"No data provided for insertion into {table.__tablename__}.")
+    #         return
+
+    #     with self.session_scope() as session:
+    #         try:
+    #             stmt = insert(table).values(rows)
+    #             stmt = stmt.on_conflict_do_nothing(index_elements=["symbol", "fiscal_date_ending"])
+    #             session.execute(stmt)
+    #             self.logger.info(f"Inserted rows into {table.__tablename__} (skipping duplicates).")
+    #         except Exception as e:
+    #             self.logger.error(f"Failed to insert rows into {table.__tablename__}: {e}")
+    #             raise
 
 
     def verify_table(self, table: Type, limit: int = 10, filters: Dict = None):
