@@ -1,4 +1,3 @@
-
 import requests
 import pandas as pd
 
@@ -6,10 +5,53 @@ from configs.config import ALPHA_API_KEY
 from data_manager.db_builders.postgre_adapter import PostgresAdapter
 from data_manager.db_builders.postgre_objects import DailyTimeSeries, CompanyFundamentalsTable
 
+from data_manager.etl_jobs.transform_utils import (
+    standardize_annual_income_statement_columns,
+    standardize_quarterly_income_statement_columns,
+    standardize_annual_balance_sheet_columns,
+    standardize_quarterly_balance_sheet_columns,
+    standardize_annual_cash_flow_columns,
+    standardize_quarterly_cash_flow_columns,
+    standardize_annual_earnings_columns,
+    standardize_quarterly_earnings_columns,
+)
+from data_manager.db_builders.postgre_objects import (
+    AnnualIncomeStatement,
+    QuarterlyIncomeStatement,
+    AnnualBalanceSheetTable,
+    QuarterlyBalanceSheetTable,
+    AnnualCashFlowTable,
+    QuarterlyCashFlowTable,
+    AnnualEarningsTable,
+    QuarterlyEarningsTable,
+)
+
 # TODO: ADD  ROW FOR EACH DATA HANDLER TO CHECK FOR DATABASE COMPLIANCE AND DATA QUALITY
 # e.g. missing values, and add a logger for these stuff!
 
+
 class AlphaLoader:
+
+    """
+        AlphaLoader: Data Extraction and Storage Utility for Alpha Vantage API
+
+        This module provides the `AlphaLoader` class for fetching a variety of financial data 
+        from the Alpha Vantage API, including daily time series, company fundamentals, financial statements, 
+        insider transactions, stock splits, and dividends for a specified company symbol.
+
+        The loader supports two main data persistence modes:
+        - **Database Mode:** Stores data directly in a PostgreSQL database via SQLAlchemy adapters and ORM classes.
+        - **Local Store Mode:** Saves data as CSV files in a local directory.
+
+        Key Features:
+        - Robust API querying with error handling for all supported data types.
+        - Data standardization and cleanup before storage, using custom utility functions.
+        - Modular design to facilitate data quality checks and compliance (future enhancements).
+        - Optional local storage for offline or backup use.
+        - Easy integration with ETL pipelines.
+
+        Note: Database table definitions and transformation utilities are imported from the `data_manager` package.
+    """
 
     def __init__(self, symbol: str, db_mode: bool = False, local_store_mode: bool = False):
         self.symbol = symbol.upper()
@@ -18,22 +60,27 @@ class AlphaLoader:
         self.base_url = "https://www.alphavantage.co/query?function="
         self.local_store_path = "/home/bandee/projects/marketIntelligence/dev_data/jsons"
 
-
     def get_daily_timeseries(self):
+        """
+            Fetch daily time series data for the symbol from Alpha Vantage.
+            Saves the data to a database or as a CSV file, based on configuration.
+            Handles API errors and ensures proper data formatting.
+        """
         url = f"{self.base_url}TIME_SERIES_DAILY&outputsize=full&symbol={self.symbol}&apikey={ALPHA_API_KEY}"
         print(f"Fetching data for {self.symbol}...")
-
         try:
-            r = requests.get(url)
+            r = requests.get(url, timeout=10)
             r.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
             data = r.json()
-            #data = json.load(open(f'{self.local_store_path}/{self.symbol}_daily_time_series.json'))
+            # data = json.load(open(f'{self.local_store_path}/{self.symbol}_daily_time_series.json'))
             # Handle API limit or error response
             if "Time Series (Daily)" not in data:
-                print(f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
+                print(
+                    f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
                 return
 
-            data_df = pd.DataFrame.from_dict(data=data["Time Series (Daily)"], orient='index')
+            data_df = pd.DataFrame.from_dict(
+                data=data["Time Series (Daily)"], orient='index')
             data_df.columns = ['open', 'high', 'low', 'close', 'volume']
             data_df.index = pd.to_datetime(data_df.index)
             data_df.sort_index(ascending=True, axis=0, inplace=True)
@@ -42,13 +89,16 @@ class AlphaLoader:
             data_df["symbol"] = self.symbol
 
             # Reorder columns
-            data_df = data_df[["date", "symbol", "open", "high", "low", "close", "volume"]]
+            data_df = data_df[["date", "symbol", "open",
+                               "high", "low", "close", "volume"]]
 
             if self.db_mode:
                 adapter = PostgresAdapter()
                 data_df_rows = data_df.to_dict(orient="records")
-                adapter.insert_new_data(table=DailyTimeSeries, rows=data_df_rows)
-                print(f"✅ Candlestick data for {self.symbol} loaded into the database.")
+                adapter.insert_new_data(
+                    table=DailyTimeSeries, rows=data_df_rows)
+                print(
+                    f"✅ Candlestick data for {self.symbol} loaded into the database.")
 
             if self.local_store_mode:
                 output_path = f"{self.local_store_path}/{self.symbol}_daily_time_series.csv"
@@ -63,7 +113,6 @@ class AlphaLoader:
         except Exception as e:
             print(f"❌ An unexpected error occurred: {e}")
 
-
     def get_company_base(self):
         """
         Fetch company base information from Alpha Vantage API and store it.
@@ -73,19 +122,20 @@ class AlphaLoader:
         print(f"Fetching company base data for {self.symbol}...")
 
         try:
-            r = requests.get(url)
+            r = requests.get(url, timeout=10)
             r.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
             data = r.json()
-            #file = [f for f in os.listdir(self.local_store_path) if 'company_fundamentals' in f][0]
-            #data = json.load(open(f'{self.local_store_path}/{file}'))
+            # file = [f for f in os.listdir(self.local_store_path) if 'company_fundamentals' in f][0]
+            # data = json.load(open(f'{self.local_store_path}/{file}'))
 
             # Handle error in API response
             if "Error Message" in data or "Note" in data:
-                print(f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
+                print(
+                    f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
                 return
             # Convert the response into a DataFrame
             data_df = pd.DataFrame([data])
-            
+
             # converting the datatypes:
             data_df.replace("None", pd.NA, inplace=True)
             data_df = data_df.apply(pd.to_numeric, errors='ignore')
@@ -101,8 +151,10 @@ class AlphaLoader:
                     for k, v in d.items():
                         if pd.isna(v):
                             d[k] = None
-                adapter.insert_new_data(table=CompanyFundamentalsTable, rows=data_df_rows)
-                print(f"✅ Company base data for {self.symbol} loaded into the database.")
+                adapter.insert_new_data(
+                    table=CompanyFundamentalsTable, rows=data_df_rows)
+                print(
+                    f"✅ Company base data for {self.symbol} loaded into the database.")
 
             # Save data locally as a CSV if local_store_mode is enabled
             if self.local_store_mode:
@@ -119,7 +171,6 @@ class AlphaLoader:
         except Exception as e:
             print(f"❌ An unexpected error occurred: {e}")
 
-
     def get_financials(self, function: str):
         """
         Fetch financial data (INCOME_STATEMENT, BALANCE_SHEET, CASH_FLOW, or EARNINGS) for the given symbol.
@@ -128,7 +179,7 @@ class AlphaLoader:
         print(f"Fetching {function} data for {self.symbol}...")
 
         try:
-            r = requests.get(url)
+            r = requests.get(url, timeout=10)
             r.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
             data = r.json()
 
@@ -138,7 +189,8 @@ class AlphaLoader:
                 annual_key = "annualEarnings"
                 quarterly_key = "quarterlyEarnings"
                 if annual_key not in data or quarterly_key not in data:
-                    print(f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
+                    print(
+                        f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
                     return
                 annual_df = pd.DataFrame(data[annual_key])
                 quarterly_df = pd.DataFrame(data[quarterly_key])
@@ -147,7 +199,8 @@ class AlphaLoader:
                 quarterly_df["symbol"] = data["symbol"]
             else:
                 if "annualReports" not in data or "quarterlyReports" not in data:
-                    print(f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
+                    print(
+                        f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
                     return
                 annual_df = pd.DataFrame(data["annualReports"])
                 annual_df["symbol"] = data["symbol"]
@@ -157,49 +210,33 @@ class AlphaLoader:
 
             # === 2. Standardize and type-cast columns ===
             if function == 'INCOME_STATEMENT':
-                from data_manager.etl_jobs.transform_utils import (
-                    standardize_annual_income_statement_columns, standardize_quarterly_income_statement_columns
-                )
                 annual_df = standardize_annual_income_statement_columns(annual_df)
                 quarterly_df = standardize_quarterly_income_statement_columns(quarterly_df)
                 annual_pk = "fiscal_date_ending"
                 quarterly_pk = "fiscal_date_ending"
-                from data_manager.db_builders.postgre_objects import (
-                    AnnualIncomeStatement as AnnualTable, QuarterlyIncomeStatement as QuarterlyTable
-                )
+                AnnualTable = AnnualIncomeStatement
+                QuarterlyTable = QuarterlyIncomeStatement
             elif function == 'BALANCE_SHEET':
-                from data_manager.etl_jobs.transform_utils import (
-                    standardize_annual_balance_sheet_columns, standardize_quarterly_balance_sheet_columns
-                )
                 annual_df = standardize_annual_balance_sheet_columns(annual_df)
                 quarterly_df = standardize_quarterly_balance_sheet_columns(quarterly_df)
                 annual_pk = "fiscal_date_ending"
                 quarterly_pk = "fiscal_date_ending"
-                from data_manager.db_builders.postgre_objects import (
-                    AnnualBalanceSheetTable as AnnualTable, QuarterlyBalanceSheetTable as QuarterlyTable
-                )
+                AnnualTable = AnnualBalanceSheetTable
+                QuarterlyTable = QuarterlyBalanceSheetTable
             elif function == 'CASH_FLOW':
-                from data_manager.etl_jobs.transform_utils import (
-                    standardize_annual_cash_flow_columns, standardize_quarterly_cash_flow_columns
-                )
                 annual_df = standardize_annual_cash_flow_columns(annual_df)
                 quarterly_df = standardize_quarterly_cash_flow_columns(quarterly_df)
                 annual_pk = "fiscal_date_ending"
                 quarterly_pk = "fiscal_date_ending"
-                from data_manager.db_builders.postgre_objects import (
-                    AnnualCashFlowTable as AnnualTable, QuarterlyCashFlowTable as QuarterlyTable
-                )
+                AnnualTable = AnnualCashFlowTable
+                QuarterlyTable = QuarterlyCashFlowTable
             elif function == 'EARNINGS':
-                from data_manager.etl_jobs.transform_utils import (
-                    standardize_annual_earnings_columns, standardize_quarterly_earnings_columns
-                )
                 annual_df = standardize_annual_earnings_columns(annual_df)
                 quarterly_df = standardize_quarterly_earnings_columns(quarterly_df)
                 annual_pk = "fiscal_date_ending"
                 quarterly_pk = "fiscal_date_ending"
-                from data_manager.db_builders.postgre_objects import (
-                    AnnualEarningsTable as AnnualTable, QuarterlyEarningsTable as QuarterlyTable
-                )
+                AnnualTable = AnnualEarningsTable
+                QuarterlyTable = QuarterlyEarningsTable
             else:
                 print(f"❌ Unknown function '{function}'")
                 return
@@ -212,14 +249,19 @@ class AlphaLoader:
             # === 4. Save to DB if enabled ===
             if self.db_mode:
                 adapter = PostgresAdapter()
-                adapter.insert_new_data(table=AnnualTable, rows=annual_df.to_dict(orient="records"))
-                adapter.insert_new_data(table=QuarterlyTable, rows=quarterly_df.to_dict(orient="records"))
-                print(f"✅ {function} data for {self.symbol} loaded into the database.")
+                adapter.insert_new_data(
+                    table=AnnualTable, rows=annual_df.to_dict(orient="records"))
+                adapter.insert_new_data(
+                    table=QuarterlyTable, rows=quarterly_df.to_dict(orient="records"))
+                print(
+                    f"✅ {function} data for {self.symbol} loaded into the database.")
 
             # === 5. Save as CSV locally if enabled ===
             if self.local_store_mode:
-                annual_df.to_csv(f"{self.local_store_path}/{self.symbol}_{function.lower()}_annual.csv", index=False)
-                quarterly_df.to_csv(f"{self.local_store_path}/{self.symbol}_{function.lower()}_quaterly.csv", index=False)
+                annual_df.to_csv(
+                    f"{self.local_store_path}/{self.symbol}_{function.lower()}_annual.csv", index=False)
+                quarterly_df.to_csv(
+                    f"{self.local_store_path}/{self.symbol}_{function.lower()}_quaterly.csv", index=False)
                 print(f"✅ {function} data saved locally for {self.symbol}.")
 
             # === 6. Warn if nothing is enabled ===
@@ -239,7 +281,7 @@ class AlphaLoader:
         print(f"Fetching INSIDER_TRANSACTIONS data for {self.symbol}...")
 
         try:
-            r = requests.get(url)
+            r = requests.get(url, timeout=10)
             r.raise_for_status()
             data = r.json()
             if isinstance(data, dict) and "data" in data:
@@ -251,28 +293,34 @@ class AlphaLoader:
             from data_manager.etl_jobs.transform_utils import standardize_insider_transaction_columns
             df = standardize_insider_transaction_columns(df)
             if "transaction_date" not in df.columns:
-                print("❌ 'transaction_date' column missing after standardization. Columns are:", df.columns)
+                print(
+                    "❌ 'transaction_date' column missing after standardization. Columns are:", df.columns)
                 return
             df.dropna(subset=["transaction_date", "symbol"], inplace=True)
 
             if self.db_mode:
                 from data_manager.db_builders.postgre_objects import InsiderTransactionTable
                 adapter = PostgresAdapter()
-                adapter.insert_new_data(table=InsiderTransactionTable, rows=df.to_dict(orient="records"))
-                print(f"✅ Insider transaction data for {self.symbol} loaded into the database.")
+                adapter.insert_new_data(
+                    table=InsiderTransactionTable, rows=df.to_dict(orient="records"))
+                print(
+                    f"✅ Insider transaction data for {self.symbol} loaded into the database.")
 
             if self.local_store_mode:
-                df.to_csv(f"{self.local_store_path}/{self.symbol}_insider_transactions.csv", index=False)
-                print(f"✅ Insider transaction data saved locally for {self.symbol}.")
+                df.to_csv(
+                    f"{self.local_store_path}/{self.symbol}_insider_transactions.csv", index=False)
+                print(
+                    f"✅ Insider transaction data saved locally for {self.symbol}.")
 
             if not self.db_mode and not self.local_store_mode:
-                print('⚠️  Choose a place where you want to store the data from the API!')
+                print(
+                    '⚠️  Choose a place where you want to store the data from the API!')
 
         except requests.exceptions.RequestException as e:
             print(f"❌ Request failed for {self.symbol}: {e}")
         except Exception as e:
             print(f"❌ An unexpected error occurred: {e}")
-    
+
     def get_stock_splits(self):
         """
         Fetch and store stock split data for the given symbol.
@@ -281,7 +329,7 @@ class AlphaLoader:
         print(f"Fetching STOCK_SPLITS data for {self.symbol}...")
 
         try:
-            r = requests.get(url)
+            r = requests.get(url, timeout=10)
             r.raise_for_status()
             data = r.json()
             print(data)
@@ -301,15 +349,19 @@ class AlphaLoader:
             if self.db_mode:
                 from data_manager.db_builders.postgre_objects import StockSplit
                 adapter = PostgresAdapter()
-                adapter.insert_new_data(table=StockSplit, rows=df.to_dict(orient="records"))
-                print(f"✅ Stock split data for {self.symbol} loaded into the database.")
+                adapter.insert_new_data(
+                    table=StockSplit, rows=df.to_dict(orient="records"))
+                print(
+                    f"✅ Stock split data for {self.symbol} loaded into the database.")
 
             if self.local_store_mode:
-                df.to_csv(f"{self.local_store_path}/{self.symbol}_stock_splits.csv", index=False)
+                df.to_csv(
+                    f"{self.local_store_path}/{self.symbol}_stock_splits.csv", index=False)
                 print(f"✅ Stock split data saved locally for {self.symbol}.")
 
             if not self.db_mode and not self.local_store_mode:
-                print('⚠️  Choose a place where you want to store the data from the API!')
+                print(
+                    '⚠️  Choose a place where you want to store the data from the API!')
 
         except requests.exceptions.RequestException as e:
             print(f"❌ Request failed for {self.symbol}: {e}")
@@ -324,7 +376,7 @@ class AlphaLoader:
         print(f"Fetching DIVIDENDS data for {self.symbol}...")
 
         try:
-            r = requests.get(url)
+            r = requests.get(url, timeout=10)
             r.raise_for_status()
             data = r.json()
 
@@ -344,15 +396,19 @@ class AlphaLoader:
             if self.db_mode:
                 from data_manager.db_builders.postgre_objects import DividendsTable
                 adapter = PostgresAdapter()
-                adapter.insert_new_data(table=DividendsTable, rows=df.to_dict(orient="records"))
-                print(f"✅ Dividend data for {self.symbol} loaded into the database.")
+                adapter.insert_new_data(
+                    table=DividendsTable, rows=df.to_dict(orient="records"))
+                print(
+                    f"✅ Dividend data for {self.symbol} loaded into the database.")
 
             if self.local_store_mode:
-                df.to_csv(f"{self.local_store_path}/{self.symbol}_dividends.csv", index=False)
+                df.to_csv(
+                    f"{self.local_store_path}/{self.symbol}_dividends.csv", index=False)
                 print(f"✅ Dividend data saved locally for {self.symbol}.")
 
             if not self.db_mode and not self.local_store_mode:
-                print('⚠️  Choose a place where you want to store the data from the API!')
+                print(
+                    '⚠️  Choose a place where you want to store the data from the API!')
 
         except requests.exceptions.RequestException as e:
             print(f"❌ Request failed for {self.symbol}: {e}")
@@ -360,12 +416,9 @@ class AlphaLoader:
             print(f"❌ An unexpected error occurred: {e}")
 
 
-
-
-
 # def get_time_series_intraday(month: str, symbol: str = SYMBOL, interval: str='1min'):
-#     """    
-#         month is in YYYY-MM format   
+#     """
+#         month is in YYYY-MM format
 #     """
 
 #     url = f'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={symbol}&interval={interval}&month={month}&outputsize=full&apikey={ALPHA_API_KEY}'
