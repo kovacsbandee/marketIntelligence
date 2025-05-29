@@ -1,63 +1,64 @@
 import pandas as pd
 import numpy as np
 
+
 def standardize_company_fundamentals_columns(df):
     """Rename columns from Alpha Vantage to match the database schema."""
 
     column_map = {
-    'Symbol': 'symbol',
-    'AssetType': 'asset_type',
-    'Name': 'name',
-    'Description': 'description',
-    'CIK': 'cik',
-    'Exchange': 'exchange',
-    'Currency': 'currency',
-    'Country': 'country',
-    'Sector': 'sector',
-    'Industry': 'industry',
-    'Address': 'address',
-    'OfficialSite': 'official_site',
-    'FiscalYearEnd': 'fiscal_year_end',
-    'LatestQuarter': 'latest_quarter',
-    'MarketCapitalization': 'market_capitalization',
-    'EBITDA': 'ebitda',
-    'PERatio': 'pe_ratio',
-    'PEGRatio': 'peg_ratio',
-    'BookValue': 'book_value',
-    'DividendPerShare': 'dividend_per_share',
-    'DividendYield': 'dividend_yield',
-    'EPS': 'eps',
-    'RevenuePerShareTTM': 'revenue_per_share_ttm',
-    'ProfitMargin': 'profit_margin',
-    'OperatingMarginTTM': 'operating_margin_ttm',
-    'ReturnOnAssetsTTM': 'return_on_assets_ttm',
-    'ReturnOnEquityTTM': 'return_on_equity_ttm',
-    'RevenueTTM': 'revenue_ttm',
-    'GrossProfitTTM': 'gross_profit_ttm',
-    'DilutedEPSTTM': 'diluted_eps_ttm',
-    'QuarterlyEarningsGrowthYOY': 'quarterly_earnings_growth_yoy',
-    'QuarterlyRevenueGrowthYOY': 'quarterly_revenue_growth_yoy',
-    'AnalystTargetPrice': 'analyst_target_price',
-    'AnalystRatingStrongBuy': 'analyst_rating_strong_buy',
-    'AnalystRatingBuy': 'analyst_rating_buy',
-    'AnalystRatingHold': 'analyst_rating_hold',
-    'AnalystRatingSell': 'analyst_rating_sell',
-    'AnalystRatingStrongSell': 'analyst_rating_strong_sell',
-    'TrailingPE': 'trailing_pe',
-    'ForwardPE': 'forward_pe',
-    'PriceToSalesRatioTTM': 'price_to_sales_ratio_ttm',
-    'PriceToBookRatio': 'price_to_book_ratio',
-    'EVToRevenue': 'ev_to_revenue',
-    'EVToEBITDA': 'ev_to_ebitda',
-    'Beta': 'beta',
-    '52WeekHigh': 'fifty_two_week_high',
-    '52WeekLow': 'fifty_two_week_low',
-    '50DayMovingAverage': 'fifty_day_moving_average',
-    '200DayMovingAverage': 'two_hundred_day_moving_average',
-    'SharesOutstanding': 'shares_outstanding',
-    'DividendDate': 'dividend_date',
-    'ExDividendDate': 'ex_dividend_date'
-}
+        'Symbol': 'symbol',
+        'AssetType': 'asset_type',
+        'Name': 'name',
+        'Description': 'description',
+        'CIK': 'cik',
+        'Exchange': 'exchange',
+        'Currency': 'currency',
+        'Country': 'country',
+        'Sector': 'sector',
+        'Industry': 'industry',
+        'Address': 'address',
+        'OfficialSite': 'official_site',
+        'FiscalYearEnd': 'fiscal_year_end',
+        'LatestQuarter': 'latest_quarter',
+        'MarketCapitalization': 'market_capitalization',
+        'EBITDA': 'ebitda',
+        'PERatio': 'pe_ratio',
+        'PEGRatio': 'peg_ratio',
+        'BookValue': 'book_value',
+        'DividendPerShare': 'dividend_per_share',
+        'DividendYield': 'dividend_yield',
+        'EPS': 'eps',
+        'RevenuePerShareTTM': 'revenue_per_share_ttm',
+        'ProfitMargin': 'profit_margin',
+        'OperatingMarginTTM': 'operating_margin_ttm',
+        'ReturnOnAssetsTTM': 'return_on_assets_ttm',
+        'ReturnOnEquityTTM': 'return_on_equity_ttm',
+        'RevenueTTM': 'revenue_ttm',
+        'GrossProfitTTM': 'gross_profit_ttm',
+        'DilutedEPSTTM': 'diluted_eps_ttm',
+        'QuarterlyEarningsGrowthYOY': 'quarterly_earnings_growth_yoy',
+        'QuarterlyRevenueGrowthYOY': 'quarterly_revenue_growth_yoy',
+        'AnalystTargetPrice': 'analyst_target_price',
+        'AnalystRatingStrongBuy': 'analyst_rating_strong_buy',
+        'AnalystRatingBuy': 'analyst_rating_buy',
+        'AnalystRatingHold': 'analyst_rating_hold',
+        'AnalystRatingSell': 'analyst_rating_sell',
+        'AnalystRatingStrongSell': 'analyst_rating_strong_sell',
+        'TrailingPE': 'trailing_pe',
+        'ForwardPE': 'forward_pe',
+        'PriceToSalesRatioTTM': 'price_to_sales_ratio_ttm',
+        'PriceToBookRatio': 'price_to_book_ratio',
+        'EVToRevenue': 'ev_to_revenue',
+        'EVToEBITDA': 'ev_to_ebitda',
+        'Beta': 'beta',
+        '52WeekHigh': 'fifty_two_week_high',
+        '52WeekLow': 'fifty_two_week_low',
+        '50DayMovingAverage': 'fifty_day_moving_average',
+        '200DayMovingAverage': 'two_hundred_day_moving_average',
+        'SharesOutstanding': 'shares_outstanding',
+        'DividendDate': 'dividend_date',
+        'ExDividendDate': 'ex_dividend_date'
+    }
 
     return df.rename(columns=column_map)
 
@@ -71,6 +72,7 @@ INCOME_STATEMENT_NUMERIC_COLUMNS = [
     'interest_and_debt_expense', 'net_income_from_continuing_operations',
     'comprehensive_income_net_of_tax', 'ebit', 'ebitda', 'net_income'
 ]
+
 
 def standardize_annual_income_statement_columns(df):
     """Rename and clean Alpha Vantage annual income statement columns for DB insert."""
@@ -110,16 +112,19 @@ def standardize_annual_income_statement_columns(df):
         value=np.nan,
         inplace=True
     )
-    df = df.infer_objects(copy=False)  # Explicitly call infer_objects to avoid future warning
+    # Explicitly call infer_objects to avoid future warning
+    df = df.infer_objects(copy=False)
 
     for col in INCOME_STATEMENT_NUMERIC_COLUMNS:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
 
     if 'fiscal_date_ending' in df.columns:
-        df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors="coerce")
+        df['fiscal_date_ending'] = pd.to_datetime(
+            df['fiscal_date_ending'], errors="coerce")
     df = df.where(pd.notnull(df), None)
     return df
+
 
 def standardize_quarterly_income_statement_columns(df):
     """Rename and clean Alpha Vantage quarterly income statement columns for DB insert."""
@@ -164,7 +169,8 @@ def standardize_quarterly_income_statement_columns(df):
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
     if 'fiscal_date_ending' in df.columns:
-        df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors="coerce")
+        df['fiscal_date_ending'] = pd.to_datetime(
+            df['fiscal_date_ending'], errors="coerce")
     df = df.where(pd.notnull(df), None)
     return df
 
@@ -209,6 +215,7 @@ def standardize_annual_balance_sheet_columns(df):
         'commonStockSharesOutstanding': 'common_stock_shares_outstanding',
     }
     return df.rename(columns=column_map)
+
 
 def standardize_quarterly_balance_sheet_columns(df):
     """Rename Alpha Vantage quarterly balance sheet columns to match database schema."""
@@ -299,7 +306,8 @@ def standardize_annual_balance_sheet_columns(df):
     # Convert columns to appropriate types
     # Date
     if 'fiscal_date_ending' in df.columns:
-        df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
+        df['fiscal_date_ending'] = pd.to_datetime(
+            df['fiscal_date_ending'], errors='coerce')
 
     # Numeric columns (excluding 'symbol', 'reported_currency')
     float_columns = [
@@ -325,9 +333,11 @@ def standardize_annual_balance_sheet_columns(df):
             df[col] = pd.to_numeric(df[col], errors='coerce').astype('Int64')
 
     # Clean any 'None', 'nan', 'NaN', etc.
-    df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan, inplace=True)
+    df.replace(to_replace=["None", "none", "NaN",
+               "nan", ""], value=np.nan, inplace=True)
 
     return df
+
 
 def standardize_quarterly_balance_sheet_columns(df):
     """Rename and type-cast columns from Alpha Vantage quarterly balance sheet to match the database schema."""
@@ -378,7 +388,8 @@ def standardize_quarterly_balance_sheet_columns(df):
 
     # Date
     if 'fiscal_date_ending' in df.columns:
-        df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
+        df['fiscal_date_ending'] = pd.to_datetime(
+            df['fiscal_date_ending'], errors='coerce')
 
     float_columns = [
         'total_assets', 'total_current_assets', 'cash_and_cash_equivalents',
@@ -403,12 +414,11 @@ def standardize_quarterly_balance_sheet_columns(df):
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors='coerce').astype('Int64')
 
-    df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan, inplace=True)
+    df.replace(to_replace=["None", "none", "NaN",
+               "nan", ""], value=np.nan, inplace=True)
 
     return df
 
-import numpy as np
-import pandas as pd
 
 def standardize_annual_cash_flow_columns(df):
     """Rename and type-cast Alpha Vantage annual cash flow columns to DB schema."""
@@ -455,14 +465,17 @@ def standardize_annual_cash_flow_columns(df):
 
     # Date conversion
     if 'fiscal_date_ending' in df.columns:
-        df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
+        df['fiscal_date_ending'] = pd.to_datetime(
+            df['fiscal_date_ending'], errors='coerce')
 
     # Float columns (all except symbol, date, currency)
-    float_cols = [col for col in df.columns if col not in ['symbol', 'fiscal_date_ending', 'reported_currency']]
+    float_cols = [col for col in df.columns if col not in [
+        'symbol', 'fiscal_date_ending', 'reported_currency']]
     for col in float_cols:
         df[col] = pd.to_numeric(df[col], errors='coerce')
     # Clean up
     return df
+
 
 def standardize_quarterly_cash_flow_columns(df):
     """Rename and type-cast Alpha Vantage quarterly cash flow columns to DB schema."""
@@ -509,14 +522,17 @@ def standardize_quarterly_cash_flow_columns(df):
 
     # Date conversion
     if 'fiscal_date_ending' in df.columns:
-        df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
+        df['fiscal_date_ending'] = pd.to_datetime(
+            df['fiscal_date_ending'], errors='coerce')
 
     # Float columns (all except symbol, date, currency)
-    float_cols = [col for col in df.columns if col not in ['symbol', 'fiscal_date_ending', 'reported_currency']]
+    float_cols = [col for col in df.columns if col not in [
+        'symbol', 'fiscal_date_ending', 'reported_currency']]
     for col in float_cols:
         df[col] = pd.to_numeric(df[col], errors='coerce')
     # Clean up
     return df
+
 
 def standardize_annual_earnings_columns(df):
     """Rename Alpha Vantage annual earnings columns to match the database schema and convert types."""
@@ -528,7 +544,8 @@ def standardize_annual_earnings_columns(df):
     df = df.rename(columns=column_map)
     # Convert types
     if 'fiscal_date_ending' in df.columns:
-        df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
+        df['fiscal_date_ending'] = pd.to_datetime(
+            df['fiscal_date_ending'], errors='coerce')
     if 'reported_eps' in df.columns:
         df['reported_eps'] = pd.to_numeric(df['reported_eps'], errors='coerce')
     if 'symbol' in df.columns and 'symbol' in column_map:
@@ -541,6 +558,7 @@ def standardize_annual_earnings_columns(df):
     )
     df = df.infer_objects(copy=False)
     return df
+
 
 def standardize_quarterly_earnings_columns(df):
     """Rename Alpha Vantage quarterly earnings columns to match the database schema and convert types."""
@@ -557,10 +575,13 @@ def standardize_quarterly_earnings_columns(df):
     df = df.rename(columns=column_map)
     # Convert types
     if 'fiscal_date_ending' in df.columns:
-        df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
+        df['fiscal_date_ending'] = pd.to_datetime(
+            df['fiscal_date_ending'], errors='coerce')
     if 'reported_date' in df.columns:
-        df['reported_date'] = pd.to_datetime(df['reported_date'], errors='coerce')
-    float_cols = ['reported_eps', 'estimated_eps', 'surprise', 'surprise_percentage']
+        df['reported_date'] = pd.to_datetime(
+            df['reported_date'], errors='coerce')
+    float_cols = ['reported_eps', 'estimated_eps',
+                  'surprise', 'surprise_percentage']
     for col in float_cols:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors='coerce')
@@ -595,7 +616,8 @@ def standardize_insider_transaction_columns(df):
 
     # Protect against missing columns
     if "transaction_date" in df.columns:
-        df["transaction_date"] = pd.to_datetime(df["transaction_date"], errors="coerce")
+        df["transaction_date"] = pd.to_datetime(
+            df["transaction_date"], errors="coerce")
     for col in ["shares", "share_price"]:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
@@ -612,7 +634,8 @@ def standardize_insider_transaction_columns(df):
     required_cols = ["transaction_date", "symbol"]
     for c in required_cols:
         if c not in df.columns:
-            print(f"❌ Warning: Required column '{c}' is missing after standardization!")
+            print(
+                f"❌ Warning: Required column '{c}' is missing after standardization!")
     df.drop_duplicates(
         subset=[
             "transaction_date",
@@ -624,6 +647,7 @@ def standardize_insider_transaction_columns(df):
         inplace=True)
 
     return df
+
 
 def standardize_stock_split_columns(df):
     """
@@ -637,7 +661,8 @@ def standardize_stock_split_columns(df):
     df = df.rename(columns=column_map)
 
     # Convert types
-    df["effective_date"] = pd.to_datetime(df["effective_date"], errors="coerce")
+    df["effective_date"] = pd.to_datetime(
+        df["effective_date"], errors="coerce")
     df["split_factor"] = pd.to_numeric(df["split_factor"], errors="coerce")
     if "symbol" in df.columns:
         df["symbol"] = df["symbol"].astype(str)
@@ -655,6 +680,7 @@ def standardize_stock_split_columns(df):
 
     return df
 
+
 def standardize_dividends_columns(df):
     column_map = {
         "ex_dividend_date": "ex_dividend_date",
@@ -665,8 +691,10 @@ def standardize_dividends_columns(df):
         "symbol": "symbol"
     }
     df = df.rename(columns=column_map)
-    df["ex_dividend_date"] = pd.to_datetime(df["ex_dividend_date"], errors="coerce")
-    df["declaration_date"] = pd.to_datetime(df["declaration_date"], errors="coerce")
+    df["ex_dividend_date"] = pd.to_datetime(
+        df["ex_dividend_date"], errors="coerce")
+    df["declaration_date"] = pd.to_datetime(
+        df["declaration_date"], errors="coerce")
     df["record_date"] = pd.to_datetime(df["record_date"], errors="coerce")
     df["payment_date"] = pd.to_datetime(df["payment_date"], errors="coerce")
     df["amount"] = pd.to_numeric(df["amount"], errors="coerce")
@@ -681,8 +709,10 @@ def standardize_dividends_columns(df):
     # Final fix before DB insert
     for col in ["ex_dividend_date", "declaration_date", "record_date", "payment_date"]:
         if col in df.columns:
-            df[col] = pd.to_datetime(df[col], errors="coerce").apply(lambda x: x.date() if pd.notnull(x) else None)
-            df[col] = df[col].apply(lambda x: None if pd.isnull(x) or x is pd.NaT or x == "NaT" else x)
+            df[col] = pd.to_datetime(df[col], errors="coerce").apply(
+                lambda x: x.date() if pd.notnull(x) else None)
+            df[col] = df[col].apply(lambda x: None if pd.isnull(
+                x) or x is pd.NaT or x == "NaT" else x)
     # Drop duplicates if needed
     df.drop_duplicates(subset=["symbol", "ex_dividend_date"], inplace=True)
     return df

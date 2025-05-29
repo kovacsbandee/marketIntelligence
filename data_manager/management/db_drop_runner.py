@@ -3,6 +3,7 @@ import logging
 from data_manager.db_builders.postgre_adapter import PostgresAdapter
 from data_manager.db_builders import postgre_objects
 
+
 def main():
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger("DBDropper")
@@ -30,7 +31,8 @@ def main():
         return
 
     # Display list of tables to drop (table class names)
-    print(f"\n⚠️  WARNING: You are about to delete {len(defined_classes)} tables:")
+    print(
+        f"\n⚠️  WARNING: You are about to delete {len(defined_classes)} tables:")
     for table_class in defined_classes:
         print(f" - {table_class.__tablename__}")
 
@@ -47,6 +49,7 @@ def main():
         adapter.drop_table(table_class)
 
     print("✅ All specified tables have been dropped.")
+
 
 if __name__ == "__main__":
     main()

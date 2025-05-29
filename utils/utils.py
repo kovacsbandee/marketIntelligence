@@ -1,6 +1,7 @@
 import csv
 from pathlib import Path
 
+
 def get_symbols_from_csv(
     csv_path="configs/nasdaq_screener.csv",
     country=None,

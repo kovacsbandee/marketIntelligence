@@ -377,7 +377,8 @@ class AnnualCashFlowTable(Base):
     dividend_payout_common_stock = Column(Float, nullable=True)
     dividend_payout_preferred_stock = Column(Float, nullable=True)
     proceeds_from_issuance_of_common_stock = Column(Float, nullable=True)
-    proceeds_from_issuance_of_long_term_debt_and_capital_securities_net = Column(Float, nullable=True)
+    proceeds_from_issuance_of_long_term_debt_and_capital_securities_net = Column(
+        Float, nullable=True)
     proceeds_from_issuance_of_preferred_stock = Column(Float, nullable=True)
     proceeds_from_repurchase_of_equity = Column(Float, nullable=True)
     proceeds_from_sale_of_treasury_stock = Column(Float, nullable=True)
@@ -453,7 +454,8 @@ class QuarterlyCashFlowTable(Base):
     dividend_payout_common_stock = Column(Float, nullable=True)
     dividend_payout_preferred_stock = Column(Float, nullable=True)
     proceeds_from_issuance_of_common_stock = Column(Float, nullable=True)
-    proceeds_from_issuance_of_long_term_debt_and_capital_securities_net = Column(Float, nullable=True)
+    proceeds_from_issuance_of_long_term_debt_and_capital_securities_net = Column(
+        Float, nullable=True)
     proceeds_from_issuance_of_preferred_stock = Column(Float, nullable=True)
     proceeds_from_repurchase_of_equity = Column(Float, nullable=True)
     proceeds_from_sale_of_treasury_stock = Column(Float, nullable=True)
@@ -647,6 +649,7 @@ class QuarterlyIncomeStatement(Base):
     ebitda = Column(Float, nullable=True)
     net_income = Column(Float, nullable=True)
 
+
 class InsiderTransactionTable(Base):
     """
     ORM osztály a vállalati bennfentes tranzakciók tárolására.
@@ -670,7 +673,8 @@ class InsiderTransactionTable(Base):
     executive = Column(String, primary_key=True, nullable=True)
     executive_title = Column(String, nullable=True)
     security_type = Column(String, primary_key=True, nullable=True)
-    acquisition_or_disposal = Column(String, primary_key=True, nullable=True)  # 'A' (acquire) or 'D' (dispose)
+    # 'A' (acquire) or 'D' (dispose)
+    acquisition_or_disposal = Column(String, primary_key=True, nullable=True)
     shares = Column(Float, nullable=True)
     share_price = Column(Float, nullable=True)
 
@@ -720,4 +724,3 @@ class DividendsTable(Base):
     declaration_date = Column(Date, nullable=True)
     record_date = Column(Date, nullable=True)
     payment_date = Column(Date, nullable=True)
-

@@ -3,6 +3,7 @@ import logging
 from data_manager.db_builders.postgre_adapter import PostgresAdapter
 from data_manager.db_builders import postgre_objects
 
+
 def main():
     # Setup basic logging (optional, improves readability)
     logging.basicConfig(level=logging.INFO)
@@ -36,6 +37,7 @@ def main():
     # List all tables that exist in the database after creation
     tables = adapter.list_tables()
     logger.info(f"Tables currently in the database: {tables}")
+
 
 if __name__ == "__main__":
     main()

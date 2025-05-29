@@ -3,10 +3,10 @@ import pandas as pd
 
 class AddPriceIndicators:
 
-    def __init__(self, 
-                 table: pd.DataFrame = None, 
+    def __init__(self,
+                 table: pd.DataFrame = None,
                  price_col: str = "close"):
-        
+
         self.table = table
         self.price_col = price_col
         self.rsi_period = None
@@ -30,10 +30,12 @@ class AddPriceIndicators:
         """
         # Compute EMAs
         self.table[f"EMA_{macd_short_period}"] = (
-            self.table[self.price_col].ewm(span=macd_short_period, adjust=False).mean()
+            self.table[self.price_col].ewm(
+                span=macd_short_period, adjust=False).mean()
         )
         self.table[f"EMA_{macd_long_period}"] = (
-            self.table[self.price_col].ewm(span=macd_long_period, adjust=False).mean()
+            self.table[self.price_col].ewm(
+                span=macd_long_period, adjust=False).mean()
         )
 
         # Compute MACD Line
@@ -44,7 +46,8 @@ class AddPriceIndicators:
 
         # Compute Signal Line
         self.table["signal_line"] = (
-            self.table["MACD_line"].ewm(span=macd_signal_period, adjust=False).mean()
+            self.table["MACD_line"].ewm(
+                span=macd_signal_period, adjust=False).mean()
         )
 
         # Compute MACD Histogram
@@ -57,19 +60,21 @@ class AddPriceIndicators:
         print(f"Short-term EMA: {macd_short_period}")
         print(f"Long-term EMA: {macd_long_period}")
         print(f"Signal line EMA: {macd_signal_period}")
-        print(f"Intermediate columns {'dropped' if clean_intermediates else 'kept'}.")
+        print(
+            f"Intermediate columns {'dropped' if clean_intermediates else 'kept'}.")
 
         # Optionally clean intermediate columns
         if clean_intermediates:
             self.table.drop(
-                columns=[f"EMA_{macd_short_period}", f"EMA_{macd_long_period}"],
+                columns=[f"EMA_{macd_short_period}",
+                         f"EMA_{macd_long_period}"],
                 inplace=True,
             )
 
         return self.table
 
-    def add_rsi(self, 
-                rsi_period=14, 
+    def add_rsi(self,
+                rsi_period=14,
                 clean_intermediates=True):
         """
         Adds RSI (Relative Strength Index) to the table.
@@ -109,18 +114,20 @@ class AddPriceIndicators:
         # Log parameters
         print("RSI parameters:")
         print(f"RSI period: {rsi_period}")
-        print(f"Intermediate columns {'dropped' if clean_intermediates else 'kept'}.")
+        print(
+            f"Intermediate columns {'dropped' if clean_intermediates else 'kept'}.")
 
         # Optionally clean intermediate columns
         if clean_intermediates:
             self.table.drop(
-                columns=["price_diff", "gain", "loss", "avg_gain", "avg_loss", "RS"],
+                columns=["price_diff", "gain", "loss",
+                         "avg_gain", "avg_loss", "RS"],
                 inplace=True,
             )
 
         return self.table
 
-    def add_indicator(self, 
+    def add_indicator(self,
                       macd=True):
         if macd:
             self.add_macd()

@@ -1,6 +1,5 @@
-import os
+
 import requests
-import json
 import pandas as pd
 
 from configs.config import ALPHA_API_KEY

@@ -9,7 +9,7 @@ from sqlalchemy import create_engine, inspect, func
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.inspection import inspect
 from sqlalchemy.dialects.postgresql import insert
-#from data_manager.build_db.db_objects import DynamicCandlestickTable
+# from data_manager.build_db.db_objects import DynamicCandlestickTable
 
 # Load environment variables from .env file
 load_dotenv()
@@ -49,7 +49,8 @@ class PostgresAdapter:
         self.db_port = db_port or os.getenv("DB_PORT")
 
         if not all(
-            [self.db_host, self.db_name, self.db_user, self.db_password, self.db_port]
+            [self.db_host, self.db_name, self.db_user,
+                self.db_password, self.db_port]
         ):
             raise ValueError(
                 "Database connection parameters are incomplete. Check your environment or arguments."
@@ -61,7 +62,6 @@ class PostgresAdapter:
         self.logger = logging.getLogger(__name__)
         logging.basicConfig(level=logging.INFO)
 
-
     def provide_session(self) -> Session:
         """
         Provide a new database session.
@@ -71,7 +71,6 @@ class PostgresAdapter:
         """
         base_session = sessionmaker(bind=self.engine)
         return base_session()
-
 
     @contextmanager
     def session_scope(self):
@@ -144,7 +143,8 @@ class PostgresAdapter:
             rows (List[Dict]): A list of dictionaries representing rows to append.
         """
         if not rows:
-            self.logger.info(f"No data provided for appending into {table.__tablename__}.")
+            self.logger.info(
+                f"No data provided for appending into {table.__tablename__}.")
             return
 
         with self.session_scope() as session:
@@ -152,19 +152,24 @@ class PostgresAdapter:
             incoming_times = {pd.Timestamp(row["time"]) for row in rows}
 
             # Step 2: Fetch only the existing `time` values from the database
-            existing_times_query = session.query(table.time).filter(table.time.in_(incoming_times))
-            existing_times = {pd.Timestamp(time[0]) for time in existing_times_query.all()}
+            existing_times_query = session.query(
+                table.time).filter(table.time.in_(incoming_times))
+            existing_times = {pd.Timestamp(time[0])
+                              for time in existing_times_query.all()}
 
             # Step 3: Filter out rows with `time` values that already exist in the database
-            new_rows = [row for row in rows if pd.Timestamp(row["time"]) not in existing_times]
+            new_rows = [row for row in rows if pd.Timestamp(
+                row["time"]) not in existing_times]
 
             if not new_rows:
-                self.logger.info(f"No new data to append into {table.__tablename__}.")
+                self.logger.info(
+                    f"No new data to append into {table.__tablename__}.")
                 return
 
             # Step 4: Insert only the new rows
             session.bulk_insert_mappings(table, new_rows)
-            self.logger.info(f"Appended {len(new_rows)} new rows into {table.__tablename__}.")
+            self.logger.info(
+                f"Appended {len(new_rows)} new rows into {table.__tablename__}.")
 
             # Step 5: Sort the table by `time` (order rows physically in the database)
             session.execute(f"""
@@ -172,33 +177,39 @@ class PostgresAdapter:
                 SELECT * FROM {table.__tablename__} ORDER BY time;
             """)
             session.execute(f"DROP TABLE {table.__tablename__};")
-            session.execute(f"ALTER TABLE temp_sorted RENAME TO {table.__tablename__};")
+            session.execute(
+                f"ALTER TABLE temp_sorted RENAME TO {table.__tablename__};")
 
             # Step 6: Reapply indexes or primary keys
-            session.execute(f"ALTER TABLE {table.__tablename__} ADD PRIMARY KEY (time);")
-            self.logger.info(f"Sorted table {table.__tablename__} by `time` and reapplied indexes.")
+            session.execute(
+                f"ALTER TABLE {table.__tablename__} ADD PRIMARY KEY (time);")
+            self.logger.info(
+                f"Sorted table {table.__tablename__} by `time` and reapplied indexes.")
 
     def insert_new_data(self, table: Type, rows: List[Dict]):
-            """
-            Insert only new rows into the table based on time uniqueness.
+        """
+        Insert only new rows into the table based on time uniqueness.
 
-            Args:
-                table (Type): The SQLAlchemy ORM-mapped class representing the table.
-                rows (List[Dict]): A list of dictionaries representing rows to insert.
-            """
-            if not rows:
-                self.logger.info(f"No data provided for insertion into {table.__tablename__}.")
-                return
+        Args:
+            table (Type): The SQLAlchemy ORM-mapped class representing the table.
+            rows (List[Dict]): A list of dictionaries representing rows to insert.
+        """
+        if not rows:
+            self.logger.info(
+                f"No data provided for insertion into {table.__tablename__}.")
+            return
 
-            with self.session_scope() as session:
-                # Fetch existing time values from the database
-                try:
-                    # Insert only new rows
-                    session.bulk_insert_mappings(table, rows)
-                    self.logger.info(f"Inserted {len(rows)} new rows into {table.__tablename__}.")
-                except Exception as e:
-                    self.logger.error(f"Failed to insert new rows into {table.__tablename__}: {e}")
-                    raise
+        with self.session_scope() as session:
+            # Fetch existing time values from the database
+            try:
+                # Insert only new rows
+                session.bulk_insert_mappings(table, rows)
+                self.logger.info(
+                    f"Inserted {len(rows)} new rows into {table.__tablename__}.")
+            except Exception as e:
+                self.logger.error(
+                    f"Failed to insert new rows into {table.__tablename__}: {e}")
+                raise
 
     # def insert_new_data(self, table: Type, rows: List[Dict]):
     #     """
@@ -217,7 +228,6 @@ class PostgresAdapter:
     #         except Exception as e:
     #             self.logger.error(f"Failed to insert rows into {table.__tablename__}: {e}")
     #             raise
-
 
     def verify_table(self, table: Type, limit: int = 10, filters: Dict = None):
         """
@@ -245,7 +255,6 @@ class PostgresAdapter:
                 row_data = {column: getattr(row, column) for column in columns}
                 print(row_data)
 
-
     def list_tables(self):
         """
         List all table names in the connected database.
@@ -255,7 +264,6 @@ class PostgresAdapter:
         """
         inspector = inspect(self.engine)
         return inspector.get_table_names()
-
 
     def create_table(self, table: Type):
         """
@@ -267,7 +275,6 @@ class PostgresAdapter:
         table.__table__.create(bind=self.engine, checkfirst=True)
         self.logger.info(f"Table {table.__tablename__} created.")
 
-
     def drop_table(self, table: Type):
         """
         Drop a table if it exists.
@@ -277,8 +284,6 @@ class PostgresAdapter:
         """
         table.__table__.drop(bind=self.engine, checkfirst=True)
         self.logger.info(f"Table {table.__tablename__} dropped.")
-
-
 
     def load_all(self, table: Type, limit: int = None) -> List[Dict]:
         """
@@ -300,7 +305,6 @@ class PostgresAdapter:
             # Convert ORM objects to dictionaries
             return [self._row_to_dict(row) for row in rows]
 
-
     def load_filtered_with_matching_values(self, table: Type, filters: Dict) -> List[Dict]:
         """
         Fetch rows from a table based on filter criteria.
@@ -320,10 +324,8 @@ class PostgresAdapter:
             # Convert ORM objects to dictionaries
             return [self._row_to_dict(row) for row in rows]
 
-
     def _row_to_dict(self, row):
         """
         Convert an SQLAlchemy ORM row to a dictionary.
         """
         return {column.key: getattr(row, column.key) for column in inspect(row).mapper.column_attrs}
-
