@@ -1,11 +1,32 @@
+"""
+AlphaLoader module: Fetches, standardizes, and persists financial datasets from Alpha Vantage.
+
+Features:
+    - Retrieves daily time series, company fundamentals, financial statements,
+      insider transactions, stock splits, and dividends for a given stock symbol.
+    - Supports both PostgreSQL (via SQLAlchemy ORM) and local CSV persistence.
+    - Uses data_manager.etl_jobs.transform_utils for data standardization and cleanup.
+    - Handles API, connection, and data errors robustly.
+    - Designed for ETL and data science pipelines.
+
+Usage:
+    Instantiate AlphaLoader with a symbol and desired modes, then call desired methods.
+"""
+
 import requests
 import pandas as pd
 
 from configs.config import ALPHA_API_KEY
 from data_manager.db_builders.postgre_adapter import PostgresAdapter
-from data_manager.db_builders.postgre_objects import DailyTimeSeries, CompanyFundamentalsTable
+from data_manager.db_builders.postgre_objects import (
+    DailyTimeSeries, CompanyFundamentalsTable, AnnualIncomeStatement,
+    QuarterlyIncomeStatement, AnnualBalanceSheetTable, QuarterlyBalanceSheetTable,
+    AnnualCashFlowTable, QuarterlyCashFlowTable, AnnualEarningsTable, QuarterlyEarningsTable,
+    InsiderTransactionTable, StockSplit, DividendsTable
+)
 
 from data_manager.etl_jobs.transform_utils import (
+    standardize_company_fundamentals_columns,
     standardize_annual_income_statement_columns,
     standardize_quarterly_income_statement_columns,
     standardize_annual_balance_sheet_columns,
@@ -14,17 +35,11 @@ from data_manager.etl_jobs.transform_utils import (
     standardize_quarterly_cash_flow_columns,
     standardize_annual_earnings_columns,
     standardize_quarterly_earnings_columns,
+    standardize_insider_transaction_columns,
+    standardize_stock_split_columns,
+    standardize_dividends_columns,
 )
-from data_manager.db_builders.postgre_objects import (
-    AnnualIncomeStatement,
-    QuarterlyIncomeStatement,
-    AnnualBalanceSheetTable,
-    QuarterlyBalanceSheetTable,
-    AnnualCashFlowTable,
-    QuarterlyCashFlowTable,
-    AnnualEarningsTable,
-    QuarterlyEarningsTable,
-)
+
 
 # TODO: ADD  ROW FOR EACH DATA HANDLER TO CHECK FOR DATABASE COMPLIANCE AND DATA QUALITY
 # e.g. missing values, and add a logger for these stuff!
@@ -140,7 +155,6 @@ class AlphaLoader:
             data_df.replace("None", pd.NA, inplace=True)
             data_df = data_df.apply(pd.to_numeric, errors='ignore')
 
-            from data_manager.etl_jobs.transform_utils import standardize_company_fundamentals_columns
             data_df = standardize_company_fundamentals_columns(data_df)
 
             # Save data into the database if db_mode is enabled
@@ -158,6 +172,8 @@ class AlphaLoader:
 
             # Save data locally as a CSV if local_store_mode is enabled
             if self.local_store_mode:
+                # TODO: latest_quarter needs to be fetched from the data
+                latest_quarter = 'XXX_todo'
                 output_path = f"{self.local_store_path}/{self.symbol}_company_fundamentals_lat_quart_{latest_quarter}.csv"
                 data_df.to_csv(output_path, index=False)
                 print(f"✅ Company base data saved locally: {output_path}")
@@ -290,7 +306,6 @@ class AlphaLoader:
             df = pd.DataFrame(data)
             df["symbol"] = self.symbol
 
-            from data_manager.etl_jobs.transform_utils import standardize_insider_transaction_columns
             df = standardize_insider_transaction_columns(df)
             if "transaction_date" not in df.columns:
                 print(
@@ -299,7 +314,6 @@ class AlphaLoader:
             df.dropna(subset=["transaction_date", "symbol"], inplace=True)
 
             if self.db_mode:
-                from data_manager.db_builders.postgre_objects import InsiderTransactionTable
                 adapter = PostgresAdapter()
                 adapter.insert_new_data(
                     table=InsiderTransactionTable, rows=df.to_dict(orient="records"))
@@ -342,12 +356,10 @@ class AlphaLoader:
                     row["symbol"] = self.symbol
 
             df = pd.DataFrame(data)
-            from data_manager.etl_jobs.transform_utils import standardize_stock_split_columns
             df = standardize_stock_split_columns(df)
             df.dropna(subset=["symbol", "effective_date"], inplace=True)
 
             if self.db_mode:
-                from data_manager.db_builders.postgre_objects import StockSplit
                 adapter = PostgresAdapter()
                 adapter.insert_new_data(
                     table=StockSplit, rows=df.to_dict(orient="records"))
@@ -389,12 +401,10 @@ class AlphaLoader:
                     row["symbol"] = self.symbol
 
             df = pd.DataFrame(data)
-            from data_manager.etl_jobs.transform_utils import standardize_dividends_columns
             df = standardize_dividends_columns(df)
             df.dropna(subset=["symbol", "ex_dividend_date"], inplace=True)
 
             if self.db_mode:
-                from data_manager.db_builders.postgre_objects import DividendsTable
                 adapter = PostgresAdapter()
                 adapter.insert_new_data(
                     table=DividendsTable, rows=df.to_dict(orient="records"))
@@ -415,6 +425,7 @@ class AlphaLoader:
         except Exception as e:
             print(f"❌ An unexpected error occurred: {e}")
 
+# TODO: their is intraday data in the alphavantage
 
 # def get_time_series_intraday(month: str, symbol: str = SYMBOL, interval: str='1min'):
 #     """
