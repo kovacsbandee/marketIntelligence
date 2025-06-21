@@ -19,14 +19,14 @@ def add_dividends(dividend_points: pd.DataFrame,
             name="Dividends",
             hovertext=[
                 f"Date: {row[dividend_date_col]}, Amount: {row['amount']}"
-                for _, row in filtered_dividends.iterrows()], 
-            hoverinfo="text" ), row=1, col=1)
+                for _, row in filtered_dividends.iterrows()],
+            hoverinfo="text"), row=1, col=1)
     return figure
 
 
 def add_macd_subplot(price_table: pd.DataFrame,
                      figure: go.Figure) -> go.Figure:
-    
+
     price_table = AddPriceIndicators(table=price_table).add_macd()
 
     figure.add_trace(
@@ -40,7 +40,7 @@ def add_macd_subplot(price_table: pd.DataFrame,
             x=price_table['date'],
             y=price_table['signal_line'],
             mode='lines',
-            name='Signal Line'),row=2, col=1)
+            name='Signal Line'), row=2, col=1)
     figure.add_trace(
         go.Bar(
             x=price_table['date'],
@@ -53,9 +53,9 @@ def add_macd_subplot(price_table: pd.DataFrame,
 def add_rsi_subplot(price_table: pd.DataFrame,
                     figure: go.Figure,
                     include_macd: bool) -> go.Figure:
-    
+
     price_table = AddPriceIndicators(table=price_table).add_rsi()
-    
+
     figure.add_trace(
         go.Scatter(
             x=price_table['date'],
@@ -76,14 +76,14 @@ def add_rsi_subplot(price_table: pd.DataFrame,
             mode='lines',
             line=dict(dash='dash', color='green'),
             name='Oversold (30)'), row=3 if include_macd else 2, col=1)
-    
+
     return figure
 
 
-def plot_price_with_indicators(price_table, 
-                               dividend_table: bool = False, 
-                               include_macd: bool = False, 
-                               include_rsi: bool = False, 
+def plot_price_with_indicators(price_table,
+                               dividend_table: bool = False,
+                               include_macd: bool = False,
+                               include_rsi: bool = False,
                                dividend_date_col='ex_dividend_date'):
     """
     Plots price data with optional MACD, RSI, and dividends using Plotly's make_subplots.
@@ -108,8 +108,8 @@ def plot_price_with_indicators(price_table,
         vertical_spacing=0.02,
         row_heights=[0.5] + [0.25] * (rows - 1),
         subplot_titles=["Price Data"] +
-                       (["MACD"] if include_macd else []) +
-                       (["RSI"] if include_rsi else [])
+        (["MACD"] if include_macd else []) +
+        (["RSI"] if include_rsi else [])
     )
 
     # Plot base candlestick chart
@@ -135,9 +135,10 @@ def plot_price_with_indicators(price_table,
 
             filtered_dividends = dividend_table[
                 (dividend_table[dividend_date_col] >= price_table["date"].min()) &
-                (dividend_table[dividend_date_col] <= price_table["date"].max())
+                (dividend_table[dividend_date_col]
+                 <= price_table["date"].max())
             ]
-        
+
             # Match dividend dates to closest available dates in price_table
             dividend_points = filtered_dividends[dividend_date_col].apply(
                 lambda d: price_table.iloc[
@@ -157,32 +158,34 @@ def plot_price_with_indicators(price_table,
         try:
             fig = add_macd_subplot(price_table=price_table, figure=fig)
         except KeyError as e:
-            print(f"Error: MACD values not found in the price table. Missing column: {e}")
+            print(
+                f"Error: MACD values not found in the price table. Missing column: {e}")
 
     # Add RSI visualization if requested
     if include_rsi:
         try:
             add_rsi_subplot(price_table=price_table,
-                            figure=fig, 
+                            figure=fig,
                             include_macd=include_macd)
         except KeyError as e:
-            print(f"Error: RSI values not found in the price table. Missing column: {e}")
+            print(
+                f"Error: RSI values not found in the price table. Missing column: {e}")
     fig.update_layout(
         title={
-                "text": "Price Data with Indicators and Dividends",
-                "x": 0.5,  # Center the title
-                "xanchor": "center",
-                "yanchor": "top",
-                "font": {"size": 20}  # Larger title font size
-            },
+            "text": "Price Data with Indicators and Dividends",
+            "x": 0.5,  # Center the title
+            "xanchor": "center",
+            "yanchor": "top",
+            "font": {"size": 20}  # Larger title font size
+        },
         xaxis_title="Date",
         yaxis_title="Price",
         xaxis_rangeslider_visible=False,
         template="plotly_white",
         showlegend=True,
         width=1800,
-        height=1800, 
-        margin=dict(l=50, r=50, t=80, b=50),  
+        height=1800,
+        margin=dict(l=50, r=50, t=80, b=50),
         font=dict(size=14))
 
     return fig
@@ -202,19 +205,22 @@ def plot_insider_transactions(insider_transaction):
 
     # Aggregate data
     plot_df = insider_transaction.groupby(
-        by=['transaction_date', 'executive_title', 'security_type', 'acquisition_or_disposal']
+        by=['transaction_date', 'executive_title',
+            'security_type', 'acquisition_or_disposal']
     ).agg({'shares': 'mean', 'share_price': 'mean'}).reset_index()
 
     # Map colors for scatter plots
-    scatter_colors = plot_df['acquisition_or_disposal'].map({'A': 'blue', 'D': 'red'})
+    scatter_colors = plot_df['acquisition_or_disposal'].map(
+        {'A': 'blue', 'D': 'red'})
 
     # Map colors for bar plots
     unique_security_types = plot_df['security_type'].unique()
-    bar_color_mapping = {security_type: qualitative.G10[i % len(qualitative.G10)] for i, security_type in enumerate(unique_security_types)}
+    bar_color_mapping = {security_type: qualitative.G10[i % len(
+        qualitative.G10)] for i, security_type in enumerate(unique_security_types)}
     bar_colors = plot_df['security_type'].map(bar_color_mapping)
 
     # Create subplots
-    fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05, 
+    fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05,
                         subplot_titles=["Share Price", "Volume"])
 
     # Add scatter plots for each acquisition/disposal type
