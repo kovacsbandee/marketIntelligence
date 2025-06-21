@@ -1,0 +1,57 @@
+.
+├── README.md
+├── data_manager
+│   ├── __init__.py
+│   ├── add_derived_data
+│   │   └── add_price_indicators.py
+│   ├── db_builders
+│   │   ├── __init__.py
+│   │   ├── postgre_adapter.py
+│   │   └── postgre_objects.py
+│   ├── etl_jobs
+│   │   ├── __init__.py
+│   │   ├── alphavantage_adapter.py
+│   │   ├── column_maps.py
+│   │   ├── load_local_symbol_data.py
+│   │   └── transform_utils.py
+│   └── management
+│       ├── __init__.py
+│       ├── db_build_runner.py
+│       ├── db_drop_runner.py
+│       ├── db_initial_load_runner.py
+│       └── db_update_runner.py
+├── dev.ipynb
+├── dev_data
+│   └── jsons
+│       ├── MSFT__insider_transactions.json
+│       ├── MSFT_balance_sheet.json
+│       ├── MSFT_cash_flow.json
+│       ├── MSFT_daily_time_series.json
+│       ├── MSFT_dividends.json
+│       ├── MSFT_earnings.json
+│       ├── MSFT_income_statement.json
+│       ├── MSFT_splits.json
+│       ├── NVDA_balance_sheet.json
+│       ├── NVDA_cash_flow.json
+│       ├── NVDA_company_fundamentals_lat_quart_2025-01-31.json
+│       ├── NVDA_daily_time_series.json
+│       ├── NVDA_dividends.json
+│       ├── NVDA_earnings.json
+│       ├── NVDA_income_statement.json
+│       ├── NVDA_insider_transactions.json
+│       └── NVDA_splits.json
+├── docs
+│   └── PROJECT_REFACTOR_PLAN.md
+├── project_structure.txt
+├── requirements.txt
+├── scripts
+│   └── run_initial_load.py
+├── utils
+│   └── utils.py
+└── visualization
+    ├── __init__.py
+    ├── base_plots.py
+    └── dash
+        └── app.py
+
+13 directories, 42 files
