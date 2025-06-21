@@ -172,8 +172,10 @@ class AlphaLoader:
 
             # Save data locally as a CSV if local_store_mode is enabled
             if self.local_store_mode:
-                # TODO: latest_quarter needs to be fetched from the data
-                latest_quarter = 'XXX_todo'
+                if "latest_quarter" in data_df.columns and not data_df["latest_quarter"].empty:
+                    latest_quarter = data_df["latest_quarter"].iloc[0]
+                else:
+                    latest_quarter = "unknown"
                 output_path = f"{self.local_store_path}/{self.symbol}_company_fundamentals_lat_quart_{latest_quarter}.csv"
                 data_df.to_csv(output_path, index=False)
                 print(f"✅ Company base data saved locally: {output_path}")
