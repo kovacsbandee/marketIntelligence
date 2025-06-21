@@ -18,6 +18,9 @@ Note:
 
 import pandas as pd
 import numpy as np
+import logging
+
+logger = logging.getLogger(__name__)
 
 # transform_utils.py
 
@@ -253,7 +256,7 @@ def standardize_insider_transaction_columns(df):
     required_cols = ["transaction_date", "symbol"]
     for c in required_cols:
         if c not in df.columns:
-            print(f"❌ Warning: Required column '{c}' is missing after standardization!")
+            logger.warning("Required column '%s' is missing after standardization!", c)
     df.drop_duplicates(
         subset=[
             "transaction_date",

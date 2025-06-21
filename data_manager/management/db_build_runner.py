@@ -36,7 +36,7 @@ def main():
     try:
         adapter = PostgresAdapter()
     except ValueError as e:
-        logger.error("Failed to initialize PostgresAdapter: %s", e)
+        logger.error("Failed to initialize PostgresAdapter", exc_info=True)
         return
 
     logger.info("Successfully connected to the PostgreSQL database.")
@@ -48,10 +48,13 @@ def main():
     ]
 
     logger.info("Found %d table classes to create.", len(defined_classes))
+    logger.debug("Tables to create: %s", [cls.__name__ for cls in defined_classes])
 
     for table_class in defined_classes:
         logger.info("Creating table for: %s", table_class.__name__)
         adapter.create_table(table=table_class)
+
+    logger.info("Created %d tables", len(defined_classes))
 
     tables = adapter.list_tables()
     logger.info("Tables currently in the database: %s", tables)
