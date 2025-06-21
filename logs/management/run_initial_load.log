@@ -1,0 +1,7 @@
+2025-06-21 15:33:10,742 INFO run_initial_load: Starting initial load for 5 symbols...
+2025-06-21 15:33:10,742 INFO run_initial_load: Processing symbol: MSFT
+2025-06-21 15:33:19,587 INFO run_initial_load: Processing symbol: AAPL
+2025-06-21 15:33:29,204 INFO run_initial_load: Processing symbol: TSLA
+2025-06-21 15:33:40,322 INFO run_initial_load: Processing symbol: NVDA
+2025-06-21 15:33:47,895 INFO run_initial_load: Processing symbol: AA
+2025-06-21 15:33:53,634 INFO run_initial_load: ✅ Initial loader finished its running.

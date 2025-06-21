@@ -1,0 +1,614 @@
+2025-06-21 15:48:29,931 - db_initial_load_runner - INFO - Starting initial load for 5 symbols...
+2025-06-21 15:48:29,931 - db_initial_load_runner - INFO - Processing symbol: MSFT
+2025-06-21 15:48:29,931 - AlphaLoader - INFO - Fetching data for MSFT...
+2025-06-21 15:48:31,658 - data_manager.db_builders.postgre_adapter - INFO - Inserted 6448 new rows into daily_timeseries
+2025-06-21 15:48:31,667 - AlphaLoader - INFO - Candlestick data for MSFT loaded into the database.
+2025-06-21 15:48:31,668 - AlphaLoader - INFO - Fetching company base data for MSFT...
+2025-06-21 15:48:32,466 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-06-21 15:48:32,475 - AlphaLoader - INFO - Company base data for MSFT loaded into the database.
+2025-06-21 15:48:32,475 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for MSFT...
+2025-06-21 15:48:33,351 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-06-21 15:48:33,380 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-06-21 15:48:33,384 - AlphaLoader - INFO - INCOME_STATEMENT data for MSFT loaded into the database.
+2025-06-21 15:48:33,385 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for MSFT...
+2025-06-21 15:48:34,304 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-06-21 15:48:34,329 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-06-21 15:48:34,339 - AlphaLoader - INFO - BALANCE_SHEET data for MSFT loaded into the database.
+2025-06-21 15:48:34,339 - AlphaLoader - INFO - Fetching CASH_FLOW data for MSFT...
+2025-06-21 15:48:35,243 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-06-21 15:48:35,277 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-06-21 15:48:35,285 - AlphaLoader - INFO - CASH_FLOW data for MSFT loaded into the database.
+2025-06-21 15:48:35,285 - AlphaLoader - INFO - Fetching EARNINGS data for MSFT...
+2025-06-21 15:48:36,010 - data_manager.db_builders.postgre_adapter - INFO - Inserted 30 new rows into earnings_annual
+2025-06-21 15:48:36,035 - data_manager.db_builders.postgre_adapter - INFO - Inserted 117 new rows into earnings_quarterly
+2025-06-21 15:48:36,040 - AlphaLoader - INFO - EARNINGS data for MSFT loaded into the database.
+2025-06-21 15:48:36,040 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for MSFT...
+2025-06-21 15:48:37,444 - data_manager.db_builders.postgre_adapter - INFO - Inserted 876 new rows into insider_transactions
+2025-06-21 15:48:37,450 - AlphaLoader - INFO - Insider transaction data for MSFT loaded into the database.
+2025-06-21 15:48:37,451 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for MSFT...
+2025-06-21 15:48:38,294 - data_manager.db_builders.postgre_adapter - INFO - Inserted 2 new rows into stock_splits
+2025-06-21 15:48:38,299 - AlphaLoader - INFO - Stock split data for MSFT loaded into the database.
+2025-06-21 15:48:38,299 - AlphaLoader - INFO - Fetching DIVIDENDS data for MSFT...
+2025-06-21 15:48:38,852 - data_manager.db_builders.postgre_adapter - INFO - Inserted 87 new rows into dividends
+2025-06-21 15:48:38,857 - AlphaLoader - INFO - Dividend data for MSFT loaded into the database.
+2025-06-21 15:48:38,857 - db_initial_load_runner - INFO - Processing symbol: AAPL
+2025-06-21 15:48:38,857 - AlphaLoader - INFO - Fetching data for AAPL...
+2025-06-21 15:48:40,474 - data_manager.db_builders.postgre_adapter - INFO - Inserted 6448 new rows into daily_timeseries
+2025-06-21 15:48:40,481 - AlphaLoader - INFO - Candlestick data for AAPL loaded into the database.
+2025-06-21 15:48:40,481 - AlphaLoader - INFO - Fetching company base data for AAPL...
+2025-06-21 15:48:41,037 - data_manager.db_builders.postgre_adapter - ERROR - Failed to insert new rows into company_fundamentals
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.InvalidTextRepresentation: invalid input syntax for type integer: "-"
+LINE 1: ...010000, 186699006000, 6.45, 0.078, 0.051, 228.85, '-', '-', ...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 244, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1843, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1983, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.DataError: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "-"
+LINE 1: ...010000, 186699006000, 6.45, 0.078, 0.051, 228.85, '-', '-', ...
+                                                             ^
+
+[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, pe_ratio, peg_ratio, book_value, dividend_per_share, dividend_yield, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding, dividend_date, ex_dividend_date) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(pe_ratio)s, %(peg_ratio)s, %(book_value)s, %(dividend_per_share)s, %(dividend_yield)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s, %(dividend_date)s, %(ex_dividend_date)s)]
+[parameters: {'symbol': 'AAPL', 'asset_type': 'Common Stock', 'name': 'Apple Inc', 'description': "Apple Inc. is an American multinational technology company that specializes in consumer electronics, computer software, and online services. Apple is ... (234 characters truncated) ... est smartphone manufacturer. It is one of the Big Five American information technology companies, along with Amazon, Google, Microsoft, and Facebook.", 'cik': 320193, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'TECHNOLOGY', 'industry': 'ELECTRONIC COMPUTERS', 'address': 'ONE INFINITE LOOP, CUPERTINO, CA, US', 'official_site': 'https://www.apple.com', 'fiscal_year_end': 'September', 'latest_quarter': '2025-03-31', 'market_capitalization': 2936079647000, 'ebitda': 138866000000, 'pe_ratio': 30.48, 'peg_ratio': 1.785, 'book_value': 4.471, 'dividend_per_share': 1, 'dividend_yield': 0.0053, 'eps': 6.45, 'revenue_per_share_ttm': 26.45, 'profit_margin': 0.243, 'operating_margin_ttm': 0.31, 'return_on_assets_ttm': 0.238, 'return_on_equity_ttm': 1.38, 'revenue_ttm': 400366010000, 'gross_profit_ttm': 186699006000, 'diluted_eps_ttm': 6.45, 'quarterly_earnings_growth_yoy': 0.078, 'quarterly_revenue_growth_yoy': 0.051, 'analyst_target_price': 228.85, 'analyst_rating_strong_buy': '-', 'analyst_rating_buy': '-', 'analyst_rating_hold': '-', 'analyst_rating_sell': '-', 'analyst_rating_strong_sell': '-', 'trailing_pe': 30.48, 'forward_pe': 24.57, 'price_to_sales_ratio_ttm': 7.5, 'price_to_book_ratio': 43.96, 'ev_to_revenue': 7.46, 'ev_to_ebitda': 21.5, 'beta': 1.211, 'fifty_two_week_high': 259.47, 'fifty_two_week_low': 168.99, 'fifty_day_moving_average': 201.78, 'two_hundred_day_moving_average': 223.98, 'shares_outstanding': 14935800000, 'dividend_date': '2025-05-15', 'ex_dividend_date': '2025-05-12'}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-06-21 15:48:41,049 - data_manager.db_builders.postgre_adapter - ERROR - Transaction failed
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.InvalidTextRepresentation: invalid input syntax for type integer: "-"
+LINE 1: ...010000, 186699006000, 6.45, 0.078, 0.051, 228.85, '-', '-', ...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 87, in session_scope
+    yield session
+  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 244, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1843, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1983, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.DataError: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "-"
+LINE 1: ...010000, 186699006000, 6.45, 0.078, 0.051, 228.85, '-', '-', ...
+                                                             ^
+
+[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, pe_ratio, peg_ratio, book_value, dividend_per_share, dividend_yield, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding, dividend_date, ex_dividend_date) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(pe_ratio)s, %(peg_ratio)s, %(book_value)s, %(dividend_per_share)s, %(dividend_yield)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s, %(dividend_date)s, %(ex_dividend_date)s)]
+[parameters: {'symbol': 'AAPL', 'asset_type': 'Common Stock', 'name': 'Apple Inc', 'description': "Apple Inc. is an American multinational technology company that specializes in consumer electronics, computer software, and online services. Apple is ... (234 characters truncated) ... est smartphone manufacturer. It is one of the Big Five American information technology companies, along with Amazon, Google, Microsoft, and Facebook.", 'cik': 320193, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'TECHNOLOGY', 'industry': 'ELECTRONIC COMPUTERS', 'address': 'ONE INFINITE LOOP, CUPERTINO, CA, US', 'official_site': 'https://www.apple.com', 'fiscal_year_end': 'September', 'latest_quarter': '2025-03-31', 'market_capitalization': 2936079647000, 'ebitda': 138866000000, 'pe_ratio': 30.48, 'peg_ratio': 1.785, 'book_value': 4.471, 'dividend_per_share': 1, 'dividend_yield': 0.0053, 'eps': 6.45, 'revenue_per_share_ttm': 26.45, 'profit_margin': 0.243, 'operating_margin_ttm': 0.31, 'return_on_assets_ttm': 0.238, 'return_on_equity_ttm': 1.38, 'revenue_ttm': 400366010000, 'gross_profit_ttm': 186699006000, 'diluted_eps_ttm': 6.45, 'quarterly_earnings_growth_yoy': 0.078, 'quarterly_revenue_growth_yoy': 0.051, 'analyst_target_price': 228.85, 'analyst_rating_strong_buy': '-', 'analyst_rating_buy': '-', 'analyst_rating_hold': '-', 'analyst_rating_sell': '-', 'analyst_rating_strong_sell': '-', 'trailing_pe': 30.48, 'forward_pe': 24.57, 'price_to_sales_ratio_ttm': 7.5, 'price_to_book_ratio': 43.96, 'ev_to_revenue': 7.46, 'ev_to_ebitda': 21.5, 'beta': 1.211, 'fifty_two_week_high': 259.47, 'fifty_two_week_low': 168.99, 'fifty_day_moving_average': 201.78, 'two_hundred_day_moving_average': 223.98, 'shares_outstanding': 14935800000, 'dividend_date': '2025-05-15', 'ex_dividend_date': '2025-05-12'}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-06-21 15:48:41,055 - AlphaLoader - ERROR - An unexpected error occurred: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "-"
+LINE 1: ...010000, 186699006000, 6.45, 0.078, 0.051, 228.85, '-', '-', ...
+                                                             ^
+
+[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, pe_ratio, peg_ratio, book_value, dividend_per_share, dividend_yield, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding, dividend_date, ex_dividend_date) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(pe_ratio)s, %(peg_ratio)s, %(book_value)s, %(dividend_per_share)s, %(dividend_yield)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s, %(dividend_date)s, %(ex_dividend_date)s)]
+[parameters: {'symbol': 'AAPL', 'asset_type': 'Common Stock', 'name': 'Apple Inc', 'description': "Apple Inc. is an American multinational technology company that specializes in consumer electronics, computer software, and online services. Apple is ... (234 characters truncated) ... est smartphone manufacturer. It is one of the Big Five American information technology companies, along with Amazon, Google, Microsoft, and Facebook.", 'cik': 320193, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'TECHNOLOGY', 'industry': 'ELECTRONIC COMPUTERS', 'address': 'ONE INFINITE LOOP, CUPERTINO, CA, US', 'official_site': 'https://www.apple.com', 'fiscal_year_end': 'September', 'latest_quarter': '2025-03-31', 'market_capitalization': 2936079647000, 'ebitda': 138866000000, 'pe_ratio': 30.48, 'peg_ratio': 1.785, 'book_value': 4.471, 'dividend_per_share': 1, 'dividend_yield': 0.0053, 'eps': 6.45, 'revenue_per_share_ttm': 26.45, 'profit_margin': 0.243, 'operating_margin_ttm': 0.31, 'return_on_assets_ttm': 0.238, 'return_on_equity_ttm': 1.38, 'revenue_ttm': 400366010000, 'gross_profit_ttm': 186699006000, 'diluted_eps_ttm': 6.45, 'quarterly_earnings_growth_yoy': 0.078, 'quarterly_revenue_growth_yoy': 0.051, 'analyst_target_price': 228.85, 'analyst_rating_strong_buy': '-', 'analyst_rating_buy': '-', 'analyst_rating_hold': '-', 'analyst_rating_sell': '-', 'analyst_rating_strong_sell': '-', 'trailing_pe': 30.48, 'forward_pe': 24.57, 'price_to_sales_ratio_ttm': 7.5, 'price_to_book_ratio': 43.96, 'ev_to_revenue': 7.46, 'ev_to_ebitda': 21.5, 'beta': 1.211, 'fifty_two_week_high': 259.47, 'fifty_two_week_low': 168.99, 'fifty_day_moving_average': 201.78, 'two_hundred_day_moving_average': 223.98, 'shares_outstanding': 14935800000, 'dividend_date': '2025-05-15', 'ex_dividend_date': '2025-05-12'}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-06-21 15:48:41,056 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for AAPL...
+2025-06-21 15:48:41,913 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-06-21 15:48:41,941 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-06-21 15:48:41,950 - AlphaLoader - INFO - INCOME_STATEMENT data for AAPL loaded into the database.
+2025-06-21 15:48:41,950 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for AAPL...
+2025-06-21 15:48:42,858 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-06-21 15:48:42,885 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-06-21 15:48:42,890 - AlphaLoader - INFO - BALANCE_SHEET data for AAPL loaded into the database.
+2025-06-21 15:48:42,890 - AlphaLoader - INFO - Fetching CASH_FLOW data for AAPL...
+2025-06-21 15:48:43,575 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-06-21 15:48:43,607 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-06-21 15:48:43,613 - AlphaLoader - INFO - CASH_FLOW data for AAPL loaded into the database.
+2025-06-21 15:48:43,613 - AlphaLoader - INFO - Fetching EARNINGS data for AAPL...
+2025-06-21 15:48:44,152 - data_manager.db_builders.postgre_adapter - INFO - Inserted 30 new rows into earnings_annual
+2025-06-21 15:48:44,176 - data_manager.db_builders.postgre_adapter - INFO - Inserted 117 new rows into earnings_quarterly
+2025-06-21 15:48:44,181 - AlphaLoader - INFO - EARNINGS data for AAPL loaded into the database.
+2025-06-21 15:48:44,181 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for AAPL...
+2025-06-21 15:48:45,767 - data_manager.db_builders.postgre_adapter - INFO - Inserted 2568 new rows into insider_transactions
+2025-06-21 15:48:45,776 - AlphaLoader - INFO - Insider transaction data for AAPL loaded into the database.
+2025-06-21 15:48:45,776 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for AAPL...
+2025-06-21 15:48:46,233 - data_manager.db_builders.postgre_adapter - INFO - Inserted 4 new rows into stock_splits
+2025-06-21 15:48:46,236 - AlphaLoader - INFO - Stock split data for AAPL loaded into the database.
+2025-06-21 15:48:46,236 - AlphaLoader - INFO - Fetching DIVIDENDS data for AAPL...
+2025-06-21 15:48:46,877 - data_manager.db_builders.postgre_adapter - INFO - Inserted 53 new rows into dividends
+2025-06-21 15:48:46,882 - AlphaLoader - INFO - Dividend data for AAPL loaded into the database.
+2025-06-21 15:48:46,882 - db_initial_load_runner - INFO - Processing symbol: TSLA
+2025-06-21 15:48:46,882 - AlphaLoader - INFO - Fetching data for TSLA...
+2025-06-21 15:48:48,156 - data_manager.db_builders.postgre_adapter - INFO - Inserted 3768 new rows into daily_timeseries
+2025-06-21 15:48:48,163 - AlphaLoader - INFO - Candlestick data for TSLA loaded into the database.
+2025-06-21 15:48:48,164 - AlphaLoader - INFO - Fetching company base data for TSLA...
+2025-06-21 15:48:48,659 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-06-21 15:48:48,662 - AlphaLoader - INFO - Company base data for TSLA loaded into the database.
+2025-06-21 15:48:48,662 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for TSLA...
+2025-06-21 15:48:49,540 - data_manager.db_builders.postgre_adapter - INFO - Inserted 19 new rows into income_statement_annual
+2025-06-21 15:48:49,565 - data_manager.db_builders.postgre_adapter - INFO - Inserted 70 new rows into income_statement_quarterly
+2025-06-21 15:48:49,570 - AlphaLoader - INFO - INCOME_STATEMENT data for TSLA loaded into the database.
+2025-06-21 15:48:49,571 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for TSLA...
+2025-06-21 15:48:50,697 - data_manager.db_builders.postgre_adapter - INFO - Inserted 19 new rows into balance_sheet_annual
+2025-06-21 15:48:50,719 - data_manager.db_builders.postgre_adapter - INFO - Inserted 70 new rows into balance_sheet_quarterly
+2025-06-21 15:48:50,724 - AlphaLoader - INFO - BALANCE_SHEET data for TSLA loaded into the database.
+2025-06-21 15:48:50,724 - AlphaLoader - INFO - Fetching CASH_FLOW data for TSLA...
+2025-06-21 15:48:51,405 - data_manager.db_builders.postgre_adapter - INFO - Inserted 19 new rows into cash_flow_annual
+2025-06-21 15:48:51,432 - data_manager.db_builders.postgre_adapter - INFO - Inserted 70 new rows into cash_flow_statement_quarterly
+2025-06-21 15:48:51,438 - AlphaLoader - INFO - CASH_FLOW data for TSLA loaded into the database.
+2025-06-21 15:48:51,438 - AlphaLoader - INFO - Fetching EARNINGS data for TSLA...
+2025-06-21 15:48:51,759 - data_manager.db_builders.postgre_adapter - INFO - Inserted 16 new rows into earnings_annual
+2025-06-21 15:48:51,775 - data_manager.db_builders.postgre_adapter - INFO - Inserted 60 new rows into earnings_quarterly
+2025-06-21 15:48:51,779 - AlphaLoader - INFO - EARNINGS data for TSLA loaded into the database.
+2025-06-21 15:48:51,779 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for TSLA...
+2025-06-21 15:48:53,010 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1641 new rows into insider_transactions
+2025-06-21 15:48:53,016 - AlphaLoader - INFO - Insider transaction data for TSLA loaded into the database.
+2025-06-21 15:48:53,016 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for TSLA...
+2025-06-21 15:48:53,549 - data_manager.db_builders.postgre_adapter - INFO - Inserted 2 new rows into stock_splits
+2025-06-21 15:48:53,554 - AlphaLoader - INFO - Stock split data for TSLA loaded into the database.
+2025-06-21 15:48:53,554 - AlphaLoader - INFO - Fetching DIVIDENDS data for TSLA...
+2025-06-21 15:48:53,825 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-06-21 15:48:53,825 - db_initial_load_runner - INFO - Processing symbol: NVDA
+2025-06-21 15:48:53,825 - AlphaLoader - INFO - Fetching data for NVDA...
+2025-06-21 15:48:55,361 - data_manager.db_builders.postgre_adapter - INFO - Inserted 6448 new rows into daily_timeseries
+2025-06-21 15:48:55,368 - AlphaLoader - INFO - Candlestick data for NVDA loaded into the database.
+2025-06-21 15:48:55,368 - AlphaLoader - INFO - Fetching company base data for NVDA...
+2025-06-21 15:48:55,860 - data_manager.db_builders.postgre_adapter - ERROR - Failed to insert new rows into company_fundamentals
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.InvalidTextRepresentation: invalid input syntax for type integer: "-"
+LINE 1: ...14996000, 104120001000, 3.1, 0.267, 0.692, 172.6, '-', '-', ...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 244, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1843, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1983, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.DataError: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "-"
+LINE 1: ...14996000, 104120001000, 3.1, 0.267, 0.692, 172.6, '-', '-', ...
+                                                             ^
+
+[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, pe_ratio, peg_ratio, book_value, dividend_per_share, dividend_yield, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding, dividend_date, ex_dividend_date) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(pe_ratio)s, %(peg_ratio)s, %(book_value)s, %(dividend_per_share)s, %(dividend_yield)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s, %(dividend_date)s, %(ex_dividend_date)s)]
+[parameters: {'symbol': 'NVDA', 'asset_type': 'Common Stock', 'name': 'NVIDIA Corporation', 'description': 'Nvidia Corporation is an American multinational technology company incorporated in Delaware and based in Santa Clara, California. It designs graphics ... (5 characters truncated) ... essing units (GPUs) for the gaming and professional markets, as well as system on a chip units (SoCs) for the mobile computing and automotive market.', 'cik': 1045810, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'MANUFACTURING', 'industry': 'SEMICONDUCTORS & RELATED DEVICES', 'address': '2701 SAN TOMAS EXPRESSWAY, SANTA CLARA, CA, US', 'official_site': 'https://www.nvidia.com', 'fiscal_year_end': 'January', 'latest_quarter': '2025-04-30', 'market_capitalization': 3547908014000, 'ebitda': 88247001000, 'pe_ratio': 46.93, 'peg_ratio': 1.784, 'book_value': 3.438, 'dividend_per_share': 0.04, 'dividend_yield': 0.0003, 'eps': 3.1, 'revenue_per_share_ttm': 6.06, 'profit_margin': 0.517, 'operating_margin_ttm': 0.491, 'return_on_assets_ttm': 0.532, 'return_on_equity_ttm': 1.155, 'revenue_ttm': 148514996000, 'gross_profit_ttm': 104120001000, 'diluted_eps_ttm': 3.1, 'quarterly_earnings_growth_yoy': 0.267, 'quarterly_revenue_growth_yoy': 0.692, 'analyst_target_price': 172.6, 'analyst_rating_strong_buy': '-', 'analyst_rating_buy': '-', 'analyst_rating_hold': '-', 'analyst_rating_sell': '-', 'analyst_rating_strong_sell': '-', 'trailing_pe': 46.93, 'forward_pe': 33.56, 'price_to_sales_ratio_ttm': 23.62, 'price_to_book_ratio': 41.84, 'ev_to_revenue': 23.34, 'ev_to_ebitda': 38.1, 'beta': 2.122, 'fifty_two_week_high': 153.11, 'fifty_two_week_low': 86.61, 'fifty_day_moving_average': 124.54, 'two_hundred_day_moving_average': 127.94, 'shares_outstanding': 24387600000, 'dividend_date': '2025-07-03', 'ex_dividend_date': '2025-06-11'}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-06-21 15:48:55,867 - data_manager.db_builders.postgre_adapter - ERROR - Transaction failed
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.InvalidTextRepresentation: invalid input syntax for type integer: "-"
+LINE 1: ...14996000, 104120001000, 3.1, 0.267, 0.692, 172.6, '-', '-', ...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 87, in session_scope
+    yield session
+  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 244, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1843, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1983, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.DataError: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "-"
+LINE 1: ...14996000, 104120001000, 3.1, 0.267, 0.692, 172.6, '-', '-', ...
+                                                             ^
+
+[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, pe_ratio, peg_ratio, book_value, dividend_per_share, dividend_yield, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding, dividend_date, ex_dividend_date) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(pe_ratio)s, %(peg_ratio)s, %(book_value)s, %(dividend_per_share)s, %(dividend_yield)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s, %(dividend_date)s, %(ex_dividend_date)s)]
+[parameters: {'symbol': 'NVDA', 'asset_type': 'Common Stock', 'name': 'NVIDIA Corporation', 'description': 'Nvidia Corporation is an American multinational technology company incorporated in Delaware and based in Santa Clara, California. It designs graphics ... (5 characters truncated) ... essing units (GPUs) for the gaming and professional markets, as well as system on a chip units (SoCs) for the mobile computing and automotive market.', 'cik': 1045810, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'MANUFACTURING', 'industry': 'SEMICONDUCTORS & RELATED DEVICES', 'address': '2701 SAN TOMAS EXPRESSWAY, SANTA CLARA, CA, US', 'official_site': 'https://www.nvidia.com', 'fiscal_year_end': 'January', 'latest_quarter': '2025-04-30', 'market_capitalization': 3547908014000, 'ebitda': 88247001000, 'pe_ratio': 46.93, 'peg_ratio': 1.784, 'book_value': 3.438, 'dividend_per_share': 0.04, 'dividend_yield': 0.0003, 'eps': 3.1, 'revenue_per_share_ttm': 6.06, 'profit_margin': 0.517, 'operating_margin_ttm': 0.491, 'return_on_assets_ttm': 0.532, 'return_on_equity_ttm': 1.155, 'revenue_ttm': 148514996000, 'gross_profit_ttm': 104120001000, 'diluted_eps_ttm': 3.1, 'quarterly_earnings_growth_yoy': 0.267, 'quarterly_revenue_growth_yoy': 0.692, 'analyst_target_price': 172.6, 'analyst_rating_strong_buy': '-', 'analyst_rating_buy': '-', 'analyst_rating_hold': '-', 'analyst_rating_sell': '-', 'analyst_rating_strong_sell': '-', 'trailing_pe': 46.93, 'forward_pe': 33.56, 'price_to_sales_ratio_ttm': 23.62, 'price_to_book_ratio': 41.84, 'ev_to_revenue': 23.34, 'ev_to_ebitda': 38.1, 'beta': 2.122, 'fifty_two_week_high': 153.11, 'fifty_two_week_low': 86.61, 'fifty_day_moving_average': 124.54, 'two_hundred_day_moving_average': 127.94, 'shares_outstanding': 24387600000, 'dividend_date': '2025-07-03', 'ex_dividend_date': '2025-06-11'}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-06-21 15:48:55,873 - AlphaLoader - ERROR - An unexpected error occurred: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "-"
+LINE 1: ...14996000, 104120001000, 3.1, 0.267, 0.692, 172.6, '-', '-', ...
+                                                             ^
+
+[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, pe_ratio, peg_ratio, book_value, dividend_per_share, dividend_yield, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding, dividend_date, ex_dividend_date) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(pe_ratio)s, %(peg_ratio)s, %(book_value)s, %(dividend_per_share)s, %(dividend_yield)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s, %(dividend_date)s, %(ex_dividend_date)s)]
+[parameters: {'symbol': 'NVDA', 'asset_type': 'Common Stock', 'name': 'NVIDIA Corporation', 'description': 'Nvidia Corporation is an American multinational technology company incorporated in Delaware and based in Santa Clara, California. It designs graphics ... (5 characters truncated) ... essing units (GPUs) for the gaming and professional markets, as well as system on a chip units (SoCs) for the mobile computing and automotive market.', 'cik': 1045810, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'MANUFACTURING', 'industry': 'SEMICONDUCTORS & RELATED DEVICES', 'address': '2701 SAN TOMAS EXPRESSWAY, SANTA CLARA, CA, US', 'official_site': 'https://www.nvidia.com', 'fiscal_year_end': 'January', 'latest_quarter': '2025-04-30', 'market_capitalization': 3547908014000, 'ebitda': 88247001000, 'pe_ratio': 46.93, 'peg_ratio': 1.784, 'book_value': 3.438, 'dividend_per_share': 0.04, 'dividend_yield': 0.0003, 'eps': 3.1, 'revenue_per_share_ttm': 6.06, 'profit_margin': 0.517, 'operating_margin_ttm': 0.491, 'return_on_assets_ttm': 0.532, 'return_on_equity_ttm': 1.155, 'revenue_ttm': 148514996000, 'gross_profit_ttm': 104120001000, 'diluted_eps_ttm': 3.1, 'quarterly_earnings_growth_yoy': 0.267, 'quarterly_revenue_growth_yoy': 0.692, 'analyst_target_price': 172.6, 'analyst_rating_strong_buy': '-', 'analyst_rating_buy': '-', 'analyst_rating_hold': '-', 'analyst_rating_sell': '-', 'analyst_rating_strong_sell': '-', 'trailing_pe': 46.93, 'forward_pe': 33.56, 'price_to_sales_ratio_ttm': 23.62, 'price_to_book_ratio': 41.84, 'ev_to_revenue': 23.34, 'ev_to_ebitda': 38.1, 'beta': 2.122, 'fifty_two_week_high': 153.11, 'fifty_two_week_low': 86.61, 'fifty_day_moving_average': 124.54, 'two_hundred_day_moving_average': 127.94, 'shares_outstanding': 24387600000, 'dividend_date': '2025-07-03', 'ex_dividend_date': '2025-06-11'}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-06-21 15:48:55,873 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for NVDA...
+2025-06-21 15:48:56,538 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-06-21 15:48:56,568 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-06-21 15:48:56,575 - AlphaLoader - INFO - INCOME_STATEMENT data for NVDA loaded into the database.
+2025-06-21 15:48:56,575 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for NVDA...
+2025-06-21 15:48:57,274 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-06-21 15:48:57,296 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-06-21 15:48:57,303 - AlphaLoader - INFO - BALANCE_SHEET data for NVDA loaded into the database.
+2025-06-21 15:48:57,304 - AlphaLoader - INFO - Fetching CASH_FLOW data for NVDA...
+2025-06-21 15:48:57,989 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-06-21 15:48:58,021 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-06-21 15:48:58,032 - AlphaLoader - INFO - CASH_FLOW data for NVDA loaded into the database.
+2025-06-21 15:48:58,032 - AlphaLoader - INFO - Fetching EARNINGS data for NVDA...
+2025-06-21 15:48:58,579 - data_manager.db_builders.postgre_adapter - INFO - Inserted 27 new rows into earnings_annual
+2025-06-21 15:48:58,604 - data_manager.db_builders.postgre_adapter - INFO - Inserted 105 new rows into earnings_quarterly
+2025-06-21 15:48:58,610 - AlphaLoader - INFO - EARNINGS data for NVDA loaded into the database.
+2025-06-21 15:48:58,610 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for NVDA...
+2025-06-21 15:49:00,140 - data_manager.db_builders.postgre_adapter - INFO - Inserted 2377 new rows into insider_transactions
+2025-06-21 15:49:00,142 - AlphaLoader - INFO - Insider transaction data for NVDA loaded into the database.
+2025-06-21 15:49:00,143 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for NVDA...
+2025-06-21 15:49:00,652 - data_manager.db_builders.postgre_adapter - INFO - Inserted 6 new rows into stock_splits
+2025-06-21 15:49:00,655 - AlphaLoader - INFO - Stock split data for NVDA loaded into the database.
+2025-06-21 15:49:00,655 - AlphaLoader - INFO - Fetching DIVIDENDS data for NVDA...
+2025-06-21 15:49:01,189 - data_manager.db_builders.postgre_adapter - INFO - Inserted 52 new rows into dividends
+2025-06-21 15:49:01,195 - AlphaLoader - INFO - Dividend data for NVDA loaded into the database.
+2025-06-21 15:49:01,195 - db_initial_load_runner - INFO - Processing symbol: AA
+2025-06-21 15:49:01,196 - AlphaLoader - INFO - Fetching data for AA...
+2025-06-21 15:49:02,826 - data_manager.db_builders.postgre_adapter - INFO - Inserted 2180 new rows into daily_timeseries
+2025-06-21 15:49:02,832 - AlphaLoader - INFO - Candlestick data for AA loaded into the database.
+2025-06-21 15:49:02,832 - AlphaLoader - INFO - Fetching company base data for AA...
+2025-06-21 15:49:03,350 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-06-21 15:49:03,356 - AlphaLoader - INFO - Company base data for AA loaded into the database.
+2025-06-21 15:49:03,356 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for AA...
+2025-06-21 15:49:04,152 - data_manager.db_builders.postgre_adapter - INFO - Inserted 12 new rows into income_statement_annual
+2025-06-21 15:49:04,171 - data_manager.db_builders.postgre_adapter - INFO - Inserted 42 new rows into income_statement_quarterly
+2025-06-21 15:49:04,175 - AlphaLoader - INFO - INCOME_STATEMENT data for AA loaded into the database.
+2025-06-21 15:49:04,175 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for AA...
+2025-06-21 15:49:04,980 - data_manager.db_builders.postgre_adapter - INFO - Inserted 12 new rows into balance_sheet_annual
+2025-06-21 15:49:05,003 - data_manager.db_builders.postgre_adapter - INFO - Inserted 42 new rows into balance_sheet_quarterly
+2025-06-21 15:49:05,010 - AlphaLoader - INFO - BALANCE_SHEET data for AA loaded into the database.
+2025-06-21 15:49:05,013 - AlphaLoader - INFO - Fetching CASH_FLOW data for AA...
+2025-06-21 15:49:05,800 - data_manager.db_builders.postgre_adapter - INFO - Inserted 12 new rows into cash_flow_annual
+2025-06-21 15:49:05,825 - data_manager.db_builders.postgre_adapter - INFO - Inserted 42 new rows into cash_flow_statement_quarterly
+2025-06-21 15:49:05,830 - AlphaLoader - INFO - CASH_FLOW data for AA loaded into the database.
+2025-06-21 15:49:05,831 - AlphaLoader - INFO - Fetching EARNINGS data for AA...
+2025-06-21 15:49:06,201 - data_manager.db_builders.postgre_adapter - INFO - Inserted 28 new rows into earnings_annual
+2025-06-21 15:49:06,217 - data_manager.db_builders.postgre_adapter - INFO - Inserted 106 new rows into earnings_quarterly
+2025-06-21 15:49:06,221 - AlphaLoader - INFO - EARNINGS data for AA loaded into the database.
+2025-06-21 15:49:06,221 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for AA...
+2025-06-21 15:49:07,180 - data_manager.db_builders.postgre_adapter - INFO - Inserted 422 new rows into insider_transactions
+2025-06-21 15:49:07,182 - AlphaLoader - INFO - Insider transaction data for AA loaded into the database.
+2025-06-21 15:49:07,182 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for AA...
+2025-06-21 15:49:07,614 - AlphaLoader - ERROR - An unexpected error occurred: 'effective_date'
+2025-06-21 15:49:07,614 - AlphaLoader - INFO - Fetching DIVIDENDS data for AA...
+2025-06-21 15:49:08,186 - data_manager.db_builders.postgre_adapter - INFO - Inserted 16 new rows into dividends
+2025-06-21 15:49:08,191 - AlphaLoader - INFO - Dividend data for AA loaded into the database.
+2025-06-21 15:49:08,192 - db_initial_load_runner - INFO - ✅ Initial loader finished its running.

@@ -26,7 +26,6 @@ dev_data/jsons
 dev_data/csv
 
 # === Logs & debugging ===
-*.log
 *.db
 *.sqlite3
 
