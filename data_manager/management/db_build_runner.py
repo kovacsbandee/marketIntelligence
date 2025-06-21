@@ -21,6 +21,7 @@ import inspect
 import logging
 from data_manager.db_builders.postgre_adapter import PostgresAdapter
 from data_manager.db_builders import postgre_objects
+from utils.logger import get_logger
 
 
 def main():
@@ -30,8 +31,7 @@ def main():
     Initializes the database adapter, inspects table models in `postgre_objects`,
     creates the corresponding tables, and logs existing tables.
     """
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger("DBInitializer")
+    logger = get_logger("db_build_runner")
 
     try:
         adapter = PostgresAdapter()

@@ -25,6 +25,7 @@ import inspect
 import logging
 from data_manager.db_builders.postgre_adapter import PostgresAdapter
 from data_manager.db_builders import postgre_objects
+from utils.logger import get_logger
 
 
 def main():
@@ -34,8 +35,7 @@ def main():
     Connects to the database, discovers table models in `postgre_objects`,
     prompts for user confirmation, and drops the corresponding tables.
     """
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger("DBDropper")
+    logger = get_logger("db_drop_runner")
 
     try:
         adapter = PostgresAdapter()

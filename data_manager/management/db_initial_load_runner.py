@@ -18,6 +18,7 @@ Dependencies:
 
 from utils.logger import get_logger
 from data_manager.etl_jobs.alphavantage_adapter import AlphaLoader
+from utils.logger import get_logger
 
 
 def load_initial_stocks(symbols):
@@ -33,7 +34,7 @@ def load_initial_stocks(symbols):
     Args:
         symbols (list[str]): List of stock ticker symbols.
     """
-    logger = get_logger("run_initial_load")
+    logger = get_logger("db_initial_load_runner")
 
     logger.info("Starting initial load for %d symbols...", len(symbols))
 
