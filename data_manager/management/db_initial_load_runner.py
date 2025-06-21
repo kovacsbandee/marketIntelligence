@@ -40,10 +40,22 @@ def load_initial_stocks(symbols):
     loader_functions = [
         ("get_daily_timeseries", lambda loader: loader.get_daily_timeseries()),
         ("get_company_base", lambda loader: loader.get_company_base()),
-        ("get_financials:INCOME_STATEMENT", lambda loader: loader.get_financials(function="INCOME_STATEMENT")),
-        ("get_financials:BALANCE_SHEET", lambda loader: loader.get_financials(function="BALANCE_SHEET")),
-        ("get_financials:CASH_FLOW", lambda loader: loader.get_financials(function="CASH_FLOW")),
-        ("get_financials:EARNINGS", lambda loader: loader.get_financials(function="EARNINGS")),
+        (
+            "get_financials:INCOME_STATEMENT",
+            lambda loader: loader.get_financials(function="INCOME_STATEMENT"),
+        ),
+        (
+            "get_financials:BALANCE_SHEET",
+            lambda loader: loader.get_financials(function="BALANCE_SHEET"),
+        ),
+        (
+            "get_financials:CASH_FLOW",
+            lambda loader: loader.get_financials(function="CASH_FLOW"),
+        ),
+        (
+            "get_financials:EARNINGS",
+            lambda loader: loader.get_financials(function="EARNINGS"),
+        ),
         ("get_insider_transactions", lambda loader: loader.get_insider_transactions()),
         ("get_stock_splits", lambda loader: loader.get_stock_splits()),
         ("get_dividends", lambda loader: loader.get_dividends()),
@@ -54,12 +66,12 @@ def load_initial_stocks(symbols):
         logger.info("Processing symbol: %s", symbol)
         for func_name, func in loader_functions:
             try:
+                logger.debug("Calling %s for %s", func_name, symbol)
                 func(loader)
-            except Exception as exc:
-                logger.error("❌ Error in %s for %s: %s", func_name, symbol, exc)
+            except Exception:
+                logger.error("❌ Error in %s for %s", func_name, symbol, exc_info=True)
 
     logger.info("✅ Initial loader finished its running.")
-
 
 
 def main():

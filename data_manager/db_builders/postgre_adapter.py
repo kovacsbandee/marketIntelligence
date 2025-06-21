@@ -9,6 +9,7 @@ from sqlalchemy import create_engine, inspect, func
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.inspection import inspect
 from sqlalchemy.dialects.postgresql import insert
+
 # from data_manager.build_db.db_objects import DynamicCandlestickTable
 
 # Load environment variables from .env file
@@ -49,8 +50,7 @@ class PostgresAdapter:
         self.db_port = db_port or os.getenv("DB_PORT")
 
         if not all(
-            [self.db_host, self.db_name, self.db_user,
-                self.db_password, self.db_port]
+            [self.db_host, self.db_name, self.db_user, self.db_password, self.db_port]
         ):
             raise ValueError(
                 "Database connection parameters are incomplete. Check your environment or arguments."
@@ -70,6 +70,7 @@ class PostgresAdapter:
             Session: A new SQLAlchemy session object.
         """
         base_session = sessionmaker(bind=self.engine)
+        self.logger.debug("Providing new database session")
         return base_session()
 
     @contextmanager
@@ -81,15 +82,18 @@ class PostgresAdapter:
             Session: A new session within a transactional scope.
         """
         session = self.provide_session()
+        self.logger.debug("Session scope opened")
         try:
             yield session
             session.commit()
+            self.logger.debug("Transaction committed")
         except Exception as e:
             session.rollback()
-            self.logger.error(f"Transaction failed: {e}")
+            self.logger.error("Transaction failed", exc_info=True)
             raise
         finally:
             session.close()
+            self.logger.debug("Session closed")
 
     def table_exists(self, table_name: str) -> bool:
         """
@@ -101,8 +105,11 @@ class PostgresAdapter:
         Returns:
             bool: True if the table exists, False otherwise.
         """
+        self.logger.debug("Checking existence of table '%s'", table_name)
         inspector = inspect(self.engine)
-        return table_name in inspector.get_table_names()
+        exists = table_name in inspector.get_table_names()
+        self.logger.debug("Table '%s' exists: %s", table_name, exists)
+        return exists
 
     def get_existing_times(self, table: Type) -> set:
         """
@@ -114,8 +121,13 @@ class PostgresAdapter:
         Returns:
             set: A set of existing `time` values in the table.
         """
+        self.logger.debug("Fetching existing times from %s", table.__tablename__)
         with self.session_scope() as session:
-            return {row.time for row in session.query(table.time).all()}
+            times = {row.time for row in session.query(table.time).all()}
+        self.logger.debug(
+            "Fetched %d existing times from %s", len(times), table.__tablename__
+        )
+        return times
 
     def get_time_range(self, table: Type) -> tuple[pd.Timestamp, pd.Timestamp]:
         """
@@ -127,11 +139,20 @@ class PostgresAdapter:
         Returns:
             tuple: A tuple containing the minimum and maximum `time` values as pandas.Timestamp objects.
         """
+        self.logger.debug("Fetching time range for %s", table.__tablename__)
         with self.session_scope() as session:
             min_time = session.query(func.min(table.time)).scalar()
             max_time = session.query(func.max(table.time)).scalar()
-            return (pd.Timestamp(min_time) if min_time else None,
-                    pd.Timestamp(max_time) if max_time else None)
+        self.logger.debug(
+            "Time range for %s: %s - %s",
+            table.__tablename__,
+            min_time,
+            max_time,
+        )
+        return (
+            pd.Timestamp(min_time) if min_time else None,
+            pd.Timestamp(max_time) if max_time else None,
+        )
 
     def append_and_sort_data(self, table: Type, rows: List[Dict]):
         """
@@ -142,9 +163,15 @@ class PostgresAdapter:
             table (Type): The SQLAlchemy ORM-mapped class representing the table.
             rows (List[Dict]): A list of dictionaries representing rows to append.
         """
+        self.logger.debug(
+            "Appending and sorting data for %s: %d incoming rows",
+            table.__tablename__,
+            len(rows),
+        )
         if not rows:
             self.logger.info(
-                f"No data provided for appending into {table.__tablename__}.")
+                f"No data provided for appending into {table.__tablename__}."
+            )
             return
 
         with self.session_scope() as session:
@@ -152,39 +179,48 @@ class PostgresAdapter:
             incoming_times = {pd.Timestamp(row["time"]) for row in rows}
 
             # Step 2: Fetch only the existing `time` values from the database
-            existing_times_query = session.query(
-                table.time).filter(table.time.in_(incoming_times))
-            existing_times = {pd.Timestamp(time[0])
-                              for time in existing_times_query.all()}
+            existing_times_query = session.query(table.time).filter(
+                table.time.in_(incoming_times)
+            )
+            existing_times = {
+                pd.Timestamp(time[0]) for time in existing_times_query.all()
+            }
 
             # Step 3: Filter out rows with `time` values that already exist in the database
-            new_rows = [row for row in rows if pd.Timestamp(
-                row["time"]) not in existing_times]
+            new_rows = [
+                row for row in rows if pd.Timestamp(row["time"]) not in existing_times
+            ]
 
             if not new_rows:
-                self.logger.info(
-                    f"No new data to append into {table.__tablename__}.")
+                self.logger.info(f"No new data to append into {table.__tablename__}.")
                 return
 
             # Step 4: Insert only the new rows
             session.bulk_insert_mappings(table, new_rows)
             self.logger.info(
-                f"Appended {len(new_rows)} new rows into {table.__tablename__}.")
+                "Appended %d new rows into %s",
+                len(new_rows),
+                table.__tablename__,
+            )
 
             # Step 5: Sort the table by `time` (order rows physically in the database)
-            session.execute(f"""
+            session.execute(
+                f"""
                 CREATE TABLE temp_sorted AS
                 SELECT * FROM {table.__tablename__} ORDER BY time;
-            """)
+            """
+            )
             session.execute(f"DROP TABLE {table.__tablename__};")
-            session.execute(
-                f"ALTER TABLE temp_sorted RENAME TO {table.__tablename__};")
+            session.execute(f"ALTER TABLE temp_sorted RENAME TO {table.__tablename__};")
 
             # Step 6: Reapply indexes or primary keys
             session.execute(
-                f"ALTER TABLE {table.__tablename__} ADD PRIMARY KEY (time);")
+                f"ALTER TABLE {table.__tablename__} ADD PRIMARY KEY (time);"
+            )
             self.logger.info(
-                f"Sorted table {table.__tablename__} by `time` and reapplied indexes.")
+                "Sorted table %s by `time` and reapplied indexes.",
+                table.__tablename__,
+            )
 
     def insert_new_data(self, table: Type, rows: List[Dict]):
         """
@@ -194,9 +230,11 @@ class PostgresAdapter:
             table (Type): The SQLAlchemy ORM-mapped class representing the table.
             rows (List[Dict]): A list of dictionaries representing rows to insert.
         """
+        self.logger.debug("Inserting %d rows into %s", len(rows), table.__tablename__)
         if not rows:
             self.logger.info(
-                f"No data provided for insertion into {table.__tablename__}.")
+                f"No data provided for insertion into {table.__tablename__}."
+            )
             return
 
         with self.session_scope() as session:
@@ -205,10 +243,16 @@ class PostgresAdapter:
                 # Insert only new rows
                 session.bulk_insert_mappings(table, rows)
                 self.logger.info(
-                    f"Inserted {len(rows)} new rows into {table.__tablename__}.")
+                    "Inserted %d new rows into %s",
+                    len(rows),
+                    table.__tablename__,
+                )
             except Exception as e:
                 self.logger.error(
-                    f"Failed to insert new rows into {table.__tablename__}: {e}")
+                    "Failed to insert new rows into %s",
+                    table.__tablename__,
+                    exc_info=True,
+                )
                 raise
 
     # def insert_new_data(self, table: Type, rows: List[Dict]):
@@ -238,6 +282,12 @@ class PostgresAdapter:
             limit (int): Maximum number of rows to fetch. Defaults to 10.
             filters (Dict): Optional filters as column-value pairs.
         """
+        self.logger.debug(
+            "Verifying table %s with limit=%d filters=%s",
+            table.__tablename__,
+            limit,
+            filters,
+        )
         with self.session_scope() as session:
             query = session.query(table)
             if filters:
@@ -246,9 +296,10 @@ class PostgresAdapter:
             rows = query.limit(limit).all()
 
             if not rows:
-                self.logger.info(f"The table {table.__tablename__} is empty.")
+                self.logger.info("The table %s is empty.", table.__tablename__)
                 return
 
+            self.logger.info("Verified %d rows from %s", len(rows), table.__tablename__)
             inspector = inspect(table)
             columns = [column.key for column in inspector.mapper.columns]
             for row in rows:
@@ -262,8 +313,11 @@ class PostgresAdapter:
         Returns:
             List[str]: A list of table names.
         """
+        self.logger.debug("Listing tables in the database")
         inspector = inspect(self.engine)
-        return inspector.get_table_names()
+        tables = inspector.get_table_names()
+        self.logger.debug("Found tables: %s", tables)
+        return tables
 
     def create_table(self, table: Type):
         """
@@ -272,8 +326,9 @@ class PostgresAdapter:
         Args:
             table (Type): The SQLAlchemy ORM-mapped class representing the table.
         """
+        self.logger.debug("Creating table %s", table.__tablename__)
         table.__table__.create(bind=self.engine, checkfirst=True)
-        self.logger.info(f"Table {table.__tablename__} created.")
+        self.logger.info("Table %s created", table.__tablename__)
 
     def drop_table(self, table: Type):
         """
@@ -282,8 +337,9 @@ class PostgresAdapter:
         Args:
             table (Type): The SQLAlchemy ORM-mapped class representing the table.
         """
+        self.logger.debug("Dropping table %s", table.__tablename__)
         table.__table__.drop(bind=self.engine, checkfirst=True)
-        self.logger.info(f"Table {table.__tablename__} dropped.")
+        self.logger.info("Table %s dropped", table.__tablename__)
 
     def load_all(self, table: Type, limit: int = None) -> List[Dict]:
         """
@@ -296,16 +352,23 @@ class PostgresAdapter:
         Returns:
             List[Dict]: A list of rows as dictionaries.
         """
+        self.logger.debug(
+            "Loading rows from %s with limit=%s", table.__tablename__, limit
+        )
         with self.session_scope() as session:
             query = session.query(table)
             if limit:
                 query = query.limit(limit)
             rows = query.all()
 
+            self.logger.info("Loaded %d rows from %s", len(rows), table.__tablename__)
+
             # Convert ORM objects to dictionaries
             return [self._row_to_dict(row) for row in rows]
 
-    def load_filtered_with_matching_values(self, table: Type, filters: Dict) -> List[Dict]:
+    def load_filtered_with_matching_values(
+        self, table: Type, filters: Dict
+    ) -> List[Dict]:
         """
         Fetch rows from a table based on filter criteria.
 
@@ -316,11 +379,19 @@ class PostgresAdapter:
         Returns:
             List[Dict]: A list of rows as dictionaries.
         """
+        self.logger.debug(
+            "Loading rows from %s with filters=%s",
+            table.__tablename__,
+            filters,
+        )
         with self.session_scope() as session:
             query = session.query(table)
             for column, value in filters.items():
                 query = query.filter(getattr(table, column) == value)
             rows = query.all()
+            self.logger.info(
+                "Loaded %d filtered rows from %s", len(rows), table.__tablename__
+            )
             # Convert ORM objects to dictionaries
             return [self._row_to_dict(row) for row in rows]
 
@@ -328,4 +399,7 @@ class PostgresAdapter:
         """
         Convert an SQLAlchemy ORM row to a dictionary.
         """
-        return {column.key: getattr(row, column.key) for column in inspect(row).mapper.column_attrs}
+        return {
+            column.key: getattr(row, column.key)
+            for column in inspect(row).mapper.column_attrs
+        }

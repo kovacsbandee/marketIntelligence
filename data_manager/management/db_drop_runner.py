@@ -39,8 +39,8 @@ def main():
 
     try:
         adapter = PostgresAdapter()
-    except ValueError as e:
-        logger.error("Failed to initialize PostgresAdapter: %s", e)
+    except ValueError:
+        logger.error("Failed to initialize PostgresAdapter", exc_info=True)
         return
 
     logger.info("Connected to the database successfully.")
@@ -60,9 +60,9 @@ def main():
     print(warning_msg)
     logger.warning(warning_msg)
     for table_class in defined_classes:
-        table_name_msg = f" - {table_class.__tablename__}"
-        print(table_name_msg)
-        logger.warning(table_name_msg)
+
+        print(f" - {table_class.__tablename__}")
+    logger.debug("Tables to drop: %s", [cls.__tablename__ for cls in defined_classes])#
 
     # Prompt for confirmation
     confirmation = input("\nType 'DELETE' to confirm and drop all tables: ")
@@ -75,6 +75,7 @@ def main():
         logger.info("Dropping table: %s", table_class.__tablename__)
         adapter.drop_table(table_class)
 
+    logger.info("Dropped %d tables", len(defined_classes))
     logger.info("All specified tables have been dropped.")
 
 

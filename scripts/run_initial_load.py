@@ -26,23 +26,26 @@ def load_initial_stocks(symbols):
 
     for symbol in symbols:
         try:
-            loader = AlphaLoader(
-                symbol=symbol, db_mode=True, local_store_mode=False
-            )
-            loader.get_daily_timeseries()
-            loader.get_company_base()
-            loader.get_financials(function="INCOME_STATEMENT")
-            loader.get_financials(function="BALANCE_SHEET")
-            loader.get_financials(function="CASH_FLOW")
-            loader.get_financials(function="EARNINGS")
-            loader.get_insider_transactions()
-            loader.get_stock_splits()
-            loader.get_dividends()
-        except Exception as exc:
-            logger.exception("❌ Error processing %s: %s", symbol, exc)
+            logger.info("Processing symbol: %s", symbol)
+            loader = AlphaLoader(symbol=symbol, db_mode=True, local_store_mode=False)
+            for func in [
+                loader.get_daily_timeseries,
+                loader.get_company_base,
+                lambda: loader.get_financials(function="INCOME_STATEMENT"),
+                lambda: loader.get_financials(function="BALANCE_SHEET"),
+                lambda: loader.get_financials(function="CASH_FLOW"),
+                lambda: loader.get_financials(function="EARNINGS"),
+                loader.get_insider_transactions,
+                loader.get_stock_splits,
+                loader.get_dividends,
+            ]:
+                logger.debug("Calling %s for %s", func.__name__, symbol)
+                func()
+            logger.info("Finished processing symbol: %s", symbol)
+        except Exception:
+            logger.error("❌ Error processing %s", symbol, exc_info=True)
 
     logger.info("✅ Initial loader finished running.")
-
 
 
 def get_symbols():
@@ -51,7 +54,7 @@ def get_symbols():
 
     Returns:
         list[str]: A list of stock ticker symbols.
-    
+
     Note:
         The limit is intended for development/testing. Remove or adjust for production use.
     """
