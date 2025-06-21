@@ -15,6 +15,7 @@ Usage:
 
 import requests
 import pandas as pd
+import logging
 
 from configs.config import ALPHA_API_KEY
 from data_manager.db_builders.postgre_adapter import PostgresAdapter
@@ -74,6 +75,7 @@ class AlphaLoader:
         self.local_store_mode = local_store_mode
         self.base_url = "https://www.alphavantage.co/query?function="
         self.local_store_path = "/home/bandee/projects/marketIntelligence/dev_data/jsons"
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     def get_daily_timeseries(self):
         """
@@ -82,7 +84,7 @@ class AlphaLoader:
             Handles API errors and ensures proper data formatting.
         """
         url = f"{self.base_url}TIME_SERIES_DAILY&outputsize=full&symbol={self.symbol}&apikey={ALPHA_API_KEY}"
-        print(f"Fetching data for {self.symbol}...")
+        self.logger.info("Fetching data for %s...", self.symbol)
         try:
             r = requests.get(url, timeout=10)
             r.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
@@ -90,8 +92,8 @@ class AlphaLoader:
             # data = json.load(open(f'{self.local_store_path}/{self.symbol}_daily_time_series.json'))
             # Handle API limit or error response
             if "Time Series (Daily)" not in data:
-                print(
-                    f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
+                self.logger.error(
+                    "Error in API response for %s: %s", self.symbol, data.get('Note') or data)
                 return
 
             data_df = pd.DataFrame.from_dict(
@@ -112,21 +114,21 @@ class AlphaLoader:
                 data_df_rows = data_df.to_dict(orient="records")
                 adapter.insert_new_data(
                     table=DailyTimeSeries, rows=data_df_rows)
-                print(
-                    f"✅ Candlestick data for {self.symbol} loaded into the database.")
+                self.logger.info(
+                    "Candlestick data for %s loaded into the database.", self.symbol)
 
             if self.local_store_mode:
                 output_path = f"{self.local_store_path}/{self.symbol}_daily_time_series.csv"
                 data_df.to_csv(output_path, index=False)
-                print(f"✅ Data saved locally: {output_path}")
+                self.logger.info("Data saved locally: %s", output_path)
 
             if not self.db_mode and not self.local_store_mode:
-                print('⚠️  Chose a place where you want to store the data from the API!')
+                self.logger.warning('Choose a place where you want to store the data from the API!')
 
         except requests.exceptions.RequestException as e:
-            print(f"❌ Request failed for {self.symbol}: {e}")
+            self.logger.error("Request failed for %s: %s", self.symbol, e)
         except Exception as e:
-            print(f"❌ An unexpected error occurred: {e}")
+            self.logger.error("An unexpected error occurred: %s", e)
 
     def get_company_base(self):
         """
@@ -134,7 +136,7 @@ class AlphaLoader:
         This could be updated when a report is arriving for a company...
         """
         url = f'{self.base_url}OVERVIEW&symbol={self.symbol}&apikey={ALPHA_API_KEY}'
-        print(f"Fetching company base data for {self.symbol}...")
+        self.logger.info("Fetching company base data for %s...", self.symbol)
 
         try:
             r = requests.get(url, timeout=10)
@@ -145,8 +147,8 @@ class AlphaLoader:
 
             # Handle error in API response
             if "Error Message" in data or "Note" in data:
-                print(
-                    f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
+                self.logger.error(
+                    "Error in API response for %s: %s", self.symbol, data.get('Note') or data)
                 return
             # Convert the response into a DataFrame
             data_df = pd.DataFrame([data])
@@ -167,8 +169,8 @@ class AlphaLoader:
                             d[k] = None
                 adapter.insert_new_data(
                     table=CompanyFundamentalsTable, rows=data_df_rows)
-                print(
-                    f"✅ Company base data for {self.symbol} loaded into the database.")
+                self.logger.info(
+                    "Company base data for %s loaded into the database.", self.symbol)
 
             # Save data locally as a CSV if local_store_mode is enabled
             if self.local_store_mode:
@@ -178,23 +180,23 @@ class AlphaLoader:
                     latest_quarter = "unknown"
                 output_path = f"{self.local_store_path}/{self.symbol}_company_fundamentals_lat_quart_{latest_quarter}.csv"
                 data_df.to_csv(output_path, index=False)
-                print(f"✅ Company base data saved locally: {output_path}")
+                self.logger.info("Company base data saved locally: %s", output_path)
 
             # If neither db_mode nor local_store_mode is enabled, prompt the user
             if not self.db_mode and not self.local_store_mode:
-                print('⚠️  Chose a place where you want to store the company base data!')
+                self.logger.warning('Choose a place where you want to store the company base data!')
 
         except requests.exceptions.RequestException as e:
-            print(f"❌ Request failed for {self.symbol}: {e}")
+            self.logger.error("Request failed for %s: %s", self.symbol, e)
         except Exception as e:
-            print(f"❌ An unexpected error occurred: {e}")
+            self.logger.error("An unexpected error occurred: %s", e)
 
     def get_financials(self, function: str):
         """
         Fetch financial data (INCOME_STATEMENT, BALANCE_SHEET, CASH_FLOW, or EARNINGS) for the given symbol.
         """
         url = f'{self.base_url}{function}&symbol={self.symbol}&apikey={ALPHA_API_KEY}'
-        print(f"Fetching {function} data for {self.symbol}...")
+        self.logger.info("Fetching %s data for %s...", function, self.symbol)
 
         try:
             r = requests.get(url, timeout=10)
@@ -207,8 +209,8 @@ class AlphaLoader:
                 annual_key = "annualEarnings"
                 quarterly_key = "quarterlyEarnings"
                 if annual_key not in data or quarterly_key not in data:
-                    print(
-                        f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
+                    self.logger.error(
+                        "Error in API response for %s: %s", self.symbol, data.get('Note') or data)
                     return
                 annual_df = pd.DataFrame(data[annual_key])
                 quarterly_df = pd.DataFrame(data[quarterly_key])
@@ -217,8 +219,8 @@ class AlphaLoader:
                 quarterly_df["symbol"] = data["symbol"]
             else:
                 if "annualReports" not in data or "quarterlyReports" not in data:
-                    print(
-                        f"❌ Error in API response for {self.symbol}: {data.get('Note') or data}")
+                    self.logger.error(
+                        "Error in API response for %s: %s", self.symbol, data.get('Note') or data)
                     return
                 annual_df = pd.DataFrame(data["annualReports"])
                 annual_df["symbol"] = data["symbol"]
@@ -256,7 +258,7 @@ class AlphaLoader:
                 AnnualTable = AnnualEarningsTable
                 QuarterlyTable = QuarterlyEarningsTable
             else:
-                print(f"❌ Unknown function '{function}'")
+                self.logger.error("Unknown function '%s'", function)
                 return
 
             # === 3. Final cleanup (drop rows with null PKs, reindex) ===
@@ -271,8 +273,8 @@ class AlphaLoader:
                     table=AnnualTable, rows=annual_df.to_dict(orient="records"))
                 adapter.insert_new_data(
                     table=QuarterlyTable, rows=quarterly_df.to_dict(orient="records"))
-                print(
-                    f"✅ {function} data for {self.symbol} loaded into the database.")
+                self.logger.info(
+                    "%s data for %s loaded into the database.", function, self.symbol)
 
             # === 5. Save as CSV locally if enabled ===
             if self.local_store_mode:
@@ -280,23 +282,23 @@ class AlphaLoader:
                     f"{self.local_store_path}/{self.symbol}_{function.lower()}_annual.csv", index=False)
                 quarterly_df.to_csv(
                     f"{self.local_store_path}/{self.symbol}_{function.lower()}_quaterly.csv", index=False)
-                print(f"✅ {function} data saved locally for {self.symbol}.")
+                self.logger.info("%s data saved locally for %s.", function, self.symbol)
 
             # === 6. Warn if nothing is enabled ===
             if not self.db_mode and not self.local_store_mode:
-                print('⚠️  Choose a place where you want to store the data from the API!')
+                self.logger.warning('Choose a place where you want to store the data from the API!')
 
         except requests.exceptions.RequestException as e:
-            print(f"❌ Request failed for {self.symbol}: {e}")
+            self.logger.error("Request failed for %s: %s", self.symbol, e)
         except Exception as e:
-            print(f"❌ An unexpected error occurred: {e}")
+            self.logger.error("An unexpected error occurred: %s", e)
 
     def get_insider_transactions(self):
         """
         Fetch and store insider transactions for the given symbol.
         """
         url = f"{self.base_url}INSIDER_TRANSACTIONS&symbol={self.symbol}&apikey={ALPHA_API_KEY}"
-        print(f"Fetching INSIDER_TRANSACTIONS data for {self.symbol}...")
+        self.logger.info("Fetching INSIDER_TRANSACTIONS data for %s...", self.symbol)
 
         try:
             r = requests.get(url, timeout=10)
@@ -310,8 +312,9 @@ class AlphaLoader:
 
             df = standardize_insider_transaction_columns(df)
             if "transaction_date" not in df.columns:
-                print(
-                    "❌ 'transaction_date' column missing after standardization. Columns are:", df.columns)
+                self.logger.error(
+                    "'transaction_date' column missing after standardization. Columns are: %s",
+                    df.columns)
                 return
             df.dropna(subset=["transaction_date", "symbol"], inplace=True)
 
@@ -319,36 +322,36 @@ class AlphaLoader:
                 adapter = PostgresAdapter()
                 adapter.insert_new_data(
                     table=InsiderTransactionTable, rows=df.to_dict(orient="records"))
-                print(
-                    f"✅ Insider transaction data for {self.symbol} loaded into the database.")
+                self.logger.info(
+                    "Insider transaction data for %s loaded into the database.", self.symbol)
 
             if self.local_store_mode:
                 df.to_csv(
                     f"{self.local_store_path}/{self.symbol}_insider_transactions.csv", index=False)
-                print(
-                    f"✅ Insider transaction data saved locally for {self.symbol}.")
+                self.logger.info(
+                    "Insider transaction data saved locally for %s.", self.symbol)
 
             if not self.db_mode and not self.local_store_mode:
-                print(
-                    '⚠️  Choose a place where you want to store the data from the API!')
+                self.logger.warning(
+                    'Choose a place where you want to store the data from the API!')
 
         except requests.exceptions.RequestException as e:
-            print(f"❌ Request failed for {self.symbol}: {e}")
+            self.logger.error("Request failed for %s: %s", self.symbol, e)
         except Exception as e:
-            print(f"❌ An unexpected error occurred: {e}")
+            self.logger.error("An unexpected error occurred: %s", e)
 
     def get_stock_splits(self):
         """
         Fetch and store stock split data for the given symbol.
         """
         url = f"{self.base_url}SPLITS&symbol={self.symbol}&apikey={ALPHA_API_KEY}"
-        print(f"Fetching STOCK_SPLITS data for {self.symbol}...")
+        self.logger.info("Fetching STOCK_SPLITS data for %s...", self.symbol)
 
         try:
             r = requests.get(url, timeout=10)
             r.raise_for_status()
             data = r.json()
-            print(data)
+            self.logger.debug(data)
             # If the response is a dict with the splits in a key
             if isinstance(data, dict) and "data" in data:
                 data = data["data"]
@@ -365,29 +368,29 @@ class AlphaLoader:
                 adapter = PostgresAdapter()
                 adapter.insert_new_data(
                     table=StockSplit, rows=df.to_dict(orient="records"))
-                print(
-                    f"✅ Stock split data for {self.symbol} loaded into the database.")
+                self.logger.info(
+                    "Stock split data for %s loaded into the database.", self.symbol)
 
             if self.local_store_mode:
                 df.to_csv(
                     f"{self.local_store_path}/{self.symbol}_stock_splits.csv", index=False)
-                print(f"✅ Stock split data saved locally for {self.symbol}.")
+                self.logger.info("Stock split data saved locally for %s.", self.symbol)
 
             if not self.db_mode and not self.local_store_mode:
-                print(
-                    '⚠️  Choose a place where you want to store the data from the API!')
+                self.logger.warning(
+                    'Choose a place where you want to store the data from the API!')
 
         except requests.exceptions.RequestException as e:
-            print(f"❌ Request failed for {self.symbol}: {e}")
+            self.logger.error("Request failed for %s: %s", self.symbol, e)
         except Exception as e:
-            print(f"❌ An unexpected error occurred: {e}")
+            self.logger.error("An unexpected error occurred: %s", e)
 
     def get_dividends(self):
         """
         Fetch and store dividend data for the given symbol.
         """
         url = f"{self.base_url}DIVIDENDS&symbol={self.symbol}&apikey={ALPHA_API_KEY}"
-        print(f"Fetching DIVIDENDS data for {self.symbol}...")
+        self.logger.info("Fetching DIVIDENDS data for %s...", self.symbol)
 
         try:
             r = requests.get(url, timeout=10)
@@ -410,22 +413,22 @@ class AlphaLoader:
                 adapter = PostgresAdapter()
                 adapter.insert_new_data(
                     table=DividendsTable, rows=df.to_dict(orient="records"))
-                print(
-                    f"✅ Dividend data for {self.symbol} loaded into the database.")
+                self.logger.info(
+                    "Dividend data for %s loaded into the database.", self.symbol)
 
             if self.local_store_mode:
                 df.to_csv(
                     f"{self.local_store_path}/{self.symbol}_dividends.csv", index=False)
-                print(f"✅ Dividend data saved locally for {self.symbol}.")
+                self.logger.info("Dividend data saved locally for %s.", self.symbol)
 
             if not self.db_mode and not self.local_store_mode:
-                print(
-                    '⚠️  Choose a place where you want to store the data from the API!')
+                self.logger.warning(
+                    'Choose a place where you want to store the data from the API!')
 
         except requests.exceptions.RequestException as e:
-            print(f"❌ Request failed for {self.symbol}: {e}")
+            self.logger.error("Request failed for %s: %s", self.symbol, e)
         except Exception as e:
-            print(f"❌ An unexpected error occurred: {e}")
+            self.logger.error("An unexpected error occurred: %s", e)
 
 # TODO: their is intraday data in the alphavantage
 

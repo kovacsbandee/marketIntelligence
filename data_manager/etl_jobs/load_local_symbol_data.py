@@ -1,6 +1,9 @@
 import os
 from typing import List
 import pandas as pd
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class LoadExampleData:
@@ -96,7 +99,7 @@ def create_desc_json_base(data_path="/home/bandee/projects/stockAnalyzer/dev_dat
     for file in os.listdir(data_path):
         # Strip prefix and suffix to generate dictionary key
         key = file.lstrip("IBM_").rstrip(".csv")
-        print(key)
+        logger.info(key)
 
         # Process each file based on its type
         if 'company_fundamental' in file:
@@ -192,7 +195,7 @@ def create_desc_json_base(data_path="/home/bandee/projects/stockAnalyzer/dev_dat
                                 for c in cash_flow_annual.columns if c != 'Symbol']
             total_keys += len(column_desc[key])
     # Print the resulting dictionary
-    print(column_desc)
+    logger.info(column_desc)
 
     import json
     output_file = os.path.join(data_path, out_file_name)
