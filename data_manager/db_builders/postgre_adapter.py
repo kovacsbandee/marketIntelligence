@@ -60,7 +60,7 @@ class PostgresAdapter:
             f"postgresql+psycopg2://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}"
         )
         self.logger = logging.getLogger(__name__)
-        logging.basicConfig(level=logging.INFO)
+        # logging.basicConfig(level=logging.INFO)
 
     def provide_session(self) -> Session:
         """

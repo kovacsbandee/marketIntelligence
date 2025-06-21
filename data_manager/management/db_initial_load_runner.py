@@ -16,7 +16,7 @@ Dependencies:
     - Database configuration and Alpha Vantage credentials must be set in the environment or code.
 """
 
-import logging
+from utils.logger import get_logger
 from data_manager.etl_jobs.alphavantage_adapter import AlphaLoader
 
 
@@ -33,8 +33,7 @@ def load_initial_stocks(symbols):
     Args:
         symbols (list[str]): List of stock ticker symbols.
     """
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger("InitialLoader")
+    logger = get_logger("run_initial_load")
 
     logger.info("Starting initial load for %d symbols...", len(symbols))
 

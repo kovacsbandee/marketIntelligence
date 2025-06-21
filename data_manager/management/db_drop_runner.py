@@ -56,26 +56,26 @@ def main():
         return
 
     # List tables to be dropped
-    print(f"\n⚠️  WARNING: You are about to delete {len(defined_classes)} tables:")
+    warning_msg = f"\n⚠️  WARNING: You are about to delete {len(defined_classes)} tables:"
+    print(warning_msg)
+    logger.warning(warning_msg)
     for table_class in defined_classes:
+
         print(f" - {table_class.__tablename__}")
-    logger.debug("Tables to drop: %s", [cls.__tablename__ for cls in defined_classes])
+    logger.debug("Tables to drop: %s", [cls.__tablename__ for cls in defined_classes])#
 
     # Prompt for confirmation
     confirmation = input("\nType 'DELETE' to confirm and drop all tables: ")
     if confirmation != "DELETE":
-        print("Aborted. No tables were deleted.")
+        logger.info("Aborted. No tables were deleted.")
         return
 
     # Drop each table and log progress
     for table_class in defined_classes:
-        print(f"Dropping table: {table_class.__tablename__}")
         logger.info("Dropping table: %s", table_class.__tablename__)
         adapter.drop_table(table_class)
 
     logger.info("Dropped %d tables", len(defined_classes))
-
-    print("✅ All specified tables have been dropped.")
     logger.info("All specified tables have been dropped.")
 
 
