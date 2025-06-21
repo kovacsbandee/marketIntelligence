@@ -6,8 +6,7 @@ financials, insider transactions, splits, and dividends. It stores the results
 in a PostgreSQL database through the AlphaLoader interface.
 """
 
-import logging
-import sys
+from utils.logger import get_logger
 from utils.utils import get_symbols_from_csv
 from data_manager.etl_jobs.alphavantage_adapter import AlphaLoader
 
@@ -22,7 +21,7 @@ def load_initial_stocks(symbols):
     This function fetches daily time series, company fundamentals, various financial
     statements, insider transactions, stock splits, and dividend data for each symbol.
     """
-    logger = logging.getLogger("InitialLoader")
+    logger = get_logger("run_initial_load")
     logger.info("Starting initial load for %d symbols...", len(symbols))
 
     for symbol in symbols:
@@ -65,14 +64,7 @@ def main():
 
     Sets up logging, retrieves the list of stock symbols, and initiates the data load.
     """
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
-        handlers=[
-            logging.StreamHandler(sys.stdout),
-            logging.FileHandler("initial_load.log", mode="w"),
-        ],
-    )
+    logger = get_logger("run_initial_load")
 
     symbols = get_symbols()
     load_initial_stocks(symbols)
