@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, BigInteger, String, Float, Date
+from sqlalchemy import Column, Integer, BigInteger, String, Float, Date, Sequence
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -718,8 +718,9 @@ class DividendsTable(Base):
     """
     __tablename__ = 'dividends'
 
-    symbol = Column(String, primary_key=True, nullable=True)
-    ex_dividend_date = Column(Date, primary_key=True, nullable=True)
+    id = Column(Integer, Sequence('dividends_id_seq'), primary_key=True, autoincrement=True)
+    symbol = Column(String, nullable=True)
+    ex_dividend_date = Column(Date, nullable=True)
     amount = Column(Float, nullable=True)
     declaration_date = Column(Date, nullable=True)
     record_date = Column(Date, nullable=True)

@@ -1,24 +1,51 @@
-2025-07-11 19:32:38,749 - db_initial_load_runner - INFO - Starting initial load for 5 symbols...
-2025-07-11 19:32:38,749 - db_initial_load_runner - INFO - Processing symbol: APRE
-2025-07-11 19:32:38,749 - AlphaLoader - INFO - Fetching data for APRE...
-2025-07-11 19:32:39,751 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1449 new rows into daily_timeseries
-2025-07-11 19:32:39,757 - AlphaLoader - INFO - Candlestick data for APRE loaded into the database.
-2025-07-11 19:32:39,757 - AlphaLoader - INFO - Fetching company base data for APRE...
-2025-07-11 19:32:40,502 - data_manager.db_builders.postgre_adapter - ERROR - Failed to insert new rows into company_fundamentals
+2025-07-11 20:06:35,480 - db_initial_load_runner - INFO - Starting initial load for 5 symbols...
+2025-07-11 20:06:35,481 - db_initial_load_runner - INFO - Processing symbol: OXSQ
+2025-07-11 20:06:35,481 - AlphaLoader - INFO - Fetching data for OXSQ...
+2025-07-11 20:06:36,411 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1836 new rows into daily_timeseries
+2025-07-11 20:06:36,418 - AlphaLoader - INFO - Candlestick data for OXSQ loaded into the database.
+2025-07-11 20:06:36,418 - AlphaLoader - INFO - Fetching company base data for OXSQ...
+2025-07-11 20:06:36,971 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-11 20:06:36,976 - AlphaLoader - INFO - Company base data for OXSQ loaded into the database.
+2025-07-11 20:06:36,977 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for OXSQ...
+2025-07-11 20:06:37,387 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-07-11 20:06:37,420 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-07-11 20:06:37,425 - AlphaLoader - INFO - INCOME_STATEMENT data for OXSQ loaded into the database.
+2025-07-11 20:06:37,426 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for OXSQ...
+2025-07-11 20:06:38,249 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-07-11 20:06:38,279 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-07-11 20:06:38,284 - AlphaLoader - INFO - BALANCE_SHEET data for OXSQ loaded into the database.
+2025-07-11 20:06:38,285 - AlphaLoader - INFO - Fetching CASH_FLOW data for OXSQ...
+2025-07-11 20:06:39,147 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-07-11 20:06:39,179 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-07-11 20:06:39,185 - AlphaLoader - INFO - CASH_FLOW data for OXSQ loaded into the database.
+2025-07-11 20:06:39,185 - AlphaLoader - INFO - Fetching EARNINGS data for OXSQ...
+2025-07-11 20:06:39,712 - data_manager.db_builders.postgre_adapter - INFO - Inserted 22 new rows into earnings_annual
+2025-07-11 20:06:39,734 - data_manager.db_builders.postgre_adapter - INFO - Inserted 85 new rows into earnings_quarterly
+2025-07-11 20:06:39,740 - AlphaLoader - INFO - EARNINGS data for OXSQ loaded into the database.
+2025-07-11 20:06:39,740 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for OXSQ...
+2025-07-11 20:06:40,363 - data_manager.db_builders.postgre_adapter - INFO - Inserted 346 new rows into insider_transactions
+2025-07-11 20:06:40,369 - AlphaLoader - INFO - Insider transaction data for OXSQ loaded into the database.
+2025-07-11 20:06:40,369 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for OXSQ...
+2025-07-11 20:06:40,625 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
+2025-07-11 20:06:40,630 - AlphaLoader - INFO - Stock split data for OXSQ loaded into the database.
+2025-07-11 20:06:40,630 - AlphaLoader - INFO - Fetching DIVIDENDS data for OXSQ...
+2025-07-11 20:06:41,284 - data_manager.db_builders.postgre_adapter - ERROR - Failed to insert new rows into dividends
 Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
-    self.dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~~~~~~^
-        cursor, str_statement, effective_parameters, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
     )
     ^
   File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
     cursor.execute(statement, parameters)
     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-psycopg2.errors.InvalidTextRepresentation: invalid input syntax for type double precision: "-"
-LINE 1: ...961755,  -2.34, 0,  -0.573, 13.67, 2, 1, 0, 0, 0, '-', '-', ...
-                                                             ^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "dividends_pkey"
+DETAIL:  Key (symbol)=(OXSQ) already exists.
 
 
 The above exception was the direct cause of the following exception:
@@ -81,794 +108,57 @@ Traceback (most recent call last):
     ...<8 lines>...
         cache_hit=cache_hit,
     )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1843, in _execute_context
-    return self._exec_single_context(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~^
-        dialect, context, statement, parameters
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1983, in _exec_single_context
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
     self._handle_dbapi_exception(
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        e, str_statement, effective_parameters, cursor, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
-    self.dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~~~~~~^
-        cursor, str_statement, effective_parameters, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-sqlalchemy.exc.DataError: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type double precision: "-"
-LINE 1: ...961755,  -2.34, 0,  -0.573, 13.67, 2, 1, 0, 0, 0, '-', '-', ...
-                                                             ^
-
-[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, book_value, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(book_value)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s)]
-[parameters: {'symbol': 'APRE', 'asset_type': 'Common Stock', 'name': 'Aprea Therapeutics Inc', 'description': 'Aprea Therapeutics, Inc., a clinical-stage biopharmaceutical company, develops and markets cancer therapies that reactivate the mutant p53 tumor suppressor protein. The company is headquartered in Boston, Massachusetts.', 'cik': 1781983, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'LIFE SCIENCES', 'industry': 'PHARMACEUTICAL PREPARATIONS', 'address': '535 BOYLSTON STREET, BOSTON, MA, US', 'official_site': 'https://aprea.com', 'fiscal_year_end': 'December', 'latest_quarter': '2025-03-31', 'market_capitalization': 9790500, 'ebitda': -15233977, 'book_value': 2.821, 'eps': -2.34, 'revenue_per_share_ttm': 0.216, 'profit_margin': 0, 'operating_margin_ttm': -25.15, 'return_on_assets_ttm': -0.357, 'return_on_equity_ttm': -0.598, 'revenue_ttm': 1284500, 'gross_profit_ttm': -8961755, 'diluted_eps_ttm': -2.34, 'quarterly_earnings_growth_yoy': 0, 'quarterly_revenue_growth_yoy': -0.573, 'analyst_target_price': 13.67, 'analyst_rating_strong_buy': 2, 'analyst_rating_buy': 1, 'analyst_rating_hold': 0, 'analyst_rating_sell': 0, 'analyst_rating_strong_sell': 0, 'trailing_pe': '-', 'forward_pe': '-', 'price_to_sales_ratio_ttm': 7.62, 'price_to_book_ratio': 0.669, 'ev_to_revenue': '-', 'ev_to_ebitda': 0.346, 'beta': 1.609, 'fifty_two_week_high': 5.01, 'fifty_two_week_low': 1.412, 'fifty_day_moving_average': 1.741, 'two_hundred_day_moving_average': 2.701, 'shares_outstanding': 5531400}]
-(Background on this error at: https://sqlalche.me/e/20/9h9h)
-2025-07-11 19:32:40,516 - data_manager.db_builders.postgre_adapter - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
-    self.dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~~~~~~^
-        cursor, str_statement, effective_parameters, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-psycopg2.errors.InvalidTextRepresentation: invalid input syntax for type double precision: "-"
-LINE 1: ...961755,  -2.34, 0,  -0.573, 13.67, 2, 1, 0, 0, 0, '-', '-', ...
-                                                             ^
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 86, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 241, in insert_new_data
-    session.bulk_insert_mappings(table, rows)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
-    self._bulk_save_mappings(
-    ~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<5 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
-    with util.safe_reraise():
-         ~~~~~~~~~~~~~~~~~^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
-    raise exc_value.with_traceback(exc_tb)
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
-    bulk_persistence._bulk_insert(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
+        e,
+        ^^
     ...<4 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
-    result = persistence._emit_insert_statements(
-        base_mapper,
-    ...<6 lines>...
-        execution_options=execution_options,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
-    result = connection.execute(
-        statement, multiparams, execution_options=execution_options
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
-    return meth(
-        self,
-        distilled_parameters,
-        execution_options or NO_OPTIONS,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
-    return connection._execute_clauseelement(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        self, distilled_params, execution_options
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
-    ret = self._execute_context(
-        dialect,
-    ...<8 lines>...
-        cache_hit=cache_hit,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1843, in _execute_context
-    return self._exec_single_context(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~^
-        dialect, context, statement, parameters
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1983, in _exec_single_context
-    self._handle_dbapi_exception(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        e, str_statement, effective_parameters, cursor, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
     )
     ^
   File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
     raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
-    self.dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~~~~~~^
-        cursor, str_statement, effective_parameters, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
     )
     ^
   File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
     cursor.execute(statement, parameters)
     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-sqlalchemy.exc.DataError: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type double precision: "-"
-LINE 1: ...961755,  -2.34, 0,  -0.573, 13.67, 2, 1, 0, 0, 0, '-', '-', ...
-                                                             ^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "dividends_pkey"
+DETAIL:  Key (symbol)=(OXSQ) already exists.
 
-[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, book_value, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(book_value)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s)]
-[parameters: {'symbol': 'APRE', 'asset_type': 'Common Stock', 'name': 'Aprea Therapeutics Inc', 'description': 'Aprea Therapeutics, Inc., a clinical-stage biopharmaceutical company, develops and markets cancer therapies that reactivate the mutant p53 tumor suppressor protein. The company is headquartered in Boston, Massachusetts.', 'cik': 1781983, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'LIFE SCIENCES', 'industry': 'PHARMACEUTICAL PREPARATIONS', 'address': '535 BOYLSTON STREET, BOSTON, MA, US', 'official_site': 'https://aprea.com', 'fiscal_year_end': 'December', 'latest_quarter': '2025-03-31', 'market_capitalization': 9790500, 'ebitda': -15233977, 'book_value': 2.821, 'eps': -2.34, 'revenue_per_share_ttm': 0.216, 'profit_margin': 0, 'operating_margin_ttm': -25.15, 'return_on_assets_ttm': -0.357, 'return_on_equity_ttm': -0.598, 'revenue_ttm': 1284500, 'gross_profit_ttm': -8961755, 'diluted_eps_ttm': -2.34, 'quarterly_earnings_growth_yoy': 0, 'quarterly_revenue_growth_yoy': -0.573, 'analyst_target_price': 13.67, 'analyst_rating_strong_buy': 2, 'analyst_rating_buy': 1, 'analyst_rating_hold': 0, 'analyst_rating_sell': 0, 'analyst_rating_strong_sell': 0, 'trailing_pe': '-', 'forward_pe': '-', 'price_to_sales_ratio_ttm': 7.62, 'price_to_book_ratio': 0.669, 'ev_to_revenue': '-', 'ev_to_ebitda': 0.346, 'beta': 1.609, 'fifty_two_week_high': 5.01, 'fifty_two_week_low': 1.412, 'fifty_day_moving_average': 1.741, 'two_hundred_day_moving_average': 2.701, 'shares_outstanding': 5531400}]
-(Background on this error at: https://sqlalche.me/e/20/9h9h)
-2025-07-11 19:32:40,523 - AlphaLoader - ERROR - An unexpected error occurred: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type double precision: "-"
-LINE 1: ...961755,  -2.34, 0,  -0.573, 13.67, 2, 1, 0, 0, 0, '-', '-', ...
-                                                             ^
-
-[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, book_value, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(book_value)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s)]
-[parameters: {'symbol': 'APRE', 'asset_type': 'Common Stock', 'name': 'Aprea Therapeutics Inc', 'description': 'Aprea Therapeutics, Inc., a clinical-stage biopharmaceutical company, develops and markets cancer therapies that reactivate the mutant p53 tumor suppressor protein. The company is headquartered in Boston, Massachusetts.', 'cik': 1781983, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'LIFE SCIENCES', 'industry': 'PHARMACEUTICAL PREPARATIONS', 'address': '535 BOYLSTON STREET, BOSTON, MA, US', 'official_site': 'https://aprea.com', 'fiscal_year_end': 'December', 'latest_quarter': '2025-03-31', 'market_capitalization': 9790500, 'ebitda': -15233977, 'book_value': 2.821, 'eps': -2.34, 'revenue_per_share_ttm': 0.216, 'profit_margin': 0, 'operating_margin_ttm': -25.15, 'return_on_assets_ttm': -0.357, 'return_on_equity_ttm': -0.598, 'revenue_ttm': 1284500, 'gross_profit_ttm': -8961755, 'diluted_eps_ttm': -2.34, 'quarterly_earnings_growth_yoy': 0, 'quarterly_revenue_growth_yoy': -0.573, 'analyst_target_price': 13.67, 'analyst_rating_strong_buy': 2, 'analyst_rating_buy': 1, 'analyst_rating_hold': 0, 'analyst_rating_sell': 0, 'analyst_rating_strong_sell': 0, 'trailing_pe': '-', 'forward_pe': '-', 'price_to_sales_ratio_ttm': 7.62, 'price_to_book_ratio': 0.669, 'ev_to_revenue': '-', 'ev_to_ebitda': 0.346, 'beta': 1.609, 'fifty_two_week_high': 5.01, 'fifty_two_week_low': 1.412, 'fifty_day_moving_average': 1.741, 'two_hundred_day_moving_average': 2.701, 'shares_outstanding': 5531400}]
-(Background on this error at: https://sqlalche.me/e/20/9h9h)
-2025-07-11 19:32:40,523 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for APRE...
-2025-07-11 19:32:41,485 - data_manager.db_builders.postgre_adapter - INFO - Inserted 11 new rows into income_statement_annual
-2025-07-11 19:32:41,511 - data_manager.db_builders.postgre_adapter - INFO - Inserted 32 new rows into income_statement_quarterly
-2025-07-11 19:32:41,514 - AlphaLoader - INFO - INCOME_STATEMENT data for APRE loaded into the database.
-2025-07-11 19:32:41,515 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for APRE...
-2025-07-11 19:32:42,219 - data_manager.db_builders.postgre_adapter - INFO - Inserted 11 new rows into balance_sheet_annual
-2025-07-11 19:32:42,241 - data_manager.db_builders.postgre_adapter - INFO - Inserted 29 new rows into balance_sheet_quarterly
-2025-07-11 19:32:42,245 - AlphaLoader - INFO - BALANCE_SHEET data for APRE loaded into the database.
-2025-07-11 19:32:42,245 - AlphaLoader - INFO - Fetching CASH_FLOW data for APRE...
-2025-07-11 19:32:43,302 - data_manager.db_builders.postgre_adapter - INFO - Inserted 11 new rows into cash_flow_annual
-2025-07-11 19:32:43,325 - data_manager.db_builders.postgre_adapter - INFO - Inserted 32 new rows into cash_flow_statement_quarterly
-2025-07-11 19:32:43,331 - AlphaLoader - INFO - CASH_FLOW data for APRE loaded into the database.
-2025-07-11 19:32:43,331 - AlphaLoader - INFO - Fetching EARNINGS data for APRE...
-2025-07-11 19:32:43,995 - data_manager.db_builders.postgre_adapter - INFO - Inserted 7 new rows into earnings_annual
-2025-07-11 19:32:44,009 - data_manager.db_builders.postgre_adapter - INFO - Inserted 24 new rows into earnings_quarterly
-2025-07-11 19:32:44,016 - AlphaLoader - INFO - EARNINGS data for APRE loaded into the database.
-2025-07-11 19:32:44,016 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for APRE...
-2025-07-11 19:32:44,600 - data_manager.db_builders.postgre_adapter - INFO - Inserted 208 new rows into insider_transactions
-2025-07-11 19:32:44,605 - AlphaLoader - INFO - Insider transaction data for APRE loaded into the database.
-2025-07-11 19:32:44,605 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for APRE...
-2025-07-11 19:32:45,593 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
-2025-07-11 19:32:45,595 - AlphaLoader - INFO - Stock split data for APRE loaded into the database.
-2025-07-11 19:32:45,595 - AlphaLoader - INFO - Fetching DIVIDENDS data for APRE...
-2025-07-11 19:32:45,968 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
-2025-07-11 19:32:45,969 - db_initial_load_runner - INFO - Processing symbol: JBSS
-2025-07-11 19:32:45,969 - AlphaLoader - INFO - Fetching data for JBSS...
-2025-07-11 19:32:47,981 - data_manager.db_builders.postgre_adapter - INFO - Inserted 6461 new rows into daily_timeseries
-2025-07-11 19:32:47,994 - AlphaLoader - INFO - Candlestick data for JBSS loaded into the database.
-2025-07-11 19:32:47,994 - AlphaLoader - INFO - Fetching company base data for JBSS...
-2025-07-11 19:32:48,271 - data_manager.db_builders.postgre_adapter - ERROR - Failed to insert new rows into company_fundamentals
+[SQL: INSERT INTO dividends (symbol, ex_dividend_date, amount, declaration_date, record_date, payment_date) VALUES (%(symbol__0)s, %(ex_dividend_date__0)s, %(amount__0)s, %(declaration_date__0)s, %(record_date__0)s, %(payment_date__0)s), (%(symbol__1)s, %( ... 8598 characters truncated ... end_date__68)s, %(amount__68)s, %(declaration_date__68)s, %(record_date__68)s, %(payment_date__68)s)]
+[parameters: {'amount__0': 0.035, 'ex_dividend_date__0': datetime.date(2025, 9, 16), 'declaration_date__0': datetime.date(2025, 4, 22), 'payment_date__0': datetime.date(2025, 9, 30), 'symbol__0': 'OXSQ', 'record_date__0': datetime.date(2025, 9, 16), 'amount__1': 0.035, 'ex_dividend_date__1': datetime.date(2025, 8, 15), 'declaration_date__1': datetime.date(2025, 4, 22), 'payment_date__1': datetime.date(2025, 8, 29), 'symbol__1': 'OXSQ', 'record_date__1': datetime.date(2025, 8, 15), 'amount__2': 0.035, 'ex_dividend_date__2': datetime.date(2025, 7, 17), 'declaration_date__2': datetime.date(2025, 4, 22), 'payment_date__2': datetime.date(2025, 7, 31), 'symbol__2': 'OXSQ', 'record_date__2': datetime.date(2025, 7, 17), 'amount__3': 0.035, 'ex_dividend_date__3': datetime.date(2025, 6, 16), 'declaration_date__3': datetime.date(2025, 2, 27), 'payment_date__3': datetime.date(2025, 6, 30), 'symbol__3': 'OXSQ', 'record_date__3': datetime.date(2025, 6, 16), 'amount__4': 0.035, 'ex_dividend_date__4': datetime.date(2025, 5, 16), 'declaration_date__4': datetime.date(2025, 2, 27), 'payment_date__4': datetime.date(2025, 5, 30), 'symbol__4': 'OXSQ', 'record_date__4': datetime.date(2025, 5, 16), 'amount__5': 0.035, 'ex_dividend_date__5': datetime.date(2025, 4, 16), 'declaration_date__5': datetime.date(2025, 2, 27), 'payment_date__5': datetime.date(2025, 4, 30), 'symbol__5': 'OXSQ', 'record_date__5': datetime.date(2025, 4, 16), 'amount__6': 0.035, 'ex_dividend_date__6': datetime.date(2025, 3, 17), 'declaration_date__6': datetime.date(2024, 10, 31), 'payment_date__6': datetime.date(2025, 3, 31), 'symbol__6': 'OXSQ', 'record_date__6': datetime.date(2025, 3, 17), 'amount__7': 0.035, 'ex_dividend_date__7': datetime.date(2025, 2, 14), 'declaration_date__7': datetime.date(2024, 10, 31), 'payment_date__7': datetime.date(2025, 2, 28), 'symbol__7': 'OXSQ', 'record_date__7': datetime.date(2025, 2, 14), 'amount__8': 0.035, 'ex_dividend_date__8': datetime.date(2025, 1, 17) ... 314 parameters truncated ... 'symbol__60': 'OXSQ', 'record_date__60': datetime.date(2020, 9, 16), 'amount__61': 0.035, 'ex_dividend_date__61': datetime.date(2020, 8, 14), 'declaration_date__61': datetime.date(2020, 6, 1), 'payment_date__61': datetime.date(2020, 8, 31), 'symbol__61': 'OXSQ', 'record_date__61': datetime.date(2020, 8, 17), 'amount__62': 0.035, 'ex_dividend_date__62': datetime.date(2020, 7, 16), 'declaration_date__62': datetime.date(2020, 6, 1), 'payment_date__62': datetime.date(2020, 7, 31), 'symbol__62': 'OXSQ', 'record_date__62': datetime.date(2020, 7, 17), 'amount__63': 0.067, 'ex_dividend_date__63': datetime.date(2020, 6, 12), 'declaration_date__63': datetime.date(2020, 2, 24), 'payment_date__63': datetime.date(2020, 6, 30), 'symbol__63': 'OXSQ', 'record_date__63': datetime.date(2020, 6, 15), 'amount__64': 0.067, 'ex_dividend_date__64': datetime.date(2020, 5, 13), 'declaration_date__64': datetime.date(2020, 2, 24), 'payment_date__64': datetime.date(2020, 5, 29), 'symbol__64': 'OXSQ', 'record_date__64': datetime.date(2020, 5, 14), 'amount__65': 0.067, 'ex_dividend_date__65': datetime.date(2020, 4, 14), 'declaration_date__65': datetime.date(2020, 2, 24), 'payment_date__65': datetime.date(2020, 4, 30), 'symbol__65': 'OXSQ', 'record_date__65': datetime.date(2020, 4, 15), 'amount__66': 0.067, 'ex_dividend_date__66': datetime.date(2020, 3, 16), 'declaration_date__66': datetime.date(2019, 10, 25), 'payment_date__66': datetime.date(2020, 3, 31), 'symbol__66': 'OXSQ', 'record_date__66': datetime.date(2020, 3, 17), 'amount__67': 0.067, 'ex_dividend_date__67': datetime.date(2020, 2, 13), 'declaration_date__67': datetime.date(2019, 10, 25), 'payment_date__67': datetime.date(2020, 2, 28), 'symbol__67': 'OXSQ', 'record_date__67': datetime.date(2020, 2, 14), 'amount__68': 0.067, 'ex_dividend_date__68': datetime.date(2020, 1, 16), 'declaration_date__68': datetime.date(2019, 10, 25), 'payment_date__68': datetime.date(2020, 1, 31), 'symbol__68': 'OXSQ', 'record_date__68': datetime.date(2020, 1, 17)}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-11 20:06:41,294 - data_manager.db_builders.postgre_adapter - ERROR - Transaction failed
 Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
-    self.dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~~~~~~^
-        cursor, str_statement, effective_parameters, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
     )
     ^
   File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
     cursor.execute(statement, parameters)
     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-psycopg2.errors.InvalidTextRepresentation: invalid input syntax for type integer: "-"
-LINE 1: ... 1107742000, 204689000, 4.72, 0.496,  -0.04, 107, '-', '-', ...
-                                                             ^
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 241, in insert_new_data
-    session.bulk_insert_mappings(table, rows)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
-    self._bulk_save_mappings(
-    ~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<5 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
-    with util.safe_reraise():
-         ~~~~~~~~~~~~~~~~~^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
-    raise exc_value.with_traceback(exc_tb)
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
-    bulk_persistence._bulk_insert(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<4 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
-    result = persistence._emit_insert_statements(
-        base_mapper,
-    ...<6 lines>...
-        execution_options=execution_options,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
-    result = connection.execute(
-        statement, multiparams, execution_options=execution_options
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
-    return meth(
-        self,
-        distilled_parameters,
-        execution_options or NO_OPTIONS,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
-    return connection._execute_clauseelement(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        self, distilled_params, execution_options
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
-    ret = self._execute_context(
-        dialect,
-    ...<8 lines>...
-        cache_hit=cache_hit,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1843, in _execute_context
-    return self._exec_single_context(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~^
-        dialect, context, statement, parameters
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1983, in _exec_single_context
-    self._handle_dbapi_exception(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        e, str_statement, effective_parameters, cursor, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
-    self.dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~~~~~~^
-        cursor, str_statement, effective_parameters, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-sqlalchemy.exc.DataError: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "-"
-LINE 1: ... 1107742000, 204689000, 4.72, 0.496,  -0.04, 107, '-', '-', ...
-                                                             ^
-
-[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, pe_ratio, peg_ratio, book_value, dividend_per_share, dividend_yield, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding, dividend_date, ex_dividend_date) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(pe_ratio)s, %(peg_ratio)s, %(book_value)s, %(dividend_per_share)s, %(dividend_yield)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s, %(dividend_date)s, %(ex_dividend_date)s)]
-[parameters: {'symbol': 'JBSS', 'asset_type': 'Common Stock', 'name': 'John B Sanfilippo & Son Inc', 'description': 'John B. Sanfilippo & Son, Inc., along with its subsidiary, JBSS Ventures, LLC, processes and distributes tree nuts and peanuts in the United States. The company is headquartered in Elgin, Illinois.', 'cik': 880117, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'MANUFACTURING', 'industry': 'SUGAR & CONFECTIONERY PRODUCTS', 'address': '1703 N. RANDALL ROAD, ELGIN, IL, US', 'official_site': 'https://www.jbssinc.com', 'fiscal_year_end': 'June', 'latest_quarter': '2025-03-31', 'market_capitalization': 784253000, 'ebitda': 103319000, 'pe_ratio': 14.23, 'peg_ratio': 0, 'book_value': 29.78, 'dividend_per_share': 0.85, 'dividend_yield': 0.0134, 'eps': 4.72, 'revenue_per_share_ttm': 95.15, 'profit_margin': 0.05, 'operating_margin_ttm': 0.104, 'return_on_assets_ttm': 0.0888, 'return_on_equity_ttm': 0.166, 'revenue_ttm': 1107742000, 'gross_profit_ttm': 204689000, 'diluted_eps_ttm': 4.72, 'quarterly_earnings_growth_yoy': 0.496, 'quarterly_revenue_growth_yoy': -0.04, 'analyst_target_price': 107, 'analyst_rating_strong_buy': '-', 'analyst_rating_buy': '-', 'analyst_rating_hold': '-', 'analyst_rating_sell': '-', 'analyst_rating_strong_sell': '-', 'trailing_pe': 14.23, 'forward_pe': '-', 'price_to_sales_ratio_ttm': 0.708, 'price_to_book_ratio': 2.25, 'ev_to_revenue': 0.813, 'ev_to_ebitda': 8.46, 'beta': 0.353, 'fifty_two_week_high': 104.34, 'fifty_two_week_low': 58.47, 'fifty_day_moving_average': 63.09, 'two_hundred_day_moving_average': 76.87, 'shares_outstanding': 9043400, 'dividend_date': '2024-09-11', 'ex_dividend_date': '2024-08-20'}]
-(Background on this error at: https://sqlalche.me/e/20/9h9h)
-2025-07-11 19:32:48,277 - data_manager.db_builders.postgre_adapter - INFO - Retrying after sanitizing integer columns...
-2025-07-11 19:32:48,278 - data_manager.db_builders.postgre_adapter - ERROR - Retry failed for inserting rows into company_fundamentals
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
-    self.dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~~~~~~^
-        cursor, str_statement, effective_parameters, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-psycopg2.errors.InvalidTextRepresentation: invalid input syntax for type integer: "-"
-LINE 1: ... 1107742000, 204689000, 4.72, 0.496,  -0.04, 107, '-', '-', ...
-                                                             ^
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 241, in insert_new_data
-    session.bulk_insert_mappings(table, rows)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
-    self._bulk_save_mappings(
-    ~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<5 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
-    with util.safe_reraise():
-         ~~~~~~~~~~~~~~~~~^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
-    raise exc_value.with_traceback(exc_tb)
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
-    bulk_persistence._bulk_insert(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<4 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
-    result = persistence._emit_insert_statements(
-        base_mapper,
-    ...<6 lines>...
-        execution_options=execution_options,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
-    result = connection.execute(
-        statement, multiparams, execution_options=execution_options
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
-    return meth(
-        self,
-        distilled_parameters,
-        execution_options or NO_OPTIONS,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
-    return connection._execute_clauseelement(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        self, distilled_params, execution_options
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
-    ret = self._execute_context(
-        dialect,
-    ...<8 lines>...
-        cache_hit=cache_hit,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1843, in _execute_context
-    return self._exec_single_context(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~^
-        dialect, context, statement, parameters
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1983, in _exec_single_context
-    self._handle_dbapi_exception(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        e, str_statement, effective_parameters, cursor, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
-    self.dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~~~~~~^
-        cursor, str_statement, effective_parameters, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-sqlalchemy.exc.DataError: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "-"
-LINE 1: ... 1107742000, 204689000, 4.72, 0.496,  -0.04, 107, '-', '-', ...
-                                                             ^
-
-[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, pe_ratio, peg_ratio, book_value, dividend_per_share, dividend_yield, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding, dividend_date, ex_dividend_date) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(pe_ratio)s, %(peg_ratio)s, %(book_value)s, %(dividend_per_share)s, %(dividend_yield)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s, %(dividend_date)s, %(ex_dividend_date)s)]
-[parameters: {'symbol': 'JBSS', 'asset_type': 'Common Stock', 'name': 'John B Sanfilippo & Son Inc', 'description': 'John B. Sanfilippo & Son, Inc., along with its subsidiary, JBSS Ventures, LLC, processes and distributes tree nuts and peanuts in the United States. The company is headquartered in Elgin, Illinois.', 'cik': 880117, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'MANUFACTURING', 'industry': 'SUGAR & CONFECTIONERY PRODUCTS', 'address': '1703 N. RANDALL ROAD, ELGIN, IL, US', 'official_site': 'https://www.jbssinc.com', 'fiscal_year_end': 'June', 'latest_quarter': '2025-03-31', 'market_capitalization': 784253000, 'ebitda': 103319000, 'pe_ratio': 14.23, 'peg_ratio': 0, 'book_value': 29.78, 'dividend_per_share': 0.85, 'dividend_yield': 0.0134, 'eps': 4.72, 'revenue_per_share_ttm': 95.15, 'profit_margin': 0.05, 'operating_margin_ttm': 0.104, 'return_on_assets_ttm': 0.0888, 'return_on_equity_ttm': 0.166, 'revenue_ttm': 1107742000, 'gross_profit_ttm': 204689000, 'diluted_eps_ttm': 4.72, 'quarterly_earnings_growth_yoy': 0.496, 'quarterly_revenue_growth_yoy': -0.04, 'analyst_target_price': 107, 'analyst_rating_strong_buy': '-', 'analyst_rating_buy': '-', 'analyst_rating_hold': '-', 'analyst_rating_sell': '-', 'analyst_rating_strong_sell': '-', 'trailing_pe': 14.23, 'forward_pe': '-', 'price_to_sales_ratio_ttm': 0.708, 'price_to_book_ratio': 2.25, 'ev_to_revenue': 0.813, 'ev_to_ebitda': 8.46, 'beta': 0.353, 'fifty_two_week_high': 104.34, 'fifty_two_week_low': 58.47, 'fifty_day_moving_average': 63.09, 'two_hundred_day_moving_average': 76.87, 'shares_outstanding': 9043400, 'dividend_date': '2024-09-11', 'ex_dividend_date': '2024-08-20'}]
-(Background on this error at: https://sqlalche.me/e/20/9h9h)
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 266, in insert_new_data
-    session.bulk_insert_mappings(table, rows)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
-    self._bulk_save_mappings(
-    ~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<5 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4741, in _bulk_save_mappings
-    transaction = self._autobegin_t()._begin()
-  File "<string>", line 2, in _begin
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/state_changes.py", line 103, in _go
-    self._raise_for_prerequisite_state(fn.__name__, current_state)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 973, in _raise_for_prerequisite_state
-    raise sa_exc.PendingRollbackError(
-    ...<6 lines>...
-    )
-sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "-"
-LINE 1: ... 1107742000, 204689000, 4.72, 0.496,  -0.04, 107, '-', '-', ...
-                                                             ^
-
-[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, pe_ratio, peg_ratio, book_value, dividend_per_share, dividend_yield, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding, dividend_date, ex_dividend_date) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(pe_ratio)s, %(peg_ratio)s, %(book_value)s, %(dividend_per_share)s, %(dividend_yield)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s, %(dividend_date)s, %(ex_dividend_date)s)]
-[parameters: {'symbol': 'JBSS', 'asset_type': 'Common Stock', 'name': 'John B Sanfilippo & Son Inc', 'description': 'John B. Sanfilippo & Son, Inc., along with its subsidiary, JBSS Ventures, LLC, processes and distributes tree nuts and peanuts in the United States. The company is headquartered in Elgin, Illinois.', 'cik': 880117, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'MANUFACTURING', 'industry': 'SUGAR & CONFECTIONERY PRODUCTS', 'address': '1703 N. RANDALL ROAD, ELGIN, IL, US', 'official_site': 'https://www.jbssinc.com', 'fiscal_year_end': 'June', 'latest_quarter': '2025-03-31', 'market_capitalization': 784253000, 'ebitda': 103319000, 'pe_ratio': 14.23, 'peg_ratio': 0, 'book_value': 29.78, 'dividend_per_share': 0.85, 'dividend_yield': 0.0134, 'eps': 4.72, 'revenue_per_share_ttm': 95.15, 'profit_margin': 0.05, 'operating_margin_ttm': 0.104, 'return_on_assets_ttm': 0.0888, 'return_on_equity_ttm': 0.166, 'revenue_ttm': 1107742000, 'gross_profit_ttm': 204689000, 'diluted_eps_ttm': 4.72, 'quarterly_earnings_growth_yoy': 0.496, 'quarterly_revenue_growth_yoy': -0.04, 'analyst_target_price': 107, 'analyst_rating_strong_buy': '-', 'analyst_rating_buy': '-', 'analyst_rating_hold': '-', 'analyst_rating_sell': '-', 'analyst_rating_strong_sell': '-', 'trailing_pe': 14.23, 'forward_pe': '-', 'price_to_sales_ratio_ttm': 0.708, 'price_to_book_ratio': 2.25, 'ev_to_revenue': 0.813, 'ev_to_ebitda': 8.46, 'beta': 0.353, 'fifty_two_week_high': 104.34, 'fifty_two_week_low': 58.47, 'fifty_day_moving_average': 63.09, 'two_hundred_day_moving_average': 76.87, 'shares_outstanding': 9043400, 'dividend_date': '2024-09-11', 'ex_dividend_date': '2024-08-20'}]
-(Background on this error at: https://sqlalche.me/e/20/9h9h) (Background on this error at: https://sqlalche.me/e/20/7s2a)
-2025-07-11 19:32:48,289 - data_manager.db_builders.postgre_adapter - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
-    self.dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~~~~~~^
-        cursor, str_statement, effective_parameters, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-psycopg2.errors.InvalidTextRepresentation: invalid input syntax for type integer: "-"
-LINE 1: ... 1107742000, 204689000, 4.72, 0.496,  -0.04, 107, '-', '-', ...
-                                                             ^
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 241, in insert_new_data
-    session.bulk_insert_mappings(table, rows)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
-    self._bulk_save_mappings(
-    ~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<5 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
-    with util.safe_reraise():
-         ~~~~~~~~~~~~~~~~~^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
-    raise exc_value.with_traceback(exc_tb)
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
-    bulk_persistence._bulk_insert(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<4 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
-    result = persistence._emit_insert_statements(
-        base_mapper,
-    ...<6 lines>...
-        execution_options=execution_options,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
-    result = connection.execute(
-        statement, multiparams, execution_options=execution_options
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
-    return meth(
-        self,
-        distilled_parameters,
-        execution_options or NO_OPTIONS,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
-    return connection._execute_clauseelement(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        self, distilled_params, execution_options
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
-    ret = self._execute_context(
-        dialect,
-    ...<8 lines>...
-        cache_hit=cache_hit,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1843, in _execute_context
-    return self._exec_single_context(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~^
-        dialect, context, statement, parameters
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1983, in _exec_single_context
-    self._handle_dbapi_exception(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        e, str_statement, effective_parameters, cursor, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
-    self.dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~~~~~~^
-        cursor, str_statement, effective_parameters, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-sqlalchemy.exc.DataError: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "-"
-LINE 1: ... 1107742000, 204689000, 4.72, 0.496,  -0.04, 107, '-', '-', ...
-                                                             ^
-
-[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, pe_ratio, peg_ratio, book_value, dividend_per_share, dividend_yield, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding, dividend_date, ex_dividend_date) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(pe_ratio)s, %(peg_ratio)s, %(book_value)s, %(dividend_per_share)s, %(dividend_yield)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s, %(dividend_date)s, %(ex_dividend_date)s)]
-[parameters: {'symbol': 'JBSS', 'asset_type': 'Common Stock', 'name': 'John B Sanfilippo & Son Inc', 'description': 'John B. Sanfilippo & Son, Inc., along with its subsidiary, JBSS Ventures, LLC, processes and distributes tree nuts and peanuts in the United States. The company is headquartered in Elgin, Illinois.', 'cik': 880117, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'MANUFACTURING', 'industry': 'SUGAR & CONFECTIONERY PRODUCTS', 'address': '1703 N. RANDALL ROAD, ELGIN, IL, US', 'official_site': 'https://www.jbssinc.com', 'fiscal_year_end': 'June', 'latest_quarter': '2025-03-31', 'market_capitalization': 784253000, 'ebitda': 103319000, 'pe_ratio': 14.23, 'peg_ratio': 0, 'book_value': 29.78, 'dividend_per_share': 0.85, 'dividend_yield': 0.0134, 'eps': 4.72, 'revenue_per_share_ttm': 95.15, 'profit_margin': 0.05, 'operating_margin_ttm': 0.104, 'return_on_assets_ttm': 0.0888, 'return_on_equity_ttm': 0.166, 'revenue_ttm': 1107742000, 'gross_profit_ttm': 204689000, 'diluted_eps_ttm': 4.72, 'quarterly_earnings_growth_yoy': 0.496, 'quarterly_revenue_growth_yoy': -0.04, 'analyst_target_price': 107, 'analyst_rating_strong_buy': '-', 'analyst_rating_buy': '-', 'analyst_rating_hold': '-', 'analyst_rating_sell': '-', 'analyst_rating_strong_sell': '-', 'trailing_pe': 14.23, 'forward_pe': '-', 'price_to_sales_ratio_ttm': 0.708, 'price_to_book_ratio': 2.25, 'ev_to_revenue': 0.813, 'ev_to_ebitda': 8.46, 'beta': 0.353, 'fifty_two_week_high': 104.34, 'fifty_two_week_low': 58.47, 'fifty_day_moving_average': 63.09, 'two_hundred_day_moving_average': 76.87, 'shares_outstanding': 9043400, 'dividend_date': '2024-09-11', 'ex_dividend_date': '2024-08-20'}]
-(Background on this error at: https://sqlalche.me/e/20/9h9h)
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 86, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 266, in insert_new_data
-    session.bulk_insert_mappings(table, rows)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
-    self._bulk_save_mappings(
-    ~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<5 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4741, in _bulk_save_mappings
-    transaction = self._autobegin_t()._begin()
-  File "<string>", line 2, in _begin
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/state_changes.py", line 103, in _go
-    self._raise_for_prerequisite_state(fn.__name__, current_state)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 973, in _raise_for_prerequisite_state
-    raise sa_exc.PendingRollbackError(
-    ...<6 lines>...
-    )
-sqlalchemy.exc.PendingRollbackError: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "-"
-LINE 1: ... 1107742000, 204689000, 4.72, 0.496,  -0.04, 107, '-', '-', ...
-                                                             ^
-
-[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, pe_ratio, peg_ratio, book_value, dividend_per_share, dividend_yield, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding, dividend_date, ex_dividend_date) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(pe_ratio)s, %(peg_ratio)s, %(book_value)s, %(dividend_per_share)s, %(dividend_yield)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s, %(dividend_date)s, %(ex_dividend_date)s)]
-[parameters: {'symbol': 'JBSS', 'asset_type': 'Common Stock', 'name': 'John B Sanfilippo & Son Inc', 'description': 'John B. Sanfilippo & Son, Inc., along with its subsidiary, JBSS Ventures, LLC, processes and distributes tree nuts and peanuts in the United States. The company is headquartered in Elgin, Illinois.', 'cik': 880117, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'MANUFACTURING', 'industry': 'SUGAR & CONFECTIONERY PRODUCTS', 'address': '1703 N. RANDALL ROAD, ELGIN, IL, US', 'official_site': 'https://www.jbssinc.com', 'fiscal_year_end': 'June', 'latest_quarter': '2025-03-31', 'market_capitalization': 784253000, 'ebitda': 103319000, 'pe_ratio': 14.23, 'peg_ratio': 0, 'book_value': 29.78, 'dividend_per_share': 0.85, 'dividend_yield': 0.0134, 'eps': 4.72, 'revenue_per_share_ttm': 95.15, 'profit_margin': 0.05, 'operating_margin_ttm': 0.104, 'return_on_assets_ttm': 0.0888, 'return_on_equity_ttm': 0.166, 'revenue_ttm': 1107742000, 'gross_profit_ttm': 204689000, 'diluted_eps_ttm': 4.72, 'quarterly_earnings_growth_yoy': 0.496, 'quarterly_revenue_growth_yoy': -0.04, 'analyst_target_price': 107, 'analyst_rating_strong_buy': '-', 'analyst_rating_buy': '-', 'analyst_rating_hold': '-', 'analyst_rating_sell': '-', 'analyst_rating_strong_sell': '-', 'trailing_pe': 14.23, 'forward_pe': '-', 'price_to_sales_ratio_ttm': 0.708, 'price_to_book_ratio': 2.25, 'ev_to_revenue': 0.813, 'ev_to_ebitda': 8.46, 'beta': 0.353, 'fifty_two_week_high': 104.34, 'fifty_two_week_low': 58.47, 'fifty_day_moving_average': 63.09, 'two_hundred_day_moving_average': 76.87, 'shares_outstanding': 9043400, 'dividend_date': '2024-09-11', 'ex_dividend_date': '2024-08-20'}]
-(Background on this error at: https://sqlalche.me/e/20/9h9h) (Background on this error at: https://sqlalche.me/e/20/7s2a)
-2025-07-11 19:32:48,294 - AlphaLoader - ERROR - An unexpected error occurred: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "-"
-LINE 1: ... 1107742000, 204689000, 4.72, 0.496,  -0.04, 107, '-', '-', ...
-                                                             ^
-
-[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, pe_ratio, peg_ratio, book_value, dividend_per_share, dividend_yield, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding, dividend_date, ex_dividend_date) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(pe_ratio)s, %(peg_ratio)s, %(book_value)s, %(dividend_per_share)s, %(dividend_yield)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s, %(dividend_date)s, %(ex_dividend_date)s)]
-[parameters: {'symbol': 'JBSS', 'asset_type': 'Common Stock', 'name': 'John B Sanfilippo & Son Inc', 'description': 'John B. Sanfilippo & Son, Inc., along with its subsidiary, JBSS Ventures, LLC, processes and distributes tree nuts and peanuts in the United States. The company is headquartered in Elgin, Illinois.', 'cik': 880117, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'MANUFACTURING', 'industry': 'SUGAR & CONFECTIONERY PRODUCTS', 'address': '1703 N. RANDALL ROAD, ELGIN, IL, US', 'official_site': 'https://www.jbssinc.com', 'fiscal_year_end': 'June', 'latest_quarter': '2025-03-31', 'market_capitalization': 784253000, 'ebitda': 103319000, 'pe_ratio': 14.23, 'peg_ratio': 0, 'book_value': 29.78, 'dividend_per_share': 0.85, 'dividend_yield': 0.0134, 'eps': 4.72, 'revenue_per_share_ttm': 95.15, 'profit_margin': 0.05, 'operating_margin_ttm': 0.104, 'return_on_assets_ttm': 0.0888, 'return_on_equity_ttm': 0.166, 'revenue_ttm': 1107742000, 'gross_profit_ttm': 204689000, 'diluted_eps_ttm': 4.72, 'quarterly_earnings_growth_yoy': 0.496, 'quarterly_revenue_growth_yoy': -0.04, 'analyst_target_price': 107, 'analyst_rating_strong_buy': '-', 'analyst_rating_buy': '-', 'analyst_rating_hold': '-', 'analyst_rating_sell': '-', 'analyst_rating_strong_sell': '-', 'trailing_pe': 14.23, 'forward_pe': '-', 'price_to_sales_ratio_ttm': 0.708, 'price_to_book_ratio': 2.25, 'ev_to_revenue': 0.813, 'ev_to_ebitda': 8.46, 'beta': 0.353, 'fifty_two_week_high': 104.34, 'fifty_two_week_low': 58.47, 'fifty_day_moving_average': 63.09, 'two_hundred_day_moving_average': 76.87, 'shares_outstanding': 9043400, 'dividend_date': '2024-09-11', 'ex_dividend_date': '2024-08-20'}]
-(Background on this error at: https://sqlalche.me/e/20/9h9h) (Background on this error at: https://sqlalche.me/e/20/7s2a)
-2025-07-11 19:32:48,295 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for JBSS...
-2025-07-11 19:32:48,610 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
-2025-07-11 19:32:48,638 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
-2025-07-11 19:32:48,644 - AlphaLoader - INFO - INCOME_STATEMENT data for JBSS loaded into the database.
-2025-07-11 19:32:48,644 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for JBSS...
-2025-07-11 19:32:49,452 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
-2025-07-11 19:32:49,477 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
-2025-07-11 19:32:49,491 - AlphaLoader - INFO - BALANCE_SHEET data for JBSS loaded into the database.
-2025-07-11 19:32:49,491 - AlphaLoader - INFO - Fetching CASH_FLOW data for JBSS...
-2025-07-11 19:32:51,173 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
-2025-07-11 19:32:51,205 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
-2025-07-11 19:32:51,211 - AlphaLoader - INFO - CASH_FLOW data for JBSS loaded into the database.
-2025-07-11 19:32:51,211 - AlphaLoader - INFO - Fetching EARNINGS data for JBSS...
-2025-07-11 19:32:52,021 - data_manager.db_builders.postgre_adapter - INFO - Inserted 28 new rows into earnings_annual
-2025-07-11 19:32:52,041 - data_manager.db_builders.postgre_adapter - INFO - Inserted 111 new rows into earnings_quarterly
-2025-07-11 19:32:52,054 - AlphaLoader - INFO - EARNINGS data for JBSS loaded into the database.
-2025-07-11 19:32:52,054 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for JBSS...
-2025-07-11 19:32:54,165 - data_manager.db_builders.postgre_adapter - INFO - Inserted 702 new rows into insider_transactions
-2025-07-11 19:32:54,171 - AlphaLoader - INFO - Insider transaction data for JBSS loaded into the database.
-2025-07-11 19:32:54,171 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for JBSS...
-2025-07-11 19:32:54,469 - AlphaLoader - ERROR - An unexpected error occurred: 'effective_date'
-2025-07-11 19:32:54,469 - AlphaLoader - INFO - Fetching DIVIDENDS data for JBSS...
-2025-07-11 19:32:54,925 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into dividends
-2025-07-11 19:32:54,930 - AlphaLoader - INFO - Dividend data for JBSS loaded into the database.
-2025-07-11 19:32:54,930 - db_initial_load_runner - INFO - Processing symbol: HCVIW
-2025-07-11 19:32:54,930 - AlphaLoader - INFO - Fetching data for HCVIW...
-2025-07-11 19:32:55,788 - data_manager.db_builders.postgre_adapter - INFO - Inserted 887 new rows into daily_timeseries
-2025-07-11 19:32:55,793 - AlphaLoader - INFO - Candlestick data for HCVIW loaded into the database.
-2025-07-11 19:32:55,793 - AlphaLoader - INFO - Fetching company base data for HCVIW...
-2025-07-11 19:32:56,324 - data_manager.db_builders.postgre_adapter - INFO - No data provided for insertion into company_fundamentals.
-2025-07-11 19:32:56,324 - AlphaLoader - INFO - Company base data for HCVIW loaded into the database.
-2025-07-11 19:32:56,324 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for HCVIW...
-2025-07-11 19:32:56,522 - AlphaLoader - ERROR - Error in API response for HCVIW: {}
-2025-07-11 19:32:56,522 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for HCVIW...
-2025-07-11 19:32:56,776 - AlphaLoader - ERROR - Error in API response for HCVIW: {}
-2025-07-11 19:32:56,776 - AlphaLoader - INFO - Fetching CASH_FLOW data for HCVIW...
-2025-07-11 19:32:56,977 - AlphaLoader - ERROR - Error in API response for HCVIW: {}
-2025-07-11 19:32:56,977 - AlphaLoader - INFO - Fetching EARNINGS data for HCVIW...
-2025-07-11 19:32:57,545 - AlphaLoader - ERROR - Error in API response for HCVIW: {}
-2025-07-11 19:32:57,545 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for HCVIW...
-2025-07-11 19:32:57,742 - data_manager.etl_jobs.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
-2025-07-11 19:32:57,742 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
-2025-07-11 19:32:57,743 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for HCVIW...
-2025-07-11 19:32:58,078 - AlphaLoader - ERROR - An unexpected error occurred: 'effective_date'
-2025-07-11 19:32:58,079 - AlphaLoader - INFO - Fetching DIVIDENDS data for HCVIW...
-2025-07-11 19:32:58,486 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
-2025-07-11 19:32:58,486 - db_initial_load_runner - INFO - Processing symbol: JUNE
-2025-07-11 19:32:58,487 - AlphaLoader - INFO - Fetching data for JUNE...
-2025-07-11 19:32:59,236 - data_manager.db_builders.postgre_adapter - INFO - Inserted 352 new rows into daily_timeseries
-2025-07-11 19:32:59,242 - AlphaLoader - INFO - Candlestick data for JUNE loaded into the database.
-2025-07-11 19:32:59,242 - AlphaLoader - INFO - Fetching company base data for JUNE...
-2025-07-11 19:32:59,486 - data_manager.db_builders.postgre_adapter - INFO - No data provided for insertion into company_fundamentals.
-2025-07-11 19:32:59,487 - AlphaLoader - INFO - Company base data for JUNE loaded into the database.
-2025-07-11 19:32:59,487 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for JUNE...
-2025-07-11 19:32:59,689 - AlphaLoader - ERROR - Error in API response for JUNE: {}
-2025-07-11 19:32:59,689 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for JUNE...
-2025-07-11 19:32:59,893 - AlphaLoader - ERROR - Error in API response for JUNE: {}
-2025-07-11 19:32:59,893 - AlphaLoader - INFO - Fetching CASH_FLOW data for JUNE...
-2025-07-11 19:33:00,098 - AlphaLoader - ERROR - Error in API response for JUNE: {}
-2025-07-11 19:33:00,098 - AlphaLoader - INFO - Fetching EARNINGS data for JUNE...
-2025-07-11 19:33:00,718 - AlphaLoader - ERROR - Error in API response for JUNE: {}
-2025-07-11 19:33:00,718 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for JUNE...
-2025-07-11 19:33:00,920 - data_manager.etl_jobs.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
-2025-07-11 19:33:00,920 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
-2025-07-11 19:33:00,921 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for JUNE...
-2025-07-11 19:33:01,226 - AlphaLoader - ERROR - An unexpected error occurred: 'effective_date'
-2025-07-11 19:33:01,226 - AlphaLoader - INFO - Fetching DIVIDENDS data for JUNE...
-2025-07-11 19:33:01,582 - data_manager.db_builders.postgre_adapter - INFO - Inserted 2 new rows into dividends
-2025-07-11 19:33:01,588 - AlphaLoader - INFO - Dividend data for JUNE loaded into the database.
-2025-07-11 19:33:01,588 - db_initial_load_runner - INFO - Processing symbol: VIR
-2025-07-11 19:33:01,588 - AlphaLoader - INFO - Fetching data for VIR...
-2025-07-11 19:33:02,374 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1443 new rows into daily_timeseries
-2025-07-11 19:33:02,380 - AlphaLoader - INFO - Candlestick data for VIR loaded into the database.
-2025-07-11 19:33:02,380 - AlphaLoader - INFO - Fetching company base data for VIR...
-2025-07-11 19:33:02,609 - data_manager.db_builders.postgre_adapter - ERROR - Failed to insert new rows into company_fundamentals
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
-    self.dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~~~~~~^
-        cursor, str_statement, effective_parameters, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-psycopg2.errors.InvalidTextRepresentation: invalid input syntax for type double precision: "-"
-LINE 1: ...92,  -4.23, 0.585,  -0.946, 17.88, 5, 2, 2, 0, 0, '-', 4.361...
-                                                             ^
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 241, in insert_new_data
-    session.bulk_insert_mappings(table, rows)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
-    self._bulk_save_mappings(
-    ~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<5 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
-    with util.safe_reraise():
-         ~~~~~~~~~~~~~~~~~^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
-    raise exc_value.with_traceback(exc_tb)
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
-    bulk_persistence._bulk_insert(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<4 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
-    result = persistence._emit_insert_statements(
-        base_mapper,
-    ...<6 lines>...
-        execution_options=execution_options,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
-    result = connection.execute(
-        statement, multiparams, execution_options=execution_options
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
-    return meth(
-        self,
-        distilled_parameters,
-        execution_options or NO_OPTIONS,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
-    return connection._execute_clauseelement(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        self, distilled_params, execution_options
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
-    ret = self._execute_context(
-        dialect,
-    ...<8 lines>...
-        cache_hit=cache_hit,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1843, in _execute_context
-    return self._exec_single_context(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~^
-        dialect, context, statement, parameters
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1983, in _exec_single_context
-    self._handle_dbapi_exception(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        e, str_statement, effective_parameters, cursor, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
-    self.dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~~~~~~^
-        cursor, str_statement, effective_parameters, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-sqlalchemy.exc.DataError: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type double precision: "-"
-LINE 1: ...92,  -4.23, 0.585,  -0.946, 17.88, 5, 2, 2, 0, 0, '-', 4.361...
-                                                             ^
-
-[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, book_value, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(book_value)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s)]
-[parameters: {'symbol': 'VIR', 'asset_type': 'Common Stock', 'name': 'Vir Biotechnology Inc', 'description': 'Vir Biotechnology, Inc., a clinical-stage immunology company, develops therapeutic products to treat and prevent serious infectious diseases. The company is headquartered in San Francisco, California.', 'cik': 1706431, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'LIFE SCIENCES', 'industry': 'BIOLOGICAL PRODUCTS, (NO DISGNOSTIC SUBSTANCES)', 'address': '499 ILLINOIS STREET, SUITE 500, SAN FRANCISCO, CA, US', 'official_site': 'https://www.vir.bio', 'fiscal_year_end': 'December', 'latest_quarter': '2025-03-31', 'market_capitalization': 819751000, 'ebitda': -570609984, 'book_value': 7.56, 'eps': -4.23, 'revenue_per_share_ttm': 0.152, 'profit_margin': 0, 'operating_margin_ttm': -45.69, 'return_on_assets_ttm': -0.235, 'return_on_equity_ttm': -0.446, 'revenue_ttm': 20861000, 'gross_profit_ttm': -476864992, 'diluted_eps_ttm': -4.23, 'quarterly_earnings_growth_yoy': 0.585, 'quarterly_revenue_growth_yoy': -0.946, 'analyst_target_price': 17.88, 'analyst_rating_strong_buy': 5, 'analyst_rating_buy': 2, 'analyst_rating_hold': 2, 'analyst_rating_sell': 0, 'analyst_rating_strong_sell': 0, 'trailing_pe': '-', 'forward_pe': 4.361, 'price_to_sales_ratio_ttm': 39.3, 'price_to_book_ratio': 0.785, 'ev_to_revenue': 7.98, 'ev_to_ebitda': 0.895, 'beta': 1.229, 'fifty_two_week_high': 14.45, 'fifty_two_week_low': 4.32, 'fifty_day_moving_average': 5.23, 'two_hundred_day_moving_average': 7.31, 'shares_outstanding': 138238000}]
-(Background on this error at: https://sqlalche.me/e/20/9h9h)
-2025-07-11 19:33:02,616 - data_manager.db_builders.postgre_adapter - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
-    self.dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~~~~~~^
-        cursor, str_statement, effective_parameters, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-psycopg2.errors.InvalidTextRepresentation: invalid input syntax for type double precision: "-"
-LINE 1: ...92,  -4.23, 0.585,  -0.946, 17.88, 5, 2, 2, 0, 0, '-', 4.361...
-                                                             ^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "dividends_pkey"
+DETAIL:  Key (symbol)=(OXSQ) already exists.
 
 
 The above exception was the direct cause of the following exception:
@@ -933,67 +223,399 @@ Traceback (most recent call last):
     ...<8 lines>...
         cache_hit=cache_hit,
     )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1843, in _execute_context
-    return self._exec_single_context(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~^
-        dialect, context, statement, parameters
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1983, in _exec_single_context
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
     self._handle_dbapi_exception(
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        e, str_statement, effective_parameters, cursor, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
     )
     ^
   File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
     raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
-    self.dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~~~~~~^
-        cursor, str_statement, effective_parameters, context
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
     )
     ^
   File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
     cursor.execute(statement, parameters)
     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-sqlalchemy.exc.DataError: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type double precision: "-"
-LINE 1: ...92,  -4.23, 0.585,  -0.946, 17.88, 5, 2, 2, 0, 0, '-', 4.361...
-                                                             ^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "dividends_pkey"
+DETAIL:  Key (symbol)=(OXSQ) already exists.
 
-[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, book_value, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(book_value)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s)]
-[parameters: {'symbol': 'VIR', 'asset_type': 'Common Stock', 'name': 'Vir Biotechnology Inc', 'description': 'Vir Biotechnology, Inc., a clinical-stage immunology company, develops therapeutic products to treat and prevent serious infectious diseases. The company is headquartered in San Francisco, California.', 'cik': 1706431, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'LIFE SCIENCES', 'industry': 'BIOLOGICAL PRODUCTS, (NO DISGNOSTIC SUBSTANCES)', 'address': '499 ILLINOIS STREET, SUITE 500, SAN FRANCISCO, CA, US', 'official_site': 'https://www.vir.bio', 'fiscal_year_end': 'December', 'latest_quarter': '2025-03-31', 'market_capitalization': 819751000, 'ebitda': -570609984, 'book_value': 7.56, 'eps': -4.23, 'revenue_per_share_ttm': 0.152, 'profit_margin': 0, 'operating_margin_ttm': -45.69, 'return_on_assets_ttm': -0.235, 'return_on_equity_ttm': -0.446, 'revenue_ttm': 20861000, 'gross_profit_ttm': -476864992, 'diluted_eps_ttm': -4.23, 'quarterly_earnings_growth_yoy': 0.585, 'quarterly_revenue_growth_yoy': -0.946, 'analyst_target_price': 17.88, 'analyst_rating_strong_buy': 5, 'analyst_rating_buy': 2, 'analyst_rating_hold': 2, 'analyst_rating_sell': 0, 'analyst_rating_strong_sell': 0, 'trailing_pe': '-', 'forward_pe': 4.361, 'price_to_sales_ratio_ttm': 39.3, 'price_to_book_ratio': 0.785, 'ev_to_revenue': 7.98, 'ev_to_ebitda': 0.895, 'beta': 1.229, 'fifty_two_week_high': 14.45, 'fifty_two_week_low': 4.32, 'fifty_day_moving_average': 5.23, 'two_hundred_day_moving_average': 7.31, 'shares_outstanding': 138238000}]
-(Background on this error at: https://sqlalche.me/e/20/9h9h)
-2025-07-11 19:33:02,622 - AlphaLoader - ERROR - An unexpected error occurred: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type double precision: "-"
-LINE 1: ...92,  -4.23, 0.585,  -0.946, 17.88, 5, 2, 2, 0, 0, '-', 4.361...
-                                                             ^
+[SQL: INSERT INTO dividends (symbol, ex_dividend_date, amount, declaration_date, record_date, payment_date) VALUES (%(symbol__0)s, %(ex_dividend_date__0)s, %(amount__0)s, %(declaration_date__0)s, %(record_date__0)s, %(payment_date__0)s), (%(symbol__1)s, %( ... 8598 characters truncated ... end_date__68)s, %(amount__68)s, %(declaration_date__68)s, %(record_date__68)s, %(payment_date__68)s)]
+[parameters: {'amount__0': 0.035, 'ex_dividend_date__0': datetime.date(2025, 9, 16), 'declaration_date__0': datetime.date(2025, 4, 22), 'payment_date__0': datetime.date(2025, 9, 30), 'symbol__0': 'OXSQ', 'record_date__0': datetime.date(2025, 9, 16), 'amount__1': 0.035, 'ex_dividend_date__1': datetime.date(2025, 8, 15), 'declaration_date__1': datetime.date(2025, 4, 22), 'payment_date__1': datetime.date(2025, 8, 29), 'symbol__1': 'OXSQ', 'record_date__1': datetime.date(2025, 8, 15), 'amount__2': 0.035, 'ex_dividend_date__2': datetime.date(2025, 7, 17), 'declaration_date__2': datetime.date(2025, 4, 22), 'payment_date__2': datetime.date(2025, 7, 31), 'symbol__2': 'OXSQ', 'record_date__2': datetime.date(2025, 7, 17), 'amount__3': 0.035, 'ex_dividend_date__3': datetime.date(2025, 6, 16), 'declaration_date__3': datetime.date(2025, 2, 27), 'payment_date__3': datetime.date(2025, 6, 30), 'symbol__3': 'OXSQ', 'record_date__3': datetime.date(2025, 6, 16), 'amount__4': 0.035, 'ex_dividend_date__4': datetime.date(2025, 5, 16), 'declaration_date__4': datetime.date(2025, 2, 27), 'payment_date__4': datetime.date(2025, 5, 30), 'symbol__4': 'OXSQ', 'record_date__4': datetime.date(2025, 5, 16), 'amount__5': 0.035, 'ex_dividend_date__5': datetime.date(2025, 4, 16), 'declaration_date__5': datetime.date(2025, 2, 27), 'payment_date__5': datetime.date(2025, 4, 30), 'symbol__5': 'OXSQ', 'record_date__5': datetime.date(2025, 4, 16), 'amount__6': 0.035, 'ex_dividend_date__6': datetime.date(2025, 3, 17), 'declaration_date__6': datetime.date(2024, 10, 31), 'payment_date__6': datetime.date(2025, 3, 31), 'symbol__6': 'OXSQ', 'record_date__6': datetime.date(2025, 3, 17), 'amount__7': 0.035, 'ex_dividend_date__7': datetime.date(2025, 2, 14), 'declaration_date__7': datetime.date(2024, 10, 31), 'payment_date__7': datetime.date(2025, 2, 28), 'symbol__7': 'OXSQ', 'record_date__7': datetime.date(2025, 2, 14), 'amount__8': 0.035, 'ex_dividend_date__8': datetime.date(2025, 1, 17) ... 314 parameters truncated ... 'symbol__60': 'OXSQ', 'record_date__60': datetime.date(2020, 9, 16), 'amount__61': 0.035, 'ex_dividend_date__61': datetime.date(2020, 8, 14), 'declaration_date__61': datetime.date(2020, 6, 1), 'payment_date__61': datetime.date(2020, 8, 31), 'symbol__61': 'OXSQ', 'record_date__61': datetime.date(2020, 8, 17), 'amount__62': 0.035, 'ex_dividend_date__62': datetime.date(2020, 7, 16), 'declaration_date__62': datetime.date(2020, 6, 1), 'payment_date__62': datetime.date(2020, 7, 31), 'symbol__62': 'OXSQ', 'record_date__62': datetime.date(2020, 7, 17), 'amount__63': 0.067, 'ex_dividend_date__63': datetime.date(2020, 6, 12), 'declaration_date__63': datetime.date(2020, 2, 24), 'payment_date__63': datetime.date(2020, 6, 30), 'symbol__63': 'OXSQ', 'record_date__63': datetime.date(2020, 6, 15), 'amount__64': 0.067, 'ex_dividend_date__64': datetime.date(2020, 5, 13), 'declaration_date__64': datetime.date(2020, 2, 24), 'payment_date__64': datetime.date(2020, 5, 29), 'symbol__64': 'OXSQ', 'record_date__64': datetime.date(2020, 5, 14), 'amount__65': 0.067, 'ex_dividend_date__65': datetime.date(2020, 4, 14), 'declaration_date__65': datetime.date(2020, 2, 24), 'payment_date__65': datetime.date(2020, 4, 30), 'symbol__65': 'OXSQ', 'record_date__65': datetime.date(2020, 4, 15), 'amount__66': 0.067, 'ex_dividend_date__66': datetime.date(2020, 3, 16), 'declaration_date__66': datetime.date(2019, 10, 25), 'payment_date__66': datetime.date(2020, 3, 31), 'symbol__66': 'OXSQ', 'record_date__66': datetime.date(2020, 3, 17), 'amount__67': 0.067, 'ex_dividend_date__67': datetime.date(2020, 2, 13), 'declaration_date__67': datetime.date(2019, 10, 25), 'payment_date__67': datetime.date(2020, 2, 28), 'symbol__67': 'OXSQ', 'record_date__67': datetime.date(2020, 2, 14), 'amount__68': 0.067, 'ex_dividend_date__68': datetime.date(2020, 1, 16), 'declaration_date__68': datetime.date(2019, 10, 25), 'payment_date__68': datetime.date(2020, 1, 31), 'symbol__68': 'OXSQ', 'record_date__68': datetime.date(2020, 1, 17)}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-11 20:06:41,300 - AlphaLoader - ERROR - An unexpected error occurred: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "dividends_pkey"
+DETAIL:  Key (symbol)=(OXSQ) already exists.
 
-[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, description, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, ebitda, book_value, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, analyst_rating_strong_buy, analyst_rating_buy, analyst_rating_hold, analyst_rating_sell, analyst_rating_strong_sell, trailing_pe, forward_pe, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, ev_to_ebitda, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(description)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(ebitda)s, %(book_value)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(analyst_rating_strong_buy)s, %(analyst_rating_buy)s, %(analyst_rating_hold)s, %(analyst_rating_sell)s, %(analyst_rating_strong_sell)s, %(trailing_pe)s, %(forward_pe)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(ev_to_ebitda)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s)]
-[parameters: {'symbol': 'VIR', 'asset_type': 'Common Stock', 'name': 'Vir Biotechnology Inc', 'description': 'Vir Biotechnology, Inc., a clinical-stage immunology company, develops therapeutic products to treat and prevent serious infectious diseases. The company is headquartered in San Francisco, California.', 'cik': 1706431, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'LIFE SCIENCES', 'industry': 'BIOLOGICAL PRODUCTS, (NO DISGNOSTIC SUBSTANCES)', 'address': '499 ILLINOIS STREET, SUITE 500, SAN FRANCISCO, CA, US', 'official_site': 'https://www.vir.bio', 'fiscal_year_end': 'December', 'latest_quarter': '2025-03-31', 'market_capitalization': 819751000, 'ebitda': -570609984, 'book_value': 7.56, 'eps': -4.23, 'revenue_per_share_ttm': 0.152, 'profit_margin': 0, 'operating_margin_ttm': -45.69, 'return_on_assets_ttm': -0.235, 'return_on_equity_ttm': -0.446, 'revenue_ttm': 20861000, 'gross_profit_ttm': -476864992, 'diluted_eps_ttm': -4.23, 'quarterly_earnings_growth_yoy': 0.585, 'quarterly_revenue_growth_yoy': -0.946, 'analyst_target_price': 17.88, 'analyst_rating_strong_buy': 5, 'analyst_rating_buy': 2, 'analyst_rating_hold': 2, 'analyst_rating_sell': 0, 'analyst_rating_strong_sell': 0, 'trailing_pe': '-', 'forward_pe': 4.361, 'price_to_sales_ratio_ttm': 39.3, 'price_to_book_ratio': 0.785, 'ev_to_revenue': 7.98, 'ev_to_ebitda': 0.895, 'beta': 1.229, 'fifty_two_week_high': 14.45, 'fifty_two_week_low': 4.32, 'fifty_day_moving_average': 5.23, 'two_hundred_day_moving_average': 7.31, 'shares_outstanding': 138238000}]
-(Background on this error at: https://sqlalche.me/e/20/9h9h)
-2025-07-11 19:33:02,622 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for VIR...
-2025-07-11 19:33:03,143 - data_manager.db_builders.postgre_adapter - INFO - Inserted 8 new rows into income_statement_annual
-2025-07-11 19:33:03,160 - data_manager.db_builders.postgre_adapter - INFO - Inserted 29 new rows into income_statement_quarterly
-2025-07-11 19:33:03,163 - AlphaLoader - INFO - INCOME_STATEMENT data for VIR loaded into the database.
-2025-07-11 19:33:03,163 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for VIR...
-2025-07-11 19:33:03,683 - data_manager.db_builders.postgre_adapter - INFO - Inserted 8 new rows into balance_sheet_annual
-2025-07-11 19:33:03,702 - data_manager.db_builders.postgre_adapter - INFO - Inserted 29 new rows into balance_sheet_quarterly
-2025-07-11 19:33:03,705 - AlphaLoader - INFO - BALANCE_SHEET data for VIR loaded into the database.
-2025-07-11 19:33:03,706 - AlphaLoader - INFO - Fetching CASH_FLOW data for VIR...
-2025-07-11 19:33:04,393 - data_manager.db_builders.postgre_adapter - INFO - Inserted 8 new rows into cash_flow_annual
-2025-07-11 19:33:04,411 - data_manager.db_builders.postgre_adapter - INFO - Inserted 29 new rows into cash_flow_statement_quarterly
-2025-07-11 19:33:04,415 - AlphaLoader - INFO - CASH_FLOW data for VIR loaded into the database.
-2025-07-11 19:33:04,415 - AlphaLoader - INFO - Fetching EARNINGS data for VIR...
-2025-07-11 19:33:04,651 - data_manager.db_builders.postgre_adapter - INFO - Inserted 7 new rows into earnings_annual
-2025-07-11 19:33:04,665 - data_manager.db_builders.postgre_adapter - INFO - Inserted 24 new rows into earnings_quarterly
-2025-07-11 19:33:04,666 - AlphaLoader - INFO - EARNINGS data for VIR loaded into the database.
-2025-07-11 19:33:04,667 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for VIR...
-2025-07-11 19:33:05,550 - data_manager.db_builders.postgre_adapter - INFO - Inserted 795 new rows into insider_transactions
-2025-07-11 19:33:05,557 - AlphaLoader - INFO - Insider transaction data for VIR loaded into the database.
-2025-07-11 19:33:05,557 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for VIR...
-2025-07-11 19:33:05,766 - AlphaLoader - ERROR - An unexpected error occurred: 'effective_date'
-2025-07-11 19:33:05,767 - AlphaLoader - INFO - Fetching DIVIDENDS data for VIR...
-2025-07-11 19:33:06,039 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
-2025-07-11 19:33:06,040 - db_initial_load_runner - INFO - ✅ Initial loader finished its running.
+[SQL: INSERT INTO dividends (symbol, ex_dividend_date, amount, declaration_date, record_date, payment_date) VALUES (%(symbol__0)s, %(ex_dividend_date__0)s, %(amount__0)s, %(declaration_date__0)s, %(record_date__0)s, %(payment_date__0)s), (%(symbol__1)s, %( ... 8598 characters truncated ... end_date__68)s, %(amount__68)s, %(declaration_date__68)s, %(record_date__68)s, %(payment_date__68)s)]
+[parameters: {'amount__0': 0.035, 'ex_dividend_date__0': datetime.date(2025, 9, 16), 'declaration_date__0': datetime.date(2025, 4, 22), 'payment_date__0': datetime.date(2025, 9, 30), 'symbol__0': 'OXSQ', 'record_date__0': datetime.date(2025, 9, 16), 'amount__1': 0.035, 'ex_dividend_date__1': datetime.date(2025, 8, 15), 'declaration_date__1': datetime.date(2025, 4, 22), 'payment_date__1': datetime.date(2025, 8, 29), 'symbol__1': 'OXSQ', 'record_date__1': datetime.date(2025, 8, 15), 'amount__2': 0.035, 'ex_dividend_date__2': datetime.date(2025, 7, 17), 'declaration_date__2': datetime.date(2025, 4, 22), 'payment_date__2': datetime.date(2025, 7, 31), 'symbol__2': 'OXSQ', 'record_date__2': datetime.date(2025, 7, 17), 'amount__3': 0.035, 'ex_dividend_date__3': datetime.date(2025, 6, 16), 'declaration_date__3': datetime.date(2025, 2, 27), 'payment_date__3': datetime.date(2025, 6, 30), 'symbol__3': 'OXSQ', 'record_date__3': datetime.date(2025, 6, 16), 'amount__4': 0.035, 'ex_dividend_date__4': datetime.date(2025, 5, 16), 'declaration_date__4': datetime.date(2025, 2, 27), 'payment_date__4': datetime.date(2025, 5, 30), 'symbol__4': 'OXSQ', 'record_date__4': datetime.date(2025, 5, 16), 'amount__5': 0.035, 'ex_dividend_date__5': datetime.date(2025, 4, 16), 'declaration_date__5': datetime.date(2025, 2, 27), 'payment_date__5': datetime.date(2025, 4, 30), 'symbol__5': 'OXSQ', 'record_date__5': datetime.date(2025, 4, 16), 'amount__6': 0.035, 'ex_dividend_date__6': datetime.date(2025, 3, 17), 'declaration_date__6': datetime.date(2024, 10, 31), 'payment_date__6': datetime.date(2025, 3, 31), 'symbol__6': 'OXSQ', 'record_date__6': datetime.date(2025, 3, 17), 'amount__7': 0.035, 'ex_dividend_date__7': datetime.date(2025, 2, 14), 'declaration_date__7': datetime.date(2024, 10, 31), 'payment_date__7': datetime.date(2025, 2, 28), 'symbol__7': 'OXSQ', 'record_date__7': datetime.date(2025, 2, 14), 'amount__8': 0.035, 'ex_dividend_date__8': datetime.date(2025, 1, 17) ... 314 parameters truncated ... 'symbol__60': 'OXSQ', 'record_date__60': datetime.date(2020, 9, 16), 'amount__61': 0.035, 'ex_dividend_date__61': datetime.date(2020, 8, 14), 'declaration_date__61': datetime.date(2020, 6, 1), 'payment_date__61': datetime.date(2020, 8, 31), 'symbol__61': 'OXSQ', 'record_date__61': datetime.date(2020, 8, 17), 'amount__62': 0.035, 'ex_dividend_date__62': datetime.date(2020, 7, 16), 'declaration_date__62': datetime.date(2020, 6, 1), 'payment_date__62': datetime.date(2020, 7, 31), 'symbol__62': 'OXSQ', 'record_date__62': datetime.date(2020, 7, 17), 'amount__63': 0.067, 'ex_dividend_date__63': datetime.date(2020, 6, 12), 'declaration_date__63': datetime.date(2020, 2, 24), 'payment_date__63': datetime.date(2020, 6, 30), 'symbol__63': 'OXSQ', 'record_date__63': datetime.date(2020, 6, 15), 'amount__64': 0.067, 'ex_dividend_date__64': datetime.date(2020, 5, 13), 'declaration_date__64': datetime.date(2020, 2, 24), 'payment_date__64': datetime.date(2020, 5, 29), 'symbol__64': 'OXSQ', 'record_date__64': datetime.date(2020, 5, 14), 'amount__65': 0.067, 'ex_dividend_date__65': datetime.date(2020, 4, 14), 'declaration_date__65': datetime.date(2020, 2, 24), 'payment_date__65': datetime.date(2020, 4, 30), 'symbol__65': 'OXSQ', 'record_date__65': datetime.date(2020, 4, 15), 'amount__66': 0.067, 'ex_dividend_date__66': datetime.date(2020, 3, 16), 'declaration_date__66': datetime.date(2019, 10, 25), 'payment_date__66': datetime.date(2020, 3, 31), 'symbol__66': 'OXSQ', 'record_date__66': datetime.date(2020, 3, 17), 'amount__67': 0.067, 'ex_dividend_date__67': datetime.date(2020, 2, 13), 'declaration_date__67': datetime.date(2019, 10, 25), 'payment_date__67': datetime.date(2020, 2, 28), 'symbol__67': 'OXSQ', 'record_date__67': datetime.date(2020, 2, 14), 'amount__68': 0.067, 'ex_dividend_date__68': datetime.date(2020, 1, 16), 'declaration_date__68': datetime.date(2019, 10, 25), 'payment_date__68': datetime.date(2020, 1, 31), 'symbol__68': 'OXSQ', 'record_date__68': datetime.date(2020, 1, 17)}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-11 20:06:41,301 - db_initial_load_runner - INFO - Processing symbol: BHAT
+2025-07-11 20:06:41,301 - AlphaLoader - INFO - Fetching data for BHAT...
+2025-07-11 20:06:42,497 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1497 new rows into daily_timeseries
+2025-07-11 20:06:42,499 - AlphaLoader - INFO - Candlestick data for BHAT loaded into the database.
+2025-07-11 20:06:42,499 - AlphaLoader - INFO - Fetching company base data for BHAT...
+2025-07-11 20:06:42,802 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-11 20:06:42,807 - AlphaLoader - INFO - Company base data for BHAT loaded into the database.
+2025-07-11 20:06:42,808 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for BHAT...
+2025-07-11 20:06:43,549 - data_manager.db_builders.postgre_adapter - INFO - Inserted 11 new rows into income_statement_annual
+2025-07-11 20:06:43,574 - data_manager.db_builders.postgre_adapter - INFO - Inserted 37 new rows into income_statement_quarterly
+2025-07-11 20:06:43,579 - AlphaLoader - INFO - INCOME_STATEMENT data for BHAT loaded into the database.
+2025-07-11 20:06:43,579 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for BHAT...
+2025-07-11 20:06:44,271 - data_manager.db_builders.postgre_adapter - INFO - Inserted 11 new rows into balance_sheet_annual
+2025-07-11 20:06:44,295 - data_manager.db_builders.postgre_adapter - INFO - Inserted 39 new rows into balance_sheet_quarterly
+2025-07-11 20:06:44,297 - AlphaLoader - INFO - BALANCE_SHEET data for BHAT loaded into the database.
+2025-07-11 20:06:44,297 - AlphaLoader - INFO - Fetching CASH_FLOW data for BHAT...
+2025-07-11 20:06:44,774 - data_manager.db_builders.postgre_adapter - INFO - Inserted 11 new rows into cash_flow_annual
+2025-07-11 20:06:44,793 - data_manager.db_builders.postgre_adapter - INFO - Inserted 38 new rows into cash_flow_statement_quarterly
+2025-07-11 20:06:44,800 - AlphaLoader - INFO - CASH_FLOW data for BHAT loaded into the database.
+2025-07-11 20:06:44,800 - AlphaLoader - INFO - Fetching EARNINGS data for BHAT...
+2025-07-11 20:06:45,148 - data_manager.db_builders.postgre_adapter - INFO - Inserted 8 new rows into earnings_annual
+2025-07-11 20:06:45,159 - data_manager.db_builders.postgre_adapter - INFO - Inserted 33 new rows into earnings_quarterly
+2025-07-11 20:06:45,161 - AlphaLoader - INFO - EARNINGS data for BHAT loaded into the database.
+2025-07-11 20:06:45,162 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for BHAT...
+2025-07-11 20:06:45,411 - data_manager.etl_jobs.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
+2025-07-11 20:06:45,412 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
+2025-07-11 20:06:45,412 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for BHAT...
+2025-07-11 20:06:45,648 - data_manager.db_builders.postgre_adapter - INFO - Inserted 2 new rows into stock_splits
+2025-07-11 20:06:45,654 - AlphaLoader - INFO - Stock split data for BHAT loaded into the database.
+2025-07-11 20:06:45,654 - AlphaLoader - INFO - Fetching DIVIDENDS data for BHAT...
+2025-07-11 20:06:46,125 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-11 20:06:46,126 - db_initial_load_runner - INFO - Processing symbol: AGMH
+2025-07-11 20:06:46,126 - AlphaLoader - INFO - Fetching data for AGMH...
+2025-07-11 20:06:47,088 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1817 new rows into daily_timeseries
+2025-07-11 20:06:47,091 - AlphaLoader - INFO - Candlestick data for AGMH loaded into the database.
+2025-07-11 20:06:47,091 - AlphaLoader - INFO - Fetching company base data for AGMH...
+2025-07-11 20:06:47,618 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-11 20:06:47,624 - AlphaLoader - INFO - Company base data for AGMH loaded into the database.
+2025-07-11 20:06:47,624 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for AGMH...
+2025-07-11 20:06:48,108 - data_manager.db_builders.postgre_adapter - INFO - Inserted 10 new rows into income_statement_annual
+2025-07-11 20:06:48,133 - data_manager.db_builders.postgre_adapter - INFO - Inserted 33 new rows into income_statement_quarterly
+2025-07-11 20:06:48,136 - AlphaLoader - INFO - INCOME_STATEMENT data for AGMH loaded into the database.
+2025-07-11 20:06:48,137 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for AGMH...
+2025-07-11 20:06:48,701 - AlphaLoader - ERROR - An unexpected error occurred: cannot safely cast non-equivalent float64 to int64
+2025-07-11 20:06:48,701 - AlphaLoader - INFO - Fetching CASH_FLOW data for AGMH...
+2025-07-11 20:06:49,476 - data_manager.db_builders.postgre_adapter - INFO - Inserted 10 new rows into cash_flow_annual
+2025-07-11 20:06:49,498 - data_manager.db_builders.postgre_adapter - INFO - Inserted 35 new rows into cash_flow_statement_quarterly
+2025-07-11 20:06:49,501 - AlphaLoader - INFO - CASH_FLOW data for AGMH loaded into the database.
+2025-07-11 20:06:49,501 - AlphaLoader - INFO - Fetching EARNINGS data for AGMH...
+2025-07-11 20:06:50,065 - data_manager.db_builders.postgre_adapter - INFO - Inserted 7 new rows into earnings_annual
+2025-07-11 20:06:50,075 - data_manager.db_builders.postgre_adapter - INFO - Inserted 25 new rows into earnings_quarterly
+2025-07-11 20:06:50,077 - AlphaLoader - INFO - EARNINGS data for AGMH loaded into the database.
+2025-07-11 20:06:50,077 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for AGMH...
+2025-07-11 20:06:50,530 - data_manager.etl_jobs.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
+2025-07-11 20:06:50,530 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
+2025-07-11 20:06:50,530 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for AGMH...
+2025-07-11 20:06:50,766 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
+2025-07-11 20:06:50,772 - AlphaLoader - INFO - Stock split data for AGMH loaded into the database.
+2025-07-11 20:06:50,772 - AlphaLoader - INFO - Fetching DIVIDENDS data for AGMH...
+2025-07-11 20:06:51,041 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-11 20:06:51,041 - db_initial_load_runner - INFO - Processing symbol: SAIA
+2025-07-11 20:06:51,041 - AlphaLoader - INFO - Fetching data for SAIA...
+2025-07-11 20:06:52,494 - data_manager.db_builders.postgre_adapter - INFO - Inserted 5743 new rows into daily_timeseries
+2025-07-11 20:06:52,505 - AlphaLoader - INFO - Candlestick data for SAIA loaded into the database.
+2025-07-11 20:06:52,505 - AlphaLoader - INFO - Fetching company base data for SAIA...
+2025-07-11 20:06:52,729 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-11 20:06:52,734 - AlphaLoader - INFO - Company base data for SAIA loaded into the database.
+2025-07-11 20:06:52,734 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for SAIA...
+2025-07-11 20:06:53,390 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-07-11 20:06:53,418 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-07-11 20:06:53,424 - AlphaLoader - INFO - INCOME_STATEMENT data for SAIA loaded into the database.
+2025-07-11 20:06:53,424 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for SAIA...
+2025-07-11 20:06:54,118 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-07-11 20:06:54,143 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-07-11 20:06:54,148 - AlphaLoader - INFO - BALANCE_SHEET data for SAIA loaded into the database.
+2025-07-11 20:06:54,148 - AlphaLoader - INFO - Fetching CASH_FLOW data for SAIA...
+2025-07-11 20:06:54,815 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-07-11 20:06:54,850 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-07-11 20:06:54,856 - AlphaLoader - INFO - CASH_FLOW data for SAIA loaded into the database.
+2025-07-11 20:06:54,856 - AlphaLoader - INFO - Fetching EARNINGS data for SAIA...
+2025-07-11 20:06:55,184 - data_manager.db_builders.postgre_adapter - INFO - Inserted 24 new rows into earnings_annual
+2025-07-11 20:06:55,204 - data_manager.db_builders.postgre_adapter - INFO - Inserted 91 new rows into earnings_quarterly
+2025-07-11 20:06:55,210 - AlphaLoader - INFO - EARNINGS data for SAIA loaded into the database.
+2025-07-11 20:06:55,210 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for SAIA...
+2025-07-11 20:06:56,525 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1190 new rows into insider_transactions
+2025-07-11 20:06:56,530 - AlphaLoader - INFO - Insider transaction data for SAIA loaded into the database.
+2025-07-11 20:06:56,531 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for SAIA...
+2025-07-11 20:06:56,949 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
+2025-07-11 20:06:56,954 - AlphaLoader - INFO - Stock split data for SAIA loaded into the database.
+2025-07-11 20:06:56,954 - AlphaLoader - INFO - Fetching DIVIDENDS data for SAIA...
+2025-07-11 20:06:57,402 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-11 20:06:57,403 - db_initial_load_runner - INFO - Processing symbol: ENSG
+2025-07-11 20:06:57,403 - AlphaLoader - INFO - Fetching data for ENSG...
+2025-07-11 20:06:58,630 - data_manager.db_builders.postgre_adapter - INFO - Inserted 4443 new rows into daily_timeseries
+2025-07-11 20:06:58,637 - AlphaLoader - INFO - Candlestick data for ENSG loaded into the database.
+2025-07-11 20:06:58,637 - AlphaLoader - INFO - Fetching company base data for ENSG...
+2025-07-11 20:06:58,873 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-11 20:06:58,877 - AlphaLoader - INFO - Company base data for ENSG loaded into the database.
+2025-07-11 20:06:58,878 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for ENSG...
+2025-07-11 20:06:59,447 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-07-11 20:06:59,478 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-07-11 20:06:59,484 - AlphaLoader - INFO - INCOME_STATEMENT data for ENSG loaded into the database.
+2025-07-11 20:06:59,484 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for ENSG...
+2025-07-11 20:07:00,141 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-07-11 20:07:00,171 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-07-11 20:07:00,181 - AlphaLoader - INFO - BALANCE_SHEET data for ENSG loaded into the database.
+2025-07-11 20:07:00,181 - AlphaLoader - INFO - Fetching CASH_FLOW data for ENSG...
+2025-07-11 20:07:01,070 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-07-11 20:07:01,102 - data_manager.db_builders.postgre_adapter - INFO - Inserted 77 new rows into cash_flow_statement_quarterly
+2025-07-11 20:07:01,107 - AlphaLoader - INFO - CASH_FLOW data for ENSG loaded into the database.
+2025-07-11 20:07:01,108 - AlphaLoader - INFO - Fetching EARNINGS data for ENSG...
+2025-07-11 20:07:01,429 - data_manager.db_builders.postgre_adapter - INFO - Inserted 19 new rows into earnings_annual
+2025-07-11 20:07:01,444 - data_manager.db_builders.postgre_adapter - INFO - Inserted 71 new rows into earnings_quarterly
+2025-07-11 20:07:01,448 - AlphaLoader - INFO - EARNINGS data for ENSG loaded into the database.
+2025-07-11 20:07:01,448 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for ENSG...
+2025-07-11 20:07:02,343 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1651 new rows into insider_transactions
+2025-07-11 20:07:02,348 - AlphaLoader - INFO - Insider transaction data for ENSG loaded into the database.
+2025-07-11 20:07:02,349 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for ENSG...
+2025-07-11 20:07:02,640 - data_manager.db_builders.postgre_adapter - INFO - Inserted 2 new rows into stock_splits
+2025-07-11 20:07:02,645 - AlphaLoader - INFO - Stock split data for ENSG loaded into the database.
+2025-07-11 20:07:02,645 - AlphaLoader - INFO - Fetching DIVIDENDS data for ENSG...
+2025-07-11 20:07:02,865 - data_manager.db_builders.postgre_adapter - ERROR - Failed to insert new rows into dividends
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "dividends_pkey"
+DETAIL:  Key (symbol)=(ENSG) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "dividends_pkey"
+DETAIL:  Key (symbol)=(ENSG) already exists.
+
+[SQL: INSERT INTO dividends (symbol, ex_dividend_date, amount, declaration_date, record_date, payment_date) VALUES (%(symbol__0)s, %(ex_dividend_date__0)s, %(amount__0)s, %(declaration_date__0)s, %(record_date__0)s, %(payment_date__0)s), (%(symbol__1)s, %( ... 2277 characters truncated ... end_date__19)s, %(amount__19)s, %(declaration_date__19)s, %(record_date__19)s, %(payment_date__19)s)]
+[parameters: {'amount__0': 0.0625, 'ex_dividend_date__0': datetime.date(2025, 6, 30), 'declaration_date__0': datetime.date(2025, 6, 19), 'payment_date__0': datetime.date(2025, 7, 31), 'symbol__0': 'ENSG', 'record_date__0': datetime.date(2025, 6, 30), 'amount__1': 0.0625, 'ex_dividend_date__1': datetime.date(2025, 3, 31), 'declaration_date__1': datetime.date(2025, 3, 20), 'payment_date__1': datetime.date(2025, 4, 30), 'symbol__1': 'ENSG', 'record_date__1': datetime.date(2025, 3, 31), 'amount__2': 0.0625, 'ex_dividend_date__2': datetime.date(2024, 12, 31), 'declaration_date__2': datetime.date(2024, 12, 13), 'payment_date__2': datetime.date(2025, 1, 31), 'symbol__2': 'ENSG', 'record_date__2': datetime.date(2024, 12, 31), 'amount__3': 0.06, 'ex_dividend_date__3': datetime.date(2024, 9, 30), 'declaration_date__3': datetime.date(2024, 9, 13), 'payment_date__3': datetime.date(2024, 10, 31), 'symbol__3': 'ENSG', 'record_date__3': datetime.date(2024, 9, 30), 'amount__4': 0.06, 'ex_dividend_date__4': datetime.date(2024, 6, 28), 'declaration_date__4': datetime.date(2024, 6, 14), 'payment_date__4': datetime.date(2024, 7, 31), 'symbol__4': 'ENSG', 'record_date__4': datetime.date(2024, 6, 30), 'amount__5': 0.06, 'ex_dividend_date__5': datetime.date(2024, 3, 27), 'declaration_date__5': datetime.date(2024, 3, 22), 'payment_date__5': datetime.date(2024, 4, 30), 'symbol__5': 'ENSG', 'record_date__5': datetime.date(2024, 3, 31), 'amount__6': 0.06, 'ex_dividend_date__6': datetime.date(2023, 12, 28), 'declaration_date__6': datetime.date(2023, 12, 15), 'payment_date__6': datetime.date(2024, 1, 31), 'symbol__6': 'ENSG', 'record_date__6': datetime.date(2023, 12, 31), 'amount__7': 0.0575, 'ex_dividend_date__7': datetime.date(2023, 9, 28), 'declaration_date__7': datetime.date(2023, 9, 15), 'payment_date__7': datetime.date(2023, 10, 31), 'symbol__7': 'ENSG', 'record_date__7': datetime.date(2023, 9, 30), 'amount__8': 0.0575, 'ex_dividend_date__8': datetime.date(2023, 6, 29) ... 20 parameters truncated ... 'symbol__11': 'ENSG', 'record_date__11': datetime.date(2022, 9, 30), 'amount__12': 0.055, 'ex_dividend_date__12': datetime.date(2022, 6, 29), 'declaration_date__12': datetime.date(2022, 6, 17), 'payment_date__12': datetime.date(2022, 7, 29), 'symbol__12': 'ENSG', 'record_date__12': datetime.date(2022, 6, 30), 'amount__13': 0.055, 'ex_dividend_date__13': datetime.date(2022, 3, 30), 'declaration_date__13': datetime.date(2022, 3, 18), 'payment_date__13': datetime.date(2022, 4, 29), 'symbol__13': 'ENSG', 'record_date__13': datetime.date(2022, 3, 31), 'amount__14': 0.055, 'ex_dividend_date__14': datetime.date(2021, 12, 30), 'declaration_date__14': datetime.date(2021, 12, 17), 'payment_date__14': datetime.date(2022, 1, 31), 'symbol__14': 'ENSG', 'record_date__14': datetime.date(2021, 12, 31), 'amount__15': 0.0525, 'ex_dividend_date__15': datetime.date(2021, 9, 29), 'declaration_date__15': datetime.date(2021, 9, 17), 'payment_date__15': datetime.date(2021, 10, 31), 'symbol__15': 'ENSG', 'record_date__15': datetime.date(2021, 9, 30), 'amount__16': 0.0525, 'ex_dividend_date__16': datetime.date(2021, 6, 29), 'declaration_date__16': datetime.date(2021, 6, 18), 'payment_date__16': datetime.date(2021, 7, 31), 'symbol__16': 'ENSG', 'record_date__16': datetime.date(2021, 6, 30), 'amount__17': 0.0525, 'ex_dividend_date__17': datetime.date(2021, 3, 30), 'declaration_date__17': datetime.date(2021, 3, 19), 'payment_date__17': datetime.date(2021, 4, 30), 'symbol__17': 'ENSG', 'record_date__17': datetime.date(2021, 3, 31), 'amount__18': 0.0525, 'ex_dividend_date__18': datetime.date(2020, 12, 30), 'declaration_date__18': datetime.date(2020, 12, 18), 'payment_date__18': datetime.date(2021, 1, 31), 'symbol__18': 'ENSG', 'record_date__18': datetime.date(2020, 12, 31), 'amount__19': 0.05, 'ex_dividend_date__19': datetime.date(2020, 9, 29), 'declaration_date__19': datetime.date(2020, 9, 18), 'payment_date__19': datetime.date(2020, 10, 31), 'symbol__19': 'ENSG', 'record_date__19': datetime.date(2020, 9, 30)}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-11 20:07:02,871 - data_manager.db_builders.postgre_adapter - ERROR - Transaction failed
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "dividends_pkey"
+DETAIL:  Key (symbol)=(ENSG) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 86, in session_scope
+    yield session
+  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "dividends_pkey"
+DETAIL:  Key (symbol)=(ENSG) already exists.
+
+[SQL: INSERT INTO dividends (symbol, ex_dividend_date, amount, declaration_date, record_date, payment_date) VALUES (%(symbol__0)s, %(ex_dividend_date__0)s, %(amount__0)s, %(declaration_date__0)s, %(record_date__0)s, %(payment_date__0)s), (%(symbol__1)s, %( ... 2277 characters truncated ... end_date__19)s, %(amount__19)s, %(declaration_date__19)s, %(record_date__19)s, %(payment_date__19)s)]
+[parameters: {'amount__0': 0.0625, 'ex_dividend_date__0': datetime.date(2025, 6, 30), 'declaration_date__0': datetime.date(2025, 6, 19), 'payment_date__0': datetime.date(2025, 7, 31), 'symbol__0': 'ENSG', 'record_date__0': datetime.date(2025, 6, 30), 'amount__1': 0.0625, 'ex_dividend_date__1': datetime.date(2025, 3, 31), 'declaration_date__1': datetime.date(2025, 3, 20), 'payment_date__1': datetime.date(2025, 4, 30), 'symbol__1': 'ENSG', 'record_date__1': datetime.date(2025, 3, 31), 'amount__2': 0.0625, 'ex_dividend_date__2': datetime.date(2024, 12, 31), 'declaration_date__2': datetime.date(2024, 12, 13), 'payment_date__2': datetime.date(2025, 1, 31), 'symbol__2': 'ENSG', 'record_date__2': datetime.date(2024, 12, 31), 'amount__3': 0.06, 'ex_dividend_date__3': datetime.date(2024, 9, 30), 'declaration_date__3': datetime.date(2024, 9, 13), 'payment_date__3': datetime.date(2024, 10, 31), 'symbol__3': 'ENSG', 'record_date__3': datetime.date(2024, 9, 30), 'amount__4': 0.06, 'ex_dividend_date__4': datetime.date(2024, 6, 28), 'declaration_date__4': datetime.date(2024, 6, 14), 'payment_date__4': datetime.date(2024, 7, 31), 'symbol__4': 'ENSG', 'record_date__4': datetime.date(2024, 6, 30), 'amount__5': 0.06, 'ex_dividend_date__5': datetime.date(2024, 3, 27), 'declaration_date__5': datetime.date(2024, 3, 22), 'payment_date__5': datetime.date(2024, 4, 30), 'symbol__5': 'ENSG', 'record_date__5': datetime.date(2024, 3, 31), 'amount__6': 0.06, 'ex_dividend_date__6': datetime.date(2023, 12, 28), 'declaration_date__6': datetime.date(2023, 12, 15), 'payment_date__6': datetime.date(2024, 1, 31), 'symbol__6': 'ENSG', 'record_date__6': datetime.date(2023, 12, 31), 'amount__7': 0.0575, 'ex_dividend_date__7': datetime.date(2023, 9, 28), 'declaration_date__7': datetime.date(2023, 9, 15), 'payment_date__7': datetime.date(2023, 10, 31), 'symbol__7': 'ENSG', 'record_date__7': datetime.date(2023, 9, 30), 'amount__8': 0.0575, 'ex_dividend_date__8': datetime.date(2023, 6, 29) ... 20 parameters truncated ... 'symbol__11': 'ENSG', 'record_date__11': datetime.date(2022, 9, 30), 'amount__12': 0.055, 'ex_dividend_date__12': datetime.date(2022, 6, 29), 'declaration_date__12': datetime.date(2022, 6, 17), 'payment_date__12': datetime.date(2022, 7, 29), 'symbol__12': 'ENSG', 'record_date__12': datetime.date(2022, 6, 30), 'amount__13': 0.055, 'ex_dividend_date__13': datetime.date(2022, 3, 30), 'declaration_date__13': datetime.date(2022, 3, 18), 'payment_date__13': datetime.date(2022, 4, 29), 'symbol__13': 'ENSG', 'record_date__13': datetime.date(2022, 3, 31), 'amount__14': 0.055, 'ex_dividend_date__14': datetime.date(2021, 12, 30), 'declaration_date__14': datetime.date(2021, 12, 17), 'payment_date__14': datetime.date(2022, 1, 31), 'symbol__14': 'ENSG', 'record_date__14': datetime.date(2021, 12, 31), 'amount__15': 0.0525, 'ex_dividend_date__15': datetime.date(2021, 9, 29), 'declaration_date__15': datetime.date(2021, 9, 17), 'payment_date__15': datetime.date(2021, 10, 31), 'symbol__15': 'ENSG', 'record_date__15': datetime.date(2021, 9, 30), 'amount__16': 0.0525, 'ex_dividend_date__16': datetime.date(2021, 6, 29), 'declaration_date__16': datetime.date(2021, 6, 18), 'payment_date__16': datetime.date(2021, 7, 31), 'symbol__16': 'ENSG', 'record_date__16': datetime.date(2021, 6, 30), 'amount__17': 0.0525, 'ex_dividend_date__17': datetime.date(2021, 3, 30), 'declaration_date__17': datetime.date(2021, 3, 19), 'payment_date__17': datetime.date(2021, 4, 30), 'symbol__17': 'ENSG', 'record_date__17': datetime.date(2021, 3, 31), 'amount__18': 0.0525, 'ex_dividend_date__18': datetime.date(2020, 12, 30), 'declaration_date__18': datetime.date(2020, 12, 18), 'payment_date__18': datetime.date(2021, 1, 31), 'symbol__18': 'ENSG', 'record_date__18': datetime.date(2020, 12, 31), 'amount__19': 0.05, 'ex_dividend_date__19': datetime.date(2020, 9, 29), 'declaration_date__19': datetime.date(2020, 9, 18), 'payment_date__19': datetime.date(2020, 10, 31), 'symbol__19': 'ENSG', 'record_date__19': datetime.date(2020, 9, 30)}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-11 20:07:02,876 - AlphaLoader - ERROR - An unexpected error occurred: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "dividends_pkey"
+DETAIL:  Key (symbol)=(ENSG) already exists.
+
+[SQL: INSERT INTO dividends (symbol, ex_dividend_date, amount, declaration_date, record_date, payment_date) VALUES (%(symbol__0)s, %(ex_dividend_date__0)s, %(amount__0)s, %(declaration_date__0)s, %(record_date__0)s, %(payment_date__0)s), (%(symbol__1)s, %( ... 2277 characters truncated ... end_date__19)s, %(amount__19)s, %(declaration_date__19)s, %(record_date__19)s, %(payment_date__19)s)]
+[parameters: {'amount__0': 0.0625, 'ex_dividend_date__0': datetime.date(2025, 6, 30), 'declaration_date__0': datetime.date(2025, 6, 19), 'payment_date__0': datetime.date(2025, 7, 31), 'symbol__0': 'ENSG', 'record_date__0': datetime.date(2025, 6, 30), 'amount__1': 0.0625, 'ex_dividend_date__1': datetime.date(2025, 3, 31), 'declaration_date__1': datetime.date(2025, 3, 20), 'payment_date__1': datetime.date(2025, 4, 30), 'symbol__1': 'ENSG', 'record_date__1': datetime.date(2025, 3, 31), 'amount__2': 0.0625, 'ex_dividend_date__2': datetime.date(2024, 12, 31), 'declaration_date__2': datetime.date(2024, 12, 13), 'payment_date__2': datetime.date(2025, 1, 31), 'symbol__2': 'ENSG', 'record_date__2': datetime.date(2024, 12, 31), 'amount__3': 0.06, 'ex_dividend_date__3': datetime.date(2024, 9, 30), 'declaration_date__3': datetime.date(2024, 9, 13), 'payment_date__3': datetime.date(2024, 10, 31), 'symbol__3': 'ENSG', 'record_date__3': datetime.date(2024, 9, 30), 'amount__4': 0.06, 'ex_dividend_date__4': datetime.date(2024, 6, 28), 'declaration_date__4': datetime.date(2024, 6, 14), 'payment_date__4': datetime.date(2024, 7, 31), 'symbol__4': 'ENSG', 'record_date__4': datetime.date(2024, 6, 30), 'amount__5': 0.06, 'ex_dividend_date__5': datetime.date(2024, 3, 27), 'declaration_date__5': datetime.date(2024, 3, 22), 'payment_date__5': datetime.date(2024, 4, 30), 'symbol__5': 'ENSG', 'record_date__5': datetime.date(2024, 3, 31), 'amount__6': 0.06, 'ex_dividend_date__6': datetime.date(2023, 12, 28), 'declaration_date__6': datetime.date(2023, 12, 15), 'payment_date__6': datetime.date(2024, 1, 31), 'symbol__6': 'ENSG', 'record_date__6': datetime.date(2023, 12, 31), 'amount__7': 0.0575, 'ex_dividend_date__7': datetime.date(2023, 9, 28), 'declaration_date__7': datetime.date(2023, 9, 15), 'payment_date__7': datetime.date(2023, 10, 31), 'symbol__7': 'ENSG', 'record_date__7': datetime.date(2023, 9, 30), 'amount__8': 0.0575, 'ex_dividend_date__8': datetime.date(2023, 6, 29) ... 20 parameters truncated ... 'symbol__11': 'ENSG', 'record_date__11': datetime.date(2022, 9, 30), 'amount__12': 0.055, 'ex_dividend_date__12': datetime.date(2022, 6, 29), 'declaration_date__12': datetime.date(2022, 6, 17), 'payment_date__12': datetime.date(2022, 7, 29), 'symbol__12': 'ENSG', 'record_date__12': datetime.date(2022, 6, 30), 'amount__13': 0.055, 'ex_dividend_date__13': datetime.date(2022, 3, 30), 'declaration_date__13': datetime.date(2022, 3, 18), 'payment_date__13': datetime.date(2022, 4, 29), 'symbol__13': 'ENSG', 'record_date__13': datetime.date(2022, 3, 31), 'amount__14': 0.055, 'ex_dividend_date__14': datetime.date(2021, 12, 30), 'declaration_date__14': datetime.date(2021, 12, 17), 'payment_date__14': datetime.date(2022, 1, 31), 'symbol__14': 'ENSG', 'record_date__14': datetime.date(2021, 12, 31), 'amount__15': 0.0525, 'ex_dividend_date__15': datetime.date(2021, 9, 29), 'declaration_date__15': datetime.date(2021, 9, 17), 'payment_date__15': datetime.date(2021, 10, 31), 'symbol__15': 'ENSG', 'record_date__15': datetime.date(2021, 9, 30), 'amount__16': 0.0525, 'ex_dividend_date__16': datetime.date(2021, 6, 29), 'declaration_date__16': datetime.date(2021, 6, 18), 'payment_date__16': datetime.date(2021, 7, 31), 'symbol__16': 'ENSG', 'record_date__16': datetime.date(2021, 6, 30), 'amount__17': 0.0525, 'ex_dividend_date__17': datetime.date(2021, 3, 30), 'declaration_date__17': datetime.date(2021, 3, 19), 'payment_date__17': datetime.date(2021, 4, 30), 'symbol__17': 'ENSG', 'record_date__17': datetime.date(2021, 3, 31), 'amount__18': 0.0525, 'ex_dividend_date__18': datetime.date(2020, 12, 30), 'declaration_date__18': datetime.date(2020, 12, 18), 'payment_date__18': datetime.date(2021, 1, 31), 'symbol__18': 'ENSG', 'record_date__18': datetime.date(2020, 12, 31), 'amount__19': 0.05, 'ex_dividend_date__19': datetime.date(2020, 9, 29), 'declaration_date__19': datetime.date(2020, 9, 18), 'payment_date__19': datetime.date(2020, 10, 31), 'symbol__19': 'ENSG', 'record_date__19': datetime.date(2020, 9, 30)}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-11 20:07:02,876 - db_initial_load_runner - INFO - ✅ Initial loader finished its running.

@@ -325,5 +325,5 @@ def standardize_dividends_columns(df):
         if col in df.columns:
             df[col] = pd.to_datetime(df[col], errors="coerce").apply(lambda x: x.date() if pd.notnull(x) else None)
             df[col] = df[col].apply(lambda x: None if pd.isnull(x) or x is pd.NaT or x == "NaT" else x)
-    df.drop_duplicates(subset=["symbol", "ex_dividend_date"], inplace=True)
+    #df.drop_duplicates(subset=["symbol", "ex_dividend_date"], inplace=True)
     return df
