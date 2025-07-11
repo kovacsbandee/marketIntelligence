@@ -5,9 +5,8 @@ from contextlib import contextmanager
 
 import pandas as pd
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, inspect, func
+from sqlalchemy import create_engine, inspect, func, Integer, BigInteger
 from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy.inspection import inspect
 from sqlalchemy.dialects.postgresql import insert
 
 # from data_manager.build_db.db_objects import DynamicCandlestickTable
@@ -238,9 +237,7 @@ class PostgresAdapter:
             return
 
         with self.session_scope() as session:
-            # Fetch existing time values from the database
             try:
-                # Insert only new rows
                 session.bulk_insert_mappings(table, rows)
                 self.logger.info(
                     "Inserted %d new rows into %s",
@@ -253,7 +250,34 @@ class PostgresAdapter:
                     table.__tablename__,
                     exc_info=True,
                 )
-                raise
+                # Handle invalid integer placeholders like "-" by cleaning and retrying once
+                if "invalid input syntax for type integer" in str(e):
+                    self.logger.info("Retrying after sanitizing integer columns...")
+                    int_cols = [
+                        c.key
+                        for c in inspect(table).c
+                        if isinstance(c.type, (Integer, BigInteger))
+                    ]
+                    for row in rows:
+                        for col in int_cols:
+                            if col in row and row[col] == "-":
+                                row[col] = None
+                    try:
+                        session.bulk_insert_mappings(table, rows)
+                        self.logger.info(
+                            "Inserted %d rows into %s after sanitizing",
+                            len(rows),
+                            table.__tablename__,
+                        )
+                    except Exception:
+                        self.logger.error(
+                            "Retry failed for inserting rows into %s",
+                            table.__tablename__,
+                            exc_info=True,
+                        )
+                        raise
+                else:
+                    raise
 
     # def insert_new_data(self, table: Type, rows: List[Dict]):
     #     """
