@@ -16,9 +16,11 @@ Dependencies:
     - Database configuration and Alpha Vantage credentials must be set in the environment or code.
 """
 
+import random
 from utils.logger import get_logger
+from utils.utils import get_symbols_from_csv
 from data_manager.etl_jobs.alphavantage_adapter import AlphaLoader
-from utils.logger import get_logger
+
 
 
 def load_initial_stocks(symbols):
@@ -81,7 +83,10 @@ def main():
 
     Defines a static list of symbols and triggers the initial load.
     """
-    symbols = ["MSFT", "AAPL", "TSLA", "NVDA", "AA"]
+    all_symbols = get_symbols_from_csv(csv_path="configs/nasdaq_screener.csv")
+    num_to_load = 5  # Change as needed
+    random.seed(42)
+    symbols = random.sample(all_symbols, min(num_to_load, len(all_symbols)))
     load_initial_stocks(symbols)
 
 

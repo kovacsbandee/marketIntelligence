@@ -40,16 +40,18 @@ from .column_maps import (
 
 def standardize_company_fundamentals_columns(df):
     """
-    Rename columns from Alpha Vantage company fundamentals to match the database schema.
-
-    Args:
-        df (pandas.DataFrame): Raw DataFrame from Alpha Vantage.
-
-    Returns:
-        pandas.DataFrame: DataFrame with columns renamed for downstream processing/storage.
+    Rename columns from Alpha Vantage company fundamentals to match the database schema,
+    and clean placeholder values.
     """
-    return df.rename(columns=COMPANY_FUNDAMENTALS_MAP)
-
+    df = df.rename(columns=COMPANY_FUNDAMENTALS_MAP)
+    df.replace(
+        to_replace=["None", "none", "NaN", "nan", "", "-"],
+        value=np.nan,
+        inplace=True
+    )
+    df = df.infer_objects(copy=False)
+    df = df.where(pd.notnull(df), None)
+    return df
 
 def standardize_annual_income_statement_columns(df):
     """

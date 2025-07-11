@@ -1,31 +1,31 @@
-2025-06-21 15:47:11,372 - db_drop_runner - INFO - Connected to the database successfully.
-2025-06-21 15:47:11,373 - db_drop_runner - WARNING - 
+2025-07-11 19:45:35,181 - db_drop_runner - INFO - Connected to the database successfully.
+2025-07-11 19:45:35,182 - db_drop_runner - WARNING - 
 ⚠️  WARNING: You are about to delete 13 tables:
-2025-06-21 15:47:28,502 - db_drop_runner - INFO - Dropping table: balance_sheet_annual
-2025-06-21 15:47:28,560 - data_manager.db_builders.postgre_adapter - INFO - Table balance_sheet_annual dropped
-2025-06-21 15:47:28,561 - db_drop_runner - INFO - Dropping table: cash_flow_annual
-2025-06-21 15:47:28,575 - data_manager.db_builders.postgre_adapter - INFO - Table cash_flow_annual dropped
-2025-06-21 15:47:28,575 - db_drop_runner - INFO - Dropping table: earnings_annual
-2025-06-21 15:47:28,589 - data_manager.db_builders.postgre_adapter - INFO - Table earnings_annual dropped
-2025-06-21 15:47:28,589 - db_drop_runner - INFO - Dropping table: income_statement_annual
-2025-06-21 15:47:28,607 - data_manager.db_builders.postgre_adapter - INFO - Table income_statement_annual dropped
-2025-06-21 15:47:28,607 - db_drop_runner - INFO - Dropping table: company_fundamentals
-2025-06-21 15:47:28,628 - data_manager.db_builders.postgre_adapter - INFO - Table company_fundamentals dropped
-2025-06-21 15:47:28,628 - db_drop_runner - INFO - Dropping table: daily_timeseries
-2025-06-21 15:47:28,644 - data_manager.db_builders.postgre_adapter - INFO - Table daily_timeseries dropped
-2025-06-21 15:47:28,645 - db_drop_runner - INFO - Dropping table: dividends
-2025-06-21 15:47:28,655 - data_manager.db_builders.postgre_adapter - INFO - Table dividends dropped
-2025-06-21 15:47:28,655 - db_drop_runner - INFO - Dropping table: insider_transactions
-2025-06-21 15:47:28,669 - data_manager.db_builders.postgre_adapter - INFO - Table insider_transactions dropped
-2025-06-21 15:47:28,669 - db_drop_runner - INFO - Dropping table: balance_sheet_quarterly
-2025-06-21 15:47:28,681 - data_manager.db_builders.postgre_adapter - INFO - Table balance_sheet_quarterly dropped
-2025-06-21 15:47:28,682 - db_drop_runner - INFO - Dropping table: cash_flow_statement_quarterly
-2025-06-21 15:47:28,693 - data_manager.db_builders.postgre_adapter - INFO - Table cash_flow_statement_quarterly dropped
-2025-06-21 15:47:28,693 - db_drop_runner - INFO - Dropping table: earnings_quarterly
-2025-06-21 15:47:28,701 - data_manager.db_builders.postgre_adapter - INFO - Table earnings_quarterly dropped
-2025-06-21 15:47:28,701 - db_drop_runner - INFO - Dropping table: income_statement_quarterly
-2025-06-21 15:47:28,709 - data_manager.db_builders.postgre_adapter - INFO - Table income_statement_quarterly dropped
-2025-06-21 15:47:28,709 - db_drop_runner - INFO - Dropping table: stock_splits
-2025-06-21 15:47:28,720 - data_manager.db_builders.postgre_adapter - INFO - Table stock_splits dropped
-2025-06-21 15:47:28,720 - db_drop_runner - INFO - Dropped 13 tables
-2025-06-21 15:47:28,720 - db_drop_runner - INFO - All specified tables have been dropped.
+2025-07-11 19:45:48,985 - db_drop_runner - INFO - Dropping table: balance_sheet_annual
+2025-07-11 19:45:49,042 - data_manager.db_builders.postgre_adapter - INFO - Table balance_sheet_annual dropped
+2025-07-11 19:45:49,042 - db_drop_runner - INFO - Dropping table: cash_flow_annual
+2025-07-11 19:45:49,055 - data_manager.db_builders.postgre_adapter - INFO - Table cash_flow_annual dropped
+2025-07-11 19:45:49,055 - db_drop_runner - INFO - Dropping table: earnings_annual
+2025-07-11 19:45:49,063 - data_manager.db_builders.postgre_adapter - INFO - Table earnings_annual dropped
+2025-07-11 19:45:49,064 - db_drop_runner - INFO - Dropping table: income_statement_annual
+2025-07-11 19:45:49,075 - data_manager.db_builders.postgre_adapter - INFO - Table income_statement_annual dropped
+2025-07-11 19:45:49,076 - db_drop_runner - INFO - Dropping table: company_fundamentals
+2025-07-11 19:45:49,090 - data_manager.db_builders.postgre_adapter - INFO - Table company_fundamentals dropped
+2025-07-11 19:45:49,091 - db_drop_runner - INFO - Dropping table: daily_timeseries
+2025-07-11 19:45:49,108 - data_manager.db_builders.postgre_adapter - INFO - Table daily_timeseries dropped
+2025-07-11 19:45:49,108 - db_drop_runner - INFO - Dropping table: dividends
+2025-07-11 19:45:49,121 - data_manager.db_builders.postgre_adapter - INFO - Table dividends dropped
+2025-07-11 19:45:49,121 - db_drop_runner - INFO - Dropping table: insider_transactions
+2025-07-11 19:45:49,136 - data_manager.db_builders.postgre_adapter - INFO - Table insider_transactions dropped
+2025-07-11 19:45:49,136 - db_drop_runner - INFO - Dropping table: balance_sheet_quarterly
+2025-07-11 19:45:49,150 - data_manager.db_builders.postgre_adapter - INFO - Table balance_sheet_quarterly dropped
+2025-07-11 19:45:49,151 - db_drop_runner - INFO - Dropping table: cash_flow_statement_quarterly
+2025-07-11 19:45:49,165 - data_manager.db_builders.postgre_adapter - INFO - Table cash_flow_statement_quarterly dropped
+2025-07-11 19:45:49,165 - db_drop_runner - INFO - Dropping table: earnings_quarterly
+2025-07-11 19:45:49,180 - data_manager.db_builders.postgre_adapter - INFO - Table earnings_quarterly dropped
+2025-07-11 19:45:49,180 - db_drop_runner - INFO - Dropping table: income_statement_quarterly
+2025-07-11 19:45:49,194 - data_manager.db_builders.postgre_adapter - INFO - Table income_statement_quarterly dropped
+2025-07-11 19:45:49,195 - db_drop_runner - INFO - Dropping table: stock_splits
+2025-07-11 19:45:49,209 - data_manager.db_builders.postgre_adapter - INFO - Table stock_splits dropped
+2025-07-11 19:45:49,210 - db_drop_runner - INFO - Dropped 13 tables
+2025-07-11 19:45:49,210 - db_drop_runner - INFO - All specified tables have been dropped.
