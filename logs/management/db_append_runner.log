@@ -1,0 +1,155 @@
+2025-07-11 20:34:04,483 - data_manager.db_builders.postgre_adapter - INFO - Loaded 5 rows from company_fundamentals
+2025-07-11 20:34:04,485 - db_initial_load_runner - INFO - Starting initial load for 5 symbols...
+2025-07-11 20:34:04,486 - db_initial_load_runner - INFO - Processing symbol: OZKAP
+2025-07-11 20:34:04,486 - AlphaLoader - INFO - Fetching data for OZKAP...
+2025-07-11 20:34:05,480 - data_manager.db_builders.postgre_adapter - INFO - Inserted 926 new rows into daily_timeseries
+2025-07-11 20:34:05,482 - AlphaLoader - INFO - Candlestick data for OZKAP loaded into the database.
+2025-07-11 20:34:05,482 - AlphaLoader - INFO - Fetching company base data for OZKAP...
+2025-07-11 20:34:06,147 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-11 20:34:06,154 - AlphaLoader - INFO - Company base data for OZKAP loaded into the database.
+2025-07-11 20:34:06,154 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for OZKAP...
+2025-07-11 20:34:07,006 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-07-11 20:34:07,033 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-07-11 20:34:07,039 - AlphaLoader - INFO - INCOME_STATEMENT data for OZKAP loaded into the database.
+2025-07-11 20:34:07,039 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for OZKAP...
+2025-07-11 20:34:07,882 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-07-11 20:34:07,912 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-07-11 20:34:07,919 - AlphaLoader - INFO - BALANCE_SHEET data for OZKAP loaded into the database.
+2025-07-11 20:34:07,919 - AlphaLoader - INFO - Fetching CASH_FLOW data for OZKAP...
+2025-07-11 20:34:08,710 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-07-11 20:34:08,741 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-07-11 20:34:08,750 - AlphaLoader - INFO - CASH_FLOW data for OZKAP loaded into the database.
+2025-07-11 20:34:08,751 - AlphaLoader - INFO - Fetching EARNINGS data for OZKAP...
+2025-07-11 20:34:09,315 - data_manager.db_builders.postgre_adapter - INFO - Inserted 11 new rows into earnings_annual
+2025-07-11 20:34:09,326 - data_manager.db_builders.postgre_adapter - INFO - Inserted 41 new rows into earnings_quarterly
+2025-07-11 20:34:09,327 - AlphaLoader - INFO - EARNINGS data for OZKAP loaded into the database.
+2025-07-11 20:34:09,328 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for OZKAP...
+2025-07-11 20:34:09,774 - data_manager.etl_jobs.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
+2025-07-11 20:34:09,775 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
+2025-07-11 20:34:09,775 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for OZKAP...
+2025-07-11 20:34:09,980 - AlphaLoader - ERROR - An unexpected error occurred: 'effective_date'
+2025-07-11 20:34:09,980 - AlphaLoader - INFO - Fetching DIVIDENDS data for OZKAP...
+2025-07-11 20:34:10,231 - data_manager.db_builders.postgre_adapter - INFO - Inserted 15 new rows into dividends
+2025-07-11 20:34:10,234 - AlphaLoader - INFO - Dividend data for OZKAP loaded into the database.
+2025-07-11 20:34:10,234 - db_initial_load_runner - INFO - Processing symbol: BHFAL
+2025-07-11 20:34:10,234 - AlphaLoader - INFO - Fetching data for BHFAL...
+2025-07-11 20:34:11,036 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1713 new rows into daily_timeseries
+2025-07-11 20:34:11,046 - AlphaLoader - INFO - Candlestick data for BHFAL loaded into the database.
+2025-07-11 20:34:11,047 - AlphaLoader - INFO - Fetching company base data for BHFAL...
+2025-07-11 20:34:11,589 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-11 20:34:11,595 - AlphaLoader - INFO - Company base data for BHFAL loaded into the database.
+2025-07-11 20:34:11,595 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for BHFAL...
+2025-07-11 20:34:12,285 - data_manager.db_builders.postgre_adapter - INFO - Inserted 12 new rows into income_statement_annual
+2025-07-11 20:34:12,307 - data_manager.db_builders.postgre_adapter - INFO - Inserted 41 new rows into income_statement_quarterly
+2025-07-11 20:34:12,318 - AlphaLoader - INFO - INCOME_STATEMENT data for BHFAL loaded into the database.
+2025-07-11 20:34:12,318 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for BHFAL...
+2025-07-11 20:34:12,913 - data_manager.db_builders.postgre_adapter - INFO - Inserted 12 new rows into balance_sheet_annual
+2025-07-11 20:34:12,935 - data_manager.db_builders.postgre_adapter - INFO - Inserted 41 new rows into balance_sheet_quarterly
+2025-07-11 20:34:12,943 - AlphaLoader - INFO - BALANCE_SHEET data for BHFAL loaded into the database.
+2025-07-11 20:34:12,943 - AlphaLoader - INFO - Fetching CASH_FLOW data for BHFAL...
+2025-07-11 20:34:13,659 - data_manager.db_builders.postgre_adapter - INFO - Inserted 12 new rows into cash_flow_annual
+2025-07-11 20:34:13,683 - data_manager.db_builders.postgre_adapter - INFO - Inserted 41 new rows into cash_flow_statement_quarterly
+2025-07-11 20:34:13,693 - AlphaLoader - INFO - CASH_FLOW data for BHFAL loaded into the database.
+2025-07-11 20:34:13,693 - AlphaLoader - INFO - Fetching EARNINGS data for BHFAL...
+2025-07-11 20:34:14,013 - data_manager.db_builders.postgre_adapter - INFO - Inserted 6 new rows into earnings_annual
+2025-07-11 20:34:14,024 - data_manager.db_builders.postgre_adapter - INFO - Inserted 22 new rows into earnings_quarterly
+2025-07-11 20:34:14,025 - AlphaLoader - INFO - EARNINGS data for BHFAL loaded into the database.
+2025-07-11 20:34:14,025 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for BHFAL...
+2025-07-11 20:34:14,787 - data_manager.db_builders.postgre_adapter - INFO - Inserted 457 new rows into insider_transactions
+2025-07-11 20:34:14,793 - AlphaLoader - INFO - Insider transaction data for BHFAL loaded into the database.
+2025-07-11 20:34:14,794 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for BHFAL...
+2025-07-11 20:34:14,996 - AlphaLoader - ERROR - An unexpected error occurred: 'effective_date'
+2025-07-11 20:34:14,997 - AlphaLoader - INFO - Fetching DIVIDENDS data for BHFAL...
+2025-07-11 20:34:15,443 - data_manager.db_builders.postgre_adapter - INFO - Inserted 27 new rows into dividends
+2025-07-11 20:34:15,446 - AlphaLoader - INFO - Dividend data for BHFAL loaded into the database.
+2025-07-11 20:34:15,446 - db_initial_load_runner - INFO - Processing symbol: AGNC
+2025-07-11 20:34:15,446 - AlphaLoader - INFO - Fetching data for AGNC...
+2025-07-11 20:34:16,704 - data_manager.db_builders.postgre_adapter - INFO - Inserted 4315 new rows into daily_timeseries
+2025-07-11 20:34:16,707 - AlphaLoader - INFO - Candlestick data for AGNC loaded into the database.
+2025-07-11 20:34:16,707 - AlphaLoader - INFO - Fetching company base data for AGNC...
+2025-07-11 20:34:17,199 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-11 20:34:17,204 - AlphaLoader - INFO - Company base data for AGNC loaded into the database.
+2025-07-11 20:34:17,204 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for AGNC...
+2025-07-11 20:34:17,650 - data_manager.db_builders.postgre_adapter - INFO - Inserted 17 new rows into income_statement_annual
+2025-07-11 20:34:17,673 - data_manager.db_builders.postgre_adapter - INFO - Inserted 68 new rows into income_statement_quarterly
+2025-07-11 20:34:17,679 - AlphaLoader - INFO - INCOME_STATEMENT data for AGNC loaded into the database.
+2025-07-11 20:34:17,679 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for AGNC...
+2025-07-11 20:34:18,381 - data_manager.db_builders.postgre_adapter - INFO - Inserted 17 new rows into balance_sheet_annual
+2025-07-11 20:34:18,409 - data_manager.db_builders.postgre_adapter - INFO - Inserted 68 new rows into balance_sheet_quarterly
+2025-07-11 20:34:18,416 - AlphaLoader - INFO - BALANCE_SHEET data for AGNC loaded into the database.
+2025-07-11 20:34:18,417 - AlphaLoader - INFO - Fetching CASH_FLOW data for AGNC...
+2025-07-11 20:34:19,072 - data_manager.db_builders.postgre_adapter - INFO - Inserted 17 new rows into cash_flow_annual
+2025-07-11 20:34:19,100 - data_manager.db_builders.postgre_adapter - INFO - Inserted 67 new rows into cash_flow_statement_quarterly
+2025-07-11 20:34:19,106 - AlphaLoader - INFO - CASH_FLOW data for AGNC loaded into the database.
+2025-07-11 20:34:19,107 - AlphaLoader - INFO - Fetching EARNINGS data for AGNC...
+2025-07-11 20:34:19,342 - data_manager.db_builders.postgre_adapter - INFO - Inserted 18 new rows into earnings_annual
+2025-07-11 20:34:19,362 - data_manager.db_builders.postgre_adapter - INFO - Inserted 68 new rows into earnings_quarterly
+2025-07-11 20:34:19,368 - AlphaLoader - INFO - EARNINGS data for AGNC loaded into the database.
+2025-07-11 20:34:19,369 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for AGNC...
+2025-07-11 20:34:19,994 - data_manager.db_builders.postgre_adapter - INFO - Inserted 410 new rows into insider_transactions
+2025-07-11 20:34:19,999 - AlphaLoader - INFO - Insider transaction data for AGNC loaded into the database.
+2025-07-11 20:34:20,000 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for AGNC...
+2025-07-11 20:34:20,222 - AlphaLoader - ERROR - An unexpected error occurred: 'effective_date'
+2025-07-11 20:34:20,222 - AlphaLoader - INFO - Fetching DIVIDENDS data for AGNC...
+2025-07-11 20:34:20,561 - data_manager.db_builders.postgre_adapter - INFO - Inserted 155 new rows into dividends
+2025-07-11 20:34:20,566 - AlphaLoader - INFO - Dividend data for AGNC loaded into the database.
+2025-07-11 20:34:20,566 - db_initial_load_runner - INFO - Processing symbol: SANA
+2025-07-11 20:34:20,566 - AlphaLoader - INFO - Fetching data for SANA...
+2025-07-11 20:34:21,367 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1112 new rows into daily_timeseries
+2025-07-11 20:34:21,370 - AlphaLoader - INFO - Candlestick data for SANA loaded into the database.
+2025-07-11 20:34:21,370 - AlphaLoader - INFO - Fetching company base data for SANA...
+2025-07-11 20:34:21,915 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-11 20:34:21,920 - AlphaLoader - INFO - Company base data for SANA loaded into the database.
+2025-07-11 20:34:21,920 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for SANA...
+2025-07-11 20:34:22,357 - data_manager.db_builders.postgre_adapter - INFO - Inserted 7 new rows into income_statement_annual
+2025-07-11 20:34:22,376 - data_manager.db_builders.postgre_adapter - INFO - Inserted 22 new rows into income_statement_quarterly
+2025-07-11 20:34:22,379 - AlphaLoader - INFO - INCOME_STATEMENT data for SANA loaded into the database.
+2025-07-11 20:34:22,379 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for SANA...
+2025-07-11 20:34:22,864 - data_manager.db_builders.postgre_adapter - INFO - Inserted 7 new rows into balance_sheet_annual
+2025-07-11 20:34:22,881 - data_manager.db_builders.postgre_adapter - INFO - Inserted 22 new rows into balance_sheet_quarterly
+2025-07-11 20:34:22,891 - AlphaLoader - INFO - BALANCE_SHEET data for SANA loaded into the database.
+2025-07-11 20:34:22,891 - AlphaLoader - INFO - Fetching CASH_FLOW data for SANA...
+2025-07-11 20:34:23,352 - data_manager.db_builders.postgre_adapter - INFO - Inserted 7 new rows into cash_flow_annual
+2025-07-11 20:34:23,369 - data_manager.db_builders.postgre_adapter - INFO - Inserted 22 new rows into cash_flow_statement_quarterly
+2025-07-11 20:34:23,376 - AlphaLoader - INFO - CASH_FLOW data for SANA loaded into the database.
+2025-07-11 20:34:23,377 - AlphaLoader - INFO - Fetching EARNINGS data for SANA...
+2025-07-11 20:34:23,641 - data_manager.db_builders.postgre_adapter - INFO - Inserted 6 new rows into earnings_annual
+2025-07-11 20:34:23,654 - data_manager.db_builders.postgre_adapter - INFO - Inserted 19 new rows into earnings_quarterly
+2025-07-11 20:34:23,656 - AlphaLoader - INFO - EARNINGS data for SANA loaded into the database.
+2025-07-11 20:34:23,656 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for SANA...
+2025-07-11 20:34:24,265 - data_manager.db_builders.postgre_adapter - INFO - Inserted 150 new rows into insider_transactions
+2025-07-11 20:34:24,270 - AlphaLoader - INFO - Insider transaction data for SANA loaded into the database.
+2025-07-11 20:34:24,270 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for SANA...
+2025-07-11 20:34:24,437 - AlphaLoader - ERROR - An unexpected error occurred: 'effective_date'
+2025-07-11 20:34:24,437 - AlphaLoader - INFO - Fetching DIVIDENDS data for SANA...
+2025-07-11 20:34:24,604 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-11 20:34:24,604 - db_initial_load_runner - INFO - Processing symbol: ENTO
+2025-07-11 20:34:24,604 - AlphaLoader - INFO - Fetching data for ENTO...
+2025-07-11 20:34:25,527 - data_manager.db_builders.postgre_adapter - INFO - Inserted 2198 new rows into daily_timeseries
+2025-07-11 20:34:25,533 - AlphaLoader - INFO - Candlestick data for ENTO loaded into the database.
+2025-07-11 20:34:25,533 - AlphaLoader - INFO - Fetching company base data for ENTO...
+2025-07-11 20:34:26,012 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-11 20:34:26,017 - AlphaLoader - INFO - Company base data for ENTO loaded into the database.
+2025-07-11 20:34:26,017 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for ENTO...
+2025-07-11 20:34:26,568 - data_manager.db_builders.postgre_adapter - INFO - Inserted 12 new rows into income_statement_annual
+2025-07-11 20:34:26,590 - data_manager.db_builders.postgre_adapter - INFO - Inserted 45 new rows into income_statement_quarterly
+2025-07-11 20:34:26,596 - AlphaLoader - INFO - INCOME_STATEMENT data for ENTO loaded into the database.
+2025-07-11 20:34:26,596 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for ENTO...
+2025-07-11 20:34:27,304 - AlphaLoader - ERROR - An unexpected error occurred: cannot safely cast non-equivalent float64 to int64
+2025-07-11 20:34:27,305 - AlphaLoader - INFO - Fetching CASH_FLOW data for ENTO...
+2025-07-11 20:34:27,795 - data_manager.db_builders.postgre_adapter - INFO - Inserted 12 new rows into cash_flow_annual
+2025-07-11 20:34:27,817 - data_manager.db_builders.postgre_adapter - INFO - Inserted 45 new rows into cash_flow_statement_quarterly
+2025-07-11 20:34:27,828 - AlphaLoader - INFO - CASH_FLOW data for ENTO loaded into the database.
+2025-07-11 20:34:27,828 - AlphaLoader - INFO - Fetching EARNINGS data for ENTO...
+2025-07-11 20:34:28,454 - data_manager.db_builders.postgre_adapter - INFO - Inserted 9 new rows into earnings_annual
+2025-07-11 20:34:28,468 - data_manager.db_builders.postgre_adapter - INFO - Inserted 34 new rows into earnings_quarterly
+2025-07-11 20:34:28,472 - AlphaLoader - INFO - EARNINGS data for ENTO loaded into the database.
+2025-07-11 20:34:28,472 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for ENTO...
+2025-07-11 20:34:28,822 - data_manager.etl_jobs.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
+2025-07-11 20:34:28,823 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
+2025-07-11 20:34:28,823 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for ENTO...
+2025-07-11 20:34:29,085 - data_manager.db_builders.postgre_adapter - INFO - Inserted 4 new rows into stock_splits
+2025-07-11 20:34:29,087 - AlphaLoader - INFO - Stock split data for ENTO loaded into the database.
+2025-07-11 20:34:29,088 - AlphaLoader - INFO - Fetching DIVIDENDS data for ENTO...
+2025-07-11 20:34:29,271 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-11 20:34:29,272 - db_initial_load_runner - INFO - ✅ Initial loader finished its running.

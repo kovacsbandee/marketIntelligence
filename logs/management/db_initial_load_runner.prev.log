@@ -1,621 +1,157 @@
-2025-07-11 20:06:35,480 - db_initial_load_runner - INFO - Starting initial load for 5 symbols...
-2025-07-11 20:06:35,481 - db_initial_load_runner - INFO - Processing symbol: OXSQ
-2025-07-11 20:06:35,481 - AlphaLoader - INFO - Fetching data for OXSQ...
-2025-07-11 20:06:36,411 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1836 new rows into daily_timeseries
-2025-07-11 20:06:36,418 - AlphaLoader - INFO - Candlestick data for OXSQ loaded into the database.
-2025-07-11 20:06:36,418 - AlphaLoader - INFO - Fetching company base data for OXSQ...
-2025-07-11 20:06:36,971 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
-2025-07-11 20:06:36,976 - AlphaLoader - INFO - Company base data for OXSQ loaded into the database.
-2025-07-11 20:06:36,977 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for OXSQ...
-2025-07-11 20:06:37,387 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
-2025-07-11 20:06:37,420 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
-2025-07-11 20:06:37,425 - AlphaLoader - INFO - INCOME_STATEMENT data for OXSQ loaded into the database.
-2025-07-11 20:06:37,426 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for OXSQ...
-2025-07-11 20:06:38,249 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
-2025-07-11 20:06:38,279 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
-2025-07-11 20:06:38,284 - AlphaLoader - INFO - BALANCE_SHEET data for OXSQ loaded into the database.
-2025-07-11 20:06:38,285 - AlphaLoader - INFO - Fetching CASH_FLOW data for OXSQ...
-2025-07-11 20:06:39,147 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
-2025-07-11 20:06:39,179 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
-2025-07-11 20:06:39,185 - AlphaLoader - INFO - CASH_FLOW data for OXSQ loaded into the database.
-2025-07-11 20:06:39,185 - AlphaLoader - INFO - Fetching EARNINGS data for OXSQ...
-2025-07-11 20:06:39,712 - data_manager.db_builders.postgre_adapter - INFO - Inserted 22 new rows into earnings_annual
-2025-07-11 20:06:39,734 - data_manager.db_builders.postgre_adapter - INFO - Inserted 85 new rows into earnings_quarterly
-2025-07-11 20:06:39,740 - AlphaLoader - INFO - EARNINGS data for OXSQ loaded into the database.
-2025-07-11 20:06:39,740 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for OXSQ...
-2025-07-11 20:06:40,363 - data_manager.db_builders.postgre_adapter - INFO - Inserted 346 new rows into insider_transactions
-2025-07-11 20:06:40,369 - AlphaLoader - INFO - Insider transaction data for OXSQ loaded into the database.
-2025-07-11 20:06:40,369 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for OXSQ...
-2025-07-11 20:06:40,625 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
-2025-07-11 20:06:40,630 - AlphaLoader - INFO - Stock split data for OXSQ loaded into the database.
-2025-07-11 20:06:40,630 - AlphaLoader - INFO - Fetching DIVIDENDS data for OXSQ...
-2025-07-11 20:06:41,284 - data_manager.db_builders.postgre_adapter - ERROR - Failed to insert new rows into dividends
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
-    dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~^
-        cursor,
-        ^^^^^^^
-    ...<2 lines>...
-        context,
-        ^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "dividends_pkey"
-DETAIL:  Key (symbol)=(OXSQ) already exists.
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 241, in insert_new_data
-    session.bulk_insert_mappings(table, rows)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
-    self._bulk_save_mappings(
-    ~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<5 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
-    with util.safe_reraise():
-         ~~~~~~~~~~~~~~~~~^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
-    raise exc_value.with_traceback(exc_tb)
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
-    bulk_persistence._bulk_insert(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<4 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
-    result = persistence._emit_insert_statements(
-        base_mapper,
-    ...<6 lines>...
-        execution_options=execution_options,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
-    result = connection.execute(
-        statement, multiparams, execution_options=execution_options
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
-    return meth(
-        self,
-        distilled_parameters,
-        execution_options or NO_OPTIONS,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
-    return connection._execute_clauseelement(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        self, distilled_params, execution_options
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
-    ret = self._execute_context(
-        dialect,
-    ...<8 lines>...
-        cache_hit=cache_hit,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
-    return self._exec_insertmany_context(dialect, context)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
-    self._handle_dbapi_exception(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        e,
-        ^^
-    ...<4 lines>...
-        is_sub_exec=True,
-        ^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
-    dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~^
-        cursor,
-        ^^^^^^^
-    ...<2 lines>...
-        context,
-        ^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "dividends_pkey"
-DETAIL:  Key (symbol)=(OXSQ) already exists.
-
-[SQL: INSERT INTO dividends (symbol, ex_dividend_date, amount, declaration_date, record_date, payment_date) VALUES (%(symbol__0)s, %(ex_dividend_date__0)s, %(amount__0)s, %(declaration_date__0)s, %(record_date__0)s, %(payment_date__0)s), (%(symbol__1)s, %( ... 8598 characters truncated ... end_date__68)s, %(amount__68)s, %(declaration_date__68)s, %(record_date__68)s, %(payment_date__68)s)]
-[parameters: {'amount__0': 0.035, 'ex_dividend_date__0': datetime.date(2025, 9, 16), 'declaration_date__0': datetime.date(2025, 4, 22), 'payment_date__0': datetime.date(2025, 9, 30), 'symbol__0': 'OXSQ', 'record_date__0': datetime.date(2025, 9, 16), 'amount__1': 0.035, 'ex_dividend_date__1': datetime.date(2025, 8, 15), 'declaration_date__1': datetime.date(2025, 4, 22), 'payment_date__1': datetime.date(2025, 8, 29), 'symbol__1': 'OXSQ', 'record_date__1': datetime.date(2025, 8, 15), 'amount__2': 0.035, 'ex_dividend_date__2': datetime.date(2025, 7, 17), 'declaration_date__2': datetime.date(2025, 4, 22), 'payment_date__2': datetime.date(2025, 7, 31), 'symbol__2': 'OXSQ', 'record_date__2': datetime.date(2025, 7, 17), 'amount__3': 0.035, 'ex_dividend_date__3': datetime.date(2025, 6, 16), 'declaration_date__3': datetime.date(2025, 2, 27), 'payment_date__3': datetime.date(2025, 6, 30), 'symbol__3': 'OXSQ', 'record_date__3': datetime.date(2025, 6, 16), 'amount__4': 0.035, 'ex_dividend_date__4': datetime.date(2025, 5, 16), 'declaration_date__4': datetime.date(2025, 2, 27), 'payment_date__4': datetime.date(2025, 5, 30), 'symbol__4': 'OXSQ', 'record_date__4': datetime.date(2025, 5, 16), 'amount__5': 0.035, 'ex_dividend_date__5': datetime.date(2025, 4, 16), 'declaration_date__5': datetime.date(2025, 2, 27), 'payment_date__5': datetime.date(2025, 4, 30), 'symbol__5': 'OXSQ', 'record_date__5': datetime.date(2025, 4, 16), 'amount__6': 0.035, 'ex_dividend_date__6': datetime.date(2025, 3, 17), 'declaration_date__6': datetime.date(2024, 10, 31), 'payment_date__6': datetime.date(2025, 3, 31), 'symbol__6': 'OXSQ', 'record_date__6': datetime.date(2025, 3, 17), 'amount__7': 0.035, 'ex_dividend_date__7': datetime.date(2025, 2, 14), 'declaration_date__7': datetime.date(2024, 10, 31), 'payment_date__7': datetime.date(2025, 2, 28), 'symbol__7': 'OXSQ', 'record_date__7': datetime.date(2025, 2, 14), 'amount__8': 0.035, 'ex_dividend_date__8': datetime.date(2025, 1, 17) ... 314 parameters truncated ... 'symbol__60': 'OXSQ', 'record_date__60': datetime.date(2020, 9, 16), 'amount__61': 0.035, 'ex_dividend_date__61': datetime.date(2020, 8, 14), 'declaration_date__61': datetime.date(2020, 6, 1), 'payment_date__61': datetime.date(2020, 8, 31), 'symbol__61': 'OXSQ', 'record_date__61': datetime.date(2020, 8, 17), 'amount__62': 0.035, 'ex_dividend_date__62': datetime.date(2020, 7, 16), 'declaration_date__62': datetime.date(2020, 6, 1), 'payment_date__62': datetime.date(2020, 7, 31), 'symbol__62': 'OXSQ', 'record_date__62': datetime.date(2020, 7, 17), 'amount__63': 0.067, 'ex_dividend_date__63': datetime.date(2020, 6, 12), 'declaration_date__63': datetime.date(2020, 2, 24), 'payment_date__63': datetime.date(2020, 6, 30), 'symbol__63': 'OXSQ', 'record_date__63': datetime.date(2020, 6, 15), 'amount__64': 0.067, 'ex_dividend_date__64': datetime.date(2020, 5, 13), 'declaration_date__64': datetime.date(2020, 2, 24), 'payment_date__64': datetime.date(2020, 5, 29), 'symbol__64': 'OXSQ', 'record_date__64': datetime.date(2020, 5, 14), 'amount__65': 0.067, 'ex_dividend_date__65': datetime.date(2020, 4, 14), 'declaration_date__65': datetime.date(2020, 2, 24), 'payment_date__65': datetime.date(2020, 4, 30), 'symbol__65': 'OXSQ', 'record_date__65': datetime.date(2020, 4, 15), 'amount__66': 0.067, 'ex_dividend_date__66': datetime.date(2020, 3, 16), 'declaration_date__66': datetime.date(2019, 10, 25), 'payment_date__66': datetime.date(2020, 3, 31), 'symbol__66': 'OXSQ', 'record_date__66': datetime.date(2020, 3, 17), 'amount__67': 0.067, 'ex_dividend_date__67': datetime.date(2020, 2, 13), 'declaration_date__67': datetime.date(2019, 10, 25), 'payment_date__67': datetime.date(2020, 2, 28), 'symbol__67': 'OXSQ', 'record_date__67': datetime.date(2020, 2, 14), 'amount__68': 0.067, 'ex_dividend_date__68': datetime.date(2020, 1, 16), 'declaration_date__68': datetime.date(2019, 10, 25), 'payment_date__68': datetime.date(2020, 1, 31), 'symbol__68': 'OXSQ', 'record_date__68': datetime.date(2020, 1, 17)}]
-(Background on this error at: https://sqlalche.me/e/20/gkpj)
-2025-07-11 20:06:41,294 - data_manager.db_builders.postgre_adapter - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
-    dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~^
-        cursor,
-        ^^^^^^^
-    ...<2 lines>...
-        context,
-        ^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "dividends_pkey"
-DETAIL:  Key (symbol)=(OXSQ) already exists.
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 86, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 241, in insert_new_data
-    session.bulk_insert_mappings(table, rows)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
-    self._bulk_save_mappings(
-    ~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<5 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
-    with util.safe_reraise():
-         ~~~~~~~~~~~~~~~~~^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
-    raise exc_value.with_traceback(exc_tb)
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
-    bulk_persistence._bulk_insert(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<4 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
-    result = persistence._emit_insert_statements(
-        base_mapper,
-    ...<6 lines>...
-        execution_options=execution_options,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
-    result = connection.execute(
-        statement, multiparams, execution_options=execution_options
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
-    return meth(
-        self,
-        distilled_parameters,
-        execution_options or NO_OPTIONS,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
-    return connection._execute_clauseelement(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        self, distilled_params, execution_options
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
-    ret = self._execute_context(
-        dialect,
-    ...<8 lines>...
-        cache_hit=cache_hit,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
-    return self._exec_insertmany_context(dialect, context)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
-    self._handle_dbapi_exception(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        e,
-        ^^
-    ...<4 lines>...
-        is_sub_exec=True,
-        ^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
-    dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~^
-        cursor,
-        ^^^^^^^
-    ...<2 lines>...
-        context,
-        ^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "dividends_pkey"
-DETAIL:  Key (symbol)=(OXSQ) already exists.
-
-[SQL: INSERT INTO dividends (symbol, ex_dividend_date, amount, declaration_date, record_date, payment_date) VALUES (%(symbol__0)s, %(ex_dividend_date__0)s, %(amount__0)s, %(declaration_date__0)s, %(record_date__0)s, %(payment_date__0)s), (%(symbol__1)s, %( ... 8598 characters truncated ... end_date__68)s, %(amount__68)s, %(declaration_date__68)s, %(record_date__68)s, %(payment_date__68)s)]
-[parameters: {'amount__0': 0.035, 'ex_dividend_date__0': datetime.date(2025, 9, 16), 'declaration_date__0': datetime.date(2025, 4, 22), 'payment_date__0': datetime.date(2025, 9, 30), 'symbol__0': 'OXSQ', 'record_date__0': datetime.date(2025, 9, 16), 'amount__1': 0.035, 'ex_dividend_date__1': datetime.date(2025, 8, 15), 'declaration_date__1': datetime.date(2025, 4, 22), 'payment_date__1': datetime.date(2025, 8, 29), 'symbol__1': 'OXSQ', 'record_date__1': datetime.date(2025, 8, 15), 'amount__2': 0.035, 'ex_dividend_date__2': datetime.date(2025, 7, 17), 'declaration_date__2': datetime.date(2025, 4, 22), 'payment_date__2': datetime.date(2025, 7, 31), 'symbol__2': 'OXSQ', 'record_date__2': datetime.date(2025, 7, 17), 'amount__3': 0.035, 'ex_dividend_date__3': datetime.date(2025, 6, 16), 'declaration_date__3': datetime.date(2025, 2, 27), 'payment_date__3': datetime.date(2025, 6, 30), 'symbol__3': 'OXSQ', 'record_date__3': datetime.date(2025, 6, 16), 'amount__4': 0.035, 'ex_dividend_date__4': datetime.date(2025, 5, 16), 'declaration_date__4': datetime.date(2025, 2, 27), 'payment_date__4': datetime.date(2025, 5, 30), 'symbol__4': 'OXSQ', 'record_date__4': datetime.date(2025, 5, 16), 'amount__5': 0.035, 'ex_dividend_date__5': datetime.date(2025, 4, 16), 'declaration_date__5': datetime.date(2025, 2, 27), 'payment_date__5': datetime.date(2025, 4, 30), 'symbol__5': 'OXSQ', 'record_date__5': datetime.date(2025, 4, 16), 'amount__6': 0.035, 'ex_dividend_date__6': datetime.date(2025, 3, 17), 'declaration_date__6': datetime.date(2024, 10, 31), 'payment_date__6': datetime.date(2025, 3, 31), 'symbol__6': 'OXSQ', 'record_date__6': datetime.date(2025, 3, 17), 'amount__7': 0.035, 'ex_dividend_date__7': datetime.date(2025, 2, 14), 'declaration_date__7': datetime.date(2024, 10, 31), 'payment_date__7': datetime.date(2025, 2, 28), 'symbol__7': 'OXSQ', 'record_date__7': datetime.date(2025, 2, 14), 'amount__8': 0.035, 'ex_dividend_date__8': datetime.date(2025, 1, 17) ... 314 parameters truncated ... 'symbol__60': 'OXSQ', 'record_date__60': datetime.date(2020, 9, 16), 'amount__61': 0.035, 'ex_dividend_date__61': datetime.date(2020, 8, 14), 'declaration_date__61': datetime.date(2020, 6, 1), 'payment_date__61': datetime.date(2020, 8, 31), 'symbol__61': 'OXSQ', 'record_date__61': datetime.date(2020, 8, 17), 'amount__62': 0.035, 'ex_dividend_date__62': datetime.date(2020, 7, 16), 'declaration_date__62': datetime.date(2020, 6, 1), 'payment_date__62': datetime.date(2020, 7, 31), 'symbol__62': 'OXSQ', 'record_date__62': datetime.date(2020, 7, 17), 'amount__63': 0.067, 'ex_dividend_date__63': datetime.date(2020, 6, 12), 'declaration_date__63': datetime.date(2020, 2, 24), 'payment_date__63': datetime.date(2020, 6, 30), 'symbol__63': 'OXSQ', 'record_date__63': datetime.date(2020, 6, 15), 'amount__64': 0.067, 'ex_dividend_date__64': datetime.date(2020, 5, 13), 'declaration_date__64': datetime.date(2020, 2, 24), 'payment_date__64': datetime.date(2020, 5, 29), 'symbol__64': 'OXSQ', 'record_date__64': datetime.date(2020, 5, 14), 'amount__65': 0.067, 'ex_dividend_date__65': datetime.date(2020, 4, 14), 'declaration_date__65': datetime.date(2020, 2, 24), 'payment_date__65': datetime.date(2020, 4, 30), 'symbol__65': 'OXSQ', 'record_date__65': datetime.date(2020, 4, 15), 'amount__66': 0.067, 'ex_dividend_date__66': datetime.date(2020, 3, 16), 'declaration_date__66': datetime.date(2019, 10, 25), 'payment_date__66': datetime.date(2020, 3, 31), 'symbol__66': 'OXSQ', 'record_date__66': datetime.date(2020, 3, 17), 'amount__67': 0.067, 'ex_dividend_date__67': datetime.date(2020, 2, 13), 'declaration_date__67': datetime.date(2019, 10, 25), 'payment_date__67': datetime.date(2020, 2, 28), 'symbol__67': 'OXSQ', 'record_date__67': datetime.date(2020, 2, 14), 'amount__68': 0.067, 'ex_dividend_date__68': datetime.date(2020, 1, 16), 'declaration_date__68': datetime.date(2019, 10, 25), 'payment_date__68': datetime.date(2020, 1, 31), 'symbol__68': 'OXSQ', 'record_date__68': datetime.date(2020, 1, 17)}]
-(Background on this error at: https://sqlalche.me/e/20/gkpj)
-2025-07-11 20:06:41,300 - AlphaLoader - ERROR - An unexpected error occurred: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "dividends_pkey"
-DETAIL:  Key (symbol)=(OXSQ) already exists.
-
-[SQL: INSERT INTO dividends (symbol, ex_dividend_date, amount, declaration_date, record_date, payment_date) VALUES (%(symbol__0)s, %(ex_dividend_date__0)s, %(amount__0)s, %(declaration_date__0)s, %(record_date__0)s, %(payment_date__0)s), (%(symbol__1)s, %( ... 8598 characters truncated ... end_date__68)s, %(amount__68)s, %(declaration_date__68)s, %(record_date__68)s, %(payment_date__68)s)]
-[parameters: {'amount__0': 0.035, 'ex_dividend_date__0': datetime.date(2025, 9, 16), 'declaration_date__0': datetime.date(2025, 4, 22), 'payment_date__0': datetime.date(2025, 9, 30), 'symbol__0': 'OXSQ', 'record_date__0': datetime.date(2025, 9, 16), 'amount__1': 0.035, 'ex_dividend_date__1': datetime.date(2025, 8, 15), 'declaration_date__1': datetime.date(2025, 4, 22), 'payment_date__1': datetime.date(2025, 8, 29), 'symbol__1': 'OXSQ', 'record_date__1': datetime.date(2025, 8, 15), 'amount__2': 0.035, 'ex_dividend_date__2': datetime.date(2025, 7, 17), 'declaration_date__2': datetime.date(2025, 4, 22), 'payment_date__2': datetime.date(2025, 7, 31), 'symbol__2': 'OXSQ', 'record_date__2': datetime.date(2025, 7, 17), 'amount__3': 0.035, 'ex_dividend_date__3': datetime.date(2025, 6, 16), 'declaration_date__3': datetime.date(2025, 2, 27), 'payment_date__3': datetime.date(2025, 6, 30), 'symbol__3': 'OXSQ', 'record_date__3': datetime.date(2025, 6, 16), 'amount__4': 0.035, 'ex_dividend_date__4': datetime.date(2025, 5, 16), 'declaration_date__4': datetime.date(2025, 2, 27), 'payment_date__4': datetime.date(2025, 5, 30), 'symbol__4': 'OXSQ', 'record_date__4': datetime.date(2025, 5, 16), 'amount__5': 0.035, 'ex_dividend_date__5': datetime.date(2025, 4, 16), 'declaration_date__5': datetime.date(2025, 2, 27), 'payment_date__5': datetime.date(2025, 4, 30), 'symbol__5': 'OXSQ', 'record_date__5': datetime.date(2025, 4, 16), 'amount__6': 0.035, 'ex_dividend_date__6': datetime.date(2025, 3, 17), 'declaration_date__6': datetime.date(2024, 10, 31), 'payment_date__6': datetime.date(2025, 3, 31), 'symbol__6': 'OXSQ', 'record_date__6': datetime.date(2025, 3, 17), 'amount__7': 0.035, 'ex_dividend_date__7': datetime.date(2025, 2, 14), 'declaration_date__7': datetime.date(2024, 10, 31), 'payment_date__7': datetime.date(2025, 2, 28), 'symbol__7': 'OXSQ', 'record_date__7': datetime.date(2025, 2, 14), 'amount__8': 0.035, 'ex_dividend_date__8': datetime.date(2025, 1, 17) ... 314 parameters truncated ... 'symbol__60': 'OXSQ', 'record_date__60': datetime.date(2020, 9, 16), 'amount__61': 0.035, 'ex_dividend_date__61': datetime.date(2020, 8, 14), 'declaration_date__61': datetime.date(2020, 6, 1), 'payment_date__61': datetime.date(2020, 8, 31), 'symbol__61': 'OXSQ', 'record_date__61': datetime.date(2020, 8, 17), 'amount__62': 0.035, 'ex_dividend_date__62': datetime.date(2020, 7, 16), 'declaration_date__62': datetime.date(2020, 6, 1), 'payment_date__62': datetime.date(2020, 7, 31), 'symbol__62': 'OXSQ', 'record_date__62': datetime.date(2020, 7, 17), 'amount__63': 0.067, 'ex_dividend_date__63': datetime.date(2020, 6, 12), 'declaration_date__63': datetime.date(2020, 2, 24), 'payment_date__63': datetime.date(2020, 6, 30), 'symbol__63': 'OXSQ', 'record_date__63': datetime.date(2020, 6, 15), 'amount__64': 0.067, 'ex_dividend_date__64': datetime.date(2020, 5, 13), 'declaration_date__64': datetime.date(2020, 2, 24), 'payment_date__64': datetime.date(2020, 5, 29), 'symbol__64': 'OXSQ', 'record_date__64': datetime.date(2020, 5, 14), 'amount__65': 0.067, 'ex_dividend_date__65': datetime.date(2020, 4, 14), 'declaration_date__65': datetime.date(2020, 2, 24), 'payment_date__65': datetime.date(2020, 4, 30), 'symbol__65': 'OXSQ', 'record_date__65': datetime.date(2020, 4, 15), 'amount__66': 0.067, 'ex_dividend_date__66': datetime.date(2020, 3, 16), 'declaration_date__66': datetime.date(2019, 10, 25), 'payment_date__66': datetime.date(2020, 3, 31), 'symbol__66': 'OXSQ', 'record_date__66': datetime.date(2020, 3, 17), 'amount__67': 0.067, 'ex_dividend_date__67': datetime.date(2020, 2, 13), 'declaration_date__67': datetime.date(2019, 10, 25), 'payment_date__67': datetime.date(2020, 2, 28), 'symbol__67': 'OXSQ', 'record_date__67': datetime.date(2020, 2, 14), 'amount__68': 0.067, 'ex_dividend_date__68': datetime.date(2020, 1, 16), 'declaration_date__68': datetime.date(2019, 10, 25), 'payment_date__68': datetime.date(2020, 1, 31), 'symbol__68': 'OXSQ', 'record_date__68': datetime.date(2020, 1, 17)}]
-(Background on this error at: https://sqlalche.me/e/20/gkpj)
-2025-07-11 20:06:41,301 - db_initial_load_runner - INFO - Processing symbol: BHAT
-2025-07-11 20:06:41,301 - AlphaLoader - INFO - Fetching data for BHAT...
-2025-07-11 20:06:42,497 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1497 new rows into daily_timeseries
-2025-07-11 20:06:42,499 - AlphaLoader - INFO - Candlestick data for BHAT loaded into the database.
-2025-07-11 20:06:42,499 - AlphaLoader - INFO - Fetching company base data for BHAT...
-2025-07-11 20:06:42,802 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
-2025-07-11 20:06:42,807 - AlphaLoader - INFO - Company base data for BHAT loaded into the database.
-2025-07-11 20:06:42,808 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for BHAT...
-2025-07-11 20:06:43,549 - data_manager.db_builders.postgre_adapter - INFO - Inserted 11 new rows into income_statement_annual
-2025-07-11 20:06:43,574 - data_manager.db_builders.postgre_adapter - INFO - Inserted 37 new rows into income_statement_quarterly
-2025-07-11 20:06:43,579 - AlphaLoader - INFO - INCOME_STATEMENT data for BHAT loaded into the database.
-2025-07-11 20:06:43,579 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for BHAT...
-2025-07-11 20:06:44,271 - data_manager.db_builders.postgre_adapter - INFO - Inserted 11 new rows into balance_sheet_annual
-2025-07-11 20:06:44,295 - data_manager.db_builders.postgre_adapter - INFO - Inserted 39 new rows into balance_sheet_quarterly
-2025-07-11 20:06:44,297 - AlphaLoader - INFO - BALANCE_SHEET data for BHAT loaded into the database.
-2025-07-11 20:06:44,297 - AlphaLoader - INFO - Fetching CASH_FLOW data for BHAT...
-2025-07-11 20:06:44,774 - data_manager.db_builders.postgre_adapter - INFO - Inserted 11 new rows into cash_flow_annual
-2025-07-11 20:06:44,793 - data_manager.db_builders.postgre_adapter - INFO - Inserted 38 new rows into cash_flow_statement_quarterly
-2025-07-11 20:06:44,800 - AlphaLoader - INFO - CASH_FLOW data for BHAT loaded into the database.
-2025-07-11 20:06:44,800 - AlphaLoader - INFO - Fetching EARNINGS data for BHAT...
-2025-07-11 20:06:45,148 - data_manager.db_builders.postgre_adapter - INFO - Inserted 8 new rows into earnings_annual
-2025-07-11 20:06:45,159 - data_manager.db_builders.postgre_adapter - INFO - Inserted 33 new rows into earnings_quarterly
-2025-07-11 20:06:45,161 - AlphaLoader - INFO - EARNINGS data for BHAT loaded into the database.
-2025-07-11 20:06:45,162 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for BHAT...
-2025-07-11 20:06:45,411 - data_manager.etl_jobs.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
-2025-07-11 20:06:45,412 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
-2025-07-11 20:06:45,412 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for BHAT...
-2025-07-11 20:06:45,648 - data_manager.db_builders.postgre_adapter - INFO - Inserted 2 new rows into stock_splits
-2025-07-11 20:06:45,654 - AlphaLoader - INFO - Stock split data for BHAT loaded into the database.
-2025-07-11 20:06:45,654 - AlphaLoader - INFO - Fetching DIVIDENDS data for BHAT...
-2025-07-11 20:06:46,125 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
-2025-07-11 20:06:46,126 - db_initial_load_runner - INFO - Processing symbol: AGMH
-2025-07-11 20:06:46,126 - AlphaLoader - INFO - Fetching data for AGMH...
-2025-07-11 20:06:47,088 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1817 new rows into daily_timeseries
-2025-07-11 20:06:47,091 - AlphaLoader - INFO - Candlestick data for AGMH loaded into the database.
-2025-07-11 20:06:47,091 - AlphaLoader - INFO - Fetching company base data for AGMH...
-2025-07-11 20:06:47,618 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
-2025-07-11 20:06:47,624 - AlphaLoader - INFO - Company base data for AGMH loaded into the database.
-2025-07-11 20:06:47,624 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for AGMH...
-2025-07-11 20:06:48,108 - data_manager.db_builders.postgre_adapter - INFO - Inserted 10 new rows into income_statement_annual
-2025-07-11 20:06:48,133 - data_manager.db_builders.postgre_adapter - INFO - Inserted 33 new rows into income_statement_quarterly
-2025-07-11 20:06:48,136 - AlphaLoader - INFO - INCOME_STATEMENT data for AGMH loaded into the database.
-2025-07-11 20:06:48,137 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for AGMH...
-2025-07-11 20:06:48,701 - AlphaLoader - ERROR - An unexpected error occurred: cannot safely cast non-equivalent float64 to int64
-2025-07-11 20:06:48,701 - AlphaLoader - INFO - Fetching CASH_FLOW data for AGMH...
-2025-07-11 20:06:49,476 - data_manager.db_builders.postgre_adapter - INFO - Inserted 10 new rows into cash_flow_annual
-2025-07-11 20:06:49,498 - data_manager.db_builders.postgre_adapter - INFO - Inserted 35 new rows into cash_flow_statement_quarterly
-2025-07-11 20:06:49,501 - AlphaLoader - INFO - CASH_FLOW data for AGMH loaded into the database.
-2025-07-11 20:06:49,501 - AlphaLoader - INFO - Fetching EARNINGS data for AGMH...
-2025-07-11 20:06:50,065 - data_manager.db_builders.postgre_adapter - INFO - Inserted 7 new rows into earnings_annual
-2025-07-11 20:06:50,075 - data_manager.db_builders.postgre_adapter - INFO - Inserted 25 new rows into earnings_quarterly
-2025-07-11 20:06:50,077 - AlphaLoader - INFO - EARNINGS data for AGMH loaded into the database.
-2025-07-11 20:06:50,077 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for AGMH...
-2025-07-11 20:06:50,530 - data_manager.etl_jobs.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
-2025-07-11 20:06:50,530 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
-2025-07-11 20:06:50,530 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for AGMH...
-2025-07-11 20:06:50,766 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
-2025-07-11 20:06:50,772 - AlphaLoader - INFO - Stock split data for AGMH loaded into the database.
-2025-07-11 20:06:50,772 - AlphaLoader - INFO - Fetching DIVIDENDS data for AGMH...
-2025-07-11 20:06:51,041 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
-2025-07-11 20:06:51,041 - db_initial_load_runner - INFO - Processing symbol: SAIA
-2025-07-11 20:06:51,041 - AlphaLoader - INFO - Fetching data for SAIA...
-2025-07-11 20:06:52,494 - data_manager.db_builders.postgre_adapter - INFO - Inserted 5743 new rows into daily_timeseries
-2025-07-11 20:06:52,505 - AlphaLoader - INFO - Candlestick data for SAIA loaded into the database.
-2025-07-11 20:06:52,505 - AlphaLoader - INFO - Fetching company base data for SAIA...
-2025-07-11 20:06:52,729 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
-2025-07-11 20:06:52,734 - AlphaLoader - INFO - Company base data for SAIA loaded into the database.
-2025-07-11 20:06:52,734 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for SAIA...
-2025-07-11 20:06:53,390 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
-2025-07-11 20:06:53,418 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
-2025-07-11 20:06:53,424 - AlphaLoader - INFO - INCOME_STATEMENT data for SAIA loaded into the database.
-2025-07-11 20:06:53,424 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for SAIA...
-2025-07-11 20:06:54,118 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
-2025-07-11 20:06:54,143 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
-2025-07-11 20:06:54,148 - AlphaLoader - INFO - BALANCE_SHEET data for SAIA loaded into the database.
-2025-07-11 20:06:54,148 - AlphaLoader - INFO - Fetching CASH_FLOW data for SAIA...
-2025-07-11 20:06:54,815 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
-2025-07-11 20:06:54,850 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
-2025-07-11 20:06:54,856 - AlphaLoader - INFO - CASH_FLOW data for SAIA loaded into the database.
-2025-07-11 20:06:54,856 - AlphaLoader - INFO - Fetching EARNINGS data for SAIA...
-2025-07-11 20:06:55,184 - data_manager.db_builders.postgre_adapter - INFO - Inserted 24 new rows into earnings_annual
-2025-07-11 20:06:55,204 - data_manager.db_builders.postgre_adapter - INFO - Inserted 91 new rows into earnings_quarterly
-2025-07-11 20:06:55,210 - AlphaLoader - INFO - EARNINGS data for SAIA loaded into the database.
-2025-07-11 20:06:55,210 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for SAIA...
-2025-07-11 20:06:56,525 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1190 new rows into insider_transactions
-2025-07-11 20:06:56,530 - AlphaLoader - INFO - Insider transaction data for SAIA loaded into the database.
-2025-07-11 20:06:56,531 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for SAIA...
-2025-07-11 20:06:56,949 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
-2025-07-11 20:06:56,954 - AlphaLoader - INFO - Stock split data for SAIA loaded into the database.
-2025-07-11 20:06:56,954 - AlphaLoader - INFO - Fetching DIVIDENDS data for SAIA...
-2025-07-11 20:06:57,402 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
-2025-07-11 20:06:57,403 - db_initial_load_runner - INFO - Processing symbol: ENSG
-2025-07-11 20:06:57,403 - AlphaLoader - INFO - Fetching data for ENSG...
-2025-07-11 20:06:58,630 - data_manager.db_builders.postgre_adapter - INFO - Inserted 4443 new rows into daily_timeseries
-2025-07-11 20:06:58,637 - AlphaLoader - INFO - Candlestick data for ENSG loaded into the database.
-2025-07-11 20:06:58,637 - AlphaLoader - INFO - Fetching company base data for ENSG...
-2025-07-11 20:06:58,873 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
-2025-07-11 20:06:58,877 - AlphaLoader - INFO - Company base data for ENSG loaded into the database.
-2025-07-11 20:06:58,878 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for ENSG...
-2025-07-11 20:06:59,447 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
-2025-07-11 20:06:59,478 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
-2025-07-11 20:06:59,484 - AlphaLoader - INFO - INCOME_STATEMENT data for ENSG loaded into the database.
-2025-07-11 20:06:59,484 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for ENSG...
-2025-07-11 20:07:00,141 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
-2025-07-11 20:07:00,171 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
-2025-07-11 20:07:00,181 - AlphaLoader - INFO - BALANCE_SHEET data for ENSG loaded into the database.
-2025-07-11 20:07:00,181 - AlphaLoader - INFO - Fetching CASH_FLOW data for ENSG...
-2025-07-11 20:07:01,070 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
-2025-07-11 20:07:01,102 - data_manager.db_builders.postgre_adapter - INFO - Inserted 77 new rows into cash_flow_statement_quarterly
-2025-07-11 20:07:01,107 - AlphaLoader - INFO - CASH_FLOW data for ENSG loaded into the database.
-2025-07-11 20:07:01,108 - AlphaLoader - INFO - Fetching EARNINGS data for ENSG...
-2025-07-11 20:07:01,429 - data_manager.db_builders.postgre_adapter - INFO - Inserted 19 new rows into earnings_annual
-2025-07-11 20:07:01,444 - data_manager.db_builders.postgre_adapter - INFO - Inserted 71 new rows into earnings_quarterly
-2025-07-11 20:07:01,448 - AlphaLoader - INFO - EARNINGS data for ENSG loaded into the database.
-2025-07-11 20:07:01,448 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for ENSG...
-2025-07-11 20:07:02,343 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1651 new rows into insider_transactions
-2025-07-11 20:07:02,348 - AlphaLoader - INFO - Insider transaction data for ENSG loaded into the database.
-2025-07-11 20:07:02,349 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for ENSG...
-2025-07-11 20:07:02,640 - data_manager.db_builders.postgre_adapter - INFO - Inserted 2 new rows into stock_splits
-2025-07-11 20:07:02,645 - AlphaLoader - INFO - Stock split data for ENSG loaded into the database.
-2025-07-11 20:07:02,645 - AlphaLoader - INFO - Fetching DIVIDENDS data for ENSG...
-2025-07-11 20:07:02,865 - data_manager.db_builders.postgre_adapter - ERROR - Failed to insert new rows into dividends
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
-    dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~^
-        cursor,
-        ^^^^^^^
-    ...<2 lines>...
-        context,
-        ^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "dividends_pkey"
-DETAIL:  Key (symbol)=(ENSG) already exists.
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 241, in insert_new_data
-    session.bulk_insert_mappings(table, rows)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
-    self._bulk_save_mappings(
-    ~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<5 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
-    with util.safe_reraise():
-         ~~~~~~~~~~~~~~~~~^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
-    raise exc_value.with_traceback(exc_tb)
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
-    bulk_persistence._bulk_insert(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<4 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
-    result = persistence._emit_insert_statements(
-        base_mapper,
-    ...<6 lines>...
-        execution_options=execution_options,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
-    result = connection.execute(
-        statement, multiparams, execution_options=execution_options
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
-    return meth(
-        self,
-        distilled_parameters,
-        execution_options or NO_OPTIONS,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
-    return connection._execute_clauseelement(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        self, distilled_params, execution_options
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
-    ret = self._execute_context(
-        dialect,
-    ...<8 lines>...
-        cache_hit=cache_hit,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
-    return self._exec_insertmany_context(dialect, context)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
-    self._handle_dbapi_exception(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        e,
-        ^^
-    ...<4 lines>...
-        is_sub_exec=True,
-        ^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
-    dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~^
-        cursor,
-        ^^^^^^^
-    ...<2 lines>...
-        context,
-        ^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "dividends_pkey"
-DETAIL:  Key (symbol)=(ENSG) already exists.
-
-[SQL: INSERT INTO dividends (symbol, ex_dividend_date, amount, declaration_date, record_date, payment_date) VALUES (%(symbol__0)s, %(ex_dividend_date__0)s, %(amount__0)s, %(declaration_date__0)s, %(record_date__0)s, %(payment_date__0)s), (%(symbol__1)s, %( ... 2277 characters truncated ... end_date__19)s, %(amount__19)s, %(declaration_date__19)s, %(record_date__19)s, %(payment_date__19)s)]
-[parameters: {'amount__0': 0.0625, 'ex_dividend_date__0': datetime.date(2025, 6, 30), 'declaration_date__0': datetime.date(2025, 6, 19), 'payment_date__0': datetime.date(2025, 7, 31), 'symbol__0': 'ENSG', 'record_date__0': datetime.date(2025, 6, 30), 'amount__1': 0.0625, 'ex_dividend_date__1': datetime.date(2025, 3, 31), 'declaration_date__1': datetime.date(2025, 3, 20), 'payment_date__1': datetime.date(2025, 4, 30), 'symbol__1': 'ENSG', 'record_date__1': datetime.date(2025, 3, 31), 'amount__2': 0.0625, 'ex_dividend_date__2': datetime.date(2024, 12, 31), 'declaration_date__2': datetime.date(2024, 12, 13), 'payment_date__2': datetime.date(2025, 1, 31), 'symbol__2': 'ENSG', 'record_date__2': datetime.date(2024, 12, 31), 'amount__3': 0.06, 'ex_dividend_date__3': datetime.date(2024, 9, 30), 'declaration_date__3': datetime.date(2024, 9, 13), 'payment_date__3': datetime.date(2024, 10, 31), 'symbol__3': 'ENSG', 'record_date__3': datetime.date(2024, 9, 30), 'amount__4': 0.06, 'ex_dividend_date__4': datetime.date(2024, 6, 28), 'declaration_date__4': datetime.date(2024, 6, 14), 'payment_date__4': datetime.date(2024, 7, 31), 'symbol__4': 'ENSG', 'record_date__4': datetime.date(2024, 6, 30), 'amount__5': 0.06, 'ex_dividend_date__5': datetime.date(2024, 3, 27), 'declaration_date__5': datetime.date(2024, 3, 22), 'payment_date__5': datetime.date(2024, 4, 30), 'symbol__5': 'ENSG', 'record_date__5': datetime.date(2024, 3, 31), 'amount__6': 0.06, 'ex_dividend_date__6': datetime.date(2023, 12, 28), 'declaration_date__6': datetime.date(2023, 12, 15), 'payment_date__6': datetime.date(2024, 1, 31), 'symbol__6': 'ENSG', 'record_date__6': datetime.date(2023, 12, 31), 'amount__7': 0.0575, 'ex_dividend_date__7': datetime.date(2023, 9, 28), 'declaration_date__7': datetime.date(2023, 9, 15), 'payment_date__7': datetime.date(2023, 10, 31), 'symbol__7': 'ENSG', 'record_date__7': datetime.date(2023, 9, 30), 'amount__8': 0.0575, 'ex_dividend_date__8': datetime.date(2023, 6, 29) ... 20 parameters truncated ... 'symbol__11': 'ENSG', 'record_date__11': datetime.date(2022, 9, 30), 'amount__12': 0.055, 'ex_dividend_date__12': datetime.date(2022, 6, 29), 'declaration_date__12': datetime.date(2022, 6, 17), 'payment_date__12': datetime.date(2022, 7, 29), 'symbol__12': 'ENSG', 'record_date__12': datetime.date(2022, 6, 30), 'amount__13': 0.055, 'ex_dividend_date__13': datetime.date(2022, 3, 30), 'declaration_date__13': datetime.date(2022, 3, 18), 'payment_date__13': datetime.date(2022, 4, 29), 'symbol__13': 'ENSG', 'record_date__13': datetime.date(2022, 3, 31), 'amount__14': 0.055, 'ex_dividend_date__14': datetime.date(2021, 12, 30), 'declaration_date__14': datetime.date(2021, 12, 17), 'payment_date__14': datetime.date(2022, 1, 31), 'symbol__14': 'ENSG', 'record_date__14': datetime.date(2021, 12, 31), 'amount__15': 0.0525, 'ex_dividend_date__15': datetime.date(2021, 9, 29), 'declaration_date__15': datetime.date(2021, 9, 17), 'payment_date__15': datetime.date(2021, 10, 31), 'symbol__15': 'ENSG', 'record_date__15': datetime.date(2021, 9, 30), 'amount__16': 0.0525, 'ex_dividend_date__16': datetime.date(2021, 6, 29), 'declaration_date__16': datetime.date(2021, 6, 18), 'payment_date__16': datetime.date(2021, 7, 31), 'symbol__16': 'ENSG', 'record_date__16': datetime.date(2021, 6, 30), 'amount__17': 0.0525, 'ex_dividend_date__17': datetime.date(2021, 3, 30), 'declaration_date__17': datetime.date(2021, 3, 19), 'payment_date__17': datetime.date(2021, 4, 30), 'symbol__17': 'ENSG', 'record_date__17': datetime.date(2021, 3, 31), 'amount__18': 0.0525, 'ex_dividend_date__18': datetime.date(2020, 12, 30), 'declaration_date__18': datetime.date(2020, 12, 18), 'payment_date__18': datetime.date(2021, 1, 31), 'symbol__18': 'ENSG', 'record_date__18': datetime.date(2020, 12, 31), 'amount__19': 0.05, 'ex_dividend_date__19': datetime.date(2020, 9, 29), 'declaration_date__19': datetime.date(2020, 9, 18), 'payment_date__19': datetime.date(2020, 10, 31), 'symbol__19': 'ENSG', 'record_date__19': datetime.date(2020, 9, 30)}]
-(Background on this error at: https://sqlalche.me/e/20/gkpj)
-2025-07-11 20:07:02,871 - data_manager.db_builders.postgre_adapter - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
-    dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~^
-        cursor,
-        ^^^^^^^
-    ...<2 lines>...
-        context,
-        ^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "dividends_pkey"
-DETAIL:  Key (symbol)=(ENSG) already exists.
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 86, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/data_manager/db_builders/postgre_adapter.py", line 241, in insert_new_data
-    session.bulk_insert_mappings(table, rows)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
-    self._bulk_save_mappings(
-    ~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<5 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
-    with util.safe_reraise():
-         ~~~~~~~~~~~~~~~~~^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
-    raise exc_value.with_traceback(exc_tb)
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
-    bulk_persistence._bulk_insert(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        mapper,
-        ^^^^^^^
-    ...<4 lines>...
-        render_nulls=render_nulls,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
-    result = persistence._emit_insert_statements(
-        base_mapper,
-    ...<6 lines>...
-        execution_options=execution_options,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
-    result = connection.execute(
-        statement, multiparams, execution_options=execution_options
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
-    return meth(
-        self,
-        distilled_parameters,
-        execution_options or NO_OPTIONS,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
-    return connection._execute_clauseelement(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        self, distilled_params, execution_options
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
-    ret = self._execute_context(
-        dialect,
-    ...<8 lines>...
-        cache_hit=cache_hit,
-    )
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
-    return self._exec_insertmany_context(dialect, context)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
-    self._handle_dbapi_exception(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        e,
-        ^^
-    ...<4 lines>...
-        is_sub_exec=True,
-        ^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
-    dialect.do_execute(
-    ~~~~~~~~~~~~~~~~~~^
-        cursor,
-        ^^^^^^^
-    ...<2 lines>...
-        context,
-        ^^^^^^^^
-    )
-    ^
-  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
-    cursor.execute(statement, parameters)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "dividends_pkey"
-DETAIL:  Key (symbol)=(ENSG) already exists.
-
-[SQL: INSERT INTO dividends (symbol, ex_dividend_date, amount, declaration_date, record_date, payment_date) VALUES (%(symbol__0)s, %(ex_dividend_date__0)s, %(amount__0)s, %(declaration_date__0)s, %(record_date__0)s, %(payment_date__0)s), (%(symbol__1)s, %( ... 2277 characters truncated ... end_date__19)s, %(amount__19)s, %(declaration_date__19)s, %(record_date__19)s, %(payment_date__19)s)]
-[parameters: {'amount__0': 0.0625, 'ex_dividend_date__0': datetime.date(2025, 6, 30), 'declaration_date__0': datetime.date(2025, 6, 19), 'payment_date__0': datetime.date(2025, 7, 31), 'symbol__0': 'ENSG', 'record_date__0': datetime.date(2025, 6, 30), 'amount__1': 0.0625, 'ex_dividend_date__1': datetime.date(2025, 3, 31), 'declaration_date__1': datetime.date(2025, 3, 20), 'payment_date__1': datetime.date(2025, 4, 30), 'symbol__1': 'ENSG', 'record_date__1': datetime.date(2025, 3, 31), 'amount__2': 0.0625, 'ex_dividend_date__2': datetime.date(2024, 12, 31), 'declaration_date__2': datetime.date(2024, 12, 13), 'payment_date__2': datetime.date(2025, 1, 31), 'symbol__2': 'ENSG', 'record_date__2': datetime.date(2024, 12, 31), 'amount__3': 0.06, 'ex_dividend_date__3': datetime.date(2024, 9, 30), 'declaration_date__3': datetime.date(2024, 9, 13), 'payment_date__3': datetime.date(2024, 10, 31), 'symbol__3': 'ENSG', 'record_date__3': datetime.date(2024, 9, 30), 'amount__4': 0.06, 'ex_dividend_date__4': datetime.date(2024, 6, 28), 'declaration_date__4': datetime.date(2024, 6, 14), 'payment_date__4': datetime.date(2024, 7, 31), 'symbol__4': 'ENSG', 'record_date__4': datetime.date(2024, 6, 30), 'amount__5': 0.06, 'ex_dividend_date__5': datetime.date(2024, 3, 27), 'declaration_date__5': datetime.date(2024, 3, 22), 'payment_date__5': datetime.date(2024, 4, 30), 'symbol__5': 'ENSG', 'record_date__5': datetime.date(2024, 3, 31), 'amount__6': 0.06, 'ex_dividend_date__6': datetime.date(2023, 12, 28), 'declaration_date__6': datetime.date(2023, 12, 15), 'payment_date__6': datetime.date(2024, 1, 31), 'symbol__6': 'ENSG', 'record_date__6': datetime.date(2023, 12, 31), 'amount__7': 0.0575, 'ex_dividend_date__7': datetime.date(2023, 9, 28), 'declaration_date__7': datetime.date(2023, 9, 15), 'payment_date__7': datetime.date(2023, 10, 31), 'symbol__7': 'ENSG', 'record_date__7': datetime.date(2023, 9, 30), 'amount__8': 0.0575, 'ex_dividend_date__8': datetime.date(2023, 6, 29) ... 20 parameters truncated ... 'symbol__11': 'ENSG', 'record_date__11': datetime.date(2022, 9, 30), 'amount__12': 0.055, 'ex_dividend_date__12': datetime.date(2022, 6, 29), 'declaration_date__12': datetime.date(2022, 6, 17), 'payment_date__12': datetime.date(2022, 7, 29), 'symbol__12': 'ENSG', 'record_date__12': datetime.date(2022, 6, 30), 'amount__13': 0.055, 'ex_dividend_date__13': datetime.date(2022, 3, 30), 'declaration_date__13': datetime.date(2022, 3, 18), 'payment_date__13': datetime.date(2022, 4, 29), 'symbol__13': 'ENSG', 'record_date__13': datetime.date(2022, 3, 31), 'amount__14': 0.055, 'ex_dividend_date__14': datetime.date(2021, 12, 30), 'declaration_date__14': datetime.date(2021, 12, 17), 'payment_date__14': datetime.date(2022, 1, 31), 'symbol__14': 'ENSG', 'record_date__14': datetime.date(2021, 12, 31), 'amount__15': 0.0525, 'ex_dividend_date__15': datetime.date(2021, 9, 29), 'declaration_date__15': datetime.date(2021, 9, 17), 'payment_date__15': datetime.date(2021, 10, 31), 'symbol__15': 'ENSG', 'record_date__15': datetime.date(2021, 9, 30), 'amount__16': 0.0525, 'ex_dividend_date__16': datetime.date(2021, 6, 29), 'declaration_date__16': datetime.date(2021, 6, 18), 'payment_date__16': datetime.date(2021, 7, 31), 'symbol__16': 'ENSG', 'record_date__16': datetime.date(2021, 6, 30), 'amount__17': 0.0525, 'ex_dividend_date__17': datetime.date(2021, 3, 30), 'declaration_date__17': datetime.date(2021, 3, 19), 'payment_date__17': datetime.date(2021, 4, 30), 'symbol__17': 'ENSG', 'record_date__17': datetime.date(2021, 3, 31), 'amount__18': 0.0525, 'ex_dividend_date__18': datetime.date(2020, 12, 30), 'declaration_date__18': datetime.date(2020, 12, 18), 'payment_date__18': datetime.date(2021, 1, 31), 'symbol__18': 'ENSG', 'record_date__18': datetime.date(2020, 12, 31), 'amount__19': 0.05, 'ex_dividend_date__19': datetime.date(2020, 9, 29), 'declaration_date__19': datetime.date(2020, 9, 18), 'payment_date__19': datetime.date(2020, 10, 31), 'symbol__19': 'ENSG', 'record_date__19': datetime.date(2020, 9, 30)}]
-(Background on this error at: https://sqlalche.me/e/20/gkpj)
-2025-07-11 20:07:02,876 - AlphaLoader - ERROR - An unexpected error occurred: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "dividends_pkey"
-DETAIL:  Key (symbol)=(ENSG) already exists.
-
-[SQL: INSERT INTO dividends (symbol, ex_dividend_date, amount, declaration_date, record_date, payment_date) VALUES (%(symbol__0)s, %(ex_dividend_date__0)s, %(amount__0)s, %(declaration_date__0)s, %(record_date__0)s, %(payment_date__0)s), (%(symbol__1)s, %( ... 2277 characters truncated ... end_date__19)s, %(amount__19)s, %(declaration_date__19)s, %(record_date__19)s, %(payment_date__19)s)]
-[parameters: {'amount__0': 0.0625, 'ex_dividend_date__0': datetime.date(2025, 6, 30), 'declaration_date__0': datetime.date(2025, 6, 19), 'payment_date__0': datetime.date(2025, 7, 31), 'symbol__0': 'ENSG', 'record_date__0': datetime.date(2025, 6, 30), 'amount__1': 0.0625, 'ex_dividend_date__1': datetime.date(2025, 3, 31), 'declaration_date__1': datetime.date(2025, 3, 20), 'payment_date__1': datetime.date(2025, 4, 30), 'symbol__1': 'ENSG', 'record_date__1': datetime.date(2025, 3, 31), 'amount__2': 0.0625, 'ex_dividend_date__2': datetime.date(2024, 12, 31), 'declaration_date__2': datetime.date(2024, 12, 13), 'payment_date__2': datetime.date(2025, 1, 31), 'symbol__2': 'ENSG', 'record_date__2': datetime.date(2024, 12, 31), 'amount__3': 0.06, 'ex_dividend_date__3': datetime.date(2024, 9, 30), 'declaration_date__3': datetime.date(2024, 9, 13), 'payment_date__3': datetime.date(2024, 10, 31), 'symbol__3': 'ENSG', 'record_date__3': datetime.date(2024, 9, 30), 'amount__4': 0.06, 'ex_dividend_date__4': datetime.date(2024, 6, 28), 'declaration_date__4': datetime.date(2024, 6, 14), 'payment_date__4': datetime.date(2024, 7, 31), 'symbol__4': 'ENSG', 'record_date__4': datetime.date(2024, 6, 30), 'amount__5': 0.06, 'ex_dividend_date__5': datetime.date(2024, 3, 27), 'declaration_date__5': datetime.date(2024, 3, 22), 'payment_date__5': datetime.date(2024, 4, 30), 'symbol__5': 'ENSG', 'record_date__5': datetime.date(2024, 3, 31), 'amount__6': 0.06, 'ex_dividend_date__6': datetime.date(2023, 12, 28), 'declaration_date__6': datetime.date(2023, 12, 15), 'payment_date__6': datetime.date(2024, 1, 31), 'symbol__6': 'ENSG', 'record_date__6': datetime.date(2023, 12, 31), 'amount__7': 0.0575, 'ex_dividend_date__7': datetime.date(2023, 9, 28), 'declaration_date__7': datetime.date(2023, 9, 15), 'payment_date__7': datetime.date(2023, 10, 31), 'symbol__7': 'ENSG', 'record_date__7': datetime.date(2023, 9, 30), 'amount__8': 0.0575, 'ex_dividend_date__8': datetime.date(2023, 6, 29) ... 20 parameters truncated ... 'symbol__11': 'ENSG', 'record_date__11': datetime.date(2022, 9, 30), 'amount__12': 0.055, 'ex_dividend_date__12': datetime.date(2022, 6, 29), 'declaration_date__12': datetime.date(2022, 6, 17), 'payment_date__12': datetime.date(2022, 7, 29), 'symbol__12': 'ENSG', 'record_date__12': datetime.date(2022, 6, 30), 'amount__13': 0.055, 'ex_dividend_date__13': datetime.date(2022, 3, 30), 'declaration_date__13': datetime.date(2022, 3, 18), 'payment_date__13': datetime.date(2022, 4, 29), 'symbol__13': 'ENSG', 'record_date__13': datetime.date(2022, 3, 31), 'amount__14': 0.055, 'ex_dividend_date__14': datetime.date(2021, 12, 30), 'declaration_date__14': datetime.date(2021, 12, 17), 'payment_date__14': datetime.date(2022, 1, 31), 'symbol__14': 'ENSG', 'record_date__14': datetime.date(2021, 12, 31), 'amount__15': 0.0525, 'ex_dividend_date__15': datetime.date(2021, 9, 29), 'declaration_date__15': datetime.date(2021, 9, 17), 'payment_date__15': datetime.date(2021, 10, 31), 'symbol__15': 'ENSG', 'record_date__15': datetime.date(2021, 9, 30), 'amount__16': 0.0525, 'ex_dividend_date__16': datetime.date(2021, 6, 29), 'declaration_date__16': datetime.date(2021, 6, 18), 'payment_date__16': datetime.date(2021, 7, 31), 'symbol__16': 'ENSG', 'record_date__16': datetime.date(2021, 6, 30), 'amount__17': 0.0525, 'ex_dividend_date__17': datetime.date(2021, 3, 30), 'declaration_date__17': datetime.date(2021, 3, 19), 'payment_date__17': datetime.date(2021, 4, 30), 'symbol__17': 'ENSG', 'record_date__17': datetime.date(2021, 3, 31), 'amount__18': 0.0525, 'ex_dividend_date__18': datetime.date(2020, 12, 30), 'declaration_date__18': datetime.date(2020, 12, 18), 'payment_date__18': datetime.date(2021, 1, 31), 'symbol__18': 'ENSG', 'record_date__18': datetime.date(2020, 12, 31), 'amount__19': 0.05, 'ex_dividend_date__19': datetime.date(2020, 9, 29), 'declaration_date__19': datetime.date(2020, 9, 18), 'payment_date__19': datetime.date(2020, 10, 31), 'symbol__19': 'ENSG', 'record_date__19': datetime.date(2020, 9, 30)}]
-(Background on this error at: https://sqlalche.me/e/20/gkpj)
-2025-07-11 20:07:02,876 - db_initial_load_runner - INFO - ✅ Initial loader finished its running.
+2025-07-11 20:11:45,853 - db_initial_load_runner - INFO - Starting initial load for 5 symbols...
+2025-07-11 20:11:45,853 - db_initial_load_runner - INFO - Processing symbol: OXSQ
+2025-07-11 20:11:45,853 - AlphaLoader - INFO - Fetching data for OXSQ...
+2025-07-11 20:11:47,032 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1836 new rows into daily_timeseries
+2025-07-11 20:11:47,039 - AlphaLoader - INFO - Candlestick data for OXSQ loaded into the database.
+2025-07-11 20:11:47,039 - AlphaLoader - INFO - Fetching company base data for OXSQ...
+2025-07-11 20:11:47,364 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-11 20:11:47,370 - AlphaLoader - INFO - Company base data for OXSQ loaded into the database.
+2025-07-11 20:11:47,370 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for OXSQ...
+2025-07-11 20:11:48,214 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-07-11 20:11:48,247 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-07-11 20:11:48,253 - AlphaLoader - INFO - INCOME_STATEMENT data for OXSQ loaded into the database.
+2025-07-11 20:11:48,254 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for OXSQ...
+2025-07-11 20:11:49,150 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-07-11 20:11:49,180 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-07-11 20:11:49,188 - AlphaLoader - INFO - BALANCE_SHEET data for OXSQ loaded into the database.
+2025-07-11 20:11:49,188 - AlphaLoader - INFO - Fetching CASH_FLOW data for OXSQ...
+2025-07-11 20:11:50,045 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-07-11 20:11:50,079 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-07-11 20:11:50,087 - AlphaLoader - INFO - CASH_FLOW data for OXSQ loaded into the database.
+2025-07-11 20:11:50,087 - AlphaLoader - INFO - Fetching EARNINGS data for OXSQ...
+2025-07-11 20:11:50,660 - data_manager.db_builders.postgre_adapter - INFO - Inserted 22 new rows into earnings_annual
+2025-07-11 20:11:50,681 - data_manager.db_builders.postgre_adapter - INFO - Inserted 85 new rows into earnings_quarterly
+2025-07-11 20:11:50,687 - AlphaLoader - INFO - EARNINGS data for OXSQ loaded into the database.
+2025-07-11 20:11:50,688 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for OXSQ...
+2025-07-11 20:11:51,363 - data_manager.db_builders.postgre_adapter - INFO - Inserted 346 new rows into insider_transactions
+2025-07-11 20:11:51,369 - AlphaLoader - INFO - Insider transaction data for OXSQ loaded into the database.
+2025-07-11 20:11:51,369 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for OXSQ...
+2025-07-11 20:11:51,574 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
+2025-07-11 20:11:51,580 - AlphaLoader - INFO - Stock split data for OXSQ loaded into the database.
+2025-07-11 20:11:51,580 - AlphaLoader - INFO - Fetching DIVIDENDS data for OXSQ...
+2025-07-11 20:11:52,122 - data_manager.db_builders.postgre_adapter - INFO - Inserted 82 new rows into dividends
+2025-07-11 20:11:52,124 - AlphaLoader - INFO - Dividend data for OXSQ loaded into the database.
+2025-07-11 20:11:52,124 - db_initial_load_runner - INFO - Processing symbol: BHAT
+2025-07-11 20:11:52,124 - AlphaLoader - INFO - Fetching data for BHAT...
+2025-07-11 20:11:53,146 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1497 new rows into daily_timeseries
+2025-07-11 20:11:53,152 - AlphaLoader - INFO - Candlestick data for BHAT loaded into the database.
+2025-07-11 20:11:53,152 - AlphaLoader - INFO - Fetching company base data for BHAT...
+2025-07-11 20:11:53,591 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-11 20:11:53,596 - AlphaLoader - INFO - Company base data for BHAT loaded into the database.
+2025-07-11 20:11:53,597 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for BHAT...
+2025-07-11 20:11:54,068 - data_manager.db_builders.postgre_adapter - INFO - Inserted 11 new rows into income_statement_annual
+2025-07-11 20:11:54,094 - data_manager.db_builders.postgre_adapter - INFO - Inserted 37 new rows into income_statement_quarterly
+2025-07-11 20:11:54,099 - AlphaLoader - INFO - INCOME_STATEMENT data for BHAT loaded into the database.
+2025-07-11 20:11:54,099 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for BHAT...
+2025-07-11 20:11:54,659 - data_manager.db_builders.postgre_adapter - INFO - Inserted 11 new rows into balance_sheet_annual
+2025-07-11 20:11:54,677 - data_manager.db_builders.postgre_adapter - INFO - Inserted 39 new rows into balance_sheet_quarterly
+2025-07-11 20:11:54,682 - AlphaLoader - INFO - BALANCE_SHEET data for BHAT loaded into the database.
+2025-07-11 20:11:54,682 - AlphaLoader - INFO - Fetching CASH_FLOW data for BHAT...
+2025-07-11 20:11:55,151 - data_manager.db_builders.postgre_adapter - INFO - Inserted 11 new rows into cash_flow_annual
+2025-07-11 20:11:55,171 - data_manager.db_builders.postgre_adapter - INFO - Inserted 38 new rows into cash_flow_statement_quarterly
+2025-07-11 20:11:55,176 - AlphaLoader - INFO - CASH_FLOW data for BHAT loaded into the database.
+2025-07-11 20:11:55,176 - AlphaLoader - INFO - Fetching EARNINGS data for BHAT...
+2025-07-11 20:11:55,632 - data_manager.db_builders.postgre_adapter - INFO - Inserted 8 new rows into earnings_annual
+2025-07-11 20:11:55,646 - data_manager.db_builders.postgre_adapter - INFO - Inserted 33 new rows into earnings_quarterly
+2025-07-11 20:11:55,648 - AlphaLoader - INFO - EARNINGS data for BHAT loaded into the database.
+2025-07-11 20:11:55,648 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for BHAT...
+2025-07-11 20:11:55,817 - data_manager.etl_jobs.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
+2025-07-11 20:11:55,817 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
+2025-07-11 20:11:55,818 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for BHAT...
+2025-07-11 20:11:56,453 - data_manager.db_builders.postgre_adapter - INFO - Inserted 2 new rows into stock_splits
+2025-07-11 20:11:56,457 - AlphaLoader - INFO - Stock split data for BHAT loaded into the database.
+2025-07-11 20:11:56,457 - AlphaLoader - INFO - Fetching DIVIDENDS data for BHAT...
+2025-07-11 20:11:56,822 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-11 20:11:56,823 - db_initial_load_runner - INFO - Processing symbol: AGMH
+2025-07-11 20:11:56,823 - AlphaLoader - INFO - Fetching data for AGMH...
+2025-07-11 20:11:57,929 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1817 new rows into daily_timeseries
+2025-07-11 20:11:57,935 - AlphaLoader - INFO - Candlestick data for AGMH loaded into the database.
+2025-07-11 20:11:57,936 - AlphaLoader - INFO - Fetching company base data for AGMH...
+2025-07-11 20:11:58,333 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-11 20:11:58,338 - AlphaLoader - INFO - Company base data for AGMH loaded into the database.
+2025-07-11 20:11:58,338 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for AGMH...
+2025-07-11 20:11:58,971 - data_manager.db_builders.postgre_adapter - INFO - Inserted 10 new rows into income_statement_annual
+2025-07-11 20:11:59,105 - data_manager.db_builders.postgre_adapter - INFO - Inserted 33 new rows into income_statement_quarterly
+2025-07-11 20:11:59,110 - AlphaLoader - INFO - INCOME_STATEMENT data for AGMH loaded into the database.
+2025-07-11 20:11:59,110 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for AGMH...
+2025-07-11 20:11:59,513 - AlphaLoader - ERROR - An unexpected error occurred: cannot safely cast non-equivalent float64 to int64
+2025-07-11 20:11:59,514 - AlphaLoader - INFO - Fetching CASH_FLOW data for AGMH...
+2025-07-11 20:11:59,965 - data_manager.db_builders.postgre_adapter - INFO - Inserted 10 new rows into cash_flow_annual
+2025-07-11 20:11:59,987 - data_manager.db_builders.postgre_adapter - INFO - Inserted 35 new rows into cash_flow_statement_quarterly
+2025-07-11 20:11:59,992 - AlphaLoader - INFO - CASH_FLOW data for AGMH loaded into the database.
+2025-07-11 20:11:59,992 - AlphaLoader - INFO - Fetching EARNINGS data for AGMH...
+2025-07-11 20:12:00,650 - data_manager.db_builders.postgre_adapter - INFO - Inserted 7 new rows into earnings_annual
+2025-07-11 20:12:00,663 - data_manager.db_builders.postgre_adapter - INFO - Inserted 25 new rows into earnings_quarterly
+2025-07-11 20:12:00,664 - AlphaLoader - INFO - EARNINGS data for AGMH loaded into the database.
+2025-07-11 20:12:00,665 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for AGMH...
+2025-07-11 20:12:00,912 - data_manager.etl_jobs.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
+2025-07-11 20:12:00,912 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
+2025-07-11 20:12:00,913 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for AGMH...
+2025-07-11 20:12:01,256 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
+2025-07-11 20:12:01,259 - AlphaLoader - INFO - Stock split data for AGMH loaded into the database.
+2025-07-11 20:12:01,259 - AlphaLoader - INFO - Fetching DIVIDENDS data for AGMH...
+2025-07-11 20:12:01,526 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-11 20:12:01,526 - db_initial_load_runner - INFO - Processing symbol: SAIA
+2025-07-11 20:12:01,526 - AlphaLoader - INFO - Fetching data for SAIA...
+2025-07-11 20:12:02,831 - data_manager.db_builders.postgre_adapter - INFO - Inserted 5743 new rows into daily_timeseries
+2025-07-11 20:12:02,838 - AlphaLoader - INFO - Candlestick data for SAIA loaded into the database.
+2025-07-11 20:12:02,838 - AlphaLoader - INFO - Fetching company base data for SAIA...
+2025-07-11 20:12:03,118 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-11 20:12:03,132 - AlphaLoader - INFO - Company base data for SAIA loaded into the database.
+2025-07-11 20:12:03,132 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for SAIA...
+2025-07-11 20:12:03,772 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-07-11 20:12:03,802 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-07-11 20:12:03,807 - AlphaLoader - INFO - INCOME_STATEMENT data for SAIA loaded into the database.
+2025-07-11 20:12:03,808 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for SAIA...
+2025-07-11 20:12:04,494 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-07-11 20:12:04,522 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-07-11 20:12:04,528 - AlphaLoader - INFO - BALANCE_SHEET data for SAIA loaded into the database.
+2025-07-11 20:12:04,528 - AlphaLoader - INFO - Fetching CASH_FLOW data for SAIA...
+2025-07-11 20:12:05,095 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-07-11 20:12:05,126 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-07-11 20:12:05,131 - AlphaLoader - INFO - CASH_FLOW data for SAIA loaded into the database.
+2025-07-11 20:12:05,132 - AlphaLoader - INFO - Fetching EARNINGS data for SAIA...
+2025-07-11 20:12:05,668 - data_manager.db_builders.postgre_adapter - INFO - Inserted 24 new rows into earnings_annual
+2025-07-11 20:12:05,687 - data_manager.db_builders.postgre_adapter - INFO - Inserted 91 new rows into earnings_quarterly
+2025-07-11 20:12:05,693 - AlphaLoader - INFO - EARNINGS data for SAIA loaded into the database.
+2025-07-11 20:12:05,693 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for SAIA...
+2025-07-11 20:12:06,591 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1190 new rows into insider_transactions
+2025-07-11 20:12:06,597 - AlphaLoader - INFO - Insider transaction data for SAIA loaded into the database.
+2025-07-11 20:12:06,597 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for SAIA...
+2025-07-11 20:12:06,885 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
+2025-07-11 20:12:06,890 - AlphaLoader - INFO - Stock split data for SAIA loaded into the database.
+2025-07-11 20:12:06,890 - AlphaLoader - INFO - Fetching DIVIDENDS data for SAIA...
+2025-07-11 20:12:07,157 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-11 20:12:07,157 - db_initial_load_runner - INFO - Processing symbol: ENSG
+2025-07-11 20:12:07,157 - AlphaLoader - INFO - Fetching data for ENSG...
+2025-07-11 20:12:08,325 - data_manager.db_builders.postgre_adapter - INFO - Inserted 4443 new rows into daily_timeseries
+2025-07-11 20:12:08,332 - AlphaLoader - INFO - Candlestick data for ENSG loaded into the database.
+2025-07-11 20:12:08,332 - AlphaLoader - INFO - Fetching company base data for ENSG...
+2025-07-11 20:12:08,648 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-11 20:12:08,654 - AlphaLoader - INFO - Company base data for ENSG loaded into the database.
+2025-07-11 20:12:08,654 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for ENSG...
+2025-07-11 20:12:09,296 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-07-11 20:12:09,333 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-07-11 20:12:09,338 - AlphaLoader - INFO - INCOME_STATEMENT data for ENSG loaded into the database.
+2025-07-11 20:12:09,339 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for ENSG...
+2025-07-11 20:12:10,029 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-07-11 20:12:10,054 - data_manager.db_builders.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-07-11 20:12:10,060 - AlphaLoader - INFO - BALANCE_SHEET data for ENSG loaded into the database.
+2025-07-11 20:12:10,060 - AlphaLoader - INFO - Fetching CASH_FLOW data for ENSG...
+2025-07-11 20:12:10,427 - data_manager.db_builders.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-07-11 20:12:10,458 - data_manager.db_builders.postgre_adapter - INFO - Inserted 77 new rows into cash_flow_statement_quarterly
+2025-07-11 20:12:10,464 - AlphaLoader - INFO - CASH_FLOW data for ENSG loaded into the database.
+2025-07-11 20:12:10,465 - AlphaLoader - INFO - Fetching EARNINGS data for ENSG...
+2025-07-11 20:12:10,786 - data_manager.db_builders.postgre_adapter - INFO - Inserted 19 new rows into earnings_annual
+2025-07-11 20:12:10,804 - data_manager.db_builders.postgre_adapter - INFO - Inserted 71 new rows into earnings_quarterly
+2025-07-11 20:12:10,811 - AlphaLoader - INFO - EARNINGS data for ENSG loaded into the database.
+2025-07-11 20:12:10,811 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for ENSG...
+2025-07-11 20:12:11,701 - data_manager.db_builders.postgre_adapter - INFO - Inserted 1651 new rows into insider_transactions
+2025-07-11 20:12:11,707 - AlphaLoader - INFO - Insider transaction data for ENSG loaded into the database.
+2025-07-11 20:12:11,707 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for ENSG...
+2025-07-11 20:12:11,968 - data_manager.db_builders.postgre_adapter - INFO - Inserted 2 new rows into stock_splits
+2025-07-11 20:12:11,974 - AlphaLoader - INFO - Stock split data for ENSG loaded into the database.
+2025-07-11 20:12:11,974 - AlphaLoader - INFO - Fetching DIVIDENDS data for ENSG...
+2025-07-11 20:12:12,627 - data_manager.db_builders.postgre_adapter - INFO - Inserted 72 new rows into dividends
+2025-07-11 20:12:12,632 - AlphaLoader - INFO - Dividend data for ENSG loaded into the database.
+2025-07-11 20:12:12,632 - db_initial_load_runner - INFO - ✅ Initial loader finished its running.
