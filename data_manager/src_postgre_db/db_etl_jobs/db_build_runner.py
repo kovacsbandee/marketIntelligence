@@ -18,9 +18,8 @@ Dependencies:
 """
 
 import inspect
-import logging
-from data_manager.db_builders.postgre_adapter import PostgresAdapter
-from data_manager.db_builders import postgre_objects
+from data_manager.src_postgre_db.db_infrastructure.postgre_adapter import PostgresAdapter
+from data_manager.src_postgre_db.db_infrastructure import postgre_objects
 from utils.logger import get_logger
 
 
@@ -36,7 +35,7 @@ def main():
     try:
         adapter = PostgresAdapter()
     except ValueError as e:
-        logger.error("Failed to initialize PostgresAdapter", exc_info=True)
+        logger.error(f"Failed to initialize PostgresAdapter: {e}", exc_info=True)
         return
 
     logger.info("Successfully connected to the PostgreSQL database.")

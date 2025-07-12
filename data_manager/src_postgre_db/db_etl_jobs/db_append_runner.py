@@ -22,9 +22,9 @@ import random
 
 from utils.logger import get_logger
 from utils.utils import get_symbols_from_csv
-from data_manager.management.db_initial_load_runner import load_stock_data
-from data_manager.db_builders.postgre_adapter import PostgresAdapter
-from data_manager.db_builders.postgre_objects import CompanyFundamentalsTable
+from data_manager.src_postgre_db.db_etl_jobs.db_initial_load_runner import load_stock_data
+from data_manager.src_postgre_db.db_infrastructure.postgre_adapter import PostgresAdapter
+from data_manager.src_postgre_db.db_infrastructure.postgre_objects import CompanyFundamentalsTable
 
 def get_new_symbols(all_symbols):
     """

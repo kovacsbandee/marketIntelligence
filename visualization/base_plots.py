@@ -2,8 +2,8 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from plotly.colors import qualitative
-from data_manager.etl_jobs.load_local_symbol_data import LoadExampleData
-from data_manager.add_derived_data.add_price_indicators import AddPriceIndicators
+from data_manager.src_postgre_db.db_etl_scripts.load_local_symbol_data import LoadExampleData
+from data_manager.src_postgre_db.add_derived_data.add_price_indicators import AddPriceIndicators
 
 
 def add_dividends(dividend_points: pd.DataFrame,

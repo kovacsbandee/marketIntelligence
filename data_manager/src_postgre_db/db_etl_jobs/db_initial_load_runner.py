@@ -19,7 +19,7 @@ Dependencies:
 import random
 from utils.logger import get_logger
 from utils.utils import get_symbols_from_csv
-from data_manager.etl_jobs.alphavantage_adapter import AlphaLoader
+from data_manager.src_postgre_db.db_etl_scripts.alphavantage_adapter import AlphaLoader
 
 
 
