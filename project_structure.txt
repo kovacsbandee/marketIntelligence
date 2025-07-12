@@ -1,57 +1,126 @@
 .
-├── README.md
+├── AGENTS.md
+├── configs
+│   ├── alpha_vantage_column_description_hun.json
+│   ├── alpha_vantage_column_description.json
+│   ├── config.py
+│   ├── __init__.py
+│   ├── nasdaq_screener.csv
+│   └── __pycache__
+│       ├── config.cpython-313.pyc
+│       └── __init__.cpython-313.pyc
 ├── data_manager
-│   ├── __init__.py
-│   ├── add_derived_data
-│   │   └── add_price_indicators.py
-│   ├── db_builders
-│   │   ├── __init__.py
-│   │   ├── postgre_adapter.py
-│   │   └── postgre_objects.py
-│   ├── etl_jobs
-│   │   ├── __init__.py
-│   │   ├── alphavantage_adapter.py
-│   │   ├── column_maps.py
-│   │   ├── load_local_symbol_data.py
-│   │   └── transform_utils.py
-│   └── management
-│       ├── __init__.py
-│       ├── db_build_runner.py
-│       ├── db_drop_runner.py
-│       ├── db_initial_load_runner.py
-│       └── db_update_runner.py
-├── dev.ipynb
+│   ├── add_derived_data
+│   │   ├── add_price_indicators.py
+│   │   └── __pycache__
+│   │       └── add_price_indicators.cpython-313.pyc
+│   ├── db_builders
+│   │   ├── __init__.py
+│   │   ├── postgre_adapter.py
+│   │   ├── postgre_objects.py
+│   │   └── __pycache__
+│   │       ├── company_base.cpython-313.pyc
+│   │       ├── db_adapters.cpython-313.pyc
+│   │       ├── db_objects.cpython-313.pyc
+│   │       ├── __init__.cpython-313.pyc
+│   │       ├── postgre_adapter.cpython-313.pyc
+│   │       └── postgre_objects.cpython-313.pyc
+│   ├── etl_jobs
+│   │   ├── alphavantage_adapter.py
+│   │   ├── column_maps.py
+│   │   ├── __init__.py
+│   │   ├── load_local_symbol_data.py
+│   │   ├── __pycache__
+│   │   │   ├── alphavantage_adapter.cpython-313.pyc
+│   │   │   ├── column_maps.cpython-313.pyc
+│   │   │   ├── __init__.cpython-313.pyc
+│   │   │   ├── load_local_symbol_data.cpython-313.pyc
+│   │   │   ├── load_price_data_alpha_vantage.cpython-313.pyc
+│   │   │   ├── load_symbol_data_alpha_vantage.cpython-313.pyc
+│   │   │   └── transform_utils.cpython-313.pyc
+│   │   └── transform_utils.py
+│   ├── __init__.py
+│   ├── management
+│   │   ├── db_append_runner.py
+│   │   ├── db_build_runner.py
+│   │   ├── db_drop_runner.py
+│   │   ├── db_initial_load_runner.py
+│   │   ├── db_update_runner.py
+│   │   ├── __init__.py
+│   │   └── __pycache__
+│   │       ├── db_append_runner.cpython-313.pyc
+│   │       ├── db_build_runner.cpython-313.pyc
+│   │       ├── db_drop_runner.cpython-313.pyc
+│   │       ├── db_initial_load_runner.cpython-313.pyc
+│   │       └── __init__.cpython-313.pyc
+│   ├── __pycache__
+│   │   └── __init__.cpython-313.pyc
+│   └── update_db
 ├── dev_data
-│   └── jsons
-│       ├── MSFT__insider_transactions.json
-│       ├── MSFT_balance_sheet.json
-│       ├── MSFT_cash_flow.json
-│       ├── MSFT_daily_time_series.json
-│       ├── MSFT_dividends.json
-│       ├── MSFT_earnings.json
-│       ├── MSFT_income_statement.json
-│       ├── MSFT_splits.json
-│       ├── NVDA_balance_sheet.json
-│       ├── NVDA_cash_flow.json
-│       ├── NVDA_company_fundamentals_lat_quart_2025-01-31.json
-│       ├── NVDA_daily_time_series.json
-│       ├── NVDA_dividends.json
-│       ├── NVDA_earnings.json
-│       ├── NVDA_income_statement.json
-│       ├── NVDA_insider_transactions.json
-│       └── NVDA_splits.json
+│   ├── csvs
+│   │   ├── IBM_balance_sheet_annual.csv
+│   │   ├── IBM_balance_sheet_quaterly.csv
+│   │   ├── IBM_cash_flow_annual.csv
+│   │   ├── IBM_cash_flow_quaterly.csv
+│   │   ├── IBM_company_fundamental_lat_quart_2024-09-30.csv
+│   │   ├── IBM_daily_time_series.csv
+│   │   ├── IBM_dividends.csv
+│   │   ├── IBM_earnings_annual.csv
+│   │   ├── IBM_earnings_quaterly.csv
+│   │   ├── IBM_income_statement_annual.csv
+│   │   ├── IBM_income_statement_quaterly.csv
+│   │   ├── IBM_insider_transactions.csv
+│   │   └── IBM_splits.csv
+│   └── jsons
+│       ├── MSFT_balance_sheet.json
+│       ├── MSFT_cash_flow.json
+│       ├── MSFT_daily_time_series.json
+│       ├── MSFT_dividends.json
+│       ├── MSFT_earnings.json
+│       ├── MSFT_income_statement.json
+│       ├── MSFT_insider_transactions_debug.json
+│       ├── MSFT__insider_transactions.json
+│       ├── MSFT_splits.json
+│       ├── NVDA_balance_sheet.json
+│       ├── NVDA_cash_flow.json
+│       ├── NVDA_company_fundamentals_lat_quart_2025-01-31.json
+│       ├── NVDA_daily_time_series.json
+│       ├── NVDA_dividends.json
+│       ├── NVDA_earnings.json
+│       ├── NVDA_income_statement.json
+│       ├── NVDA_insider_transactions.json
+│       └── NVDA_splits.json
+├── dev.ipynb
 ├── docs
-│   └── PROJECT_REFACTOR_PLAN.md
+│   └── PROJECT_REFACTOR_PLAN.md
+├── elasticsearch_setup.md
+├── logs
+│   └── management
+│       ├── db_append_runner.log
+│       ├── db_build_runner.log
+│       ├── db_build_runner.prev.log
+│       ├── db_drop_runner.log
+│       ├── db_drop_runner.prev.log
+│       ├── db_initial_load_runner.log
+│       ├── db_initial_load_runner.prev.log
+│       └── run_initial_load.log
 ├── project_structure.txt
+├── README.md
 ├── requirements.txt
 ├── scripts
-│   └── run_initial_load.py
+│   └── run_initial_load.py
 ├── utils
-│   └── utils.py
+│   ├── logger.py
+│   ├── __pycache__
+│   │   ├── logger.cpython-313.pyc
+│   │   └── utils.cpython-313.pyc
+│   └── utils.py
 └── visualization
-    ├── __init__.py
     ├── base_plots.py
-    └── dash
-        └── app.py
+    ├── dash
+    │   └── app.py
+    ├── __init__.py
+    └── __pycache__
+        └── base_plots.cpython-313.pyc
 
-13 directories, 42 files
+26 directories, 98 files
