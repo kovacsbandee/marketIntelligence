@@ -400,3 +400,64 @@
 2025-07-13 16:02:29,549 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
 2025-07-13 16:02:29,549 - db_initial_load_runner - INFO - Processing symbol: MNST
 2025-07-13 16:02:29,549 - AlphaLoader - INFO - Fetching data for MNST...
+2025-07-13 16:02:31,202 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 6462 new rows into daily_timeseries
+2025-07-13 16:02:31,209 - AlphaLoader - INFO - Candlestick data for MNST loaded into the database.
+2025-07-13 16:02:31,209 - AlphaLoader - INFO - Fetching company base data for MNST...
+2025-07-13 16:02:31,468 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:02:31,474 - AlphaLoader - INFO - Company base data for MNST loaded into the database.
+2025-07-13 16:02:31,474 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for MNST...
+2025-07-13 16:02:32,096 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-07-13 16:02:32,125 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-07-13 16:02:32,130 - AlphaLoader - INFO - INCOME_STATEMENT data for MNST loaded into the database.
+2025-07-13 16:02:32,131 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for MNST...
+2025-07-13 16:02:32,919 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-07-13 16:02:32,949 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-07-13 16:02:32,955 - AlphaLoader - INFO - BALANCE_SHEET data for MNST loaded into the database.
+2025-07-13 16:02:32,956 - AlphaLoader - INFO - Fetching CASH_FLOW data for MNST...
+2025-07-13 16:02:33,584 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-07-13 16:02:33,616 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-07-13 16:02:33,622 - AlphaLoader - INFO - CASH_FLOW data for MNST loaded into the database.
+2025-07-13 16:02:33,622 - AlphaLoader - INFO - Fetching EARNINGS data for MNST...
+2025-07-13 16:02:34,102 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 30 new rows into earnings_annual
+2025-07-13 16:02:34,127 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 117 new rows into earnings_quarterly
+2025-07-13 16:02:34,142 - AlphaLoader - INFO - EARNINGS data for MNST loaded into the database.
+2025-07-13 16:02:34,142 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for MNST...
+2025-07-13 16:02:35,207 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1874 new rows into insider_transactions
+2025-07-13 16:02:35,213 - AlphaLoader - INFO - Insider transaction data for MNST loaded into the database.
+2025-07-13 16:02:35,214 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for MNST...
+2025-07-13 16:02:35,732 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 5 new rows into stock_splits
+2025-07-13 16:02:35,737 - AlphaLoader - INFO - Stock split data for MNST loaded into the database.
+2025-07-13 16:02:35,737 - AlphaLoader - INFO - Fetching DIVIDENDS data for MNST...
+2025-07-13 16:02:35,992 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-13 16:02:35,993 - db_initial_load_runner - INFO - Processing symbol: AUUD
+2025-07-13 16:02:35,993 - AlphaLoader - INFO - Fetching data for AUUD...
+2025-07-13 16:02:36,934 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1105 new rows into daily_timeseries
+2025-07-13 16:02:36,940 - AlphaLoader - INFO - Candlestick data for AUUD loaded into the database.
+2025-07-13 16:02:36,940 - AlphaLoader - INFO - Fetching company base data for AUUD...
+2025-07-13 16:02:37,449 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:02:37,454 - AlphaLoader - INFO - Company base data for AUUD loaded into the database.
+2025-07-13 16:02:37,455 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for AUUD...
+2025-07-13 16:02:37,965 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 8 new rows into income_statement_annual
+2025-07-13 16:02:37,983 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 26 new rows into income_statement_quarterly
+2025-07-13 16:02:37,988 - AlphaLoader - INFO - INCOME_STATEMENT data for AUUD loaded into the database.
+2025-07-13 16:02:37,989 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for AUUD...
+2025-07-13 16:02:38,520 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 8 new rows into balance_sheet_annual
+2025-07-13 16:02:38,536 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 26 new rows into balance_sheet_quarterly
+2025-07-13 16:02:38,540 - AlphaLoader - INFO - BALANCE_SHEET data for AUUD loaded into the database.
+2025-07-13 16:02:38,540 - AlphaLoader - INFO - Fetching CASH_FLOW data for AUUD...
+2025-07-13 16:02:39,357 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 8 new rows into cash_flow_annual
+2025-07-13 16:02:39,375 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 26 new rows into cash_flow_statement_quarterly
+2025-07-13 16:02:39,379 - AlphaLoader - INFO - CASH_FLOW data for AUUD loaded into the database.
+2025-07-13 16:02:39,379 - AlphaLoader - INFO - Fetching EARNINGS data for AUUD...
+2025-07-13 16:02:39,953 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 7 new rows into earnings_annual
+2025-07-13 16:02:39,968 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 25 new rows into earnings_quarterly
+2025-07-13 16:02:39,973 - AlphaLoader - INFO - EARNINGS data for AUUD loaded into the database.
+2025-07-13 16:02:39,973 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for AUUD...
+2025-07-13 16:02:40,304 - data_manager.src_postgre_db.db_etl_scripts.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
+2025-07-13 16:02:40,305 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
+2025-07-13 16:02:40,305 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for AUUD...
+2025-07-13 16:02:40,647 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 2 new rows into stock_splits
+2025-07-13 16:02:40,650 - AlphaLoader - INFO - Stock split data for AUUD loaded into the database.
+2025-07-13 16:02:40,651 - AlphaLoader - INFO - Fetching DIVIDENDS data for AUUD...
+2025-07-13 16:02:41,125 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-13 16:02:41,125 - db_initial_load_runner - INFO - ✅ Initial loader finished its running.
