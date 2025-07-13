@@ -1,30 +1,30 @@
-2025-07-11 20:06:18,489 - db_build_runner - INFO - Successfully connected to the PostgreSQL database.
-2025-07-11 20:06:18,489 - db_build_runner - INFO - Found 13 table classes to create.
-2025-07-11 20:06:18,489 - db_build_runner - INFO - Creating table for: AnnualBalanceSheetTable
-2025-07-11 20:06:18,542 - data_manager.db_builders.postgre_adapter - INFO - Table balance_sheet_annual created
-2025-07-11 20:06:18,542 - db_build_runner - INFO - Creating table for: AnnualCashFlowTable
-2025-07-11 20:06:18,560 - data_manager.db_builders.postgre_adapter - INFO - Table cash_flow_annual created
-2025-07-11 20:06:18,561 - db_build_runner - INFO - Creating table for: AnnualEarningsTable
-2025-07-11 20:06:18,577 - data_manager.db_builders.postgre_adapter - INFO - Table earnings_annual created
-2025-07-11 20:06:18,577 - db_build_runner - INFO - Creating table for: AnnualIncomeStatement
-2025-07-11 20:06:18,595 - data_manager.db_builders.postgre_adapter - INFO - Table income_statement_annual created
-2025-07-11 20:06:18,596 - db_build_runner - INFO - Creating table for: CompanyFundamentalsTable
-2025-07-11 20:06:18,614 - data_manager.db_builders.postgre_adapter - INFO - Table company_fundamentals created
-2025-07-11 20:06:18,614 - db_build_runner - INFO - Creating table for: DailyTimeSeries
-2025-07-11 20:06:18,630 - data_manager.db_builders.postgre_adapter - INFO - Table daily_timeseries created
-2025-07-11 20:06:18,631 - db_build_runner - INFO - Creating table for: DividendsTable
-2025-07-11 20:06:18,646 - data_manager.db_builders.postgre_adapter - INFO - Table dividends created
-2025-07-11 20:06:18,646 - db_build_runner - INFO - Creating table for: InsiderTransactionTable
-2025-07-11 20:06:18,663 - data_manager.db_builders.postgre_adapter - INFO - Table insider_transactions created
-2025-07-11 20:06:18,663 - db_build_runner - INFO - Creating table for: QuarterlyBalanceSheetTable
-2025-07-11 20:06:18,681 - data_manager.db_builders.postgre_adapter - INFO - Table balance_sheet_quarterly created
-2025-07-11 20:06:18,681 - db_build_runner - INFO - Creating table for: QuarterlyCashFlowTable
-2025-07-11 20:06:18,696 - data_manager.db_builders.postgre_adapter - INFO - Table cash_flow_statement_quarterly created
-2025-07-11 20:06:18,697 - db_build_runner - INFO - Creating table for: QuarterlyEarningsTable
-2025-07-11 20:06:18,711 - data_manager.db_builders.postgre_adapter - INFO - Table earnings_quarterly created
-2025-07-11 20:06:18,712 - db_build_runner - INFO - Creating table for: QuarterlyIncomeStatement
-2025-07-11 20:06:18,728 - data_manager.db_builders.postgre_adapter - INFO - Table income_statement_quarterly created
-2025-07-11 20:06:18,729 - db_build_runner - INFO - Creating table for: StockSplit
-2025-07-11 20:06:18,744 - data_manager.db_builders.postgre_adapter - INFO - Table stock_splits created
-2025-07-11 20:06:18,745 - db_build_runner - INFO - Created 13 tables
-2025-07-11 20:06:18,750 - db_build_runner - INFO - Tables currently in the database: ['balance_sheet_annual', 'cash_flow_annual', 'earnings_annual', 'income_statement_annual', 'company_fundamentals', 'daily_timeseries', 'dividends', 'insider_transactions', 'balance_sheet_quarterly', 'cash_flow_statement_quarterly', 'earnings_quarterly', 'income_statement_quarterly', 'stock_splits']
+2025-07-11 20:11:35,378 - db_build_runner - INFO - Successfully connected to the PostgreSQL database.
+2025-07-11 20:11:35,378 - db_build_runner - INFO - Found 13 table classes to create.
+2025-07-11 20:11:35,378 - db_build_runner - INFO - Creating table for: AnnualBalanceSheetTable
+2025-07-11 20:11:35,434 - data_manager.db_builders.postgre_adapter - INFO - Table balance_sheet_annual created
+2025-07-11 20:11:35,434 - db_build_runner - INFO - Creating table for: AnnualCashFlowTable
+2025-07-11 20:11:35,452 - data_manager.db_builders.postgre_adapter - INFO - Table cash_flow_annual created
+2025-07-11 20:11:35,452 - db_build_runner - INFO - Creating table for: AnnualEarningsTable
+2025-07-11 20:11:35,468 - data_manager.db_builders.postgre_adapter - INFO - Table earnings_annual created
+2025-07-11 20:11:35,468 - db_build_runner - INFO - Creating table for: AnnualIncomeStatement
+2025-07-11 20:11:35,488 - data_manager.db_builders.postgre_adapter - INFO - Table income_statement_annual created
+2025-07-11 20:11:35,488 - db_build_runner - INFO - Creating table for: CompanyFundamentalsTable
+2025-07-11 20:11:35,505 - data_manager.db_builders.postgre_adapter - INFO - Table company_fundamentals created
+2025-07-11 20:11:35,505 - db_build_runner - INFO - Creating table for: DailyTimeSeries
+2025-07-11 20:11:35,520 - data_manager.db_builders.postgre_adapter - INFO - Table daily_timeseries created
+2025-07-11 20:11:35,521 - db_build_runner - INFO - Creating table for: DividendsTable
+2025-07-11 20:11:35,550 - data_manager.db_builders.postgre_adapter - INFO - Table dividends created
+2025-07-11 20:11:35,550 - db_build_runner - INFO - Creating table for: InsiderTransactionTable
+2025-07-11 20:11:35,568 - data_manager.db_builders.postgre_adapter - INFO - Table insider_transactions created
+2025-07-11 20:11:35,568 - db_build_runner - INFO - Creating table for: QuarterlyBalanceSheetTable
+2025-07-11 20:11:35,588 - data_manager.db_builders.postgre_adapter - INFO - Table balance_sheet_quarterly created
+2025-07-11 20:11:35,589 - db_build_runner - INFO - Creating table for: QuarterlyCashFlowTable
+2025-07-11 20:11:35,615 - data_manager.db_builders.postgre_adapter - INFO - Table cash_flow_statement_quarterly created
+2025-07-11 20:11:35,616 - db_build_runner - INFO - Creating table for: QuarterlyEarningsTable
+2025-07-11 20:11:35,634 - data_manager.db_builders.postgre_adapter - INFO - Table earnings_quarterly created
+2025-07-11 20:11:35,634 - db_build_runner - INFO - Creating table for: QuarterlyIncomeStatement
+2025-07-11 20:11:35,651 - data_manager.db_builders.postgre_adapter - INFO - Table income_statement_quarterly created
+2025-07-11 20:11:35,651 - db_build_runner - INFO - Creating table for: StockSplit
+2025-07-11 20:11:35,668 - data_manager.db_builders.postgre_adapter - INFO - Table stock_splits created
+2025-07-11 20:11:35,668 - db_build_runner - INFO - Created 13 tables
+2025-07-11 20:11:35,673 - db_build_runner - INFO - Tables currently in the database: ['balance_sheet_annual', 'cash_flow_annual', 'earnings_annual', 'income_statement_annual', 'company_fundamentals', 'daily_timeseries', 'dividends', 'insider_transactions', 'balance_sheet_quarterly', 'cash_flow_statement_quarterly', 'earnings_quarterly', 'income_statement_quarterly', 'stock_splits']
