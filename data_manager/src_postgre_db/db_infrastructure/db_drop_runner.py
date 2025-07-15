@@ -22,9 +22,8 @@ WARNING:
 """
 
 import inspect
-import logging
-from data_manager.db_builders.postgre_adapter import PostgresAdapter
-from data_manager.db_builders import postgre_objects
+from data_manager.src_postgre_db.db_infrastructure.postgre_adapter import PostgresAdapter
+from data_manager.src_postgre_db.db_infrastructure import postgre_objects
 from utils.logger import get_logger
 
 

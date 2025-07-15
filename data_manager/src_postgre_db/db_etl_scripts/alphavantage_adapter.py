@@ -13,20 +13,20 @@ Usage:
     Instantiate AlphaLoader with a symbol and desired modes, then call desired methods.
 """
 
+import logging
 import requests
 import pandas as pd
-import logging
 
 from configs.config import ALPHA_API_KEY
-from data_manager.db_builders.postgre_adapter import PostgresAdapter
-from data_manager.db_builders.postgre_objects import (
+from data_manager.src_postgre_db.db_infrastructure.postgre_adapter import PostgresAdapter
+from data_manager.src_postgre_db.db_infrastructure.postgre_objects import (
     DailyTimeSeries, CompanyFundamentalsTable, AnnualIncomeStatement,
     QuarterlyIncomeStatement, AnnualBalanceSheetTable, QuarterlyBalanceSheetTable,
     AnnualCashFlowTable, QuarterlyCashFlowTable, AnnualEarningsTable, QuarterlyEarningsTable,
     InsiderTransactionTable, StockSplit, DividendsTable
 )
 
-from data_manager.etl_jobs.transform_utils import (
+from data_manager.src_postgre_db.db_etl_scripts.transform_utils import (
     standardize_company_fundamentals_columns,
     standardize_annual_income_statement_columns,
     standardize_quarterly_income_statement_columns,

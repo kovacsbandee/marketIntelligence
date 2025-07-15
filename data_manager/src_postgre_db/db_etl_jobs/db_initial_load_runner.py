@@ -19,7 +19,7 @@ Dependencies:
 import random
 from utils.logger import get_logger
 from utils.utils import get_symbols_from_csv
-from data_manager.etl_jobs.alphavantage_adapter import AlphaLoader
+from data_manager.src_postgre_db.db_etl_scripts.alphavantage_adapter import AlphaLoader
 
 
 
@@ -84,7 +84,7 @@ def main():
     Defines a static list of symbols and triggers the initial load.
     """
     all_symbols = get_symbols_from_csv(csv_path="configs/nasdaq_screener.csv")
-    num_to_load = 5  # Change as needed
+    num_to_load = 15  # Change as needed
     random.seed(42)
     symbols = random.sample(all_symbols, min(num_to_load, len(all_symbols)))
     load_stock_data(symbols)

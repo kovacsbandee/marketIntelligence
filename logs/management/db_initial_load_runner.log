@@ -1,0 +1,463 @@
+2025-07-13 16:01:08,355 - db_initial_load_runner - INFO - Starting initial load for 15 symbols...
+2025-07-13 16:01:08,356 - db_initial_load_runner - INFO - Processing symbol: OXSQ
+2025-07-13 16:01:08,356 - AlphaLoader - INFO - Fetching data for OXSQ...
+2025-07-13 16:01:09,791 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1837 new rows into daily_timeseries
+2025-07-13 16:01:09,799 - AlphaLoader - INFO - Candlestick data for OXSQ loaded into the database.
+2025-07-13 16:01:09,799 - AlphaLoader - INFO - Fetching company base data for OXSQ...
+2025-07-13 16:01:10,368 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:01:10,370 - AlphaLoader - INFO - Company base data for OXSQ loaded into the database.
+2025-07-13 16:01:10,371 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for OXSQ...
+2025-07-13 16:01:11,428 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-07-13 16:01:11,466 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-07-13 16:01:11,471 - AlphaLoader - INFO - INCOME_STATEMENT data for OXSQ loaded into the database.
+2025-07-13 16:01:11,472 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for OXSQ...
+2025-07-13 16:01:12,102 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-07-13 16:01:12,127 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-07-13 16:01:12,132 - AlphaLoader - INFO - BALANCE_SHEET data for OXSQ loaded into the database.
+2025-07-13 16:01:12,133 - AlphaLoader - INFO - Fetching CASH_FLOW data for OXSQ...
+2025-07-13 16:01:13,245 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-07-13 16:01:13,278 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-07-13 16:01:13,284 - AlphaLoader - INFO - CASH_FLOW data for OXSQ loaded into the database.
+2025-07-13 16:01:13,284 - AlphaLoader - INFO - Fetching EARNINGS data for OXSQ...
+2025-07-13 16:01:13,924 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 22 new rows into earnings_annual
+2025-07-13 16:01:13,949 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 85 new rows into earnings_quarterly
+2025-07-13 16:01:13,957 - AlphaLoader - INFO - EARNINGS data for OXSQ loaded into the database.
+2025-07-13 16:01:13,958 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for OXSQ...
+2025-07-13 16:01:14,793 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 346 new rows into insider_transactions
+2025-07-13 16:01:14,799 - AlphaLoader - INFO - Insider transaction data for OXSQ loaded into the database.
+2025-07-13 16:01:14,799 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for OXSQ...
+2025-07-13 16:01:15,030 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
+2025-07-13 16:01:15,035 - AlphaLoader - INFO - Stock split data for OXSQ loaded into the database.
+2025-07-13 16:01:15,035 - AlphaLoader - INFO - Fetching DIVIDENDS data for OXSQ...
+2025-07-13 16:01:15,781 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 82 new rows into dividends
+2025-07-13 16:01:15,783 - AlphaLoader - INFO - Dividend data for OXSQ loaded into the database.
+2025-07-13 16:01:15,783 - db_initial_load_runner - INFO - Processing symbol: BHAT
+2025-07-13 16:01:15,783 - AlphaLoader - INFO - Fetching data for BHAT...
+2025-07-13 16:01:16,884 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1498 new rows into daily_timeseries
+2025-07-13 16:01:16,889 - AlphaLoader - INFO - Candlestick data for BHAT loaded into the database.
+2025-07-13 16:01:16,889 - AlphaLoader - INFO - Fetching company base data for BHAT...
+2025-07-13 16:01:17,314 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:01:17,319 - AlphaLoader - INFO - Company base data for BHAT loaded into the database.
+2025-07-13 16:01:17,320 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for BHAT...
+2025-07-13 16:01:18,582 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 11 new rows into income_statement_annual
+2025-07-13 16:01:18,605 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 37 new rows into income_statement_quarterly
+2025-07-13 16:01:18,613 - AlphaLoader - INFO - INCOME_STATEMENT data for BHAT loaded into the database.
+2025-07-13 16:01:18,613 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for BHAT...
+2025-07-13 16:01:19,815 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 11 new rows into balance_sheet_annual
+2025-07-13 16:01:19,835 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 39 new rows into balance_sheet_quarterly
+2025-07-13 16:01:19,840 - AlphaLoader - INFO - BALANCE_SHEET data for BHAT loaded into the database.
+2025-07-13 16:01:19,841 - AlphaLoader - INFO - Fetching CASH_FLOW data for BHAT...
+2025-07-13 16:01:21,058 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 11 new rows into cash_flow_annual
+2025-07-13 16:01:21,081 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 38 new rows into cash_flow_statement_quarterly
+2025-07-13 16:01:21,086 - AlphaLoader - INFO - CASH_FLOW data for BHAT loaded into the database.
+2025-07-13 16:01:21,087 - AlphaLoader - INFO - Fetching EARNINGS data for BHAT...
+2025-07-13 16:01:21,702 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 8 new rows into earnings_annual
+2025-07-13 16:01:21,718 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 33 new rows into earnings_quarterly
+2025-07-13 16:01:21,722 - AlphaLoader - INFO - EARNINGS data for BHAT loaded into the database.
+2025-07-13 16:01:21,722 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for BHAT...
+2025-07-13 16:01:22,173 - data_manager.src_postgre_db.db_etl_scripts.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
+2025-07-13 16:01:22,173 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
+2025-07-13 16:01:22,177 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for BHAT...
+2025-07-13 16:01:22,513 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 2 new rows into stock_splits
+2025-07-13 16:01:22,518 - AlphaLoader - INFO - Stock split data for BHAT loaded into the database.
+2025-07-13 16:01:22,518 - AlphaLoader - INFO - Fetching DIVIDENDS data for BHAT...
+2025-07-13 16:01:23,094 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-13 16:01:23,094 - db_initial_load_runner - INFO - Processing symbol: AGMH
+2025-07-13 16:01:23,095 - AlphaLoader - INFO - Fetching data for AGMH...
+2025-07-13 16:01:24,277 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1818 new rows into daily_timeseries
+2025-07-13 16:01:24,283 - AlphaLoader - INFO - Candlestick data for AGMH loaded into the database.
+2025-07-13 16:01:24,283 - AlphaLoader - INFO - Fetching company base data for AGMH...
+2025-07-13 16:01:24,786 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:01:24,792 - AlphaLoader - INFO - Company base data for AGMH loaded into the database.
+2025-07-13 16:01:24,792 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for AGMH...
+2025-07-13 16:01:25,638 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 10 new rows into income_statement_annual
+2025-07-13 16:01:25,766 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 33 new rows into income_statement_quarterly
+2025-07-13 16:01:25,771 - AlphaLoader - INFO - INCOME_STATEMENT data for AGMH loaded into the database.
+2025-07-13 16:01:25,772 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for AGMH...
+2025-07-13 16:01:26,398 - AlphaLoader - ERROR - An unexpected error occurred: cannot safely cast non-equivalent float64 to int64
+2025-07-13 16:01:26,398 - AlphaLoader - INFO - Fetching CASH_FLOW data for AGMH...
+2025-07-13 16:01:26,891 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 10 new rows into cash_flow_annual
+2025-07-13 16:01:26,911 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 35 new rows into cash_flow_statement_quarterly
+2025-07-13 16:01:26,914 - AlphaLoader - INFO - CASH_FLOW data for AGMH loaded into the database.
+2025-07-13 16:01:26,915 - AlphaLoader - INFO - Fetching EARNINGS data for AGMH...
+2025-07-13 16:01:27,441 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 7 new rows into earnings_annual
+2025-07-13 16:01:27,457 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 25 new rows into earnings_quarterly
+2025-07-13 16:01:27,459 - AlphaLoader - INFO - EARNINGS data for AGMH loaded into the database.
+2025-07-13 16:01:27,460 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for AGMH...
+2025-07-13 16:01:27,805 - data_manager.src_postgre_db.db_etl_scripts.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
+2025-07-13 16:01:27,805 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
+2025-07-13 16:01:27,806 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for AGMH...
+2025-07-13 16:01:28,148 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
+2025-07-13 16:01:28,153 - AlphaLoader - INFO - Stock split data for AGMH loaded into the database.
+2025-07-13 16:01:28,153 - AlphaLoader - INFO - Fetching DIVIDENDS data for AGMH...
+2025-07-13 16:01:28,520 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-13 16:01:28,521 - db_initial_load_runner - INFO - Processing symbol: SAIA
+2025-07-13 16:01:28,521 - AlphaLoader - INFO - Fetching data for SAIA...
+2025-07-13 16:01:30,066 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 5744 new rows into daily_timeseries
+2025-07-13 16:01:30,075 - AlphaLoader - INFO - Candlestick data for SAIA loaded into the database.
+2025-07-13 16:01:30,075 - AlphaLoader - INFO - Fetching company base data for SAIA...
+2025-07-13 16:01:31,342 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:01:31,348 - AlphaLoader - INFO - Company base data for SAIA loaded into the database.
+2025-07-13 16:01:31,348 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for SAIA...
+2025-07-13 16:01:32,298 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-07-13 16:01:32,327 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-07-13 16:01:32,333 - AlphaLoader - INFO - INCOME_STATEMENT data for SAIA loaded into the database.
+2025-07-13 16:01:32,333 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for SAIA...
+2025-07-13 16:01:33,228 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-07-13 16:01:33,257 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-07-13 16:01:33,265 - AlphaLoader - INFO - BALANCE_SHEET data for SAIA loaded into the database.
+2025-07-13 16:01:33,265 - AlphaLoader - INFO - Fetching CASH_FLOW data for SAIA...
+2025-07-13 16:01:33,935 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-07-13 16:01:33,967 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-07-13 16:01:33,977 - AlphaLoader - INFO - CASH_FLOW data for SAIA loaded into the database.
+2025-07-13 16:01:33,977 - AlphaLoader - INFO - Fetching EARNINGS data for SAIA...
+2025-07-13 16:01:34,548 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 24 new rows into earnings_annual
+2025-07-13 16:01:34,565 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 91 new rows into earnings_quarterly
+2025-07-13 16:01:34,568 - AlphaLoader - INFO - EARNINGS data for SAIA loaded into the database.
+2025-07-13 16:01:34,568 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for SAIA...
+2025-07-13 16:01:35,687 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1190 new rows into insider_transactions
+2025-07-13 16:01:35,689 - AlphaLoader - INFO - Insider transaction data for SAIA loaded into the database.
+2025-07-13 16:01:35,689 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for SAIA...
+2025-07-13 16:01:36,440 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
+2025-07-13 16:01:36,445 - AlphaLoader - INFO - Stock split data for SAIA loaded into the database.
+2025-07-13 16:01:36,445 - AlphaLoader - INFO - Fetching DIVIDENDS data for SAIA...
+2025-07-13 16:01:37,127 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-13 16:01:37,127 - db_initial_load_runner - INFO - Processing symbol: ENSG
+2025-07-13 16:01:37,128 - AlphaLoader - INFO - Fetching data for ENSG...
+2025-07-13 16:01:38,419 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 4444 new rows into daily_timeseries
+2025-07-13 16:01:38,425 - AlphaLoader - INFO - Candlestick data for ENSG loaded into the database.
+2025-07-13 16:01:38,426 - AlphaLoader - INFO - Fetching company base data for ENSG...
+2025-07-13 16:01:38,704 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:01:38,710 - AlphaLoader - INFO - Company base data for ENSG loaded into the database.
+2025-07-13 16:01:38,710 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for ENSG...
+2025-07-13 16:01:39,375 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-07-13 16:01:39,406 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-07-13 16:01:39,411 - AlphaLoader - INFO - INCOME_STATEMENT data for ENSG loaded into the database.
+2025-07-13 16:01:39,411 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for ENSG...
+2025-07-13 16:01:40,410 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-07-13 16:01:40,439 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-07-13 16:01:40,444 - AlphaLoader - INFO - BALANCE_SHEET data for ENSG loaded into the database.
+2025-07-13 16:01:40,445 - AlphaLoader - INFO - Fetching CASH_FLOW data for ENSG...
+2025-07-13 16:01:41,303 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-07-13 16:01:41,336 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 77 new rows into cash_flow_statement_quarterly
+2025-07-13 16:01:41,341 - AlphaLoader - INFO - CASH_FLOW data for ENSG loaded into the database.
+2025-07-13 16:01:41,342 - AlphaLoader - INFO - Fetching EARNINGS data for ENSG...
+2025-07-13 16:01:42,027 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 19 new rows into earnings_annual
+2025-07-13 16:01:42,047 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 71 new rows into earnings_quarterly
+2025-07-13 16:01:42,053 - AlphaLoader - INFO - EARNINGS data for ENSG loaded into the database.
+2025-07-13 16:01:42,054 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for ENSG...
+2025-07-13 16:01:43,060 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1651 new rows into insider_transactions
+2025-07-13 16:01:43,066 - AlphaLoader - INFO - Insider transaction data for ENSG loaded into the database.
+2025-07-13 16:01:43,067 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for ENSG...
+2025-07-13 16:01:43,302 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 2 new rows into stock_splits
+2025-07-13 16:01:43,305 - AlphaLoader - INFO - Stock split data for ENSG loaded into the database.
+2025-07-13 16:01:43,305 - AlphaLoader - INFO - Fetching DIVIDENDS data for ENSG...
+2025-07-13 16:01:43,892 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 72 new rows into dividends
+2025-07-13 16:01:43,897 - AlphaLoader - INFO - Dividend data for ENSG loaded into the database.
+2025-07-13 16:01:43,897 - db_initial_load_runner - INFO - Processing symbol: DJTWW
+2025-07-13 16:01:43,897 - AlphaLoader - INFO - Fetching data for DJTWW...
+2025-07-13 16:01:44,678 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 324 new rows into daily_timeseries
+2025-07-13 16:01:44,683 - AlphaLoader - INFO - Candlestick data for DJTWW loaded into the database.
+2025-07-13 16:01:44,684 - AlphaLoader - INFO - Fetching company base data for DJTWW...
+2025-07-13 16:01:45,268 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:01:45,273 - AlphaLoader - INFO - Company base data for DJTWW loaded into the database.
+2025-07-13 16:01:45,273 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for DJTWW...
+2025-07-13 16:01:46,137 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 4 new rows into income_statement_annual
+2025-07-13 16:01:46,156 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 17 new rows into income_statement_quarterly
+2025-07-13 16:01:46,159 - AlphaLoader - INFO - INCOME_STATEMENT data for DJTWW loaded into the database.
+2025-07-13 16:01:46,159 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for DJTWW...
+2025-07-13 16:01:47,181 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 4 new rows into balance_sheet_annual
+2025-07-13 16:01:47,198 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 17 new rows into balance_sheet_quarterly
+2025-07-13 16:01:47,202 - AlphaLoader - INFO - BALANCE_SHEET data for DJTWW loaded into the database.
+2025-07-13 16:01:47,202 - AlphaLoader - INFO - Fetching CASH_FLOW data for DJTWW...
+2025-07-13 16:01:48,070 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 4 new rows into cash_flow_annual
+2025-07-13 16:01:48,088 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 17 new rows into cash_flow_statement_quarterly
+2025-07-13 16:01:48,090 - AlphaLoader - INFO - CASH_FLOW data for DJTWW loaded into the database.
+2025-07-13 16:01:48,090 - AlphaLoader - INFO - Fetching EARNINGS data for DJTWW...
+2025-07-13 16:01:49,281 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - No data provided for insertion into earnings_annual.
+2025-07-13 16:01:49,282 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - No data provided for insertion into earnings_quarterly.
+2025-07-13 16:01:49,282 - AlphaLoader - INFO - EARNINGS data for DJTWW loaded into the database.
+2025-07-13 16:01:49,282 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for DJTWW...
+2025-07-13 16:01:49,912 - data_manager.src_postgre_db.db_etl_scripts.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
+2025-07-13 16:01:49,912 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
+2025-07-13 16:01:49,912 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for DJTWW...
+2025-07-13 16:01:50,559 - AlphaLoader - ERROR - An unexpected error occurred: 'effective_date'
+2025-07-13 16:01:50,560 - AlphaLoader - INFO - Fetching DIVIDENDS data for DJTWW...
+2025-07-13 16:01:51,149 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-13 16:01:51,149 - db_initial_load_runner - INFO - Processing symbol: CTNT
+2025-07-13 16:01:51,149 - AlphaLoader - INFO - Fetching data for CTNT...
+2025-07-13 16:01:52,058 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 488 new rows into daily_timeseries
+2025-07-13 16:01:52,063 - AlphaLoader - INFO - Candlestick data for CTNT loaded into the database.
+2025-07-13 16:01:52,063 - AlphaLoader - INFO - Fetching company base data for CTNT...
+2025-07-13 16:01:52,643 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:01:52,649 - AlphaLoader - INFO - Company base data for CTNT loaded into the database.
+2025-07-13 16:01:52,649 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for CTNT...
+2025-07-13 16:01:53,184 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 4 new rows into income_statement_annual
+2025-07-13 16:01:53,199 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 13 new rows into income_statement_quarterly
+2025-07-13 16:01:53,204 - AlphaLoader - INFO - INCOME_STATEMENT data for CTNT loaded into the database.
+2025-07-13 16:01:53,204 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for CTNT...
+2025-07-13 16:01:53,787 - AlphaLoader - ERROR - An unexpected error occurred: cannot safely cast non-equivalent float64 to int64
+2025-07-13 16:01:53,787 - AlphaLoader - INFO - Fetching CASH_FLOW data for CTNT...
+2025-07-13 16:01:54,196 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 4 new rows into cash_flow_annual
+2025-07-13 16:01:54,211 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 13 new rows into cash_flow_statement_quarterly
+2025-07-13 16:01:54,222 - AlphaLoader - INFO - CASH_FLOW data for CTNT loaded into the database.
+2025-07-13 16:01:54,222 - AlphaLoader - INFO - Fetching EARNINGS data for CTNT...
+2025-07-13 16:01:54,570 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 3 new rows into earnings_annual
+2025-07-13 16:01:54,580 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 7 new rows into earnings_quarterly
+2025-07-13 16:01:54,581 - AlphaLoader - INFO - EARNINGS data for CTNT loaded into the database.
+2025-07-13 16:01:54,581 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for CTNT...
+2025-07-13 16:01:55,054 - data_manager.src_postgre_db.db_etl_scripts.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
+2025-07-13 16:01:55,055 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
+2025-07-13 16:01:55,055 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for CTNT...
+2025-07-13 16:01:55,505 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
+2025-07-13 16:01:55,511 - AlphaLoader - INFO - Stock split data for CTNT loaded into the database.
+2025-07-13 16:01:55,511 - AlphaLoader - INFO - Fetching DIVIDENDS data for CTNT...
+2025-07-13 16:01:55,962 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-13 16:01:55,963 - db_initial_load_runner - INFO - Processing symbol: BTOC
+2025-07-13 16:01:55,963 - AlphaLoader - INFO - Fetching data for BTOC...
+2025-07-13 16:01:56,533 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 290 new rows into daily_timeseries
+2025-07-13 16:01:56,537 - AlphaLoader - INFO - Candlestick data for BTOC loaded into the database.
+2025-07-13 16:01:56,537 - AlphaLoader - INFO - Fetching company base data for BTOC...
+2025-07-13 16:01:56,808 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:01:56,813 - AlphaLoader - INFO - Company base data for BTOC loaded into the database.
+2025-07-13 16:01:56,814 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for BTOC...
+2025-07-13 16:01:57,281 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 4 new rows into income_statement_annual
+2025-07-13 16:01:57,298 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 13 new rows into income_statement_quarterly
+2025-07-13 16:01:57,302 - AlphaLoader - INFO - INCOME_STATEMENT data for BTOC loaded into the database.
+2025-07-13 16:01:57,302 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for BTOC...
+2025-07-13 16:01:57,727 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 4 new rows into balance_sheet_annual
+2025-07-13 16:01:57,743 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 13 new rows into balance_sheet_quarterly
+2025-07-13 16:01:57,747 - AlphaLoader - INFO - BALANCE_SHEET data for BTOC loaded into the database.
+2025-07-13 16:01:57,747 - AlphaLoader - INFO - Fetching CASH_FLOW data for BTOC...
+2025-07-13 16:01:58,376 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 4 new rows into cash_flow_annual
+2025-07-13 16:01:58,392 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 13 new rows into cash_flow_statement_quarterly
+2025-07-13 16:01:58,396 - AlphaLoader - INFO - CASH_FLOW data for BTOC loaded into the database.
+2025-07-13 16:01:58,396 - AlphaLoader - INFO - Fetching EARNINGS data for BTOC...
+2025-07-13 16:02:00,306 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 2 new rows into earnings_annual
+2025-07-13 16:02:00,316 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 4 new rows into earnings_quarterly
+2025-07-13 16:02:00,317 - AlphaLoader - INFO - EARNINGS data for BTOC loaded into the database.
+2025-07-13 16:02:00,317 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for BTOC...
+2025-07-13 16:02:00,675 - data_manager.src_postgre_db.db_etl_scripts.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
+2025-07-13 16:02:00,675 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
+2025-07-13 16:02:00,676 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for BTOC...
+2025-07-13 16:02:00,980 - AlphaLoader - ERROR - An unexpected error occurred: 'effective_date'
+2025-07-13 16:02:00,980 - AlphaLoader - INFO - Fetching DIVIDENDS data for BTOC...
+2025-07-13 16:02:01,287 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-13 16:02:01,287 - db_initial_load_runner - INFO - Processing symbol: RVSB
+2025-07-13 16:02:01,287 - AlphaLoader - INFO - Fetching data for RVSB...
+2025-07-13 16:02:02,672 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 6462 new rows into daily_timeseries
+2025-07-13 16:02:02,678 - AlphaLoader - INFO - Candlestick data for RVSB loaded into the database.
+2025-07-13 16:02:02,678 - AlphaLoader - INFO - Fetching company base data for RVSB...
+2025-07-13 16:02:03,691 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:02:03,697 - AlphaLoader - INFO - Company base data for RVSB loaded into the database.
+2025-07-13 16:02:03,697 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for RVSB...
+2025-07-13 16:02:04,450 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-07-13 16:02:04,482 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-07-13 16:02:04,493 - AlphaLoader - INFO - INCOME_STATEMENT data for RVSB loaded into the database.
+2025-07-13 16:02:04,493 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for RVSB...
+2025-07-13 16:02:05,110 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-07-13 16:02:05,143 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-07-13 16:02:05,155 - AlphaLoader - INFO - BALANCE_SHEET data for RVSB loaded into the database.
+2025-07-13 16:02:05,155 - AlphaLoader - INFO - Fetching CASH_FLOW data for RVSB...
+2025-07-13 16:02:05,986 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-07-13 16:02:06,019 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-07-13 16:02:06,025 - AlphaLoader - INFO - CASH_FLOW data for RVSB loaded into the database.
+2025-07-13 16:02:06,025 - AlphaLoader - INFO - Fetching EARNINGS data for RVSB...
+2025-07-13 16:02:06,656 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 29 new rows into earnings_annual
+2025-07-13 16:02:06,680 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 110 new rows into earnings_quarterly
+2025-07-13 16:02:06,686 - AlphaLoader - INFO - EARNINGS data for RVSB loaded into the database.
+2025-07-13 16:02:06,687 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for RVSB...
+2025-07-13 16:02:07,344 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 389 new rows into insider_transactions
+2025-07-13 16:02:07,350 - AlphaLoader - INFO - Insider transaction data for RVSB loaded into the database.
+2025-07-13 16:02:07,350 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for RVSB...
+2025-07-13 16:02:07,668 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
+2025-07-13 16:02:07,675 - AlphaLoader - INFO - Stock split data for RVSB loaded into the database.
+2025-07-13 16:02:07,676 - AlphaLoader - INFO - Fetching DIVIDENDS data for RVSB...
+2025-07-13 16:02:08,092 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into dividends
+2025-07-13 16:02:08,097 - AlphaLoader - INFO - Dividend data for RVSB loaded into the database.
+2025-07-13 16:02:08,097 - db_initial_load_runner - INFO - Processing symbol: BCML
+2025-07-13 16:02:08,098 - AlphaLoader - INFO - Fetching data for BCML...
+2025-07-13 16:02:09,526 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 5253 new rows into daily_timeseries
+2025-07-13 16:02:09,539 - AlphaLoader - INFO - Candlestick data for BCML loaded into the database.
+2025-07-13 16:02:09,540 - AlphaLoader - INFO - Fetching company base data for BCML...
+2025-07-13 16:02:09,936 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:02:09,942 - AlphaLoader - INFO - Company base data for BCML loaded into the database.
+2025-07-13 16:02:09,942 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for BCML...
+2025-07-13 16:02:10,902 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-07-13 16:02:10,928 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 63 new rows into income_statement_quarterly
+2025-07-13 16:02:10,933 - AlphaLoader - INFO - INCOME_STATEMENT data for BCML loaded into the database.
+2025-07-13 16:02:10,933 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for BCML...
+2025-07-13 16:02:11,548 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-07-13 16:02:11,571 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 63 new rows into balance_sheet_quarterly
+2025-07-13 16:02:11,576 - AlphaLoader - INFO - BALANCE_SHEET data for BCML loaded into the database.
+2025-07-13 16:02:11,576 - AlphaLoader - INFO - Fetching CASH_FLOW data for BCML...
+2025-07-13 16:02:12,332 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 18 new rows into cash_flow_annual
+2025-07-13 16:02:12,358 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 50 new rows into cash_flow_statement_quarterly
+2025-07-13 16:02:12,363 - AlphaLoader - INFO - CASH_FLOW data for BCML loaded into the database.
+2025-07-13 16:02:12,363 - AlphaLoader - INFO - Fetching EARNINGS data for BCML...
+2025-07-13 16:02:12,906 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 16 new rows into earnings_annual
+2025-07-13 16:02:12,924 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 61 new rows into earnings_quarterly
+2025-07-13 16:02:12,928 - AlphaLoader - INFO - EARNINGS data for BCML loaded into the database.
+2025-07-13 16:02:12,928 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for BCML...
+2025-07-13 16:02:13,528 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 115 new rows into insider_transactions
+2025-07-13 16:02:13,534 - AlphaLoader - INFO - Insider transaction data for BCML loaded into the database.
+2025-07-13 16:02:13,534 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for BCML...
+2025-07-13 16:02:14,075 - AlphaLoader - ERROR - An unexpected error occurred: 'effective_date'
+2025-07-13 16:02:14,075 - AlphaLoader - INFO - Fetching DIVIDENDS data for BCML...
+2025-07-13 16:02:14,540 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 14 new rows into dividends
+2025-07-13 16:02:14,543 - AlphaLoader - INFO - Dividend data for BCML loaded into the database.
+2025-07-13 16:02:14,543 - db_initial_load_runner - INFO - Processing symbol: PRAX
+2025-07-13 16:02:14,543 - AlphaLoader - INFO - Fetching data for PRAX...
+2025-07-13 16:02:15,323 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1188 new rows into daily_timeseries
+2025-07-13 16:02:15,328 - AlphaLoader - INFO - Candlestick data for PRAX loaded into the database.
+2025-07-13 16:02:15,328 - AlphaLoader - INFO - Fetching company base data for PRAX...
+2025-07-13 16:02:15,693 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:02:15,698 - AlphaLoader - INFO - Company base data for PRAX loaded into the database.
+2025-07-13 16:02:15,698 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for PRAX...
+2025-07-13 16:02:16,103 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 7 new rows into income_statement_annual
+2025-07-13 16:02:16,124 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 25 new rows into income_statement_quarterly
+2025-07-13 16:02:16,127 - AlphaLoader - INFO - INCOME_STATEMENT data for PRAX loaded into the database.
+2025-07-13 16:02:16,128 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for PRAX...
+2025-07-13 16:02:16,615 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 7 new rows into balance_sheet_annual
+2025-07-13 16:02:16,632 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 25 new rows into balance_sheet_quarterly
+2025-07-13 16:02:16,637 - AlphaLoader - INFO - BALANCE_SHEET data for PRAX loaded into the database.
+2025-07-13 16:02:16,637 - AlphaLoader - INFO - Fetching CASH_FLOW data for PRAX...
+2025-07-13 16:02:17,246 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 7 new rows into cash_flow_annual
+2025-07-13 16:02:17,273 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 25 new rows into cash_flow_statement_quarterly
+2025-07-13 16:02:17,278 - AlphaLoader - INFO - CASH_FLOW data for PRAX loaded into the database.
+2025-07-13 16:02:17,279 - AlphaLoader - INFO - Fetching EARNINGS data for PRAX...
+2025-07-13 16:02:17,718 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 6 new rows into earnings_annual
+2025-07-13 16:02:17,729 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into earnings_quarterly
+2025-07-13 16:02:17,730 - AlphaLoader - INFO - EARNINGS data for PRAX loaded into the database.
+2025-07-13 16:02:17,730 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for PRAX...
+2025-07-13 16:02:18,465 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 140 new rows into insider_transactions
+2025-07-13 16:02:18,471 - AlphaLoader - INFO - Insider transaction data for PRAX loaded into the database.
+2025-07-13 16:02:18,471 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for PRAX...
+2025-07-13 16:02:18,902 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
+2025-07-13 16:02:18,907 - AlphaLoader - INFO - Stock split data for PRAX loaded into the database.
+2025-07-13 16:02:18,907 - AlphaLoader - INFO - Fetching DIVIDENDS data for PRAX...
+2025-07-13 16:02:19,094 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-13 16:02:19,095 - db_initial_load_runner - INFO - Processing symbol: SABSW
+2025-07-13 16:02:19,095 - AlphaLoader - INFO - Fetching data for SABSW...
+2025-07-13 16:02:19,967 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1109 new rows into daily_timeseries
+2025-07-13 16:02:19,973 - AlphaLoader - INFO - Candlestick data for SABSW loaded into the database.
+2025-07-13 16:02:19,973 - AlphaLoader - INFO - Fetching company base data for SABSW...
+2025-07-13 16:02:20,220 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:02:20,225 - AlphaLoader - INFO - Company base data for SABSW loaded into the database.
+2025-07-13 16:02:20,225 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for SABSW...
+2025-07-13 16:02:20,815 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 6 new rows into income_statement_annual
+2025-07-13 16:02:20,830 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 17 new rows into income_statement_quarterly
+2025-07-13 16:02:20,834 - AlphaLoader - INFO - INCOME_STATEMENT data for SABSW loaded into the database.
+2025-07-13 16:02:20,834 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for SABSW...
+2025-07-13 16:02:21,334 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 6 new rows into balance_sheet_annual
+2025-07-13 16:02:21,350 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 18 new rows into balance_sheet_quarterly
+2025-07-13 16:02:21,354 - AlphaLoader - INFO - BALANCE_SHEET data for SABSW loaded into the database.
+2025-07-13 16:02:21,354 - AlphaLoader - INFO - Fetching CASH_FLOW data for SABSW...
+2025-07-13 16:02:21,736 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 6 new rows into cash_flow_annual
+2025-07-13 16:02:21,754 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 17 new rows into cash_flow_statement_quarterly
+2025-07-13 16:02:21,759 - AlphaLoader - INFO - CASH_FLOW data for SABSW loaded into the database.
+2025-07-13 16:02:21,759 - AlphaLoader - INFO - Fetching EARNINGS data for SABSW...
+2025-07-13 16:02:22,010 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 3 new rows into earnings_annual
+2025-07-13 16:02:22,021 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 7 new rows into earnings_quarterly
+2025-07-13 16:02:22,023 - AlphaLoader - INFO - EARNINGS data for SABSW loaded into the database.
+2025-07-13 16:02:22,023 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for SABSW...
+2025-07-13 16:02:22,385 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 71 new rows into insider_transactions
+2025-07-13 16:02:22,391 - AlphaLoader - INFO - Insider transaction data for SABSW loaded into the database.
+2025-07-13 16:02:22,391 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for SABSW...
+2025-07-13 16:02:22,778 - AlphaLoader - ERROR - An unexpected error occurred: 'effective_date'
+2025-07-13 16:02:22,778 - AlphaLoader - INFO - Fetching DIVIDENDS data for SABSW...
+2025-07-13 16:02:23,108 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-13 16:02:23,108 - db_initial_load_runner - INFO - Processing symbol: VRNS
+2025-07-13 16:02:23,109 - AlphaLoader - INFO - Fetching data for VRNS...
+2025-07-13 16:02:24,459 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 2859 new rows into daily_timeseries
+2025-07-13 16:02:24,471 - AlphaLoader - INFO - Candlestick data for VRNS loaded into the database.
+2025-07-13 16:02:24,471 - AlphaLoader - INFO - Fetching company base data for VRNS...
+2025-07-13 16:02:24,730 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:02:24,736 - AlphaLoader - INFO - Company base data for VRNS loaded into the database.
+2025-07-13 16:02:24,737 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for VRNS...
+2025-07-13 16:02:25,231 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 15 new rows into income_statement_annual
+2025-07-13 16:02:25,254 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 53 new rows into income_statement_quarterly
+2025-07-13 16:02:25,259 - AlphaLoader - INFO - INCOME_STATEMENT data for VRNS loaded into the database.
+2025-07-13 16:02:25,259 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for VRNS...
+2025-07-13 16:02:25,965 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 15 new rows into balance_sheet_annual
+2025-07-13 16:02:25,988 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 51 new rows into balance_sheet_quarterly
+2025-07-13 16:02:25,994 - AlphaLoader - INFO - BALANCE_SHEET data for VRNS loaded into the database.
+2025-07-13 16:02:25,994 - AlphaLoader - INFO - Fetching CASH_FLOW data for VRNS...
+2025-07-13 16:02:26,798 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 15 new rows into cash_flow_annual
+2025-07-13 16:02:26,822 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 51 new rows into cash_flow_statement_quarterly
+2025-07-13 16:02:26,828 - AlphaLoader - INFO - CASH_FLOW data for VRNS loaded into the database.
+2025-07-13 16:02:26,828 - AlphaLoader - INFO - Fetching EARNINGS data for VRNS...
+2025-07-13 16:02:27,387 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 12 new rows into earnings_annual
+2025-07-13 16:02:27,405 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 45 new rows into earnings_quarterly
+2025-07-13 16:02:27,407 - AlphaLoader - INFO - EARNINGS data for VRNS loaded into the database.
+2025-07-13 16:02:27,407 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for VRNS...
+2025-07-13 16:02:28,757 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 760 new rows into insider_transactions
+2025-07-13 16:02:28,762 - AlphaLoader - INFO - Insider transaction data for VRNS loaded into the database.
+2025-07-13 16:02:28,763 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for VRNS...
+2025-07-13 16:02:29,068 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
+2025-07-13 16:02:29,073 - AlphaLoader - INFO - Stock split data for VRNS loaded into the database.
+2025-07-13 16:02:29,073 - AlphaLoader - INFO - Fetching DIVIDENDS data for VRNS...
+2025-07-13 16:02:29,549 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-13 16:02:29,549 - db_initial_load_runner - INFO - Processing symbol: MNST
+2025-07-13 16:02:29,549 - AlphaLoader - INFO - Fetching data for MNST...
+2025-07-13 16:02:31,202 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 6462 new rows into daily_timeseries
+2025-07-13 16:02:31,209 - AlphaLoader - INFO - Candlestick data for MNST loaded into the database.
+2025-07-13 16:02:31,209 - AlphaLoader - INFO - Fetching company base data for MNST...
+2025-07-13 16:02:31,468 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:02:31,474 - AlphaLoader - INFO - Company base data for MNST loaded into the database.
+2025-07-13 16:02:31,474 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for MNST...
+2025-07-13 16:02:32,096 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-07-13 16:02:32,125 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-07-13 16:02:32,130 - AlphaLoader - INFO - INCOME_STATEMENT data for MNST loaded into the database.
+2025-07-13 16:02:32,131 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for MNST...
+2025-07-13 16:02:32,919 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-07-13 16:02:32,949 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-07-13 16:02:32,955 - AlphaLoader - INFO - BALANCE_SHEET data for MNST loaded into the database.
+2025-07-13 16:02:32,956 - AlphaLoader - INFO - Fetching CASH_FLOW data for MNST...
+2025-07-13 16:02:33,584 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-07-13 16:02:33,616 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-07-13 16:02:33,622 - AlphaLoader - INFO - CASH_FLOW data for MNST loaded into the database.
+2025-07-13 16:02:33,622 - AlphaLoader - INFO - Fetching EARNINGS data for MNST...
+2025-07-13 16:02:34,102 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 30 new rows into earnings_annual
+2025-07-13 16:02:34,127 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 117 new rows into earnings_quarterly
+2025-07-13 16:02:34,142 - AlphaLoader - INFO - EARNINGS data for MNST loaded into the database.
+2025-07-13 16:02:34,142 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for MNST...
+2025-07-13 16:02:35,207 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1874 new rows into insider_transactions
+2025-07-13 16:02:35,213 - AlphaLoader - INFO - Insider transaction data for MNST loaded into the database.
+2025-07-13 16:02:35,214 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for MNST...
+2025-07-13 16:02:35,732 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 5 new rows into stock_splits
+2025-07-13 16:02:35,737 - AlphaLoader - INFO - Stock split data for MNST loaded into the database.
+2025-07-13 16:02:35,737 - AlphaLoader - INFO - Fetching DIVIDENDS data for MNST...
+2025-07-13 16:02:35,992 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-13 16:02:35,993 - db_initial_load_runner - INFO - Processing symbol: AUUD
+2025-07-13 16:02:35,993 - AlphaLoader - INFO - Fetching data for AUUD...
+2025-07-13 16:02:36,934 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1105 new rows into daily_timeseries
+2025-07-13 16:02:36,940 - AlphaLoader - INFO - Candlestick data for AUUD loaded into the database.
+2025-07-13 16:02:36,940 - AlphaLoader - INFO - Fetching company base data for AUUD...
+2025-07-13 16:02:37,449 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-13 16:02:37,454 - AlphaLoader - INFO - Company base data for AUUD loaded into the database.
+2025-07-13 16:02:37,455 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for AUUD...
+2025-07-13 16:02:37,965 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 8 new rows into income_statement_annual
+2025-07-13 16:02:37,983 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 26 new rows into income_statement_quarterly
+2025-07-13 16:02:37,988 - AlphaLoader - INFO - INCOME_STATEMENT data for AUUD loaded into the database.
+2025-07-13 16:02:37,989 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for AUUD...
+2025-07-13 16:02:38,520 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 8 new rows into balance_sheet_annual
+2025-07-13 16:02:38,536 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 26 new rows into balance_sheet_quarterly
+2025-07-13 16:02:38,540 - AlphaLoader - INFO - BALANCE_SHEET data for AUUD loaded into the database.
+2025-07-13 16:02:38,540 - AlphaLoader - INFO - Fetching CASH_FLOW data for AUUD...
+2025-07-13 16:02:39,357 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 8 new rows into cash_flow_annual
+2025-07-13 16:02:39,375 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 26 new rows into cash_flow_statement_quarterly
+2025-07-13 16:02:39,379 - AlphaLoader - INFO - CASH_FLOW data for AUUD loaded into the database.
+2025-07-13 16:02:39,379 - AlphaLoader - INFO - Fetching EARNINGS data for AUUD...
+2025-07-13 16:02:39,953 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 7 new rows into earnings_annual
+2025-07-13 16:02:39,968 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 25 new rows into earnings_quarterly
+2025-07-13 16:02:39,973 - AlphaLoader - INFO - EARNINGS data for AUUD loaded into the database.
+2025-07-13 16:02:39,973 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for AUUD...
+2025-07-13 16:02:40,304 - data_manager.src_postgre_db.db_etl_scripts.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
+2025-07-13 16:02:40,305 - AlphaLoader - ERROR - 'transaction_date' column missing after standardization. Columns are: Index(['symbol'], dtype='object')
+2025-07-13 16:02:40,305 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for AUUD...
+2025-07-13 16:02:40,647 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 2 new rows into stock_splits
+2025-07-13 16:02:40,650 - AlphaLoader - INFO - Stock split data for AUUD loaded into the database.
+2025-07-13 16:02:40,651 - AlphaLoader - INFO - Fetching DIVIDENDS data for AUUD...
+2025-07-13 16:02:41,125 - AlphaLoader - ERROR - An unexpected error occurred: 'ex_dividend_date'
+2025-07-13 16:02:41,125 - db_initial_load_runner - INFO - ✅ Initial loader finished its running.
