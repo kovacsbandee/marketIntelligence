@@ -1,0 +1,103 @@
+2025-07-15 21:21:33,357 - db_load_from_db_runner - INFO - Starting DB load for symbol: NVDA
+2025-07-15 21:21:33,490 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from balance_sheet_annual
+2025-07-15 21:21:33,494 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_annual' with 0 rows.
+2025-07-15 21:21:33,502 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from cash_flow_annual
+2025-07-15 21:21:33,504 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_annual' with 0 rows.
+2025-07-15 21:21:33,509 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from earnings_annual
+2025-07-15 21:21:33,511 - db_load_from_db_runner - INFO - Loaded table 'earnings_annual' with 0 rows.
+2025-07-15 21:21:33,517 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from income_statement_annual
+2025-07-15 21:21:33,519 - db_load_from_db_runner - INFO - Loaded table 'income_statement_annual' with 0 rows.
+2025-07-15 21:21:33,530 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from company_fundamentals
+2025-07-15 21:21:33,532 - db_load_from_db_runner - INFO - Loaded table 'company_fundamentals' with 0 rows.
+2025-07-15 21:21:33,539 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from daily_timeseries
+2025-07-15 21:21:33,541 - db_load_from_db_runner - INFO - Loaded table 'daily_timeseries' with 0 rows.
+2025-07-15 21:21:33,552 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from dividends
+2025-07-15 21:21:33,554 - db_load_from_db_runner - INFO - Loaded table 'dividends' with 0 rows.
+2025-07-15 21:21:33,559 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from insider_transactions
+2025-07-15 21:21:33,561 - db_load_from_db_runner - INFO - Loaded table 'insider_transactions' with 0 rows.
+2025-07-15 21:21:33,566 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from balance_sheet_quarterly
+2025-07-15 21:21:33,567 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_quarterly' with 0 rows.
+2025-07-15 21:21:33,575 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from cash_flow_statement_quarterly
+2025-07-15 21:21:33,577 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_statement_quarterly' with 0 rows.
+2025-07-15 21:21:33,583 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from earnings_quarterly
+2025-07-15 21:21:33,585 - db_load_from_db_runner - INFO - Loaded table 'earnings_quarterly' with 0 rows.
+2025-07-15 21:21:33,594 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from income_statement_quarterly
+2025-07-15 21:21:33,598 - db_load_from_db_runner - INFO - Loaded table 'income_statement_quarterly' with 0 rows.
+2025-07-15 21:21:33,602 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from stock_splits
+2025-07-15 21:21:33,605 - db_load_from_db_runner - INFO - Loaded table 'stock_splits' with 0 rows.
+2025-07-15 21:21:33,605 - db_load_from_db_runner - WARNING - No data found in the database for symbol 'NVDA'. Attempting to load...
+2025-07-15 21:21:33,606 - db_initial_load_runner - INFO - Starting initial load for 1 symbols...
+2025-07-15 21:21:33,607 - db_initial_load_runner - INFO - Processing symbol: NVDA
+2025-07-15 21:21:33,607 - AlphaLoader - INFO - Fetching data for NVDA...
+2025-07-15 21:21:35,600 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 6463 new rows into daily_timeseries
+2025-07-15 21:21:35,608 - AlphaLoader - INFO - Candlestick data for NVDA loaded into the database.
+2025-07-15 21:21:35,608 - AlphaLoader - INFO - Fetching company base data for NVDA...
+2025-07-15 21:21:36,331 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-15 21:21:36,337 - AlphaLoader - INFO - Company base data for NVDA loaded into the database.
+2025-07-15 21:21:36,337 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for NVDA...
+2025-07-15 21:21:37,380 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-07-15 21:21:37,407 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-07-15 21:21:37,412 - AlphaLoader - INFO - INCOME_STATEMENT data for NVDA loaded into the database.
+2025-07-15 21:21:37,412 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for NVDA...
+2025-07-15 21:21:38,644 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-07-15 21:21:38,672 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-07-15 21:21:38,678 - AlphaLoader - INFO - BALANCE_SHEET data for NVDA loaded into the database.
+2025-07-15 21:21:38,678 - AlphaLoader - INFO - Fetching CASH_FLOW data for NVDA...
+2025-07-15 21:21:39,432 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-07-15 21:21:39,464 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-07-15 21:21:39,470 - AlphaLoader - INFO - CASH_FLOW data for NVDA loaded into the database.
+2025-07-15 21:21:39,471 - AlphaLoader - INFO - Fetching EARNINGS data for NVDA...
+2025-07-15 21:21:39,944 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 27 new rows into earnings_annual
+2025-07-15 21:21:39,966 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 105 new rows into earnings_quarterly
+2025-07-15 21:21:39,971 - AlphaLoader - INFO - EARNINGS data for NVDA loaded into the database.
+2025-07-15 21:21:39,972 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for NVDA...
+2025-07-15 21:21:41,794 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 2426 new rows into insider_transactions
+2025-07-15 21:21:41,802 - AlphaLoader - INFO - Insider transaction data for NVDA loaded into the database.
+2025-07-15 21:21:41,802 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for NVDA...
+2025-07-15 21:21:42,457 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 6 new rows into stock_splits
+2025-07-15 21:21:42,462 - AlphaLoader - INFO - Stock split data for NVDA loaded into the database.
+2025-07-15 21:21:42,462 - AlphaLoader - INFO - Fetching DIVIDENDS data for NVDA...
+2025-07-15 21:21:42,895 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 52 new rows into dividends
+2025-07-15 21:21:42,900 - AlphaLoader - INFO - Dividend data for NVDA loaded into the database.
+2025-07-15 21:21:42,901 - db_initial_load_runner - INFO - ✅ Initial loader finished its running.
+2025-07-15 21:21:42,901 - db_load_from_db_runner - INFO - Called load_stock_data for symbol: NVDA
+2025-07-15 21:21:42,907 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 20 filtered rows from balance_sheet_annual
+2025-07-15 21:21:42,909 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_annual' with 20 rows.
+2025-07-15 21:21:42,911 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 20 filtered rows from cash_flow_annual
+2025-07-15 21:21:42,913 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_annual' with 20 rows.
+2025-07-15 21:21:42,916 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 27 filtered rows from earnings_annual
+2025-07-15 21:21:42,917 - db_load_from_db_runner - INFO - Loaded table 'earnings_annual' with 27 rows.
+2025-07-15 21:21:42,919 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 20 filtered rows from income_statement_annual
+2025-07-15 21:21:42,921 - db_load_from_db_runner - INFO - Loaded table 'income_statement_annual' with 20 rows.
+2025-07-15 21:21:42,923 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 1 filtered rows from company_fundamentals
+2025-07-15 21:21:42,926 - db_load_from_db_runner - INFO - Loaded table 'company_fundamentals' with 1 rows.
+2025-07-15 21:21:43,006 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 6463 filtered rows from daily_timeseries
+2025-07-15 21:21:43,100 - db_load_from_db_runner - INFO - Loaded table 'daily_timeseries' with 6463 rows.
+2025-07-15 21:21:43,103 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 52 filtered rows from dividends
+2025-07-15 21:21:43,108 - db_load_from_db_runner - INFO - Loaded table 'dividends' with 52 rows.
+2025-07-15 21:21:43,136 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 2426 filtered rows from insider_transactions
+2025-07-15 21:21:43,172 - db_load_from_db_runner - INFO - Loaded table 'insider_transactions' with 2426 rows.
+2025-07-15 21:21:43,176 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 81 filtered rows from balance_sheet_quarterly
+2025-07-15 21:21:43,180 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_quarterly' with 81 rows.
+2025-07-15 21:21:43,184 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 81 filtered rows from cash_flow_statement_quarterly
+2025-07-15 21:21:43,189 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_statement_quarterly' with 81 rows.
+2025-07-15 21:21:43,192 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 105 filtered rows from earnings_quarterly
+2025-07-15 21:21:43,195 - db_load_from_db_runner - INFO - Loaded table 'earnings_quarterly' with 105 rows.
+2025-07-15 21:21:43,199 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 81 filtered rows from income_statement_quarterly
+2025-07-15 21:21:43,203 - db_load_from_db_runner - INFO - Loaded table 'income_statement_quarterly' with 81 rows.
+2025-07-15 21:21:43,205 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 6 filtered rows from stock_splits
+2025-07-15 21:21:43,207 - db_load_from_db_runner - INFO - Loaded table 'stock_splits' with 6 rows.
+2025-07-15 21:21:43,207 - db_load_from_db_runner - INFO - Loaded tables: ['balance_sheet_annual', 'cash_flow_annual', 'earnings_annual', 'income_statement_annual', 'company_fundamentals', 'daily_timeseries', 'dividends', 'insider_transactions', 'balance_sheet_quarterly', 'cash_flow_statement_quarterly', 'earnings_quarterly', 'income_statement_quarterly', 'stock_splits']
+2025-07-15 21:21:43,207 - db_load_from_db_runner - INFO - balance_sheet_annual: 20 rows
+2025-07-15 21:21:43,207 - db_load_from_db_runner - INFO - cash_flow_annual: 20 rows
+2025-07-15 21:21:43,207 - db_load_from_db_runner - INFO - earnings_annual: 27 rows
+2025-07-15 21:21:43,207 - db_load_from_db_runner - INFO - income_statement_annual: 20 rows
+2025-07-15 21:21:43,207 - db_load_from_db_runner - INFO - company_fundamentals: 1 rows
+2025-07-15 21:21:43,207 - db_load_from_db_runner - INFO - daily_timeseries: 6463 rows
+2025-07-15 21:21:43,208 - db_load_from_db_runner - INFO - dividends: 52 rows
+2025-07-15 21:21:43,208 - db_load_from_db_runner - INFO - insider_transactions: 2426 rows
+2025-07-15 21:21:43,208 - db_load_from_db_runner - INFO - balance_sheet_quarterly: 81 rows
+2025-07-15 21:21:43,208 - db_load_from_db_runner - INFO - cash_flow_statement_quarterly: 81 rows
+2025-07-15 21:21:43,208 - db_load_from_db_runner - INFO - earnings_quarterly: 105 rows
+2025-07-15 21:21:43,208 - db_load_from_db_runner - INFO - income_statement_quarterly: 81 rows
+2025-07-15 21:21:43,208 - db_load_from_db_runner - INFO - stock_splits: 6 rows
