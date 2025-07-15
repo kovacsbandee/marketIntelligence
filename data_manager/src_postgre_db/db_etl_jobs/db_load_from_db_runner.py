@@ -8,8 +8,7 @@ Classes:
       optionally filtering rows by a given symbol.
 
 Functions:
-    - main: Demonstrates the usage of the `DBSymbolStorage` class by loading tables 
-      for a specific symbol and printing their details.
+    - print_loaded_tables: Prints the names and row counts of all tables stored in the given DBSymbolStorage.
 
 Usage:
     - The script initializes a `PostgresAdapter` instance and uses it to load tables 
@@ -27,7 +26,7 @@ Example:
     the symbol "IBM" (or another symbol if modified) and print the loaded table names 
     and their row counts.
     ```
-    python db_load_from_db_runner.py
+    python [db_load_from_db_runner.py](http://_vscodecontentref_/0)
     ```
 Notes:
     - Ensure that the `PostgresAdapter` and `postgre_objects` modules are correctly 
@@ -44,42 +43,83 @@ from utils.logger import get_logger  # <-- Import your project logger
 
 # Set up project-standard logger
 logger = get_logger("db_load_from_db_runner")
+
 class DBSymbolStorage:
     """
     Stores each database table as a DataFrame attribute, filtered by symbol if applicable.
+    Handles missing symbols by optionally triggering ETL.
+
+    Attributes:
+        _adapter (PostgresAdapter): The database adapter.
+        _symbol (str): The stock symbol to filter tables by.
+        status_message (str): Status message about the data loading process.
     """
 
-    def __init__(self, adapter: PostgresAdapter, symbol: str):
+    def __init__(self, adapter: PostgresAdapter, symbol: str, auto_load_if_missing: bool = True):
+        """
+        Initialize the DBSymbolStorage.
+
+        Args:
+            adapter (PostgresAdapter): The database adapter.
+            symbol (str): The stock symbol to filter tables by.
+            auto_load_if_missing (bool): Whether to attempt to load data if the symbol is missing.
+        """
         self._adapter = adapter
         self._symbol = symbol
-        self._load_tables()
+        self.status_message = ""
+        self._load_tables(auto_load_if_missing)
 
-    def _load_tables(self):
+    def _symbol_exists(self) -> bool:
         """
-        Loads data from database tables into pandas DataFrames and assigns them as attributes of the instance.
+        Check if the symbol exists in the company_fundamentals table.
 
-        This method retrieves a list of table names from the adapter, dynamically identifies the corresponding
-        ORM class for each table, and loads the data into a pandas DataFrame. If a table has a 'symbol' column,
-        the data is filtered by the instance's `_symbol` attribute. Otherwise, all rows are loaded. The resulting
-        DataFrame is then assigned as an attribute of the instance, named after the table.
-
-        Logs warnings for tables without a corresponding ORM class and logs the number of rows loaded for each table.
-
-        Raises:
-            AttributeError: If the adapter does not have the required methods or attributes.
-
-        Notes:
-            - The ORM classes are expected to be accessible as attributes of `orm_module`.
-            - The adapter must implement `list_tables`, `load_filtered_with_matching_values`, and `load_all` methods.
-
+        Returns:
+            bool: True if the symbol exists, False otherwise.
         """
+        orm_company_fundamentals = orm_module.table_name_to_class["company_fundamentals"]
+        rows = self._adapter.load_filtered_with_matching_values(orm_company_fundamentals, {"symbol": self._symbol})
+        return bool(rows)
+
+    def _load_tables(self, auto_load_if_missing: bool):
+        """
+        Load all tables for the given symbol. If the symbol is missing and auto_load_if_missing is True,
+        attempt to load the data using the ETL utility.
+
+        Args:
+            auto_load_if_missing (bool): Whether to attempt to load data if the symbol is missing.
+        """
+        # Check if symbol exists in company_fundamentals
+        if not self._symbol_exists():
+            self.status_message = (
+                f"Symbol '{self._symbol}' not found in database. Attempting to load..."
+            )
+            logger.warning(self.status_message)
+            if auto_load_if_missing:
+                load_stock_data([self._symbol])
+                logger.info("Called load_stock_data for symbol: %s", self._symbol)
+                # Check again after ETL
+                if not self._symbol_exists():
+                    self.status_message = (
+                        f"Failed to load data for symbol '{self._symbol}'."
+                    )
+                    logger.error(self.status_message)
+                    return
+                else:
+                    self.status_message = (
+                        f"Data loaded for symbol '{self._symbol}'."
+                    )
+            else:
+                return
+        else:
+            self.status_message = f"Data loaded for symbol '{self._symbol}'."
+
+        # Proceed to load all tables
         table_names = self._adapter.list_tables()
         for table_name in table_names:
             orm_class = orm_module.table_name_to_class.get(table_name)
             if orm_class is None:
                 logger.warning("ORM class for table '%s' not found. Skipping.", table_name)
                 continue
-            # If table has a 'symbol' column, filter by symbol
             if hasattr(orm_class, "symbol"):
                 rows = self._adapter.load_filtered_with_matching_values(orm_class, {"symbol": self._symbol})
             else:
@@ -104,14 +144,9 @@ class DBSymbolStorage:
         """
         Lists all attributes of the instance that are pandas DataFrame objects.
 
-        This method iterates through the instance's attributes and checks if each
-        attribute is an instance of `pandas.DataFrame`. It returns a list of attribute
-        names that meet this condition.
-
         Returns:
             list: A list of attribute names (strings) that are pandas DataFrame objects.
         """
-        # Only return attributes that are DataFrames
         return [attr for attr in self.__dict__ if isinstance(getattr(self, attr), pd.DataFrame)]
 
 def print_loaded_tables(storage: DBSymbolStorage):
@@ -128,27 +163,15 @@ def print_loaded_tables(storage: DBSymbolStorage):
         print(f"{name}: {df.shape} rows")
 
 if __name__ == "__main__":
+    """
+    Main entry point for loading and displaying tables for a given symbol.
+    """
     symbol = "MSFT"  # Replace with user input as needed
     logger.info("Starting DB load for symbol: %s", symbol)
     adapter = PostgresAdapter()
-    # Directly check if symbol exists in company_fundamentals
-    orm_company_fundamentals = orm_module.table_name_to_class["company_fundamentals"]
-    rows = adapter.load_filtered_with_matching_values(orm_company_fundamentals, {"symbol": symbol})
-
-    if not rows:
-        logger.warning("Symbol '%s' not found in company_fundamentals. Attempting to load...", symbol)
-        print(f"Symbol '{symbol}' not found in company_fundamentals. Attempting to load...")
-        load_stock_data([symbol])
-        logger.info("Called load_stock_data for symbol: %s", symbol)
-
-    # Now load all tables for the symbol (whether it was present or just loaded)
     storage = DBSymbolStorage(adapter, symbol)
-    has_data = any(
-        isinstance(getattr(storage, attr), pd.DataFrame) and not getattr(storage, attr).empty
-        for attr in storage.__dict__
-    )
-    if not has_data:
-        logger.error("Failed to load data for symbol '%s' after ETL.", symbol)
-        print(f"Failed to load data for symbol '{symbol}'.")
+
+    if storage.status_message.startswith("Failed"):
+        print(storage.status_message)
     else:
         print_loaded_tables(storage)

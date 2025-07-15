@@ -48,7 +48,7 @@ def load_symbol(n_clicks, symbol):
     storage = DBSymbolStorage(adapter, symbol.upper())
     price_df = storage.get_table("daily_timeseries")
     if price_df is None or price_df.empty:
-        return f"No data found for symbol '{symbol.upper()}'.", None
+        return storage.status_message, None
     dividends_df = storage.get_table("dividends")
     fig = plot_price_with_indicators(
         price_table=price_df,
@@ -56,7 +56,8 @@ def load_symbol(n_clicks, symbol):
         include_macd=True,
         include_rsi=True
     )
-    return f"Data loaded for symbol '{symbol.upper()}'.", dcc.Graph(figure=fig)
+    return storage.status_message, dcc.Graph(figure=fig)
 
 if __name__ == "__main__":
     app.run(debug=True)
+    
