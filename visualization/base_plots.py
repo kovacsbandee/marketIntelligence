@@ -126,7 +126,7 @@ def plot_price_with_indicators(price_table,
     )
 
     # Add dividends as blue dots
-    if dividend_table:
+    if dividend_table is not None and not dividend_table.empty:
         try:
             # Filter dividend table by date range if provided
             loader = LoadExampleData(load_dividends=True)
