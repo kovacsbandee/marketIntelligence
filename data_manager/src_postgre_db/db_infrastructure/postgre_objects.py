@@ -725,3 +725,21 @@ class DividendsTable(Base):
     declaration_date = Column(Date, nullable=True)
     record_date = Column(Date, nullable=True)
     payment_date = Column(Date, nullable=True)
+
+
+# --- Table name to ORM class mapping ---
+table_name_to_class = {
+    "company_fundamentals": CompanyFundamentalsTable,
+    "daily_timeseries": DailyTimeSeries,
+    "balance_sheet_annual": AnnualBalanceSheetTable,
+    "balance_sheet_quarterly": QuarterlyBalanceSheetTable,
+    "cash_flow_annual": AnnualCashFlowTable,
+    "cash_flow_statement_quarterly": QuarterlyCashFlowTable,
+    "earnings_annual": AnnualEarningsTable,
+    "earnings_quarterly": QuarterlyEarningsTable,
+    "income_statement_annual": AnnualIncomeStatement,
+    "income_statement_quarterly": QuarterlyIncomeStatement,
+    "insider_transactions": InsiderTransactionTable,
+    "stock_splits": StockSplit,
+    "dividends": DividendsTable,
+}
