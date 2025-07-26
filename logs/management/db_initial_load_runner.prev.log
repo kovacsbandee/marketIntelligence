@@ -1,0 +1,1638 @@
+2025-07-26 15:39:00,288 - db_initial_load_runner - INFO - Starting initial load for 15 symbols...
+2025-07-26 15:39:00,288 - db_initial_load_runner - INFO - Processing symbol: OXSQ
+2025-07-26 15:39:00,288 - AlphaLoader - INFO - Fetching data for OXSQ...
+2025-07-26 15:39:01,472 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - ERROR - Failed to insert new rows into daily_timeseries
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "daily_timeseries_pkey"
+DETAIL:  Key (date, symbol)=(2018-03-21, OXSQ) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "daily_timeseries_pkey"
+DETAIL:  Key (date, symbol)=(2018-03-21, OXSQ) already exists.
+
+[SQL: INSERT INTO daily_timeseries (date, symbol, open, high, low, close, volume) VALUES (%(date__0)s, %(symbol__0)s, %(open__0)s, %(high__0)s, %(low__0)s, %(close__0)s, %(volume__0)s), (%(date__1)s, %(symbol__1)s, %(open__1)s, %(high__1)s, %(low__1)s, %(c ... 109961 characters truncated ... 999)s, %(symbol__999)s, %(open__999)s, %(high__999)s, %(low__999)s, %(close__999)s, %(volume__999)s)]
+[parameters: {'close__0': '6.0400', 'symbol__0': 'OXSQ', 'date__0': Timestamp('2018-03-21 00:00:00'), 'volume__0': '145934', 'high__0': '6.1200', 'low__0': '6.0200', 'open__0': '6.0900', 'close__1': '6.1600', 'symbol__1': 'OXSQ', 'date__1': Timestamp('2018-03-22 00:00:00'), 'volume__1': '231643', 'high__1': '6.2000', 'low__1': '6.0200', 'open__1': '6.0200', 'close__2': '6.2000', 'symbol__2': 'OXSQ', 'date__2': Timestamp('2018-03-23 00:00:00'), 'volume__2': '149722', 'high__2': '6.2600', 'low__2': '5.9700', 'open__2': '6.2600', 'close__3': '6.0900', 'symbol__3': 'OXSQ', 'date__3': Timestamp('2018-03-26 00:00:00'), 'volume__3': '266024', 'high__3': '6.2300', 'low__3': '6.0900', 'open__3': '6.1400', 'close__4': '6.0200', 'symbol__4': 'OXSQ', 'date__4': Timestamp('2018-03-27 00:00:00'), 'volume__4': '261462', 'high__4': '6.1100', 'low__4': '5.9300', 'open__4': '6.0800', 'close__5': '6.1000', 'symbol__5': 'OXSQ', 'date__5': Timestamp('2018-03-28 00:00:00'), 'volume__5': '173460', 'high__5': '6.1300', 'low__5': '5.9700', 'open__5': '6.0300', 'close__6': '6.1100', 'symbol__6': 'OXSQ', 'date__6': Timestamp('2018-03-29 00:00:00'), 'volume__6': '229323', 'high__6': '6.1800', 'low__6': '6.0500', 'open__6': '6.0800', 'close__7': '6.1600' ... 6900 parameters truncated ... 'open__992': '4.0600', 'close__993': '4.1100', 'symbol__993': 'OXSQ', 'date__993': Timestamp('2022-03-01 00:00:00'), 'volume__993': '145358', 'high__993': '4.1700', 'low__993': '4.0800', 'open__993': '4.1400', 'close__994': '4.1500', 'symbol__994': 'OXSQ', 'date__994': Timestamp('2022-03-02 00:00:00'), 'volume__994': '156246', 'high__994': '4.2200', 'low__994': '4.1318', 'open__994': '4.1400', 'close__995': '4.1300', 'symbol__995': 'OXSQ', 'date__995': Timestamp('2022-03-03 00:00:00'), 'volume__995': '133441', 'high__995': '4.2200', 'low__995': '4.1201', 'open__995': '4.1600', 'close__996': '4.0100', 'symbol__996': 'OXSQ', 'date__996': Timestamp('2022-03-04 00:00:00'), 'volume__996': '180764', 'high__996': '4.1500', 'low__996': '4.0000', 'open__996': '4.1100', 'close__997': '3.9700', 'symbol__997': 'OXSQ', 'date__997': Timestamp('2022-03-07 00:00:00'), 'volume__997': '243559', 'high__997': '4.0300', 'low__997': '3.9500', 'open__997': '3.9900', 'close__998': '3.9400', 'symbol__998': 'OXSQ', 'date__998': Timestamp('2022-03-08 00:00:00'), 'volume__998': '316613', 'high__998': '4.0200', 'low__998': '3.9200', 'open__998': '3.9500', 'close__999': '3.9900', 'symbol__999': 'OXSQ', 'date__999': Timestamp('2022-03-09 00:00:00'), 'volume__999': '263669', 'high__999': '4.0350', 'low__999': '3.9400', 'open__999': '3.9800'}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:01,509 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - ERROR - Transaction failed
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "daily_timeseries_pkey"
+DETAIL:  Key (date, symbol)=(2018-03-21, OXSQ) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 86, in session_scope
+    yield session
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "daily_timeseries_pkey"
+DETAIL:  Key (date, symbol)=(2018-03-21, OXSQ) already exists.
+
+[SQL: INSERT INTO daily_timeseries (date, symbol, open, high, low, close, volume) VALUES (%(date__0)s, %(symbol__0)s, %(open__0)s, %(high__0)s, %(low__0)s, %(close__0)s, %(volume__0)s), (%(date__1)s, %(symbol__1)s, %(open__1)s, %(high__1)s, %(low__1)s, %(c ... 109961 characters truncated ... 999)s, %(symbol__999)s, %(open__999)s, %(high__999)s, %(low__999)s, %(close__999)s, %(volume__999)s)]
+[parameters: {'close__0': '6.0400', 'symbol__0': 'OXSQ', 'date__0': Timestamp('2018-03-21 00:00:00'), 'volume__0': '145934', 'high__0': '6.1200', 'low__0': '6.0200', 'open__0': '6.0900', 'close__1': '6.1600', 'symbol__1': 'OXSQ', 'date__1': Timestamp('2018-03-22 00:00:00'), 'volume__1': '231643', 'high__1': '6.2000', 'low__1': '6.0200', 'open__1': '6.0200', 'close__2': '6.2000', 'symbol__2': 'OXSQ', 'date__2': Timestamp('2018-03-23 00:00:00'), 'volume__2': '149722', 'high__2': '6.2600', 'low__2': '5.9700', 'open__2': '6.2600', 'close__3': '6.0900', 'symbol__3': 'OXSQ', 'date__3': Timestamp('2018-03-26 00:00:00'), 'volume__3': '266024', 'high__3': '6.2300', 'low__3': '6.0900', 'open__3': '6.1400', 'close__4': '6.0200', 'symbol__4': 'OXSQ', 'date__4': Timestamp('2018-03-27 00:00:00'), 'volume__4': '261462', 'high__4': '6.1100', 'low__4': '5.9300', 'open__4': '6.0800', 'close__5': '6.1000', 'symbol__5': 'OXSQ', 'date__5': Timestamp('2018-03-28 00:00:00'), 'volume__5': '173460', 'high__5': '6.1300', 'low__5': '5.9700', 'open__5': '6.0300', 'close__6': '6.1100', 'symbol__6': 'OXSQ', 'date__6': Timestamp('2018-03-29 00:00:00'), 'volume__6': '229323', 'high__6': '6.1800', 'low__6': '6.0500', 'open__6': '6.0800', 'close__7': '6.1600' ... 6900 parameters truncated ... 'open__992': '4.0600', 'close__993': '4.1100', 'symbol__993': 'OXSQ', 'date__993': Timestamp('2022-03-01 00:00:00'), 'volume__993': '145358', 'high__993': '4.1700', 'low__993': '4.0800', 'open__993': '4.1400', 'close__994': '4.1500', 'symbol__994': 'OXSQ', 'date__994': Timestamp('2022-03-02 00:00:00'), 'volume__994': '156246', 'high__994': '4.2200', 'low__994': '4.1318', 'open__994': '4.1400', 'close__995': '4.1300', 'symbol__995': 'OXSQ', 'date__995': Timestamp('2022-03-03 00:00:00'), 'volume__995': '133441', 'high__995': '4.2200', 'low__995': '4.1201', 'open__995': '4.1600', 'close__996': '4.0100', 'symbol__996': 'OXSQ', 'date__996': Timestamp('2022-03-04 00:00:00'), 'volume__996': '180764', 'high__996': '4.1500', 'low__996': '4.0000', 'open__996': '4.1100', 'close__997': '3.9700', 'symbol__997': 'OXSQ', 'date__997': Timestamp('2022-03-07 00:00:00'), 'volume__997': '243559', 'high__997': '4.0300', 'low__997': '3.9500', 'open__997': '3.9900', 'close__998': '3.9400', 'symbol__998': 'OXSQ', 'date__998': Timestamp('2022-03-08 00:00:00'), 'volume__998': '316613', 'high__998': '4.0200', 'low__998': '3.9200', 'open__998': '3.9500', 'close__999': '3.9900', 'symbol__999': 'OXSQ', 'date__999': Timestamp('2022-03-09 00:00:00'), 'volume__999': '263669', 'high__999': '4.0350', 'low__999': '3.9400', 'open__999': '3.9800'}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:01,515 - AlphaLoader - ERROR - An unexpected error occurred: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "daily_timeseries_pkey"
+DETAIL:  Key (date, symbol)=(2018-03-21, OXSQ) already exists.
+
+[SQL: INSERT INTO daily_timeseries (date, symbol, open, high, low, close, volume) VALUES (%(date__0)s, %(symbol__0)s, %(open__0)s, %(high__0)s, %(low__0)s, %(close__0)s, %(volume__0)s), (%(date__1)s, %(symbol__1)s, %(open__1)s, %(high__1)s, %(low__1)s, %(c ... 109961 characters truncated ... 999)s, %(symbol__999)s, %(open__999)s, %(high__999)s, %(low__999)s, %(close__999)s, %(volume__999)s)]
+[parameters: {'close__0': '6.0400', 'symbol__0': 'OXSQ', 'date__0': Timestamp('2018-03-21 00:00:00'), 'volume__0': '145934', 'high__0': '6.1200', 'low__0': '6.0200', 'open__0': '6.0900', 'close__1': '6.1600', 'symbol__1': 'OXSQ', 'date__1': Timestamp('2018-03-22 00:00:00'), 'volume__1': '231643', 'high__1': '6.2000', 'low__1': '6.0200', 'open__1': '6.0200', 'close__2': '6.2000', 'symbol__2': 'OXSQ', 'date__2': Timestamp('2018-03-23 00:00:00'), 'volume__2': '149722', 'high__2': '6.2600', 'low__2': '5.9700', 'open__2': '6.2600', 'close__3': '6.0900', 'symbol__3': 'OXSQ', 'date__3': Timestamp('2018-03-26 00:00:00'), 'volume__3': '266024', 'high__3': '6.2300', 'low__3': '6.0900', 'open__3': '6.1400', 'close__4': '6.0200', 'symbol__4': 'OXSQ', 'date__4': Timestamp('2018-03-27 00:00:00'), 'volume__4': '261462', 'high__4': '6.1100', 'low__4': '5.9300', 'open__4': '6.0800', 'close__5': '6.1000', 'symbol__5': 'OXSQ', 'date__5': Timestamp('2018-03-28 00:00:00'), 'volume__5': '173460', 'high__5': '6.1300', 'low__5': '5.9700', 'open__5': '6.0300', 'close__6': '6.1100', 'symbol__6': 'OXSQ', 'date__6': Timestamp('2018-03-29 00:00:00'), 'volume__6': '229323', 'high__6': '6.1800', 'low__6': '6.0500', 'open__6': '6.0800', 'close__7': '6.1600' ... 6900 parameters truncated ... 'open__992': '4.0600', 'close__993': '4.1100', 'symbol__993': 'OXSQ', 'date__993': Timestamp('2022-03-01 00:00:00'), 'volume__993': '145358', 'high__993': '4.1700', 'low__993': '4.0800', 'open__993': '4.1400', 'close__994': '4.1500', 'symbol__994': 'OXSQ', 'date__994': Timestamp('2022-03-02 00:00:00'), 'volume__994': '156246', 'high__994': '4.2200', 'low__994': '4.1318', 'open__994': '4.1400', 'close__995': '4.1300', 'symbol__995': 'OXSQ', 'date__995': Timestamp('2022-03-03 00:00:00'), 'volume__995': '133441', 'high__995': '4.2200', 'low__995': '4.1201', 'open__995': '4.1600', 'close__996': '4.0100', 'symbol__996': 'OXSQ', 'date__996': Timestamp('2022-03-04 00:00:00'), 'volume__996': '180764', 'high__996': '4.1500', 'low__996': '4.0000', 'open__996': '4.1100', 'close__997': '3.9700', 'symbol__997': 'OXSQ', 'date__997': Timestamp('2022-03-07 00:00:00'), 'volume__997': '243559', 'high__997': '4.0300', 'low__997': '3.9500', 'open__997': '3.9900', 'close__998': '3.9400', 'symbol__998': 'OXSQ', 'date__998': Timestamp('2022-03-08 00:00:00'), 'volume__998': '316613', 'high__998': '4.0200', 'low__998': '3.9200', 'open__998': '3.9500', 'close__999': '3.9900', 'symbol__999': 'OXSQ', 'date__999': Timestamp('2022-03-09 00:00:00'), 'volume__999': '263669', 'high__999': '4.0350', 'low__999': '3.9400', 'open__999': '3.9800'}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:01,516 - AlphaLoader - INFO - Fetching company base data for OXSQ...
+2025-07-26 15:39:02,138 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - ERROR - Failed to insert new rows into company_fundamentals
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "company_fundamentals_pkey"
+DETAIL:  Key (symbol)=(OXSQ) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1843, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1983, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "company_fundamentals_pkey"
+DETAIL:  Key (symbol)=(OXSQ) already exists.
+
+[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, pe_ratio, book_value, dividend_per_share, dividend_yield, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding, dividend_date, ex_dividend_date, data_state, last_update) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(pe_ratio)s, %(book_value)s, %(dividend_per_share)s, %(dividend_yield)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s, %(dividend_date)s, %(ex_dividend_date)s, %(data_state)s, %(last_update)s)]
+[parameters: {'symbol': 'OXSQ', 'asset_type': 'Common Stock', 'name': 'Oxford Square Capital Corp', 'cik': 1259429, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'TECHNOLOGY', 'industry': 'GENERAL', 'address': 'NONE', 'official_site': 'https://www.oxfordsquarecapital.com', 'fiscal_year_end': 'December', 'latest_quarter': '2025-03-31', 'market_capitalization': 177144000, 'pe_ratio': 0, 'book_value': 2.091, 'dividend_per_share': 0.42, 'dividend_yield': 0.182, 'eps': 0, 'revenue_per_share_ttm': 0.638, 'profit_margin': -0.0112, 'operating_margin_ttm': 0.793, 'return_on_assets_ttm': 0.0759, 'return_on_equity_ttm': -0.0032, 'revenue_ttm': 42166800, 'gross_profit_ttm': 42166800, 'diluted_eps_ttm': 0, 'quarterly_earnings_growth_yoy': -0.622, 'quarterly_revenue_growth_yoy': -0.048, 'analyst_target_price': 4.75, 'price_to_sales_ratio_ttm': 4.201, 'price_to_book_ratio': 1.18, 'ev_to_revenue': 86.54, 'beta': 0.657, 'fifty_two_week_high': 2.654, 'fifty_two_week_low': 2.108, 'fifty_day_moving_average': 2.307, 'two_hundred_day_moving_average': 2.583, 'shares_outstanding': 76027000, 'dividend_date': '2025-09-30', 'ex_dividend_date': '2025-08-15', 'data_state': '', 'last_update': Timestamp('2025-07-26 15:39:02.097431')}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:02,143 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - ERROR - Transaction failed
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "company_fundamentals_pkey"
+DETAIL:  Key (symbol)=(OXSQ) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 86, in session_scope
+    yield session
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1843, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1983, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "company_fundamentals_pkey"
+DETAIL:  Key (symbol)=(OXSQ) already exists.
+
+[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, pe_ratio, book_value, dividend_per_share, dividend_yield, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding, dividend_date, ex_dividend_date, data_state, last_update) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(pe_ratio)s, %(book_value)s, %(dividend_per_share)s, %(dividend_yield)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s, %(dividend_date)s, %(ex_dividend_date)s, %(data_state)s, %(last_update)s)]
+[parameters: {'symbol': 'OXSQ', 'asset_type': 'Common Stock', 'name': 'Oxford Square Capital Corp', 'cik': 1259429, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'TECHNOLOGY', 'industry': 'GENERAL', 'address': 'NONE', 'official_site': 'https://www.oxfordsquarecapital.com', 'fiscal_year_end': 'December', 'latest_quarter': '2025-03-31', 'market_capitalization': 177144000, 'pe_ratio': 0, 'book_value': 2.091, 'dividend_per_share': 0.42, 'dividend_yield': 0.182, 'eps': 0, 'revenue_per_share_ttm': 0.638, 'profit_margin': -0.0112, 'operating_margin_ttm': 0.793, 'return_on_assets_ttm': 0.0759, 'return_on_equity_ttm': -0.0032, 'revenue_ttm': 42166800, 'gross_profit_ttm': 42166800, 'diluted_eps_ttm': 0, 'quarterly_earnings_growth_yoy': -0.622, 'quarterly_revenue_growth_yoy': -0.048, 'analyst_target_price': 4.75, 'price_to_sales_ratio_ttm': 4.201, 'price_to_book_ratio': 1.18, 'ev_to_revenue': 86.54, 'beta': 0.657, 'fifty_two_week_high': 2.654, 'fifty_two_week_low': 2.108, 'fifty_day_moving_average': 2.307, 'two_hundred_day_moving_average': 2.583, 'shares_outstanding': 76027000, 'dividend_date': '2025-09-30', 'ex_dividend_date': '2025-08-15', 'data_state': '', 'last_update': Timestamp('2025-07-26 15:39:02.097431')}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:02,148 - AlphaLoader - ERROR - An unexpected error occurred: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "company_fundamentals_pkey"
+DETAIL:  Key (symbol)=(OXSQ) already exists.
+
+[SQL: INSERT INTO company_fundamentals (symbol, asset_type, name, cik, exchange, currency, country, sector, industry, address, official_site, fiscal_year_end, latest_quarter, market_capitalization, pe_ratio, book_value, dividend_per_share, dividend_yield, eps, revenue_per_share_ttm, profit_margin, operating_margin_ttm, return_on_assets_ttm, return_on_equity_ttm, revenue_ttm, gross_profit_ttm, diluted_eps_ttm, quarterly_earnings_growth_yoy, quarterly_revenue_growth_yoy, analyst_target_price, price_to_sales_ratio_ttm, price_to_book_ratio, ev_to_revenue, beta, fifty_two_week_high, fifty_two_week_low, fifty_day_moving_average, two_hundred_day_moving_average, shares_outstanding, dividend_date, ex_dividend_date, data_state, last_update) VALUES (%(symbol)s, %(asset_type)s, %(name)s, %(cik)s, %(exchange)s, %(currency)s, %(country)s, %(sector)s, %(industry)s, %(address)s, %(official_site)s, %(fiscal_year_end)s, %(latest_quarter)s, %(market_capitalization)s, %(pe_ratio)s, %(book_value)s, %(dividend_per_share)s, %(dividend_yield)s, %(eps)s, %(revenue_per_share_ttm)s, %(profit_margin)s, %(operating_margin_ttm)s, %(return_on_assets_ttm)s, %(return_on_equity_ttm)s, %(revenue_ttm)s, %(gross_profit_ttm)s, %(diluted_eps_ttm)s, %(quarterly_earnings_growth_yoy)s, %(quarterly_revenue_growth_yoy)s, %(analyst_target_price)s, %(price_to_sales_ratio_ttm)s, %(price_to_book_ratio)s, %(ev_to_revenue)s, %(beta)s, %(fifty_two_week_high)s, %(fifty_two_week_low)s, %(fifty_day_moving_average)s, %(two_hundred_day_moving_average)s, %(shares_outstanding)s, %(dividend_date)s, %(ex_dividend_date)s, %(data_state)s, %(last_update)s)]
+[parameters: {'symbol': 'OXSQ', 'asset_type': 'Common Stock', 'name': 'Oxford Square Capital Corp', 'cik': 1259429, 'exchange': 'NASDAQ', 'currency': 'USD', 'country': 'USA', 'sector': 'TECHNOLOGY', 'industry': 'GENERAL', 'address': 'NONE', 'official_site': 'https://www.oxfordsquarecapital.com', 'fiscal_year_end': 'December', 'latest_quarter': '2025-03-31', 'market_capitalization': 177144000, 'pe_ratio': 0, 'book_value': 2.091, 'dividend_per_share': 0.42, 'dividend_yield': 0.182, 'eps': 0, 'revenue_per_share_ttm': 0.638, 'profit_margin': -0.0112, 'operating_margin_ttm': 0.793, 'return_on_assets_ttm': 0.0759, 'return_on_equity_ttm': -0.0032, 'revenue_ttm': 42166800, 'gross_profit_ttm': 42166800, 'diluted_eps_ttm': 0, 'quarterly_earnings_growth_yoy': -0.622, 'quarterly_revenue_growth_yoy': -0.048, 'analyst_target_price': 4.75, 'price_to_sales_ratio_ttm': 4.201, 'price_to_book_ratio': 1.18, 'ev_to_revenue': 86.54, 'beta': 0.657, 'fifty_two_week_high': 2.654, 'fifty_two_week_low': 2.108, 'fifty_day_moving_average': 2.307, 'two_hundred_day_moving_average': 2.583, 'shares_outstanding': 76027000, 'dividend_date': '2025-09-30', 'ex_dividend_date': '2025-08-15', 'data_state': '', 'last_update': Timestamp('2025-07-26 15:39:02.097431')}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:02,149 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for OXSQ...
+2025-07-26 15:39:03,204 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - ERROR - Failed to insert new rows into income_statement_annual
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "income_statement_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2024-12-31) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "income_statement_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2024-12-31) already exists.
+
+[SQL: INSERT INTO income_statement_annual (symbol, fiscal_date_ending, reported_currency, gross_profit, total_revenue, cost_of_revenue, cost_of_goods_and_services_sold, operating_income, selling_general_and_administrative, research_and_development, operati ... 15605 characters truncated ... ns__19)s, %(comprehensive_income_net_of_tax__19)s, %(ebit__19)s, %(ebitda__19)s, %(net_income__19)s)]
+[parameters: {'investment_income_net__0': nan, 'fiscal_date_ending__0': Timestamp('2024-12-31 00:00:00'), 'net_interest_income__0': 17081967.0, 'ebitda__0': 13727001.0, 'non_interest_income__0': nan, 'comprehensive_income_net_of_tax__0': nan, 'cost_of_goods_and_services_sold__0': -63517954, 'depreciation_and_amortization__0': nan, 'net_income_from_continuing_operations__0': 5879681.0, 'interest_income__0': 24929287.0, 'reported_currency__0': 'USD', 'income_tax_expense__0': nan, 'research_and_development__0': nan, 'total_revenue__0': 42683205, 'selling_general_and_administrative__0': 2135317, 'cost_of_revenue__0': -63517954, 'ebit__0': nan, 'depreciation__0': nan, 'interest_and_debt_expense__0': nan, 'income_before_tax__0': 5879681.0, 'other_non_operating_income__0': nan, 'operating_expenses__0': 2135317, 'net_income__0': 5879681, 'symbol__0': 'OXSQ', 'interest_expense__0': 7847320, 'operating_income__0': 40547888, 'gross_profit__0': 42683205, 'investment_income_net__1': nan, 'fiscal_date_ending__1': Timestamp('2023-12-31 00:00:00'), 'net_interest_income__1': 21256692.0, 'ebitda__1': 41891203.0, 'non_interest_income__1': nan, 'comprehensive_income_net_of_tax__1': nan, 'cost_of_goods_and_services_sold__1': 8565613, 'depreciation_and_amortization__1': -190353.0, 'net_income_from_continuing_operations__1': 1773340.0, 'interest_income__1': 33050869.0, 'reported_currency__1': 'USD', 'income_tax_expense__1': 28254260.0, 'research_and_development__1': 0.5, 'total_revenue__1': 51824181, 'selling_general_and_administrative__1': 8116400, 'cost_of_revenue__1': 8565613, 'ebit__1': 28444611.0, 'depreciation__1': nan, 'interest_and_debt_expense__1': nan, 'income_before_tax__1': 17238028.0, 'other_non_operating_income__1': nan, 'operating_expenses__1': 8509292, 'net_income__1': 17238028 ... 440 parameters truncated ... 'non_interest_income__18': nan, 'comprehensive_income_net_of_tax__18': nan, 'cost_of_goods_and_services_sold__18': 8649000, 'depreciation_and_amortization__18': -914088.0, 'net_income_from_continuing_operations__18': nan, 'interest_income__18': nan, 'reported_currency__18': 'USD', 'income_tax_expense__18': 1896903.0, 'research_and_development__18': nan, 'total_revenue__18': 34980678, 'selling_general_and_administrative__18': 712301, 'cost_of_revenue__18': 8649000, 'ebit__18': 28228075.0, 'depreciation__18': nan, 'interest_and_debt_expense__18': nan, 'income_before_tax__18': 26331000.0, 'other_non_operating_income__18': nan, 'operating_expenses__18': 9000000, 'net_income__18': 26331172, 'symbol__18': 'OXSQ', 'interest_expense__18': 1896903, 'operating_income__18': 28228075, 'gross_profit__18': 34980678, 'investment_income_net__19': nan, 'fiscal_date_ending__19': Timestamp('2005-12-31 00:00:00'), 'net_interest_income__19': nan, 'ebitda__19': 395009.0, 'non_interest_income__19': nan, 'comprehensive_income_net_of_tax__19': nan, 'cost_of_goods_and_services_sold__19': 724784000000, 'depreciation_and_amortization__19': -395009.0, 'net_income_from_continuing_operations__19': nan, 'interest_income__19': nan, 'reported_currency__19': 'USD', 'income_tax_expense__19': 546516.0, 'research_and_development__19': nan, 'total_revenue__19': 23173036, 'selling_general_and_administrative__19': 724784, 'cost_of_revenue__19': 724784000000, 'ebit__19': 16850653.0, 'depreciation__19': nan, 'interest_and_debt_expense__19': nan, 'income_before_tax__19': 16304000.0, 'other_non_operating_income__19': nan, 'operating_expenses__19': 7000000, 'net_income__19': 16304137, 'symbol__19': 'OXSQ', 'interest_expense__19': 546516, 'operating_income__19': 19605041000000, 'gross_profit__19': -724760826964}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:03,211 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - ERROR - Transaction failed
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "income_statement_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2024-12-31) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 86, in session_scope
+    yield session
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "income_statement_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2024-12-31) already exists.
+
+[SQL: INSERT INTO income_statement_annual (symbol, fiscal_date_ending, reported_currency, gross_profit, total_revenue, cost_of_revenue, cost_of_goods_and_services_sold, operating_income, selling_general_and_administrative, research_and_development, operati ... 15605 characters truncated ... ns__19)s, %(comprehensive_income_net_of_tax__19)s, %(ebit__19)s, %(ebitda__19)s, %(net_income__19)s)]
+[parameters: {'investment_income_net__0': nan, 'fiscal_date_ending__0': Timestamp('2024-12-31 00:00:00'), 'net_interest_income__0': 17081967.0, 'ebitda__0': 13727001.0, 'non_interest_income__0': nan, 'comprehensive_income_net_of_tax__0': nan, 'cost_of_goods_and_services_sold__0': -63517954, 'depreciation_and_amortization__0': nan, 'net_income_from_continuing_operations__0': 5879681.0, 'interest_income__0': 24929287.0, 'reported_currency__0': 'USD', 'income_tax_expense__0': nan, 'research_and_development__0': nan, 'total_revenue__0': 42683205, 'selling_general_and_administrative__0': 2135317, 'cost_of_revenue__0': -63517954, 'ebit__0': nan, 'depreciation__0': nan, 'interest_and_debt_expense__0': nan, 'income_before_tax__0': 5879681.0, 'other_non_operating_income__0': nan, 'operating_expenses__0': 2135317, 'net_income__0': 5879681, 'symbol__0': 'OXSQ', 'interest_expense__0': 7847320, 'operating_income__0': 40547888, 'gross_profit__0': 42683205, 'investment_income_net__1': nan, 'fiscal_date_ending__1': Timestamp('2023-12-31 00:00:00'), 'net_interest_income__1': 21256692.0, 'ebitda__1': 41891203.0, 'non_interest_income__1': nan, 'comprehensive_income_net_of_tax__1': nan, 'cost_of_goods_and_services_sold__1': 8565613, 'depreciation_and_amortization__1': -190353.0, 'net_income_from_continuing_operations__1': 1773340.0, 'interest_income__1': 33050869.0, 'reported_currency__1': 'USD', 'income_tax_expense__1': 28254260.0, 'research_and_development__1': 0.5, 'total_revenue__1': 51824181, 'selling_general_and_administrative__1': 8116400, 'cost_of_revenue__1': 8565613, 'ebit__1': 28444611.0, 'depreciation__1': nan, 'interest_and_debt_expense__1': nan, 'income_before_tax__1': 17238028.0, 'other_non_operating_income__1': nan, 'operating_expenses__1': 8509292, 'net_income__1': 17238028 ... 440 parameters truncated ... 'non_interest_income__18': nan, 'comprehensive_income_net_of_tax__18': nan, 'cost_of_goods_and_services_sold__18': 8649000, 'depreciation_and_amortization__18': -914088.0, 'net_income_from_continuing_operations__18': nan, 'interest_income__18': nan, 'reported_currency__18': 'USD', 'income_tax_expense__18': 1896903.0, 'research_and_development__18': nan, 'total_revenue__18': 34980678, 'selling_general_and_administrative__18': 712301, 'cost_of_revenue__18': 8649000, 'ebit__18': 28228075.0, 'depreciation__18': nan, 'interest_and_debt_expense__18': nan, 'income_before_tax__18': 26331000.0, 'other_non_operating_income__18': nan, 'operating_expenses__18': 9000000, 'net_income__18': 26331172, 'symbol__18': 'OXSQ', 'interest_expense__18': 1896903, 'operating_income__18': 28228075, 'gross_profit__18': 34980678, 'investment_income_net__19': nan, 'fiscal_date_ending__19': Timestamp('2005-12-31 00:00:00'), 'net_interest_income__19': nan, 'ebitda__19': 395009.0, 'non_interest_income__19': nan, 'comprehensive_income_net_of_tax__19': nan, 'cost_of_goods_and_services_sold__19': 724784000000, 'depreciation_and_amortization__19': -395009.0, 'net_income_from_continuing_operations__19': nan, 'interest_income__19': nan, 'reported_currency__19': 'USD', 'income_tax_expense__19': 546516.0, 'research_and_development__19': nan, 'total_revenue__19': 23173036, 'selling_general_and_administrative__19': 724784, 'cost_of_revenue__19': 724784000000, 'ebit__19': 16850653.0, 'depreciation__19': nan, 'interest_and_debt_expense__19': nan, 'income_before_tax__19': 16304000.0, 'other_non_operating_income__19': nan, 'operating_expenses__19': 7000000, 'net_income__19': 16304137, 'symbol__19': 'OXSQ', 'interest_expense__19': 546516, 'operating_income__19': 19605041000000, 'gross_profit__19': -724760826964}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:03,216 - AlphaLoader - ERROR - An unexpected error occurred: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "income_statement_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2024-12-31) already exists.
+
+[SQL: INSERT INTO income_statement_annual (symbol, fiscal_date_ending, reported_currency, gross_profit, total_revenue, cost_of_revenue, cost_of_goods_and_services_sold, operating_income, selling_general_and_administrative, research_and_development, operati ... 15605 characters truncated ... ns__19)s, %(comprehensive_income_net_of_tax__19)s, %(ebit__19)s, %(ebitda__19)s, %(net_income__19)s)]
+[parameters: {'investment_income_net__0': nan, 'fiscal_date_ending__0': Timestamp('2024-12-31 00:00:00'), 'net_interest_income__0': 17081967.0, 'ebitda__0': 13727001.0, 'non_interest_income__0': nan, 'comprehensive_income_net_of_tax__0': nan, 'cost_of_goods_and_services_sold__0': -63517954, 'depreciation_and_amortization__0': nan, 'net_income_from_continuing_operations__0': 5879681.0, 'interest_income__0': 24929287.0, 'reported_currency__0': 'USD', 'income_tax_expense__0': nan, 'research_and_development__0': nan, 'total_revenue__0': 42683205, 'selling_general_and_administrative__0': 2135317, 'cost_of_revenue__0': -63517954, 'ebit__0': nan, 'depreciation__0': nan, 'interest_and_debt_expense__0': nan, 'income_before_tax__0': 5879681.0, 'other_non_operating_income__0': nan, 'operating_expenses__0': 2135317, 'net_income__0': 5879681, 'symbol__0': 'OXSQ', 'interest_expense__0': 7847320, 'operating_income__0': 40547888, 'gross_profit__0': 42683205, 'investment_income_net__1': nan, 'fiscal_date_ending__1': Timestamp('2023-12-31 00:00:00'), 'net_interest_income__1': 21256692.0, 'ebitda__1': 41891203.0, 'non_interest_income__1': nan, 'comprehensive_income_net_of_tax__1': nan, 'cost_of_goods_and_services_sold__1': 8565613, 'depreciation_and_amortization__1': -190353.0, 'net_income_from_continuing_operations__1': 1773340.0, 'interest_income__1': 33050869.0, 'reported_currency__1': 'USD', 'income_tax_expense__1': 28254260.0, 'research_and_development__1': 0.5, 'total_revenue__1': 51824181, 'selling_general_and_administrative__1': 8116400, 'cost_of_revenue__1': 8565613, 'ebit__1': 28444611.0, 'depreciation__1': nan, 'interest_and_debt_expense__1': nan, 'income_before_tax__1': 17238028.0, 'other_non_operating_income__1': nan, 'operating_expenses__1': 8509292, 'net_income__1': 17238028 ... 440 parameters truncated ... 'non_interest_income__18': nan, 'comprehensive_income_net_of_tax__18': nan, 'cost_of_goods_and_services_sold__18': 8649000, 'depreciation_and_amortization__18': -914088.0, 'net_income_from_continuing_operations__18': nan, 'interest_income__18': nan, 'reported_currency__18': 'USD', 'income_tax_expense__18': 1896903.0, 'research_and_development__18': nan, 'total_revenue__18': 34980678, 'selling_general_and_administrative__18': 712301, 'cost_of_revenue__18': 8649000, 'ebit__18': 28228075.0, 'depreciation__18': nan, 'interest_and_debt_expense__18': nan, 'income_before_tax__18': 26331000.0, 'other_non_operating_income__18': nan, 'operating_expenses__18': 9000000, 'net_income__18': 26331172, 'symbol__18': 'OXSQ', 'interest_expense__18': 1896903, 'operating_income__18': 28228075, 'gross_profit__18': 34980678, 'investment_income_net__19': nan, 'fiscal_date_ending__19': Timestamp('2005-12-31 00:00:00'), 'net_interest_income__19': nan, 'ebitda__19': 395009.0, 'non_interest_income__19': nan, 'comprehensive_income_net_of_tax__19': nan, 'cost_of_goods_and_services_sold__19': 724784000000, 'depreciation_and_amortization__19': -395009.0, 'net_income_from_continuing_operations__19': nan, 'interest_income__19': nan, 'reported_currency__19': 'USD', 'income_tax_expense__19': 546516.0, 'research_and_development__19': nan, 'total_revenue__19': 23173036, 'selling_general_and_administrative__19': 724784, 'cost_of_revenue__19': 724784000000, 'ebit__19': 16850653.0, 'depreciation__19': nan, 'interest_and_debt_expense__19': nan, 'income_before_tax__19': 16304000.0, 'other_non_operating_income__19': nan, 'operating_expenses__19': 7000000, 'net_income__19': 16304137, 'symbol__19': 'OXSQ', 'interest_expense__19': 546516, 'operating_income__19': 19605041000000, 'gross_profit__19': -724760826964}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:03,216 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for OXSQ...
+2025-07-26 15:39:03,841 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - ERROR - Failed to insert new rows into balance_sheet_annual
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "balance_sheet_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2024-12-31) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "balance_sheet_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2024-12-31) already exists.
+
+[SQL: INSERT INTO balance_sheet_annual (symbol, fiscal_date_ending, reported_currency, total_assets, total_current_assets, cash_and_cash_equivalents, cash_and_short_term_investments, inventory, current_net_receivables, total_non_current_assets, property_pl ... 21506 characters truncated ... ock__19)s, %(retained_earnings__19)s, %(common_stock__19)s, %(common_stock_shares_outstanding__19)s)]
+[parameters: {'total_non_current_liabilities__0': 125833544.0, 'fiscal_date_ending__0': Timestamp('2024-12-31 00:00:00'), 'current_net_receivables__0': 2724049, 'total_assets__0': 299730974, 'current_accounts_payable__0': 13231950.0, 'capital_lease_obligations__0': nan, 'inventory__0': nan, 'total_non_current_assets__0': 262080457, 'long_term_investments__0': 260852859.0, 'other_non_current_assets__0': nan, 'reported_currency__0': 'USD', 'total_current_assets__0': 37650517, 'property_plant_equipment__0': nan, 'other_non_current_liabilities__0': nan, 'total_liabilities__0': 139065494, 'goodwill__0': nan, 'cash_and_cash_equivalents__0': 34926468, 'short_long_term_debt_total__0': 123599319.0, 'short_term_investments__0': nan, 'accumulated_depreciation_amortization_ppe__0': nan, 'common_stock_shares_outstanding__0': 63465255, 'total_current_liabilities__0': 13231950, 'long_term_debt__0': nan, 'other_current_assets__0': nan, 'retained_earnings__0': -327975586, 'treasury_stock__0': nan, 'other_current_liabilities__0': -13231950, 'common_stock__0': 697590, 'symbol__0': 'OXSQ', 'cash_and_short_term_investments__0': 34926468, 'deferred_revenue__0': nan, 'current_debt__0': nan, 'short_term_debt__0': 123599319000000.0, 'total_shareholder_equity__0': 160665480, 'intangible_assets__0': nan, 'total_non_current_liabilities__1': 125154660.0, 'fiscal_date_ending__1': Timestamp('2023-12-31 00:00:00'), 'current_net_receivables__1': 3976408, 'total_assets__1': 277667772, 'current_accounts_payable__1': 1204487.0, 'capital_lease_obligations__1': nan, 'inventory__1': nan, 'total_non_current_assets__1': 267950811, 'long_term_investments__1': 266890427.0, 'other_non_current_assets__1': nan, 'reported_currency__1': 'USD', 'total_current_assets__1': 9716961, 'property_plant_equipment__1': nan, 'other_non_current_liabilities__1': nan, 'total_liabilities__1': 126359147 ... 600 parameters truncated ... 'common_stock_shares_outstanding__18': 19491588, 'total_current_liabilities__18': 624185, 'long_term_debt__18': nan, 'other_current_assets__18': 237069.0, 'retained_earnings__18': 384000, 'treasury_stock__18': nan, 'other_current_liabilities__18': 165678, 'common_stock__18': 197058, 'symbol__18': 'OXSQ', 'cash_and_short_term_investments__18': 5181512, 'deferred_revenue__18': nan, 'current_debt__18': nan, 'short_term_debt__18': nan, 'total_shareholder_equity__18': 271335345, 'intangible_assets__18': nan, 'total_non_current_liabilities__19': 4202342.0, 'fiscal_date_ending__19': Timestamp('2005-12-31 00:00:00'), 'current_net_receivables__19': 2025931, 'total_assets__19': 270107818, 'current_accounts_payable__19': nan, 'capital_lease_obligations__19': nan, 'inventory__19': nan, 'total_non_current_assets__19': 212270303, 'long_term_investments__19': nan, 'other_non_current_assets__19': nan, 'reported_currency__19': 'USD', 'total_current_assets__19': 57837515, 'property_plant_equipment__19': nan, 'other_non_current_liabilities__19': nan, 'total_liabilities__19': 4202342, 'goodwill__19': nan, 'cash_and_cash_equivalents__19': 55811584, 'short_long_term_debt_total__19': nan, 'short_term_investments__19': 55654000.0, 'accumulated_depreciation_amortization_ppe__19': nan, 'common_stock_shares_outstanding__19': 13459343, 'total_current_liabilities__19': 4200000, 'long_term_debt__19': nan, 'other_current_assets__19': 73000.0, 'retained_earnings__19': 1647000, 'treasury_stock__19': nan, 'other_current_liabilities__19': 4200000, 'common_stock__19': 193044, 'symbol__19': 'OXSQ', 'cash_and_short_term_investments__19': 55811584, 'deferred_revenue__19': nan, 'current_debt__19': nan, 'short_term_debt__19': nan, 'total_shareholder_equity__19': 265905476, 'intangible_assets__19': nan}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:03,848 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - ERROR - Transaction failed
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "balance_sheet_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2024-12-31) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 86, in session_scope
+    yield session
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "balance_sheet_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2024-12-31) already exists.
+
+[SQL: INSERT INTO balance_sheet_annual (symbol, fiscal_date_ending, reported_currency, total_assets, total_current_assets, cash_and_cash_equivalents, cash_and_short_term_investments, inventory, current_net_receivables, total_non_current_assets, property_pl ... 21506 characters truncated ... ock__19)s, %(retained_earnings__19)s, %(common_stock__19)s, %(common_stock_shares_outstanding__19)s)]
+[parameters: {'total_non_current_liabilities__0': 125833544.0, 'fiscal_date_ending__0': Timestamp('2024-12-31 00:00:00'), 'current_net_receivables__0': 2724049, 'total_assets__0': 299730974, 'current_accounts_payable__0': 13231950.0, 'capital_lease_obligations__0': nan, 'inventory__0': nan, 'total_non_current_assets__0': 262080457, 'long_term_investments__0': 260852859.0, 'other_non_current_assets__0': nan, 'reported_currency__0': 'USD', 'total_current_assets__0': 37650517, 'property_plant_equipment__0': nan, 'other_non_current_liabilities__0': nan, 'total_liabilities__0': 139065494, 'goodwill__0': nan, 'cash_and_cash_equivalents__0': 34926468, 'short_long_term_debt_total__0': 123599319.0, 'short_term_investments__0': nan, 'accumulated_depreciation_amortization_ppe__0': nan, 'common_stock_shares_outstanding__0': 63465255, 'total_current_liabilities__0': 13231950, 'long_term_debt__0': nan, 'other_current_assets__0': nan, 'retained_earnings__0': -327975586, 'treasury_stock__0': nan, 'other_current_liabilities__0': -13231950, 'common_stock__0': 697590, 'symbol__0': 'OXSQ', 'cash_and_short_term_investments__0': 34926468, 'deferred_revenue__0': nan, 'current_debt__0': nan, 'short_term_debt__0': 123599319000000.0, 'total_shareholder_equity__0': 160665480, 'intangible_assets__0': nan, 'total_non_current_liabilities__1': 125154660.0, 'fiscal_date_ending__1': Timestamp('2023-12-31 00:00:00'), 'current_net_receivables__1': 3976408, 'total_assets__1': 277667772, 'current_accounts_payable__1': 1204487.0, 'capital_lease_obligations__1': nan, 'inventory__1': nan, 'total_non_current_assets__1': 267950811, 'long_term_investments__1': 266890427.0, 'other_non_current_assets__1': nan, 'reported_currency__1': 'USD', 'total_current_assets__1': 9716961, 'property_plant_equipment__1': nan, 'other_non_current_liabilities__1': nan, 'total_liabilities__1': 126359147 ... 600 parameters truncated ... 'common_stock_shares_outstanding__18': 19491588, 'total_current_liabilities__18': 624185, 'long_term_debt__18': nan, 'other_current_assets__18': 237069.0, 'retained_earnings__18': 384000, 'treasury_stock__18': nan, 'other_current_liabilities__18': 165678, 'common_stock__18': 197058, 'symbol__18': 'OXSQ', 'cash_and_short_term_investments__18': 5181512, 'deferred_revenue__18': nan, 'current_debt__18': nan, 'short_term_debt__18': nan, 'total_shareholder_equity__18': 271335345, 'intangible_assets__18': nan, 'total_non_current_liabilities__19': 4202342.0, 'fiscal_date_ending__19': Timestamp('2005-12-31 00:00:00'), 'current_net_receivables__19': 2025931, 'total_assets__19': 270107818, 'current_accounts_payable__19': nan, 'capital_lease_obligations__19': nan, 'inventory__19': nan, 'total_non_current_assets__19': 212270303, 'long_term_investments__19': nan, 'other_non_current_assets__19': nan, 'reported_currency__19': 'USD', 'total_current_assets__19': 57837515, 'property_plant_equipment__19': nan, 'other_non_current_liabilities__19': nan, 'total_liabilities__19': 4202342, 'goodwill__19': nan, 'cash_and_cash_equivalents__19': 55811584, 'short_long_term_debt_total__19': nan, 'short_term_investments__19': 55654000.0, 'accumulated_depreciation_amortization_ppe__19': nan, 'common_stock_shares_outstanding__19': 13459343, 'total_current_liabilities__19': 4200000, 'long_term_debt__19': nan, 'other_current_assets__19': 73000.0, 'retained_earnings__19': 1647000, 'treasury_stock__19': nan, 'other_current_liabilities__19': 4200000, 'common_stock__19': 193044, 'symbol__19': 'OXSQ', 'cash_and_short_term_investments__19': 55811584, 'deferred_revenue__19': nan, 'current_debt__19': nan, 'short_term_debt__19': nan, 'total_shareholder_equity__19': 265905476, 'intangible_assets__19': nan}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:03,852 - AlphaLoader - ERROR - An unexpected error occurred: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "balance_sheet_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2024-12-31) already exists.
+
+[SQL: INSERT INTO balance_sheet_annual (symbol, fiscal_date_ending, reported_currency, total_assets, total_current_assets, cash_and_cash_equivalents, cash_and_short_term_investments, inventory, current_net_receivables, total_non_current_assets, property_pl ... 21506 characters truncated ... ock__19)s, %(retained_earnings__19)s, %(common_stock__19)s, %(common_stock_shares_outstanding__19)s)]
+[parameters: {'total_non_current_liabilities__0': 125833544.0, 'fiscal_date_ending__0': Timestamp('2024-12-31 00:00:00'), 'current_net_receivables__0': 2724049, 'total_assets__0': 299730974, 'current_accounts_payable__0': 13231950.0, 'capital_lease_obligations__0': nan, 'inventory__0': nan, 'total_non_current_assets__0': 262080457, 'long_term_investments__0': 260852859.0, 'other_non_current_assets__0': nan, 'reported_currency__0': 'USD', 'total_current_assets__0': 37650517, 'property_plant_equipment__0': nan, 'other_non_current_liabilities__0': nan, 'total_liabilities__0': 139065494, 'goodwill__0': nan, 'cash_and_cash_equivalents__0': 34926468, 'short_long_term_debt_total__0': 123599319.0, 'short_term_investments__0': nan, 'accumulated_depreciation_amortization_ppe__0': nan, 'common_stock_shares_outstanding__0': 63465255, 'total_current_liabilities__0': 13231950, 'long_term_debt__0': nan, 'other_current_assets__0': nan, 'retained_earnings__0': -327975586, 'treasury_stock__0': nan, 'other_current_liabilities__0': -13231950, 'common_stock__0': 697590, 'symbol__0': 'OXSQ', 'cash_and_short_term_investments__0': 34926468, 'deferred_revenue__0': nan, 'current_debt__0': nan, 'short_term_debt__0': 123599319000000.0, 'total_shareholder_equity__0': 160665480, 'intangible_assets__0': nan, 'total_non_current_liabilities__1': 125154660.0, 'fiscal_date_ending__1': Timestamp('2023-12-31 00:00:00'), 'current_net_receivables__1': 3976408, 'total_assets__1': 277667772, 'current_accounts_payable__1': 1204487.0, 'capital_lease_obligations__1': nan, 'inventory__1': nan, 'total_non_current_assets__1': 267950811, 'long_term_investments__1': 266890427.0, 'other_non_current_assets__1': nan, 'reported_currency__1': 'USD', 'total_current_assets__1': 9716961, 'property_plant_equipment__1': nan, 'other_non_current_liabilities__1': nan, 'total_liabilities__1': 126359147 ... 600 parameters truncated ... 'common_stock_shares_outstanding__18': 19491588, 'total_current_liabilities__18': 624185, 'long_term_debt__18': nan, 'other_current_assets__18': 237069.0, 'retained_earnings__18': 384000, 'treasury_stock__18': nan, 'other_current_liabilities__18': 165678, 'common_stock__18': 197058, 'symbol__18': 'OXSQ', 'cash_and_short_term_investments__18': 5181512, 'deferred_revenue__18': nan, 'current_debt__18': nan, 'short_term_debt__18': nan, 'total_shareholder_equity__18': 271335345, 'intangible_assets__18': nan, 'total_non_current_liabilities__19': 4202342.0, 'fiscal_date_ending__19': Timestamp('2005-12-31 00:00:00'), 'current_net_receivables__19': 2025931, 'total_assets__19': 270107818, 'current_accounts_payable__19': nan, 'capital_lease_obligations__19': nan, 'inventory__19': nan, 'total_non_current_assets__19': 212270303, 'long_term_investments__19': nan, 'other_non_current_assets__19': nan, 'reported_currency__19': 'USD', 'total_current_assets__19': 57837515, 'property_plant_equipment__19': nan, 'other_non_current_liabilities__19': nan, 'total_liabilities__19': 4202342, 'goodwill__19': nan, 'cash_and_cash_equivalents__19': 55811584, 'short_long_term_debt_total__19': nan, 'short_term_investments__19': 55654000.0, 'accumulated_depreciation_amortization_ppe__19': nan, 'common_stock_shares_outstanding__19': 13459343, 'total_current_liabilities__19': 4200000, 'long_term_debt__19': nan, 'other_current_assets__19': 73000.0, 'retained_earnings__19': 1647000, 'treasury_stock__19': nan, 'other_current_liabilities__19': 4200000, 'common_stock__19': 193044, 'symbol__19': 'OXSQ', 'cash_and_short_term_investments__19': 55811584, 'deferred_revenue__19': nan, 'current_debt__19': nan, 'short_term_debt__19': nan, 'total_shareholder_equity__19': 265905476, 'intangible_assets__19': nan}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:03,853 - AlphaLoader - INFO - Fetching CASH_FLOW data for OXSQ...
+2025-07-26 15:39:04,884 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - ERROR - Failed to insert new rows into cash_flow_annual
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "cash_flow_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2024-12-31) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "cash_flow_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2024-12-31) already exists.
+
+[SQL: INSERT INTO cash_flow_annual (symbol, fiscal_date_ending, reported_currency, operating_cashflow, payments_for_operating_activities, proceeds_from_operating_activities, change_in_operating_liabilities, change_in_operating_assets, depreciation_depletio ... 23440 characters truncated ... s, %(change_in_cash_and_cash_equivalents__19)s, %(change_in_exchange_rate__19)s, %(net_income__19)s)]
+[parameters: {'change_in_operating_liabilities__0': nan, 'dividend_payout__0': 25758093, 'fiscal_date_ending__0': Timestamp('2024-12-31 00:00:00'), 'cashflow_from_financing__0': 3477174, 'proceeds_from_issuance_of_long_term_debt_and_capital_securities_net__0': nan, 'payments_for_repurchase_of_common_stock__0': nan, 'reported_currency__0': 'USD', 'proceeds_from_operating_activities__0': nan, 'payments_for_repurchase_of_equity__0': nan, 'proceeds_from_issuance_of_preferred_stock__0': nan, 'profit_loss__0': nan, 'cashflow_from_investment__0': nan, 'proceeds_from_repayments_of_short_term_debt__0': nan, 'proceeds_from_issuance_of_common_stock__0': nan, 'change_in_inventory__0': nan, 'payments_for_repurchase_of_preferred_stock__0': nan, 'proceeds_from_repurchase_of_equity__0': nan, 'payments_for_operating_activities__0': nan, 'change_in_exchange_rate__0': nan, 'dividend_payout_common_stock__0': 25758093, 'operating_cashflow__0': 25708741, 'depreciation_depletion_and_amortization__0': nan, 'dividend_payout_preferred_stock__0': nan, 'proceeds_from_sale_of_treasury_stock__0': nan, 'net_income__0': 5879681, 'symbol__0': 'OXSQ', 'change_in_receivables__0': nan, 'change_in_operating_assets__0': nan, 'capital_expenditures__0': 0, 'change_in_cash_and_cash_equivalents__0': nan, 'change_in_operating_liabilities__1': nan, 'dividend_payout__1': 28620343, 'fiscal_date_ending__1': Timestamp('2023-12-31 00:00:00'), 'cashflow_from_financing__1': -68971590, 'proceeds_from_issuance_of_long_term_debt_and_capital_securities_net__1': nan, 'payments_for_repurchase_of_common_stock__1': nan, 'reported_currency__1': 'USD', 'proceeds_from_operating_activities__1': nan, 'payments_for_repurchase_of_equity__1': nan, 'proceeds_from_issuance_of_preferred_stock__1': nan, 'profit_loss__1': nan, 'cashflow_from_investment__1': nan, 'proceeds_from_repayments_of_short_term_debt__1': nan, 'proceeds_from_issuance_of_common_stock__1': nan, 'change_in_inventory__1': nan, 'payments_for_repurchase_of_preferred_stock__1': nan, 'proceeds_from_repurchase_of_equity__1': 94296075999975.0, 'payments_for_operating_activities__1': nan, 'change_in_exchange_rate__1': nan, 'dividend_payout_common_stock__1': 28620343 ... 500 parameters truncated ... 'profit_loss__18': nan, 'cashflow_from_investment__18': -110152788.0, 'proceeds_from_repayments_of_short_term_debt__18': nan, 'proceeds_from_issuance_of_common_stock__18': nan, 'change_in_inventory__18': nan, 'payments_for_repurchase_of_preferred_stock__18': nan, 'proceeds_from_repurchase_of_equity__18': nan, 'payments_for_operating_activities__18': nan, 'change_in_exchange_rate__18': nan, 'dividend_payout_common_stock__18': 20853132, 'operating_cashflow__18': -88276940, 'depreciation_depletion_and_amortization__18': -914088.0, 'dividend_payout_preferred_stock__18': nan, 'proceeds_from_sale_of_treasury_stock__18': nan, 'net_income__18': 26331172, 'symbol__18': 'OXSQ', 'change_in_receivables__18': nan, 'change_in_operating_assets__18': nan, 'capital_expenditures__18': 0, 'change_in_cash_and_cash_equivalents__18': nan, 'change_in_operating_liabilities__19': nan, 'dividend_payout__19': 7647627, 'fiscal_date_ending__19': Timestamp('2005-12-31 00:00:00'), 'cashflow_from_financing__19': 112656330, 'proceeds_from_issuance_of_long_term_debt_and_capital_securities_net__19': nan, 'payments_for_repurchase_of_common_stock__19': nan, 'reported_currency__19': 'USD', 'proceeds_from_operating_activities__19': nan, 'payments_for_repurchase_of_equity__19': nan, 'proceeds_from_issuance_of_preferred_stock__19': nan, 'profit_loss__19': nan, 'cashflow_from_investment__19': nan, 'proceeds_from_repayments_of_short_term_debt__19': nan, 'proceeds_from_issuance_of_common_stock__19': nan, 'change_in_inventory__19': nan, 'payments_for_repurchase_of_preferred_stock__19': nan, 'proceeds_from_repurchase_of_equity__19': nan, 'payments_for_operating_activities__19': nan, 'change_in_exchange_rate__19': nan, 'dividend_payout_common_stock__19': 7647627, 'operating_cashflow__19': -114162144, 'depreciation_depletion_and_amortization__19': -395009.0, 'dividend_payout_preferred_stock__19': nan, 'proceeds_from_sale_of_treasury_stock__19': nan, 'net_income__19': 16304137, 'symbol__19': 'OXSQ', 'change_in_receivables__19': nan, 'change_in_operating_assets__19': nan, 'capital_expenditures__19': 0, 'change_in_cash_and_cash_equivalents__19': nan}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:04,890 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - ERROR - Transaction failed
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "cash_flow_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2024-12-31) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 86, in session_scope
+    yield session
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "cash_flow_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2024-12-31) already exists.
+
+[SQL: INSERT INTO cash_flow_annual (symbol, fiscal_date_ending, reported_currency, operating_cashflow, payments_for_operating_activities, proceeds_from_operating_activities, change_in_operating_liabilities, change_in_operating_assets, depreciation_depletio ... 23440 characters truncated ... s, %(change_in_cash_and_cash_equivalents__19)s, %(change_in_exchange_rate__19)s, %(net_income__19)s)]
+[parameters: {'change_in_operating_liabilities__0': nan, 'dividend_payout__0': 25758093, 'fiscal_date_ending__0': Timestamp('2024-12-31 00:00:00'), 'cashflow_from_financing__0': 3477174, 'proceeds_from_issuance_of_long_term_debt_and_capital_securities_net__0': nan, 'payments_for_repurchase_of_common_stock__0': nan, 'reported_currency__0': 'USD', 'proceeds_from_operating_activities__0': nan, 'payments_for_repurchase_of_equity__0': nan, 'proceeds_from_issuance_of_preferred_stock__0': nan, 'profit_loss__0': nan, 'cashflow_from_investment__0': nan, 'proceeds_from_repayments_of_short_term_debt__0': nan, 'proceeds_from_issuance_of_common_stock__0': nan, 'change_in_inventory__0': nan, 'payments_for_repurchase_of_preferred_stock__0': nan, 'proceeds_from_repurchase_of_equity__0': nan, 'payments_for_operating_activities__0': nan, 'change_in_exchange_rate__0': nan, 'dividend_payout_common_stock__0': 25758093, 'operating_cashflow__0': 25708741, 'depreciation_depletion_and_amortization__0': nan, 'dividend_payout_preferred_stock__0': nan, 'proceeds_from_sale_of_treasury_stock__0': nan, 'net_income__0': 5879681, 'symbol__0': 'OXSQ', 'change_in_receivables__0': nan, 'change_in_operating_assets__0': nan, 'capital_expenditures__0': 0, 'change_in_cash_and_cash_equivalents__0': nan, 'change_in_operating_liabilities__1': nan, 'dividend_payout__1': 28620343, 'fiscal_date_ending__1': Timestamp('2023-12-31 00:00:00'), 'cashflow_from_financing__1': -68971590, 'proceeds_from_issuance_of_long_term_debt_and_capital_securities_net__1': nan, 'payments_for_repurchase_of_common_stock__1': nan, 'reported_currency__1': 'USD', 'proceeds_from_operating_activities__1': nan, 'payments_for_repurchase_of_equity__1': nan, 'proceeds_from_issuance_of_preferred_stock__1': nan, 'profit_loss__1': nan, 'cashflow_from_investment__1': nan, 'proceeds_from_repayments_of_short_term_debt__1': nan, 'proceeds_from_issuance_of_common_stock__1': nan, 'change_in_inventory__1': nan, 'payments_for_repurchase_of_preferred_stock__1': nan, 'proceeds_from_repurchase_of_equity__1': 94296075999975.0, 'payments_for_operating_activities__1': nan, 'change_in_exchange_rate__1': nan, 'dividend_payout_common_stock__1': 28620343 ... 500 parameters truncated ... 'profit_loss__18': nan, 'cashflow_from_investment__18': -110152788.0, 'proceeds_from_repayments_of_short_term_debt__18': nan, 'proceeds_from_issuance_of_common_stock__18': nan, 'change_in_inventory__18': nan, 'payments_for_repurchase_of_preferred_stock__18': nan, 'proceeds_from_repurchase_of_equity__18': nan, 'payments_for_operating_activities__18': nan, 'change_in_exchange_rate__18': nan, 'dividend_payout_common_stock__18': 20853132, 'operating_cashflow__18': -88276940, 'depreciation_depletion_and_amortization__18': -914088.0, 'dividend_payout_preferred_stock__18': nan, 'proceeds_from_sale_of_treasury_stock__18': nan, 'net_income__18': 26331172, 'symbol__18': 'OXSQ', 'change_in_receivables__18': nan, 'change_in_operating_assets__18': nan, 'capital_expenditures__18': 0, 'change_in_cash_and_cash_equivalents__18': nan, 'change_in_operating_liabilities__19': nan, 'dividend_payout__19': 7647627, 'fiscal_date_ending__19': Timestamp('2005-12-31 00:00:00'), 'cashflow_from_financing__19': 112656330, 'proceeds_from_issuance_of_long_term_debt_and_capital_securities_net__19': nan, 'payments_for_repurchase_of_common_stock__19': nan, 'reported_currency__19': 'USD', 'proceeds_from_operating_activities__19': nan, 'payments_for_repurchase_of_equity__19': nan, 'proceeds_from_issuance_of_preferred_stock__19': nan, 'profit_loss__19': nan, 'cashflow_from_investment__19': nan, 'proceeds_from_repayments_of_short_term_debt__19': nan, 'proceeds_from_issuance_of_common_stock__19': nan, 'change_in_inventory__19': nan, 'payments_for_repurchase_of_preferred_stock__19': nan, 'proceeds_from_repurchase_of_equity__19': nan, 'payments_for_operating_activities__19': nan, 'change_in_exchange_rate__19': nan, 'dividend_payout_common_stock__19': 7647627, 'operating_cashflow__19': -114162144, 'depreciation_depletion_and_amortization__19': -395009.0, 'dividend_payout_preferred_stock__19': nan, 'proceeds_from_sale_of_treasury_stock__19': nan, 'net_income__19': 16304137, 'symbol__19': 'OXSQ', 'change_in_receivables__19': nan, 'change_in_operating_assets__19': nan, 'capital_expenditures__19': 0, 'change_in_cash_and_cash_equivalents__19': nan}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:04,896 - AlphaLoader - ERROR - An unexpected error occurred: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "cash_flow_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2024-12-31) already exists.
+
+[SQL: INSERT INTO cash_flow_annual (symbol, fiscal_date_ending, reported_currency, operating_cashflow, payments_for_operating_activities, proceeds_from_operating_activities, change_in_operating_liabilities, change_in_operating_assets, depreciation_depletio ... 23440 characters truncated ... s, %(change_in_cash_and_cash_equivalents__19)s, %(change_in_exchange_rate__19)s, %(net_income__19)s)]
+[parameters: {'change_in_operating_liabilities__0': nan, 'dividend_payout__0': 25758093, 'fiscal_date_ending__0': Timestamp('2024-12-31 00:00:00'), 'cashflow_from_financing__0': 3477174, 'proceeds_from_issuance_of_long_term_debt_and_capital_securities_net__0': nan, 'payments_for_repurchase_of_common_stock__0': nan, 'reported_currency__0': 'USD', 'proceeds_from_operating_activities__0': nan, 'payments_for_repurchase_of_equity__0': nan, 'proceeds_from_issuance_of_preferred_stock__0': nan, 'profit_loss__0': nan, 'cashflow_from_investment__0': nan, 'proceeds_from_repayments_of_short_term_debt__0': nan, 'proceeds_from_issuance_of_common_stock__0': nan, 'change_in_inventory__0': nan, 'payments_for_repurchase_of_preferred_stock__0': nan, 'proceeds_from_repurchase_of_equity__0': nan, 'payments_for_operating_activities__0': nan, 'change_in_exchange_rate__0': nan, 'dividend_payout_common_stock__0': 25758093, 'operating_cashflow__0': 25708741, 'depreciation_depletion_and_amortization__0': nan, 'dividend_payout_preferred_stock__0': nan, 'proceeds_from_sale_of_treasury_stock__0': nan, 'net_income__0': 5879681, 'symbol__0': 'OXSQ', 'change_in_receivables__0': nan, 'change_in_operating_assets__0': nan, 'capital_expenditures__0': 0, 'change_in_cash_and_cash_equivalents__0': nan, 'change_in_operating_liabilities__1': nan, 'dividend_payout__1': 28620343, 'fiscal_date_ending__1': Timestamp('2023-12-31 00:00:00'), 'cashflow_from_financing__1': -68971590, 'proceeds_from_issuance_of_long_term_debt_and_capital_securities_net__1': nan, 'payments_for_repurchase_of_common_stock__1': nan, 'reported_currency__1': 'USD', 'proceeds_from_operating_activities__1': nan, 'payments_for_repurchase_of_equity__1': nan, 'proceeds_from_issuance_of_preferred_stock__1': nan, 'profit_loss__1': nan, 'cashflow_from_investment__1': nan, 'proceeds_from_repayments_of_short_term_debt__1': nan, 'proceeds_from_issuance_of_common_stock__1': nan, 'change_in_inventory__1': nan, 'payments_for_repurchase_of_preferred_stock__1': nan, 'proceeds_from_repurchase_of_equity__1': 94296075999975.0, 'payments_for_operating_activities__1': nan, 'change_in_exchange_rate__1': nan, 'dividend_payout_common_stock__1': 28620343 ... 500 parameters truncated ... 'profit_loss__18': nan, 'cashflow_from_investment__18': -110152788.0, 'proceeds_from_repayments_of_short_term_debt__18': nan, 'proceeds_from_issuance_of_common_stock__18': nan, 'change_in_inventory__18': nan, 'payments_for_repurchase_of_preferred_stock__18': nan, 'proceeds_from_repurchase_of_equity__18': nan, 'payments_for_operating_activities__18': nan, 'change_in_exchange_rate__18': nan, 'dividend_payout_common_stock__18': 20853132, 'operating_cashflow__18': -88276940, 'depreciation_depletion_and_amortization__18': -914088.0, 'dividend_payout_preferred_stock__18': nan, 'proceeds_from_sale_of_treasury_stock__18': nan, 'net_income__18': 26331172, 'symbol__18': 'OXSQ', 'change_in_receivables__18': nan, 'change_in_operating_assets__18': nan, 'capital_expenditures__18': 0, 'change_in_cash_and_cash_equivalents__18': nan, 'change_in_operating_liabilities__19': nan, 'dividend_payout__19': 7647627, 'fiscal_date_ending__19': Timestamp('2005-12-31 00:00:00'), 'cashflow_from_financing__19': 112656330, 'proceeds_from_issuance_of_long_term_debt_and_capital_securities_net__19': nan, 'payments_for_repurchase_of_common_stock__19': nan, 'reported_currency__19': 'USD', 'proceeds_from_operating_activities__19': nan, 'payments_for_repurchase_of_equity__19': nan, 'proceeds_from_issuance_of_preferred_stock__19': nan, 'profit_loss__19': nan, 'cashflow_from_investment__19': nan, 'proceeds_from_repayments_of_short_term_debt__19': nan, 'proceeds_from_issuance_of_common_stock__19': nan, 'change_in_inventory__19': nan, 'payments_for_repurchase_of_preferred_stock__19': nan, 'proceeds_from_repurchase_of_equity__19': nan, 'payments_for_operating_activities__19': nan, 'change_in_exchange_rate__19': nan, 'dividend_payout_common_stock__19': 7647627, 'operating_cashflow__19': -114162144, 'depreciation_depletion_and_amortization__19': -395009.0, 'dividend_payout_preferred_stock__19': nan, 'proceeds_from_sale_of_treasury_stock__19': nan, 'net_income__19': 16304137, 'symbol__19': 'OXSQ', 'change_in_receivables__19': nan, 'change_in_operating_assets__19': nan, 'capital_expenditures__19': 0, 'change_in_cash_and_cash_equivalents__19': nan}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:04,897 - AlphaLoader - INFO - Fetching EARNINGS data for OXSQ...
+2025-07-26 15:39:05,591 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - ERROR - Failed to insert new rows into earnings_annual
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "earnings_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2025-06-30) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "earnings_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2025-06-30) already exists.
+
+[SQL: INSERT INTO earnings_annual (symbol, fiscal_date_ending, reported_eps) VALUES (%(symbol__0)s, %(fiscal_date_ending__0)s, %(reported_eps__0)s), (%(symbol__1)s, %(fiscal_date_ending__1)s, %(reported_eps__1)s), (%(symbol__2)s, %(fiscal_date_ending__2)s, ... 1192 characters truncated ... ing__20)s, %(reported_eps__20)s), (%(symbol__21)s, %(fiscal_date_ending__21)s, %(reported_eps__21)s)]
+[parameters: {'reported_eps__0': 0.09, 'symbol__0': 'OXSQ', 'fiscal_date_ending__0': Timestamp('2025-06-30 00:00:00'), 'reported_eps__1': 0.2732, 'symbol__1': 'OXSQ', 'fiscal_date_ending__1': Timestamp('2024-12-31 00:00:00'), 'reported_eps__2': 0.32, 'symbol__2': 'OXSQ', 'fiscal_date_ending__2': Timestamp('2023-12-31 00:00:00'), 'reported_eps__3': 0.41, 'symbol__3': 'OXSQ', 'fiscal_date_ending__3': Timestamp('2022-12-31 00:00:00'), 'reported_eps__4': 0.33, 'symbol__4': 'OXSQ', 'fiscal_date_ending__4': Timestamp('2021-12-31 00:00:00'), 'reported_eps__5': 0.41, 'symbol__5': 'OXSQ', 'fiscal_date_ending__5': Timestamp('2020-12-31 00:00:00'), 'reported_eps__6': 0.82, 'symbol__6': 'OXSQ', 'fiscal_date_ending__6': Timestamp('2019-12-31 00:00:00'), 'reported_eps__7': 0.67, 'symbol__7': 'OXSQ', 'fiscal_date_ending__7': Timestamp('2018-12-31 00:00:00'), 'reported_eps__8': 0.58, 'symbol__8': 'OXSQ', 'fiscal_date_ending__8': Timestamp('2017-12-31 00:00:00'), 'reported_eps__9': 0.46, 'symbol__9': 'OXSQ', 'fiscal_date_ending__9': Timestamp('2016-12-31 00:00:00'), 'reported_eps__10': 0.6, 'symbol__10': 'OXSQ', 'fiscal_date_ending__10': Timestamp('2015-12-31 00:00:00'), 'reported_eps__11': 1.06, 'symbol__11': 'OXSQ', 'fiscal_date_ending__11': Timestamp('2014-12-31 00:00:00'), 'reported_eps__12': 1.05, 'symbol__12': 'OXSQ', 'fiscal_date_ending__12': Timestamp('2013-12-31 00:00:00'), 'reported_eps__13': 1.03, 'symbol__13': 'OXSQ', 'fiscal_date_ending__13': Timestamp('2012-12-31 00:00:00'), 'reported_eps__14': 0.96, 'symbol__14': 'OXSQ', 'fiscal_date_ending__14': Timestamp('2011-12-31 00:00:00'), 'reported_eps__15': 0.9, 'symbol__15': 'OXSQ', 'fiscal_date_ending__15': Timestamp('2010-12-31 00:00:00'), 'reported_eps__16': 0.51, 'symbol__16': 'OXSQ', 'fiscal_date_ending__16': Timestamp('2009-12-31 00:00:00'), 'reported_eps__17': 0.93, 'symbol__17': 'OXSQ', 'fiscal_date_ending__17': Timestamp('2008-12-31 00:00:00'), 'reported_eps__18': 1.33, 'symbol__18': 'OXSQ', 'fiscal_date_ending__18': Timestamp('2007-12-31 00:00:00'), 'reported_eps__19': 1.29, 'symbol__19': 'OXSQ', 'fiscal_date_ending__19': Timestamp('2006-12-31 00:00:00'), 'reported_eps__20': 1.07, 'symbol__20': 'OXSQ', 'fiscal_date_ending__20': Timestamp('2005-12-31 00:00:00'), 'reported_eps__21': 0.3354, 'symbol__21': 'OXSQ', 'fiscal_date_ending__21': Timestamp('2004-12-31 00:00:00')}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:05,596 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - ERROR - Transaction failed
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "earnings_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2025-06-30) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 86, in session_scope
+    yield session
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "earnings_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2025-06-30) already exists.
+
+[SQL: INSERT INTO earnings_annual (symbol, fiscal_date_ending, reported_eps) VALUES (%(symbol__0)s, %(fiscal_date_ending__0)s, %(reported_eps__0)s), (%(symbol__1)s, %(fiscal_date_ending__1)s, %(reported_eps__1)s), (%(symbol__2)s, %(fiscal_date_ending__2)s, ... 1192 characters truncated ... ing__20)s, %(reported_eps__20)s), (%(symbol__21)s, %(fiscal_date_ending__21)s, %(reported_eps__21)s)]
+[parameters: {'reported_eps__0': 0.09, 'symbol__0': 'OXSQ', 'fiscal_date_ending__0': Timestamp('2025-06-30 00:00:00'), 'reported_eps__1': 0.2732, 'symbol__1': 'OXSQ', 'fiscal_date_ending__1': Timestamp('2024-12-31 00:00:00'), 'reported_eps__2': 0.32, 'symbol__2': 'OXSQ', 'fiscal_date_ending__2': Timestamp('2023-12-31 00:00:00'), 'reported_eps__3': 0.41, 'symbol__3': 'OXSQ', 'fiscal_date_ending__3': Timestamp('2022-12-31 00:00:00'), 'reported_eps__4': 0.33, 'symbol__4': 'OXSQ', 'fiscal_date_ending__4': Timestamp('2021-12-31 00:00:00'), 'reported_eps__5': 0.41, 'symbol__5': 'OXSQ', 'fiscal_date_ending__5': Timestamp('2020-12-31 00:00:00'), 'reported_eps__6': 0.82, 'symbol__6': 'OXSQ', 'fiscal_date_ending__6': Timestamp('2019-12-31 00:00:00'), 'reported_eps__7': 0.67, 'symbol__7': 'OXSQ', 'fiscal_date_ending__7': Timestamp('2018-12-31 00:00:00'), 'reported_eps__8': 0.58, 'symbol__8': 'OXSQ', 'fiscal_date_ending__8': Timestamp('2017-12-31 00:00:00'), 'reported_eps__9': 0.46, 'symbol__9': 'OXSQ', 'fiscal_date_ending__9': Timestamp('2016-12-31 00:00:00'), 'reported_eps__10': 0.6, 'symbol__10': 'OXSQ', 'fiscal_date_ending__10': Timestamp('2015-12-31 00:00:00'), 'reported_eps__11': 1.06, 'symbol__11': 'OXSQ', 'fiscal_date_ending__11': Timestamp('2014-12-31 00:00:00'), 'reported_eps__12': 1.05, 'symbol__12': 'OXSQ', 'fiscal_date_ending__12': Timestamp('2013-12-31 00:00:00'), 'reported_eps__13': 1.03, 'symbol__13': 'OXSQ', 'fiscal_date_ending__13': Timestamp('2012-12-31 00:00:00'), 'reported_eps__14': 0.96, 'symbol__14': 'OXSQ', 'fiscal_date_ending__14': Timestamp('2011-12-31 00:00:00'), 'reported_eps__15': 0.9, 'symbol__15': 'OXSQ', 'fiscal_date_ending__15': Timestamp('2010-12-31 00:00:00'), 'reported_eps__16': 0.51, 'symbol__16': 'OXSQ', 'fiscal_date_ending__16': Timestamp('2009-12-31 00:00:00'), 'reported_eps__17': 0.93, 'symbol__17': 'OXSQ', 'fiscal_date_ending__17': Timestamp('2008-12-31 00:00:00'), 'reported_eps__18': 1.33, 'symbol__18': 'OXSQ', 'fiscal_date_ending__18': Timestamp('2007-12-31 00:00:00'), 'reported_eps__19': 1.29, 'symbol__19': 'OXSQ', 'fiscal_date_ending__19': Timestamp('2006-12-31 00:00:00'), 'reported_eps__20': 1.07, 'symbol__20': 'OXSQ', 'fiscal_date_ending__20': Timestamp('2005-12-31 00:00:00'), 'reported_eps__21': 0.3354, 'symbol__21': 'OXSQ', 'fiscal_date_ending__21': Timestamp('2004-12-31 00:00:00')}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:05,601 - AlphaLoader - ERROR - An unexpected error occurred: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "earnings_annual_pkey"
+DETAIL:  Key (symbol, fiscal_date_ending)=(OXSQ, 2025-06-30) already exists.
+
+[SQL: INSERT INTO earnings_annual (symbol, fiscal_date_ending, reported_eps) VALUES (%(symbol__0)s, %(fiscal_date_ending__0)s, %(reported_eps__0)s), (%(symbol__1)s, %(fiscal_date_ending__1)s, %(reported_eps__1)s), (%(symbol__2)s, %(fiscal_date_ending__2)s, ... 1192 characters truncated ... ing__20)s, %(reported_eps__20)s), (%(symbol__21)s, %(fiscal_date_ending__21)s, %(reported_eps__21)s)]
+[parameters: {'reported_eps__0': 0.09, 'symbol__0': 'OXSQ', 'fiscal_date_ending__0': Timestamp('2025-06-30 00:00:00'), 'reported_eps__1': 0.2732, 'symbol__1': 'OXSQ', 'fiscal_date_ending__1': Timestamp('2024-12-31 00:00:00'), 'reported_eps__2': 0.32, 'symbol__2': 'OXSQ', 'fiscal_date_ending__2': Timestamp('2023-12-31 00:00:00'), 'reported_eps__3': 0.41, 'symbol__3': 'OXSQ', 'fiscal_date_ending__3': Timestamp('2022-12-31 00:00:00'), 'reported_eps__4': 0.33, 'symbol__4': 'OXSQ', 'fiscal_date_ending__4': Timestamp('2021-12-31 00:00:00'), 'reported_eps__5': 0.41, 'symbol__5': 'OXSQ', 'fiscal_date_ending__5': Timestamp('2020-12-31 00:00:00'), 'reported_eps__6': 0.82, 'symbol__6': 'OXSQ', 'fiscal_date_ending__6': Timestamp('2019-12-31 00:00:00'), 'reported_eps__7': 0.67, 'symbol__7': 'OXSQ', 'fiscal_date_ending__7': Timestamp('2018-12-31 00:00:00'), 'reported_eps__8': 0.58, 'symbol__8': 'OXSQ', 'fiscal_date_ending__8': Timestamp('2017-12-31 00:00:00'), 'reported_eps__9': 0.46, 'symbol__9': 'OXSQ', 'fiscal_date_ending__9': Timestamp('2016-12-31 00:00:00'), 'reported_eps__10': 0.6, 'symbol__10': 'OXSQ', 'fiscal_date_ending__10': Timestamp('2015-12-31 00:00:00'), 'reported_eps__11': 1.06, 'symbol__11': 'OXSQ', 'fiscal_date_ending__11': Timestamp('2014-12-31 00:00:00'), 'reported_eps__12': 1.05, 'symbol__12': 'OXSQ', 'fiscal_date_ending__12': Timestamp('2013-12-31 00:00:00'), 'reported_eps__13': 1.03, 'symbol__13': 'OXSQ', 'fiscal_date_ending__13': Timestamp('2012-12-31 00:00:00'), 'reported_eps__14': 0.96, 'symbol__14': 'OXSQ', 'fiscal_date_ending__14': Timestamp('2011-12-31 00:00:00'), 'reported_eps__15': 0.9, 'symbol__15': 'OXSQ', 'fiscal_date_ending__15': Timestamp('2010-12-31 00:00:00'), 'reported_eps__16': 0.51, 'symbol__16': 'OXSQ', 'fiscal_date_ending__16': Timestamp('2009-12-31 00:00:00'), 'reported_eps__17': 0.93, 'symbol__17': 'OXSQ', 'fiscal_date_ending__17': Timestamp('2008-12-31 00:00:00'), 'reported_eps__18': 1.33, 'symbol__18': 'OXSQ', 'fiscal_date_ending__18': Timestamp('2007-12-31 00:00:00'), 'reported_eps__19': 1.29, 'symbol__19': 'OXSQ', 'fiscal_date_ending__19': Timestamp('2006-12-31 00:00:00'), 'reported_eps__20': 1.07, 'symbol__20': 'OXSQ', 'fiscal_date_ending__20': Timestamp('2005-12-31 00:00:00'), 'reported_eps__21': 0.3354, 'symbol__21': 'OXSQ', 'fiscal_date_ending__21': Timestamp('2004-12-31 00:00:00')}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:05,602 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for OXSQ...
+2025-07-26 15:39:06,871 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - ERROR - Failed to insert new rows into insider_transactions
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "insider_transactions_pkey"
+DETAIL:  Key (transaction_date, symbol, executive, security_type, acquisition_or_disposal)=(2023-06-14, OXSQ, COHEN, JONATHAN H, Transferable Subscription Rights (right to buy), D) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "insider_transactions_pkey"
+DETAIL:  Key (transaction_date, symbol, executive, security_type, acquisition_or_disposal)=(2023-06-14, OXSQ, COHEN, JONATHAN H, Transferable Subscription Rights (right to buy), D) already exists.
+
+[SQL: INSERT INTO insider_transactions (transaction_date, symbol, executive, executive_title, security_type, acquisition_or_disposal, shares, share_price) VALUES (%(transaction_date__0)s, %(symbol__0)s, %(executive__0)s, %(executive_title__0)s, %(security_ ... 64318 characters truncated ... )s, %(security_type__345)s, %(acquisition_or_disposal__345)s, %(shares__345)s, %(share_price__345)s)]
+[parameters: {'symbol__0': 'OXSQ', 'share_price__0': 0.0, 'acquisition_or_disposal__0': 'D', 'transaction_date__0': Timestamp('2023-06-14 00:00:00'), 'security_type__0': 'Transferable Subscription Rights (right to buy)', 'executive__0': 'COHEN, JONATHAN H', 'shares__0': 568122.0, 'executive_title__0': 'Director, Chief Executive Officer', 'symbol__1': 'OXSQ', 'share_price__1': 0.0, 'acquisition_or_disposal__1': 'D', 'transaction_date__1': Timestamp('2023-06-14 00:00:00'), 'security_type__1': 'Transferable Subscription Rights (right to buy)', 'executive__1': 'ROSENTHAL, SAUL B', 'shares__1': 514194.0, 'executive_title__1': 'President and COO', 'symbol__2': 'OXSQ', 'share_price__2': 2.66, 'acquisition_or_disposal__2': 'A', 'transaction_date__2': Timestamp('2023-06-14 00:00:00'), 'security_type__2': 'Common Stock, par value $0.01 per share', 'executive__2': 'COHEN, JONATHAN H', 'shares__2': 568122.0, 'executive_title__2': 'Director, Chief Executive Officer', 'symbol__3': 'OXSQ', 'share_price__3': 0.0, 'acquisition_or_disposal__3': 'D', 'transaction_date__3': Timestamp('2023-06-14 00:00:00'), 'security_type__3': 'Transferable Subscription Rights (right to buy)', 'executive__3': 'ROYCE, CHARLES M', 'shares__3': 98071.0, 'executive_title__3': 'Director', 'symbol__4': 'OXSQ', 'share_price__4': 2.66, 'acquisition_or_disposal__4': 'A', 'transaction_date__4': Timestamp('2023-06-14 00:00:00'), 'security_type__4': 'Common Stock, par value $0.01 per share', 'executive__4': 'ROYCE, CHARLES M', 'shares__4': 98071.0, 'executive_title__4': 'Director', 'symbol__5': 'OXSQ', 'share_price__5': 2.66, 'acquisition_or_disposal__5': 'A', 'transaction_date__5': Timestamp('2023-06-14 00:00:00'), 'security_type__5': 'Common Stock, par value $0.01 per share', 'executive__5': 'NOVAK, STEVEN P', 'shares__5': 2591.0, 'executive_title__5': 'Director', 'symbol__6': 'OXSQ', 'share_price__6': 0.0 ... 2668 parameters truncated ... 'shares__339': 12800.0, 'executive_title__339': 'President and COO', 'symbol__340': 'OXSQ', 'share_price__340': 5.003, 'acquisition_or_disposal__340': 'A', 'transaction_date__340': Timestamp('2016-05-05 00:00:00'), 'security_type__340': 'Common stock, $0.01 par value', 'executive__340': 'COHEN, JONATHAN H', 'shares__340': 12800.0, 'executive_title__340': 'Director, Chief Executive Officer', 'symbol__341': 'OXSQ', 'share_price__341': 5.003, 'acquisition_or_disposal__341': 'A', 'transaction_date__341': Timestamp('2016-05-05 00:00:00'), 'security_type__341': 'Common stock, $0.01 par value', 'executive__341': 'ROYCE, CHARLES M', 'shares__341': 6400.0, 'executive_title__341': 'Director', 'symbol__342': 'OXSQ', 'share_price__342': 0.0, 'acquisition_or_disposal__342': 'D', 'transaction_date__342': Timestamp('2014-12-08 00:00:00'), 'security_type__342': 'Common Stock', 'executive__342': 'OBRIEN, G PETER', 'shares__342': 1300.0, 'executive_title__342': 'Director', 'symbol__343': 'OXSQ', 'share_price__343': 8.5, 'acquisition_or_disposal__343': 'A', 'transaction_date__343': Timestamp('2011-12-21 00:00:00'), 'security_type__343': 'Common Stock', 'executive__343': 'CONROY, PATRICK', 'shares__343': 10000.0, 'executive_title__343': 'CFO, CCO and Secretary', 'symbol__344': 'OXSQ', 'share_price__344': 8.45, 'acquisition_or_disposal__344': 'A', 'transaction_date__344': Timestamp('2011-12-21 00:00:00'), 'security_type__344': 'Common Stock', 'executive__344': 'ROYCE, CHARLES M', 'shares__344': 1983.0, 'executive_title__344': 'Director', 'symbol__345': 'OXSQ', 'share_price__345': 8.4822, 'acquisition_or_disposal__345': 'A', 'transaction_date__345': Timestamp('2011-12-19 00:00:00'), 'security_type__345': 'Common Stock', 'executive__345': 'ROYCE, CHARLES M', 'shares__345': 25000.0, 'executive_title__345': 'Director'}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:06,879 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - ERROR - Transaction failed
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "insider_transactions_pkey"
+DETAIL:  Key (transaction_date, symbol, executive, security_type, acquisition_or_disposal)=(2023-06-14, OXSQ, COHEN, JONATHAN H, Transferable Subscription Rights (right to buy), D) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 86, in session_scope
+    yield session
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "insider_transactions_pkey"
+DETAIL:  Key (transaction_date, symbol, executive, security_type, acquisition_or_disposal)=(2023-06-14, OXSQ, COHEN, JONATHAN H, Transferable Subscription Rights (right to buy), D) already exists.
+
+[SQL: INSERT INTO insider_transactions (transaction_date, symbol, executive, executive_title, security_type, acquisition_or_disposal, shares, share_price) VALUES (%(transaction_date__0)s, %(symbol__0)s, %(executive__0)s, %(executive_title__0)s, %(security_ ... 64318 characters truncated ... )s, %(security_type__345)s, %(acquisition_or_disposal__345)s, %(shares__345)s, %(share_price__345)s)]
+[parameters: {'symbol__0': 'OXSQ', 'share_price__0': 0.0, 'acquisition_or_disposal__0': 'D', 'transaction_date__0': Timestamp('2023-06-14 00:00:00'), 'security_type__0': 'Transferable Subscription Rights (right to buy)', 'executive__0': 'COHEN, JONATHAN H', 'shares__0': 568122.0, 'executive_title__0': 'Director, Chief Executive Officer', 'symbol__1': 'OXSQ', 'share_price__1': 0.0, 'acquisition_or_disposal__1': 'D', 'transaction_date__1': Timestamp('2023-06-14 00:00:00'), 'security_type__1': 'Transferable Subscription Rights (right to buy)', 'executive__1': 'ROSENTHAL, SAUL B', 'shares__1': 514194.0, 'executive_title__1': 'President and COO', 'symbol__2': 'OXSQ', 'share_price__2': 2.66, 'acquisition_or_disposal__2': 'A', 'transaction_date__2': Timestamp('2023-06-14 00:00:00'), 'security_type__2': 'Common Stock, par value $0.01 per share', 'executive__2': 'COHEN, JONATHAN H', 'shares__2': 568122.0, 'executive_title__2': 'Director, Chief Executive Officer', 'symbol__3': 'OXSQ', 'share_price__3': 0.0, 'acquisition_or_disposal__3': 'D', 'transaction_date__3': Timestamp('2023-06-14 00:00:00'), 'security_type__3': 'Transferable Subscription Rights (right to buy)', 'executive__3': 'ROYCE, CHARLES M', 'shares__3': 98071.0, 'executive_title__3': 'Director', 'symbol__4': 'OXSQ', 'share_price__4': 2.66, 'acquisition_or_disposal__4': 'A', 'transaction_date__4': Timestamp('2023-06-14 00:00:00'), 'security_type__4': 'Common Stock, par value $0.01 per share', 'executive__4': 'ROYCE, CHARLES M', 'shares__4': 98071.0, 'executive_title__4': 'Director', 'symbol__5': 'OXSQ', 'share_price__5': 2.66, 'acquisition_or_disposal__5': 'A', 'transaction_date__5': Timestamp('2023-06-14 00:00:00'), 'security_type__5': 'Common Stock, par value $0.01 per share', 'executive__5': 'NOVAK, STEVEN P', 'shares__5': 2591.0, 'executive_title__5': 'Director', 'symbol__6': 'OXSQ', 'share_price__6': 0.0 ... 2668 parameters truncated ... 'shares__339': 12800.0, 'executive_title__339': 'President and COO', 'symbol__340': 'OXSQ', 'share_price__340': 5.003, 'acquisition_or_disposal__340': 'A', 'transaction_date__340': Timestamp('2016-05-05 00:00:00'), 'security_type__340': 'Common stock, $0.01 par value', 'executive__340': 'COHEN, JONATHAN H', 'shares__340': 12800.0, 'executive_title__340': 'Director, Chief Executive Officer', 'symbol__341': 'OXSQ', 'share_price__341': 5.003, 'acquisition_or_disposal__341': 'A', 'transaction_date__341': Timestamp('2016-05-05 00:00:00'), 'security_type__341': 'Common stock, $0.01 par value', 'executive__341': 'ROYCE, CHARLES M', 'shares__341': 6400.0, 'executive_title__341': 'Director', 'symbol__342': 'OXSQ', 'share_price__342': 0.0, 'acquisition_or_disposal__342': 'D', 'transaction_date__342': Timestamp('2014-12-08 00:00:00'), 'security_type__342': 'Common Stock', 'executive__342': 'OBRIEN, G PETER', 'shares__342': 1300.0, 'executive_title__342': 'Director', 'symbol__343': 'OXSQ', 'share_price__343': 8.5, 'acquisition_or_disposal__343': 'A', 'transaction_date__343': Timestamp('2011-12-21 00:00:00'), 'security_type__343': 'Common Stock', 'executive__343': 'CONROY, PATRICK', 'shares__343': 10000.0, 'executive_title__343': 'CFO, CCO and Secretary', 'symbol__344': 'OXSQ', 'share_price__344': 8.45, 'acquisition_or_disposal__344': 'A', 'transaction_date__344': Timestamp('2011-12-21 00:00:00'), 'security_type__344': 'Common Stock', 'executive__344': 'ROYCE, CHARLES M', 'shares__344': 1983.0, 'executive_title__344': 'Director', 'symbol__345': 'OXSQ', 'share_price__345': 8.4822, 'acquisition_or_disposal__345': 'A', 'transaction_date__345': Timestamp('2011-12-19 00:00:00'), 'security_type__345': 'Common Stock', 'executive__345': 'ROYCE, CHARLES M', 'shares__345': 25000.0, 'executive_title__345': 'Director'}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:06,884 - AlphaLoader - ERROR - An unexpected error occurred: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "insider_transactions_pkey"
+DETAIL:  Key (transaction_date, symbol, executive, security_type, acquisition_or_disposal)=(2023-06-14, OXSQ, COHEN, JONATHAN H, Transferable Subscription Rights (right to buy), D) already exists.
+
+[SQL: INSERT INTO insider_transactions (transaction_date, symbol, executive, executive_title, security_type, acquisition_or_disposal, shares, share_price) VALUES (%(transaction_date__0)s, %(symbol__0)s, %(executive__0)s, %(executive_title__0)s, %(security_ ... 64318 characters truncated ... )s, %(security_type__345)s, %(acquisition_or_disposal__345)s, %(shares__345)s, %(share_price__345)s)]
+[parameters: {'symbol__0': 'OXSQ', 'share_price__0': 0.0, 'acquisition_or_disposal__0': 'D', 'transaction_date__0': Timestamp('2023-06-14 00:00:00'), 'security_type__0': 'Transferable Subscription Rights (right to buy)', 'executive__0': 'COHEN, JONATHAN H', 'shares__0': 568122.0, 'executive_title__0': 'Director, Chief Executive Officer', 'symbol__1': 'OXSQ', 'share_price__1': 0.0, 'acquisition_or_disposal__1': 'D', 'transaction_date__1': Timestamp('2023-06-14 00:00:00'), 'security_type__1': 'Transferable Subscription Rights (right to buy)', 'executive__1': 'ROSENTHAL, SAUL B', 'shares__1': 514194.0, 'executive_title__1': 'President and COO', 'symbol__2': 'OXSQ', 'share_price__2': 2.66, 'acquisition_or_disposal__2': 'A', 'transaction_date__2': Timestamp('2023-06-14 00:00:00'), 'security_type__2': 'Common Stock, par value $0.01 per share', 'executive__2': 'COHEN, JONATHAN H', 'shares__2': 568122.0, 'executive_title__2': 'Director, Chief Executive Officer', 'symbol__3': 'OXSQ', 'share_price__3': 0.0, 'acquisition_or_disposal__3': 'D', 'transaction_date__3': Timestamp('2023-06-14 00:00:00'), 'security_type__3': 'Transferable Subscription Rights (right to buy)', 'executive__3': 'ROYCE, CHARLES M', 'shares__3': 98071.0, 'executive_title__3': 'Director', 'symbol__4': 'OXSQ', 'share_price__4': 2.66, 'acquisition_or_disposal__4': 'A', 'transaction_date__4': Timestamp('2023-06-14 00:00:00'), 'security_type__4': 'Common Stock, par value $0.01 per share', 'executive__4': 'ROYCE, CHARLES M', 'shares__4': 98071.0, 'executive_title__4': 'Director', 'symbol__5': 'OXSQ', 'share_price__5': 2.66, 'acquisition_or_disposal__5': 'A', 'transaction_date__5': Timestamp('2023-06-14 00:00:00'), 'security_type__5': 'Common Stock, par value $0.01 per share', 'executive__5': 'NOVAK, STEVEN P', 'shares__5': 2591.0, 'executive_title__5': 'Director', 'symbol__6': 'OXSQ', 'share_price__6': 0.0 ... 2668 parameters truncated ... 'shares__339': 12800.0, 'executive_title__339': 'President and COO', 'symbol__340': 'OXSQ', 'share_price__340': 5.003, 'acquisition_or_disposal__340': 'A', 'transaction_date__340': Timestamp('2016-05-05 00:00:00'), 'security_type__340': 'Common stock, $0.01 par value', 'executive__340': 'COHEN, JONATHAN H', 'shares__340': 12800.0, 'executive_title__340': 'Director, Chief Executive Officer', 'symbol__341': 'OXSQ', 'share_price__341': 5.003, 'acquisition_or_disposal__341': 'A', 'transaction_date__341': Timestamp('2016-05-05 00:00:00'), 'security_type__341': 'Common stock, $0.01 par value', 'executive__341': 'ROYCE, CHARLES M', 'shares__341': 6400.0, 'executive_title__341': 'Director', 'symbol__342': 'OXSQ', 'share_price__342': 0.0, 'acquisition_or_disposal__342': 'D', 'transaction_date__342': Timestamp('2014-12-08 00:00:00'), 'security_type__342': 'Common Stock', 'executive__342': 'OBRIEN, G PETER', 'shares__342': 1300.0, 'executive_title__342': 'Director', 'symbol__343': 'OXSQ', 'share_price__343': 8.5, 'acquisition_or_disposal__343': 'A', 'transaction_date__343': Timestamp('2011-12-21 00:00:00'), 'security_type__343': 'Common Stock', 'executive__343': 'CONROY, PATRICK', 'shares__343': 10000.0, 'executive_title__343': 'CFO, CCO and Secretary', 'symbol__344': 'OXSQ', 'share_price__344': 8.45, 'acquisition_or_disposal__344': 'A', 'transaction_date__344': Timestamp('2011-12-21 00:00:00'), 'security_type__344': 'Common Stock', 'executive__344': 'ROYCE, CHARLES M', 'shares__344': 1983.0, 'executive_title__344': 'Director', 'symbol__345': 'OXSQ', 'share_price__345': 8.4822, 'acquisition_or_disposal__345': 'A', 'transaction_date__345': Timestamp('2011-12-19 00:00:00'), 'security_type__345': 'Common Stock', 'executive__345': 'ROYCE, CHARLES M', 'shares__345': 25000.0, 'executive_title__345': 'Director'}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-07-26 15:39:06,885 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for OXSQ...

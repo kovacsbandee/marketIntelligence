@@ -16,6 +16,7 @@ Usage:
 import logging
 import requests
 import pandas as pd
+import datetime
 
 from configs.config import ALPHA_API_KEY
 from data_manager.src_postgre_db.db_infrastructure.postgre_adapter import PostgresAdapter
@@ -142,14 +143,13 @@ class AlphaLoader:
             r = requests.get(url, timeout=10)
             r.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
             data = r.json()
-            # file = [f for f in os.listdir(self.local_store_path) if 'company_fundamentals' in f][0]
-            # data = json.load(open(f'{self.local_store_path}/{file}'))
 
             # Handle error in API response
             if "Error Message" in data or "Note" in data:
                 self.logger.error(
                     "Error in API response for %s: %s", self.symbol, data.get('Note') or data)
                 return
+
             # Convert the response into a DataFrame
             data_df = pd.DataFrame([data])
 
@@ -158,6 +158,10 @@ class AlphaLoader:
             data_df = data_df.apply(pd.to_numeric, errors='ignore')
 
             data_df = standardize_company_fundamentals_columns(data_df)
+
+            # --- Add updater fields ---
+            data_df["data_state"] = ""  # Leave empty for now
+            data_df["last_update"] = datetime.datetime.now()
 
             # Save data into the database if db_mode is enabled
             if self.db_mode:

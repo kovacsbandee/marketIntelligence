@@ -1,118 +1,91 @@
-2025-07-26 14:54:43,695 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 1 filtered rows from company_fundamentals
-2025-07-26 14:54:43,723 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 20 filtered rows from balance_sheet_annual
-2025-07-26 14:54:43,728 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_annual' with 20 rows.
-2025-07-26 14:54:43,737 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 20 filtered rows from cash_flow_annual
-2025-07-26 14:54:43,740 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_annual' with 20 rows.
-2025-07-26 14:54:43,745 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 30 filtered rows from earnings_annual
-2025-07-26 14:54:43,747 - db_load_from_db_runner - INFO - Loaded table 'earnings_annual' with 30 rows.
-2025-07-26 14:54:43,757 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 20 filtered rows from income_statement_annual
-2025-07-26 14:54:43,759 - db_load_from_db_runner - INFO - Loaded table 'income_statement_annual' with 20 rows.
-2025-07-26 14:54:43,762 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 1 filtered rows from company_fundamentals
-2025-07-26 14:54:43,766 - db_load_from_db_runner - INFO - Loaded table 'company_fundamentals' with 1 rows.
-2025-07-26 14:54:43,853 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 6463 filtered rows from daily_timeseries
-2025-07-26 14:54:43,932 - db_load_from_db_runner - INFO - Loaded table 'daily_timeseries' with 6463 rows.
-2025-07-26 14:54:43,940 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 87 filtered rows from dividends
-2025-07-26 14:54:43,946 - db_load_from_db_runner - INFO - Loaded table 'dividends' with 87 rows.
-2025-07-26 14:54:43,963 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 877 filtered rows from insider_transactions
-2025-07-26 14:54:43,976 - db_load_from_db_runner - INFO - Loaded table 'insider_transactions' with 877 rows.
-2025-07-26 14:54:43,985 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 81 filtered rows from balance_sheet_quarterly
-2025-07-26 14:54:43,989 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_quarterly' with 81 rows.
-2025-07-26 14:54:43,999 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 81 filtered rows from cash_flow_statement_quarterly
-2025-07-26 14:54:44,004 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_statement_quarterly' with 81 rows.
-2025-07-26 14:54:44,011 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 117 filtered rows from earnings_quarterly
-2025-07-26 14:54:44,015 - db_load_from_db_runner - INFO - Loaded table 'earnings_quarterly' with 117 rows.
-2025-07-26 14:54:44,024 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 81 filtered rows from income_statement_quarterly
-2025-07-26 14:54:44,029 - db_load_from_db_runner - INFO - Loaded table 'income_statement_quarterly' with 81 rows.
-2025-07-26 14:54:44,033 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 2 filtered rows from stock_splits
-2025-07-26 14:54:44,035 - db_load_from_db_runner - INFO - Loaded table 'stock_splits' with 2 rows.
-2025-07-26 14:55:11,263 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 1 filtered rows from company_fundamentals
-2025-07-26 14:55:11,279 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 20 filtered rows from balance_sheet_annual
-2025-07-26 14:55:11,283 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_annual' with 20 rows.
-2025-07-26 14:55:11,291 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 20 filtered rows from cash_flow_annual
-2025-07-26 14:55:11,294 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_annual' with 20 rows.
-2025-07-26 14:55:11,299 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 30 filtered rows from earnings_annual
-2025-07-26 14:55:11,301 - db_load_from_db_runner - INFO - Loaded table 'earnings_annual' with 30 rows.
-2025-07-26 14:55:11,308 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 20 filtered rows from income_statement_annual
-2025-07-26 14:55:11,311 - db_load_from_db_runner - INFO - Loaded table 'income_statement_annual' with 20 rows.
-2025-07-26 14:55:11,314 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 1 filtered rows from company_fundamentals
-2025-07-26 14:55:11,318 - db_load_from_db_runner - INFO - Loaded table 'company_fundamentals' with 1 rows.
-2025-07-26 14:55:11,595 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 6463 filtered rows from daily_timeseries
-2025-07-26 14:55:11,678 - db_load_from_db_runner - INFO - Loaded table 'daily_timeseries' with 6463 rows.
-2025-07-26 14:55:11,683 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 87 filtered rows from dividends
-2025-07-26 14:55:11,688 - db_load_from_db_runner - INFO - Loaded table 'dividends' with 87 rows.
-2025-07-26 14:55:11,706 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 877 filtered rows from insider_transactions
-2025-07-26 14:55:11,722 - db_load_from_db_runner - INFO - Loaded table 'insider_transactions' with 877 rows.
-2025-07-26 14:55:11,730 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 81 filtered rows from balance_sheet_quarterly
-2025-07-26 14:55:11,734 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_quarterly' with 81 rows.
-2025-07-26 14:55:11,742 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 81 filtered rows from cash_flow_statement_quarterly
-2025-07-26 14:55:11,747 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_statement_quarterly' with 81 rows.
-2025-07-26 14:55:11,753 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 117 filtered rows from earnings_quarterly
-2025-07-26 14:55:11,757 - db_load_from_db_runner - INFO - Loaded table 'earnings_quarterly' with 117 rows.
-2025-07-26 14:55:11,765 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 81 filtered rows from income_statement_quarterly
-2025-07-26 14:55:11,771 - db_load_from_db_runner - INFO - Loaded table 'income_statement_quarterly' with 81 rows.
-2025-07-26 14:55:11,774 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 2 filtered rows from stock_splits
-2025-07-26 14:55:11,777 - db_load_from_db_runner - INFO - Loaded table 'stock_splits' with 2 rows.
-2025-07-26 14:55:46,516 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from company_fundamentals
-2025-07-26 14:55:46,517 - db_load_from_db_runner - WARNING - Symbol 'DELL' not found in database. Attempting to load...
-2025-07-26 14:55:46,518 - db_initial_load_runner - INFO - Starting initial load for 1 symbols...
-2025-07-26 14:55:46,518 - db_initial_load_runner - INFO - Processing symbol: DELL
-2025-07-26 14:55:46,519 - AlphaLoader - INFO - Fetching data for DELL...
-2025-07-26 14:55:47,673 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1656 new rows into daily_timeseries
-2025-07-26 14:55:47,677 - AlphaLoader - INFO - Candlestick data for DELL loaded into the database.
-2025-07-26 14:55:47,678 - AlphaLoader - INFO - Fetching company base data for DELL...
-2025-07-26 14:55:48,106 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
-2025-07-26 14:55:48,108 - AlphaLoader - INFO - Company base data for DELL loaded into the database.
-2025-07-26 14:55:48,108 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for DELL...
-2025-07-26 14:55:48,727 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
-2025-07-26 14:55:48,750 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 49 new rows into income_statement_quarterly
-2025-07-26 14:55:48,753 - AlphaLoader - INFO - INCOME_STATEMENT data for DELL loaded into the database.
-2025-07-26 14:55:48,753 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for DELL...
-2025-07-26 14:55:49,706 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
-2025-07-26 14:55:49,728 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 49 new rows into balance_sheet_quarterly
-2025-07-26 14:55:49,730 - AlphaLoader - INFO - BALANCE_SHEET data for DELL loaded into the database.
-2025-07-26 14:55:49,731 - AlphaLoader - INFO - Fetching CASH_FLOW data for DELL...
-2025-07-26 14:55:50,531 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
-2025-07-26 14:55:50,558 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 49 new rows into cash_flow_statement_quarterly
-2025-07-26 14:55:50,560 - AlphaLoader - INFO - CASH_FLOW data for DELL loaded into the database.
-2025-07-26 14:55:50,561 - AlphaLoader - INFO - Fetching EARNINGS data for DELL...
-2025-07-26 14:55:50,852 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 10 new rows into earnings_annual
-2025-07-26 14:55:50,864 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 35 new rows into earnings_quarterly
-2025-07-26 14:55:50,866 - AlphaLoader - INFO - EARNINGS data for DELL loaded into the database.
-2025-07-26 14:55:50,866 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for DELL...
-2025-07-26 14:55:52,107 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1077 new rows into insider_transactions
-2025-07-26 14:55:52,110 - AlphaLoader - INFO - Insider transaction data for DELL loaded into the database.
-2025-07-26 14:55:52,110 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for DELL...
-2025-07-26 14:55:52,479 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into stock_splits
-2025-07-26 14:55:52,480 - AlphaLoader - INFO - Stock split data for DELL loaded into the database.
-2025-07-26 14:55:52,481 - AlphaLoader - INFO - Fetching DIVIDENDS data for DELL...
-2025-07-26 14:55:53,005 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 15 new rows into dividends
-2025-07-26 14:55:53,007 - AlphaLoader - INFO - Dividend data for DELL loaded into the database.
-2025-07-26 14:55:53,007 - db_initial_load_runner - INFO - ✅ Initial loader finished its running.
-2025-07-26 14:55:53,007 - db_load_from_db_runner - INFO - Called load_stock_data for symbol: DELL
-2025-07-26 14:55:53,010 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 1 filtered rows from company_fundamentals
-2025-07-26 14:55:53,024 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 20 filtered rows from balance_sheet_annual
-2025-07-26 14:55:53,027 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_annual' with 20 rows.
-2025-07-26 14:55:53,036 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 20 filtered rows from cash_flow_annual
-2025-07-26 14:55:53,040 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_annual' with 20 rows.
-2025-07-26 14:55:53,044 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 10 filtered rows from earnings_annual
-2025-07-26 14:55:53,047 - db_load_from_db_runner - INFO - Loaded table 'earnings_annual' with 10 rows.
-2025-07-26 14:55:53,053 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 20 filtered rows from income_statement_annual
-2025-07-26 14:55:53,056 - db_load_from_db_runner - INFO - Loaded table 'income_statement_annual' with 20 rows.
-2025-07-26 14:55:53,059 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 1 filtered rows from company_fundamentals
-2025-07-26 14:55:53,063 - db_load_from_db_runner - INFO - Loaded table 'company_fundamentals' with 1 rows.
-2025-07-26 14:55:53,097 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 1656 filtered rows from daily_timeseries
-2025-07-26 14:55:53,125 - db_load_from_db_runner - INFO - Loaded table 'daily_timeseries' with 1656 rows.
-2025-07-26 14:55:53,131 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 15 filtered rows from dividends
-2025-07-26 14:55:53,134 - db_load_from_db_runner - INFO - Loaded table 'dividends' with 15 rows.
-2025-07-26 14:55:53,156 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 1077 filtered rows from insider_transactions
-2025-07-26 14:55:53,173 - db_load_from_db_runner - INFO - Loaded table 'insider_transactions' with 1077 rows.
-2025-07-26 14:55:53,180 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 49 filtered rows from balance_sheet_quarterly
-2025-07-26 14:55:53,184 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_quarterly' with 49 rows.
-2025-07-26 14:55:53,191 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 49 filtered rows from cash_flow_statement_quarterly
-2025-07-26 14:55:53,194 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_statement_quarterly' with 49 rows.
-2025-07-26 14:55:53,199 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 35 filtered rows from earnings_quarterly
-2025-07-26 14:55:53,202 - db_load_from_db_runner - INFO - Loaded table 'earnings_quarterly' with 35 rows.
-2025-07-26 14:55:53,208 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 49 filtered rows from income_statement_quarterly
-2025-07-26 14:55:53,211 - db_load_from_db_runner - INFO - Loaded table 'income_statement_quarterly' with 49 rows.
-2025-07-26 14:55:53,215 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 1 filtered rows from stock_splits
-2025-07-26 14:55:53,216 - db_load_from_db_runner - INFO - Loaded table 'stock_splits' with 1 rows.
+2025-07-26 15:39:37,570 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 1 filtered rows from company_fundamentals
+2025-07-26 15:39:37,588 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from balance_sheet_annual
+2025-07-26 15:39:37,592 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_annual' with 0 rows.
+2025-07-26 15:39:37,607 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 8 filtered rows from cash_flow_annual
+2025-07-26 15:39:37,610 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_annual' with 8 rows.
+2025-07-26 15:39:37,615 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 7 filtered rows from earnings_annual
+2025-07-26 15:39:37,617 - db_load_from_db_runner - INFO - Loaded table 'earnings_annual' with 7 rows.
+2025-07-26 15:39:37,627 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 8 filtered rows from income_statement_annual
+2025-07-26 15:39:37,630 - db_load_from_db_runner - INFO - Loaded table 'income_statement_annual' with 8 rows.
+2025-07-26 15:39:37,633 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 1 filtered rows from company_fundamentals
+2025-07-26 15:39:37,638 - db_load_from_db_runner - INFO - Loaded table 'company_fundamentals' with 1 rows.
+2025-07-26 15:39:37,660 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 1115 filtered rows from daily_timeseries
+2025-07-26 15:39:37,676 - db_load_from_db_runner - INFO - Loaded table 'daily_timeseries' with 1115 rows.
+2025-07-26 15:39:37,680 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from dividends
+2025-07-26 15:39:37,683 - db_load_from_db_runner - INFO - Loaded table 'dividends' with 0 rows.
+2025-07-26 15:39:37,689 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from insider_transactions
+2025-07-26 15:39:37,692 - db_load_from_db_runner - INFO - Loaded table 'insider_transactions' with 0 rows.
+2025-07-26 15:39:37,698 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from balance_sheet_quarterly
+2025-07-26 15:39:37,700 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_quarterly' with 0 rows.
+2025-07-26 15:39:37,707 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 26 filtered rows from cash_flow_statement_quarterly
+2025-07-26 15:39:37,710 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_statement_quarterly' with 26 rows.
+2025-07-26 15:39:37,714 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 25 filtered rows from earnings_quarterly
+2025-07-26 15:39:37,717 - db_load_from_db_runner - INFO - Loaded table 'earnings_quarterly' with 25 rows.
+2025-07-26 15:39:37,723 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 26 filtered rows from income_statement_quarterly
+2025-07-26 15:39:37,726 - db_load_from_db_runner - INFO - Loaded table 'income_statement_quarterly' with 26 rows.
+2025-07-26 15:39:37,730 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 2 filtered rows from stock_splits
+2025-07-26 15:39:37,732 - db_load_from_db_runner - INFO - Loaded table 'stock_splits' with 2 rows.
+2025-07-26 15:39:49,837 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 0 filtered rows from company_fundamentals
+2025-07-26 15:39:49,838 - db_load_from_db_runner - WARNING - Symbol 'MSFT' not found in database. Attempting to load...
+2025-07-26 15:39:49,840 - db_initial_load_runner - INFO - Starting initial load for 1 symbols...
+2025-07-26 15:39:49,841 - db_initial_load_runner - INFO - Processing symbol: MSFT
+2025-07-26 15:39:49,841 - AlphaLoader - INFO - Fetching data for MSFT...
+2025-07-26 15:39:51,318 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 6472 new rows into daily_timeseries
+2025-07-26 15:39:51,327 - AlphaLoader - INFO - Candlestick data for MSFT loaded into the database.
+2025-07-26 15:39:51,327 - AlphaLoader - INFO - Fetching company base data for MSFT...
+2025-07-26 15:39:52,432 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 1 new rows into company_fundamentals
+2025-07-26 15:39:52,438 - AlphaLoader - INFO - Company base data for MSFT loaded into the database.
+2025-07-26 15:39:52,439 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for MSFT...
+2025-07-26 15:39:53,089 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into income_statement_annual
+2025-07-26 15:39:53,121 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-07-26 15:39:53,129 - AlphaLoader - INFO - INCOME_STATEMENT data for MSFT loaded into the database.
+2025-07-26 15:39:53,130 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for MSFT...
+2025-07-26 15:39:54,240 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-07-26 15:39:54,266 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-07-26 15:39:54,271 - AlphaLoader - INFO - BALANCE_SHEET data for MSFT loaded into the database.
+2025-07-26 15:39:54,272 - AlphaLoader - INFO - Fetching CASH_FLOW data for MSFT...
+2025-07-26 15:39:55,210 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 20 new rows into cash_flow_annual
+2025-07-26 15:39:55,243 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-07-26 15:39:55,248 - AlphaLoader - INFO - CASH_FLOW data for MSFT loaded into the database.
+2025-07-26 15:39:55,249 - AlphaLoader - INFO - Fetching EARNINGS data for MSFT...
+2025-07-26 15:39:55,812 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 30 new rows into earnings_annual
+2025-07-26 15:39:55,832 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 117 new rows into earnings_quarterly
+2025-07-26 15:39:55,842 - AlphaLoader - INFO - EARNINGS data for MSFT loaded into the database.
+2025-07-26 15:39:55,842 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for MSFT...
+2025-07-26 15:39:56,883 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 878 new rows into insider_transactions
+2025-07-26 15:39:56,890 - AlphaLoader - INFO - Insider transaction data for MSFT loaded into the database.
+2025-07-26 15:39:56,890 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for MSFT...
+2025-07-26 15:39:57,203 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 2 new rows into stock_splits
+2025-07-26 15:39:57,208 - AlphaLoader - INFO - Stock split data for MSFT loaded into the database.
+2025-07-26 15:39:57,209 - AlphaLoader - INFO - Fetching DIVIDENDS data for MSFT...
+2025-07-26 15:39:57,837 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Inserted 87 new rows into dividends
+2025-07-26 15:39:57,846 - AlphaLoader - INFO - Dividend data for MSFT loaded into the database.
+2025-07-26 15:39:57,846 - db_initial_load_runner - INFO - ✅ Initial loader finished its running.
+2025-07-26 15:39:57,847 - db_load_from_db_runner - INFO - Called load_stock_data for symbol: MSFT
+2025-07-26 15:39:57,850 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 1 filtered rows from company_fundamentals
+2025-07-26 15:39:57,866 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 20 filtered rows from balance_sheet_annual
+2025-07-26 15:39:57,870 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_annual' with 20 rows.
+2025-07-26 15:39:57,876 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 20 filtered rows from cash_flow_annual
+2025-07-26 15:39:57,879 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_annual' with 20 rows.
+2025-07-26 15:39:57,884 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 30 filtered rows from earnings_annual
+2025-07-26 15:39:57,886 - db_load_from_db_runner - INFO - Loaded table 'earnings_annual' with 30 rows.
+2025-07-26 15:39:57,891 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 20 filtered rows from income_statement_annual
+2025-07-26 15:39:57,894 - db_load_from_db_runner - INFO - Loaded table 'income_statement_annual' with 20 rows.
+2025-07-26 15:39:57,897 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 1 filtered rows from company_fundamentals
+2025-07-26 15:39:57,901 - db_load_from_db_runner - INFO - Loaded table 'company_fundamentals' with 1 rows.
+2025-07-26 15:39:58,159 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 6472 filtered rows from daily_timeseries
+2025-07-26 15:39:58,254 - db_load_from_db_runner - INFO - Loaded table 'daily_timeseries' with 6472 rows.
+2025-07-26 15:39:58,260 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 87 filtered rows from dividends
+2025-07-26 15:39:58,266 - db_load_from_db_runner - INFO - Loaded table 'dividends' with 87 rows.
+2025-07-26 15:39:58,285 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 878 filtered rows from insider_transactions
+2025-07-26 15:39:58,300 - db_load_from_db_runner - INFO - Loaded table 'insider_transactions' with 878 rows.
+2025-07-26 15:39:58,310 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 81 filtered rows from balance_sheet_quarterly
+2025-07-26 15:39:58,315 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_quarterly' with 81 rows.
+2025-07-26 15:39:58,324 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 81 filtered rows from cash_flow_statement_quarterly
+2025-07-26 15:39:58,329 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_statement_quarterly' with 81 rows.
+2025-07-26 15:39:58,335 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 117 filtered rows from earnings_quarterly
+2025-07-26 15:39:58,340 - db_load_from_db_runner - INFO - Loaded table 'earnings_quarterly' with 117 rows.
+2025-07-26 15:39:58,349 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 81 filtered rows from income_statement_quarterly
+2025-07-26 15:39:58,354 - db_load_from_db_runner - INFO - Loaded table 'income_statement_quarterly' with 81 rows.
+2025-07-26 15:39:58,359 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - Loaded 2 filtered rows from stock_splits
+2025-07-26 15:39:58,361 - db_load_from_db_runner - INFO - Loaded table 'stock_splits' with 2 rows.

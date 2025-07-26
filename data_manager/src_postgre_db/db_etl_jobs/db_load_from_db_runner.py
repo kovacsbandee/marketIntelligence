@@ -87,6 +87,14 @@ class DBSymbolStorage:
 
         Args:
             auto_load_if_missing (bool): Whether to attempt to load data if the symbol is missing.
+
+        TODO: I need to update the logic in the _load_tables() function! 
+        Right now if the symbol exists in the DB it loads it into the application from the state,
+         when it was downloaded from alpha vantage. 
+         In this way in the dashboard the prices and other tables are not the freshest available 
+         when the dashboard is used. I need you to update the functions logic, in such a way, 
+         that if the symbol exists in the db, the _load_tables() checks if the last entry for the symbol is the
+         latest possible, it needs to fit to the last workday's date.
         """
         # Check if symbol exists in company_fundamentals
         if not self._symbol_exists():

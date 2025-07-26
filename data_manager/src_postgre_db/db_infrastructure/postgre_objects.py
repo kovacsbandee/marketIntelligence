@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, BigInteger, String, Float, Date, Sequence
+from sqlalchemy import Column, Integer, BigInteger, String, Float, Date, Sequence, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -124,6 +124,10 @@ class CompanyFundamentalsTable(Base):
     shares_outstanding = Column(BigInteger, nullable=True)
     dividend_date = Column(Date, nullable=True)
     ex_dividend_date = Column(Date, nullable=True)
+
+    # --- Updater compatibility fields ---
+    data_state = Column(String, nullable=True, default="unknown")  # e.g. "up_to_date", "outdated"
+    last_update = Column(DateTime, nullable=True)
 
 
 class DailyTimeSeries(Base):
