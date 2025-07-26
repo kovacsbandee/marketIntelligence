@@ -1,15 +1,21 @@
 # AGENTS Guidelines
 
 ## Overview
-This project is intended to help me in having a data based understanding on stock market behaviour aiming for a profitable trading strategy.
+This project is intended to help me in having a data based understanding of stock market behaviour aiming for a profitable trading strategy. 
+The project will evolve into an LLM based trading agent.
 Right now the data source is the alphavantage API the database for daily price data, company financials and other tabular information.
-Data data pipeline and the postgre db is up and running, dockerization and the initial load is needed.
+The data pipeline and the postgre db is up and running, dockerization and the initial load is needed.
 The next phases and steps are the following:
 
     Phase 1. - from PostgreDB to Dash app with news capabilities
         - An interface is needed from the database to the application with an intermediate optional data enrichment step 
           to calculate various price indicators and other derived information from the raw data. An input object will be the result of this step.
-        - Creating an informative and logical visualization system with plotly plots for all the information stored in the database. ()
+        - Creating an informative and logical visualization system with plotly plots for all the information stored in the database. 
+          (big scale info panels with DMC's tab feature: 
+              -> full scale oveview of the market, indices, somehow overall market state, calculation when the app is starting to run, but it is on the background
+              -> P/E states, and blue chip's expected earnings report, symbol interrelations, graph based on the autocorrelations across industries, industry autocorrelations,
+              -> individual stock base price chart, with company fundamentals, insider tradings and other stuffs always a random when the app is, started,
+                  --> create the balance, cash flow, earnings, income tabs for the corresponding symbol and the price chart next to them)
         - An elasticsarch database will be created with interfaces to the marketIntelligence project to make it possible to store news data.
         - An interface between the API and the Elasticsearch DB is required!
         - Place these visualiuzations into a dash application with the capability to download company related news from alpha vantage API from a defined time period.

@@ -22,7 +22,7 @@ import random
 
 from utils.logger import get_logger
 from utils.utils import get_symbols_from_csv
-from data_manager.src_postgre_db.db_etl_jobs.db_initial_load_runner import load_stock_data
+from data_manager.src_postgre_db.db_etl_jobs.db_initial_load_runner import download_stock_data
 from data_manager.src_postgre_db.db_infrastructure.postgre_adapter import PostgresAdapter
 from data_manager.src_postgre_db.db_infrastructure.postgre_objects import CompanyFundamentalsTable
 
@@ -59,7 +59,7 @@ def main():
     if not symbols:
         logger.info("No new symbols to append.")
         return
-    load_stock_data(symbols)
+    download_stock_data(symbols)
 
 if __name__ == "__main__":
     main()

@@ -38,7 +38,7 @@ Notes:
 import pandas as pd
 from data_manager.src_postgre_db.db_infrastructure.postgre_adapter import PostgresAdapter
 import data_manager.src_postgre_db.db_infrastructure.postgre_objects as orm_module
-from data_manager.src_postgre_db.db_etl_jobs.db_initial_load_runner import load_stock_data
+from data_manager.src_postgre_db.db_etl_jobs.db_initial_load_runner import download_stock_data
 from utils.logger import get_logger  # <-- Import your project logger
 
 # Set up project-standard logger
@@ -95,7 +95,7 @@ class DBSymbolStorage:
             )
             logger.warning(self.status_message)
             if auto_load_if_missing:
-                load_stock_data([self._symbol])
+                download_stock_data([self._symbol])
                 logger.info("Called load_stock_data for symbol: %s", self._symbol)
                 # Check again after ETL
                 if not self._symbol_exists():

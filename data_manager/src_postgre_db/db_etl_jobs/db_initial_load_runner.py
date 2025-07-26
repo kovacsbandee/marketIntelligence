@@ -23,7 +23,7 @@ from data_manager.src_postgre_db.db_etl_scripts.alphavantage_adapter import Alph
 
 
 
-def load_stock_data(symbols):
+def download_stock_data(symbols):
     """
     Load stock data for the provided list of symbols.
 
@@ -87,7 +87,7 @@ def main():
     num_to_load = 15  # Change as needed
     random.seed(42)
     symbols = random.sample(all_symbols, min(num_to_load, len(all_symbols)))
-    load_stock_data(symbols)
+    download_stock_data(symbols)
 
 
 if __name__ == "__main__":
