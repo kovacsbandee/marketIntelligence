@@ -2,7 +2,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from plotly.colors import qualitative
-from data_manager.src_postgre_db.db_etl_scripts.load_local_symbol_data import LoadExampleData
+from utils.load_local_symbol_data import LoadExampleData
 from data_manager.src_postgre_db.add_derived_data.add_price_indicators import AddPriceIndicators
 
 
