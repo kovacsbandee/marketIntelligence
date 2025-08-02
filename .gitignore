@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *.so
 
+# === Build artifacts ===
+kubectl
+minikube-linux-amd64
+
+
 # === Virtual environments ===
 .venv/
 
