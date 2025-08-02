@@ -1,779 +1,786 @@
-2025-08-02 14:10:10,616 - db_initial_load_runner - INFO - Starting initial load for 15 symbols...
-2025-08-02 14:10:10,616 - db_initial_load_runner - INFO - Processing symbol: OXSQ
-2025-08-02 14:10:10,617 - AlphaLoader - INFO - Fetching data for OXSQ...
-2025-08-02 14:10:11,704 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:11,705 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:11,923 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1852 new rows into daily_timeseries
-2025-08-02 14:10:11,924 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:11,930 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:12,005 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141011_930650_OXSQ_daily_timeseries.csv
-2025-08-02 14:10:12,021 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141011_930650_OXSQ_daily_timeseries_api_response.json
-2025-08-02 14:10:12,021 - AlphaLoader - INFO - Fetching company base data for OXSQ...
-2025-08-02 14:10:12,347 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:12,348 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:12,382 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
-2025-08-02 14:10:12,382 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:12,384 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:12,389 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141012_384165_OXSQ_company_base.csv
-2025-08-02 14:10:12,392 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141012_384165_OXSQ_company_base_api_response.json
-2025-08-02 14:10:12,392 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for OXSQ...
-2025-08-02 14:10:13,329 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:13,329 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:13,360 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into income_statement_annual
-2025-08-02 14:10:13,361 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:13,362 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:13,368 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141013_362431_OXSQ_financials.csv
-2025-08-02 14:10:13,375 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141013_362431_OXSQ_financials_quarterly.csv
-2025-08-02 14:10:13,382 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141013_362431_OXSQ_financials_api_response.json
-2025-08-02 14:10:13,382 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for OXSQ...
-2025-08-02 14:10:13,827 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:13,827 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:13,864 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into balance_sheet_annual
-2025-08-02 14:10:13,864 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:13,865 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:13,873 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141013_866001_OXSQ_financials.csv
-2025-08-02 14:10:13,883 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141013_866001_OXSQ_financials_quarterly.csv
-2025-08-02 14:10:13,892 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141013_866001_OXSQ_financials_api_response.json
-2025-08-02 14:10:13,892 - AlphaLoader - INFO - Fetching CASH_FLOW data for OXSQ...
-2025-08-02 14:10:14,567 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:14,568 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:14,604 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into cash_flow_annual
-2025-08-02 14:10:14,605 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:14,607 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:14,611 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141014_607190_OXSQ_financials.csv
-2025-08-02 14:10:14,620 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141014_607190_OXSQ_financials_quarterly.csv
-2025-08-02 14:10:14,628 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141014_607190_OXSQ_financials_api_response.json
-2025-08-02 14:10:14,629 - AlphaLoader - INFO - Fetching EARNINGS data for OXSQ...
-2025-08-02 14:10:15,175 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:15,176 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:15,205 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 22 new rows into earnings_annual
-2025-08-02 14:10:15,206 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:15,208 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:15,214 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141015_208430_OXSQ_financials.csv
-2025-08-02 14:10:15,220 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141015_208430_OXSQ_financials_quarterly.csv
-2025-08-02 14:10:15,223 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141015_208430_OXSQ_financials_api_response.json
-2025-08-02 14:10:15,224 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for OXSQ...
-2025-08-02 14:10:15,749 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:15,749 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:15,817 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 346 new rows into insider_transactions
-2025-08-02 14:10:15,818 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:15,819 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:15,827 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141015_820030_OXSQ_insider_transactions.csv
-2025-08-02 14:10:15,834 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141015_820030_OXSQ_insider_transactions_quarterly.csv
-2025-08-02 14:10:15,842 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141015_820030_OXSQ_insider_transactions_api_response.json
-2025-08-02 14:10:15,842 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for OXSQ...
-2025-08-02 14:10:16,062 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:16,062 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:16,093 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into stock_splits
-2025-08-02 14:10:16,094 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:16,096 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:16,102 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141016_096379_OXSQ_stock_splits.csv
-2025-08-02 14:10:16,108 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141016_096379_OXSQ_stock_splits_quarterly.csv
-2025-08-02 14:10:16,110 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141016_096379_OXSQ_stock_splits_api_response.json
-2025-08-02 14:10:16,110 - AlphaLoader - INFO - Fetching DIVIDENDS data for OXSQ...
-2025-08-02 14:10:16,628 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:16,629 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:16,672 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 82 new rows into dividends
-2025-08-02 14:10:16,674 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:16,675 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:16,682 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141016_676198_OXSQ_dividends.csv
-2025-08-02 14:10:16,687 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141016_676198_OXSQ_dividends_quarterly.csv
-2025-08-02 14:10:16,692 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141016_676198_OXSQ_dividends_api_response.json
-2025-08-02 14:10:16,692 - db_initial_load_runner - INFO - Processing symbol: BHAT
-2025-08-02 14:10:16,692 - AlphaLoader - INFO - Fetching data for BHAT...
-2025-08-02 14:10:17,397 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:17,398 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:17,531 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1513 new rows into daily_timeseries
-2025-08-02 14:10:17,532 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:17,533 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:17,545 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141017_533952_BHAT_daily_timeseries.csv
-2025-08-02 14:10:17,561 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141017_533952_BHAT_daily_timeseries_api_response.json
-2025-08-02 14:10:17,561 - AlphaLoader - INFO - Fetching company base data for BHAT...
-2025-08-02 14:10:18,040 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:18,040 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:18,070 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
-2025-08-02 14:10:18,070 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:18,071 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:18,076 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141018_072030_BHAT_company_base.csv
-2025-08-02 14:10:18,080 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141018_072030_BHAT_company_base_api_response.json
-2025-08-02 14:10:18,080 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for BHAT...
-2025-08-02 14:10:18,652 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:18,652 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:18,687 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 11 new rows into income_statement_annual
-2025-08-02 14:10:18,687 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:18,689 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:18,695 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141018_689256_BHAT_financials.csv
-2025-08-02 14:10:18,701 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141018_689256_BHAT_financials_quarterly.csv
-2025-08-02 14:10:18,706 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141018_689256_BHAT_financials_api_response.json
-2025-08-02 14:10:18,706 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for BHAT...
-2025-08-02 14:10:19,273 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:19,273 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:19,312 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 11 new rows into balance_sheet_annual
-2025-08-02 14:10:19,312 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:19,314 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:19,321 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141019_314448_BHAT_financials.csv
-2025-08-02 14:10:19,329 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141019_314448_BHAT_financials_quarterly.csv
-2025-08-02 14:10:19,335 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141019_314448_BHAT_financials_api_response.json
-2025-08-02 14:10:19,335 - AlphaLoader - INFO - Fetching CASH_FLOW data for BHAT...
-2025-08-02 14:10:19,786 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:19,786 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:19,817 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 11 new rows into cash_flow_annual
-2025-08-02 14:10:19,817 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:19,819 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:19,824 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141019_819287_BHAT_financials.csv
-2025-08-02 14:10:19,829 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141019_819287_BHAT_financials_quarterly.csv
-2025-08-02 14:10:19,834 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141019_819287_BHAT_financials_api_response.json
-2025-08-02 14:10:19,834 - AlphaLoader - INFO - Fetching EARNINGS data for BHAT...
-2025-08-02 14:10:20,056 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:20,056 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:20,086 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 8 new rows into earnings_annual
-2025-08-02 14:10:20,087 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:20,089 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:20,094 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141020_089337_BHAT_financials.csv
-2025-08-02 14:10:20,099 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141020_089337_BHAT_financials_quarterly.csv
-2025-08-02 14:10:20,102 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141020_089337_BHAT_financials_api_response.json
-2025-08-02 14:10:20,102 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for BHAT...
-2025-08-02 14:10:20,498 - infrastructure.alpha_adapter.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
-2025-08-02 14:10:20,499 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:20,499 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:20,500 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - No data provided for insertion into insider_transactions.
-2025-08-02 14:10:20,500 - AlphaLoader - INFO - Insider transaction data for BHAT loaded into the database.
-2025-08-02 14:10:20,500 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for BHAT...
-2025-08-02 14:10:20,980 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:20,980 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:21,009 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 2 new rows into stock_splits
-2025-08-02 14:10:21,010 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:21,011 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:21,017 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141021_011696_BHAT_stock_splits.csv
-2025-08-02 14:10:21,023 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141021_011696_BHAT_stock_splits_quarterly.csv
-2025-08-02 14:10:21,026 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141021_011696_BHAT_stock_splits_api_response.json
-2025-08-02 14:10:21,026 - AlphaLoader - INFO - Fetching DIVIDENDS data for BHAT...
-2025-08-02 14:10:21,271 - AlphaLoader - WARNING - No dividend data found for BHAT. Inserting dummy row.
-2025-08-02 14:10:21,292 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:21,293 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:21,322 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into dividends
-2025-08-02 14:10:21,323 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:21,325 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:21,330 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141021_325282_BHAT_dividends.csv
-2025-08-02 14:10:21,335 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141021_325282_BHAT_dividends_quarterly.csv
-2025-08-02 14:10:21,338 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141021_325282_BHAT_dividends_api_response.json
-2025-08-02 14:10:21,338 - db_initial_load_runner - INFO - Processing symbol: AGMH
-2025-08-02 14:10:21,339 - AlphaLoader - INFO - Fetching data for AGMH...
-2025-08-02 14:10:22,117 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:22,117 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:22,358 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1833 new rows into daily_timeseries
-2025-08-02 14:10:22,359 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:22,360 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:22,371 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141022_360997_AGMH_daily_timeseries.csv
-2025-08-02 14:10:22,393 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141022_360997_AGMH_daily_timeseries_api_response.json
-2025-08-02 14:10:22,393 - AlphaLoader - INFO - Fetching company base data for AGMH...
-2025-08-02 14:10:22,885 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:22,885 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:22,920 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
-2025-08-02 14:10:22,921 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:22,922 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:22,927 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141022_922830_AGMH_company_base.csv
-2025-08-02 14:10:22,930 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141022_922830_AGMH_company_base_api_response.json
-2025-08-02 14:10:22,930 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for AGMH...
-2025-08-02 14:10:23,761 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:23,761 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:23,793 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 10 new rows into income_statement_annual
-2025-08-02 14:10:23,793 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:23,795 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:23,799 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141023_795177_AGMH_financials.csv
-2025-08-02 14:10:23,804 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141023_795177_AGMH_financials_quarterly.csv
-2025-08-02 14:10:23,809 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141023_795177_AGMH_financials_api_response.json
-2025-08-02 14:10:23,809 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for AGMH...
-2025-08-02 14:10:24,254 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:24,254 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:24,292 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 10 new rows into balance_sheet_annual
-2025-08-02 14:10:24,292 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:24,294 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:24,301 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141024_294378_AGMH_financials.csv
-2025-08-02 14:10:24,308 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141024_294378_AGMH_financials_quarterly.csv
-2025-08-02 14:10:24,316 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141024_294378_AGMH_financials_api_response.json
-2025-08-02 14:10:24,316 - AlphaLoader - INFO - Fetching CASH_FLOW data for AGMH...
-2025-08-02 14:10:24,869 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:24,869 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:24,898 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 10 new rows into cash_flow_annual
-2025-08-02 14:10:24,899 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:24,900 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:24,905 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141024_900547_AGMH_financials.csv
-2025-08-02 14:10:24,911 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141024_900547_AGMH_financials_quarterly.csv
-2025-08-02 14:10:24,915 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141024_900547_AGMH_financials_api_response.json
-2025-08-02 14:10:24,915 - AlphaLoader - INFO - Fetching EARNINGS data for AGMH...
-2025-08-02 14:10:25,198 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:25,198 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:25,229 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 7 new rows into earnings_annual
-2025-08-02 14:10:25,230 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:25,231 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:25,237 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141025_232002_AGMH_financials.csv
-2025-08-02 14:10:25,243 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141025_232002_AGMH_financials_quarterly.csv
-2025-08-02 14:10:25,246 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141025_232002_AGMH_financials_api_response.json
-2025-08-02 14:10:25,246 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for AGMH...
-2025-08-02 14:10:25,473 - infrastructure.alpha_adapter.transform_utils - WARNING - Required column 'transaction_date' is missing after standardization!
-2025-08-02 14:10:25,475 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:25,476 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:25,477 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - No data provided for insertion into insider_transactions.
-2025-08-02 14:10:25,477 - AlphaLoader - INFO - Insider transaction data for AGMH loaded into the database.
-2025-08-02 14:10:25,477 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for AGMH...
-2025-08-02 14:10:25,689 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:25,690 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:25,722 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into stock_splits
-2025-08-02 14:10:25,723 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:25,724 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:25,730 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141025_724861_AGMH_stock_splits.csv
-2025-08-02 14:10:25,735 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141025_724861_AGMH_stock_splits_quarterly.csv
-2025-08-02 14:10:25,738 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141025_724861_AGMH_stock_splits_api_response.json
-2025-08-02 14:10:25,738 - AlphaLoader - INFO - Fetching DIVIDENDS data for AGMH...
-2025-08-02 14:10:25,981 - AlphaLoader - WARNING - No dividend data found for AGMH. Inserting dummy row.
-2025-08-02 14:10:26,004 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:26,004 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:26,035 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into dividends
-2025-08-02 14:10:26,036 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:26,037 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:26,043 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141026_037637_AGMH_dividends.csv
-2025-08-02 14:10:26,048 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141026_037637_AGMH_dividends_quarterly.csv
-2025-08-02 14:10:26,050 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141026_037637_AGMH_dividends_api_response.json
-2025-08-02 14:10:26,050 - db_initial_load_runner - INFO - Processing symbol: SAIA
-2025-08-02 14:10:26,050 - AlphaLoader - INFO - Fetching data for SAIA...
-2025-08-02 14:10:27,090 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:27,090 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:27,448 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 5759 new rows into daily_timeseries
-2025-08-02 14:10:27,450 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:27,452 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:27,487 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141027_452348_SAIA_daily_timeseries.csv
-2025-08-02 14:10:27,542 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141027_452348_SAIA_daily_timeseries_api_response.json
-2025-08-02 14:10:27,543 - AlphaLoader - INFO - Fetching company base data for SAIA...
-2025-08-02 14:10:27,920 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:27,920 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:27,955 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
-2025-08-02 14:10:27,956 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:27,957 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:27,962 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141027_957533_SAIA_company_base.csv
-2025-08-02 14:10:27,965 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141027_957533_SAIA_company_base_api_response.json
-2025-08-02 14:10:27,965 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for SAIA...
-2025-08-02 14:10:28,460 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:28,460 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:28,498 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into income_statement_annual
-2025-08-02 14:10:28,499 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:28,501 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:28,505 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141028_501262_SAIA_financials.csv
-2025-08-02 14:10:28,511 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141028_501262_SAIA_financials_quarterly.csv
-2025-08-02 14:10:28,516 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141028_501262_SAIA_financials_api_response.json
-2025-08-02 14:10:28,516 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for SAIA...
-2025-08-02 14:10:29,201 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:29,201 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:29,238 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into balance_sheet_annual
-2025-08-02 14:10:29,239 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:29,241 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:29,249 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141029_241264_SAIA_financials.csv
-2025-08-02 14:10:29,259 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141029_241264_SAIA_financials_quarterly.csv
-2025-08-02 14:10:29,267 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141029_241264_SAIA_financials_api_response.json
-2025-08-02 14:10:29,267 - AlphaLoader - INFO - Fetching CASH_FLOW data for SAIA...
-2025-08-02 14:10:30,028 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:30,028 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:30,062 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into cash_flow_annual
-2025-08-02 14:10:30,062 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:30,063 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:30,069 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141030_064127_SAIA_financials.csv
-2025-08-02 14:10:30,076 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141030_064127_SAIA_financials_quarterly.csv
-2025-08-02 14:10:30,082 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141030_064127_SAIA_financials_api_response.json
-2025-08-02 14:10:30,082 - AlphaLoader - INFO - Fetching EARNINGS data for SAIA...
-2025-08-02 14:10:30,410 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:30,410 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:30,438 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 24 new rows into earnings_annual
-2025-08-02 14:10:30,439 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:30,440 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:30,445 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141030_440451_SAIA_financials.csv
-2025-08-02 14:10:30,451 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141030_440451_SAIA_financials_quarterly.csv
-2025-08-02 14:10:30,455 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141030_440451_SAIA_financials_api_response.json
-2025-08-02 14:10:30,456 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for SAIA...
-2025-08-02 14:10:31,240 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:31,240 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:31,371 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1190 new rows into insider_transactions
-2025-08-02 14:10:31,372 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:31,373 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:31,383 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141031_373411_SAIA_insider_transactions.csv
-2025-08-02 14:10:31,387 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141031_373411_SAIA_insider_transactions_quarterly.csv
-2025-08-02 14:10:31,407 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141031_373411_SAIA_insider_transactions_api_response.json
-2025-08-02 14:10:31,408 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for SAIA...
-2025-08-02 14:10:31,613 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:31,613 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:31,642 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into stock_splits
-2025-08-02 14:10:31,642 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:31,644 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:31,649 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141031_644296_SAIA_stock_splits.csv
-2025-08-02 14:10:31,655 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141031_644296_SAIA_stock_splits_quarterly.csv
-2025-08-02 14:10:31,659 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141031_644296_SAIA_stock_splits_api_response.json
-2025-08-02 14:10:31,659 - AlphaLoader - INFO - Fetching DIVIDENDS data for SAIA...
-2025-08-02 14:10:31,837 - AlphaLoader - WARNING - No dividend data found for SAIA. Inserting dummy row.
-2025-08-02 14:10:31,857 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:31,857 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:31,883 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into dividends
-2025-08-02 14:10:31,883 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:31,884 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:31,889 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141031_885058_SAIA_dividends.csv
-2025-08-02 14:10:31,895 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141031_885058_SAIA_dividends_quarterly.csv
-2025-08-02 14:10:31,897 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141031_885058_SAIA_dividends_api_response.json
-2025-08-02 14:10:31,897 - db_initial_load_runner - INFO - Processing symbol: ENSG
-2025-08-02 14:10:31,898 - AlphaLoader - INFO - Fetching data for ENSG...
-2025-08-02 14:10:32,842 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:32,842 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:33,111 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 4459 new rows into daily_timeseries
-2025-08-02 14:10:33,112 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:33,113 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:33,139 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141033_113608_ENSG_daily_timeseries.csv
-2025-08-02 14:10:33,185 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141033_113608_ENSG_daily_timeseries_api_response.json
-2025-08-02 14:10:33,186 - AlphaLoader - INFO - Fetching company base data for ENSG...
-2025-08-02 14:10:33,540 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:33,540 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:33,573 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
-2025-08-02 14:10:33,573 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:33,574 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:33,579 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141033_575123_ENSG_company_base.csv
-2025-08-02 14:10:33,583 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141033_575123_ENSG_company_base_api_response.json
-2025-08-02 14:10:33,583 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for ENSG...
-2025-08-02 14:10:34,232 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:34,232 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:34,267 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into income_statement_annual
-2025-08-02 14:10:34,268 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:34,269 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:34,275 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141034_269443_ENSG_financials.csv
-2025-08-02 14:10:34,284 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141034_269443_ENSG_financials_quarterly.csv
-2025-08-02 14:10:34,291 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141034_269443_ENSG_financials_api_response.json
-2025-08-02 14:10:34,291 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for ENSG...
-2025-08-02 14:10:35,037 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:35,037 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:35,076 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into balance_sheet_annual
-2025-08-02 14:10:35,077 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:35,079 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:35,085 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141035_079309_ENSG_financials.csv
-2025-08-02 14:10:35,093 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141035_079309_ENSG_financials_quarterly.csv
-2025-08-02 14:10:35,102 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141035_079309_ENSG_financials_api_response.json
-2025-08-02 14:10:35,102 - AlphaLoader - INFO - Fetching CASH_FLOW data for ENSG...
-2025-08-02 14:10:35,766 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:35,766 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:35,797 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into cash_flow_annual
-2025-08-02 14:10:35,798 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:35,799 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:35,803 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141035_799591_ENSG_financials.csv
-2025-08-02 14:10:35,809 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141035_799591_ENSG_financials_quarterly.csv
-2025-08-02 14:10:35,816 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141035_799591_ENSG_financials_api_response.json
-2025-08-02 14:10:35,816 - AlphaLoader - INFO - Fetching EARNINGS data for ENSG...
-2025-08-02 14:10:36,130 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:36,130 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:36,165 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 19 new rows into earnings_annual
-2025-08-02 14:10:36,166 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:36,167 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:36,173 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141036_167731_ENSG_financials.csv
-2025-08-02 14:10:36,179 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141036_167731_ENSG_financials_quarterly.csv
-2025-08-02 14:10:36,184 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141036_167731_ENSG_financials_api_response.json
-2025-08-02 14:10:36,185 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for ENSG...
-2025-08-02 14:10:36,979 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:36,980 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:37,132 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1660 new rows into insider_transactions
-2025-08-02 14:10:37,133 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:37,134 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:37,150 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141037_134986_ENSG_insider_transactions.csv
-2025-08-02 14:10:37,157 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141037_134986_ENSG_insider_transactions_quarterly.csv
-2025-08-02 14:10:37,180 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141037_134986_ENSG_insider_transactions_api_response.json
-2025-08-02 14:10:37,180 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for ENSG...
-2025-08-02 14:10:37,462 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:37,462 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:37,492 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 2 new rows into stock_splits
-2025-08-02 14:10:37,492 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:37,494 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:37,500 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141037_494417_ENSG_stock_splits.csv
-2025-08-02 14:10:37,505 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141037_494417_ENSG_stock_splits_quarterly.csv
-2025-08-02 14:10:37,507 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141037_494417_ENSG_stock_splits_api_response.json
-2025-08-02 14:10:37,507 - AlphaLoader - INFO - Fetching DIVIDENDS data for ENSG...
-2025-08-02 14:10:38,023 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:38,024 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:38,057 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 72 new rows into dividends
-2025-08-02 14:10:38,058 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:38,060 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:38,066 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141038_060434_ENSG_dividends.csv
-2025-08-02 14:10:38,072 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141038_060434_ENSG_dividends_quarterly.csv
-2025-08-02 14:10:38,075 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141038_060434_ENSG_dividends_api_response.json
-2025-08-02 14:10:38,076 - db_initial_load_runner - INFO - Processing symbol: DJTWW
-2025-08-02 14:10:38,076 - AlphaLoader - INFO - Fetching data for DJTWW...
-2025-08-02 14:10:38,598 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:38,599 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:38,655 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 339 new rows into daily_timeseries
-2025-08-02 14:10:38,655 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:38,657 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:38,663 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141038_657336_DJTWW_daily_timeseries.csv
-2025-08-02 14:10:38,669 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141038_657336_DJTWW_daily_timeseries_api_response.json
-2025-08-02 14:10:38,669 - AlphaLoader - INFO - Fetching company base data for DJTWW...
-2025-08-02 14:10:38,969 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:38,970 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:39,001 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
-2025-08-02 14:10:39,002 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:39,003 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:39,007 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141039_003453_DJTWW_company_base.csv
-2025-08-02 14:10:39,010 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141039_003453_DJTWW_company_base_api_response.json
-2025-08-02 14:10:39,010 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for DJTWW...
-2025-08-02 14:10:39,436 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:39,436 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:39,467 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 4 new rows into income_statement_annual
-2025-08-02 14:10:39,468 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:39,469 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:39,475 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141039_469654_DJTWW_financials.csv
-2025-08-02 14:10:39,480 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141039_469654_DJTWW_financials_quarterly.csv
-2025-08-02 14:10:39,484 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141039_469654_DJTWW_financials_api_response.json
-2025-08-02 14:10:39,484 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for DJTWW...
-2025-08-02 14:10:39,909 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:39,910 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:39,944 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 4 new rows into balance_sheet_annual
-2025-08-02 14:10:39,944 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:39,946 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:39,952 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141039_946231_DJTWW_financials.csv
-2025-08-02 14:10:39,957 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141039_946231_DJTWW_financials_quarterly.csv
-2025-08-02 14:10:39,961 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141039_946231_DJTWW_financials_api_response.json
-2025-08-02 14:10:39,961 - AlphaLoader - INFO - Fetching CASH_FLOW data for DJTWW...
-2025-08-02 14:10:40,402 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:40,402 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 14:10:40,427 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 4 new rows into cash_flow_annual
-2025-08-02 14:10:40,428 - infrastructure.databases.company.postgre_manager.postgre_manager - ERROR - Transaction failed
-Traceback (most recent call last):
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 85, in session_scope
-    yield session
-  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/company/postgre_manager/postgre_manager.py", line 365, in insert_new_data
-    if "invalid input syntax for type integer" in str(e):
-                                                      ^
-UnboundLocalError: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:40,429 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot access local variable 'e' where it is not associated with a value
-2025-08-02 14:10:40,435 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_141040_429796_DJTWW_financials.csv
-2025-08-02 14:10:40,440 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_141040_429796_DJTWW_financials_quarterly.csv
-2025-08-02 14:10:40,443 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_141040_429796_DJTWW_financials_api_response.json
-2025-08-02 14:10:40,443 - AlphaLoader - INFO - Fetching EARNINGS data for DJTWW...
+2025-08-02 15:15:58,007 - db_initial_load_runner - INFO - Starting initial load for 15 symbols...
+2025-08-02 15:15:58,007 - db_initial_load_runner - INFO - Processing symbol: OXSQ
+2025-08-02 15:15:58,007 - AlphaLoader - INFO - Fetching data for OXSQ...
+2025-08-02 15:15:58,871 - infrastructure.alpha_adapter.transform_utils - WARNING - Daily timeseries data missing or malformed for symbol OXSQ. Inserting dummy row.
+2025-08-02 15:15:58,898 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:15:58,899 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:15:59,013 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into daily_timeseries
+2025-08-02 15:15:59,018 - AlphaLoader - INFO - Candlestick data for OXSQ loaded into the database.
+2025-08-02 15:15:59,018 - AlphaLoader - INFO - Fetching company base data for OXSQ...
+2025-08-02 15:15:59,410 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:15:59,410 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:15:59,450 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
+2025-08-02 15:15:59,455 - AlphaLoader - INFO - Company base data for OXSQ loaded into the database.
+2025-08-02 15:15:59,455 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for OXSQ...
+2025-08-02 15:16:00,482 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:00,482 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:00,516 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into income_statement_annual
+2025-08-02 15:16:00,545 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-08-02 15:16:00,551 - AlphaLoader - INFO - INCOME_STATEMENT data for OXSQ loaded into the database.
+2025-08-02 15:16:00,551 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for OXSQ...
+2025-08-02 15:16:01,225 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:01,225 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:01,267 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-08-02 15:16:01,298 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-08-02 15:16:01,304 - AlphaLoader - INFO - BALANCE_SHEET data for OXSQ loaded into the database.
+2025-08-02 15:16:01,304 - AlphaLoader - INFO - Fetching CASH_FLOW data for OXSQ...
+2025-08-02 15:16:01,945 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:01,945 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:01,981 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into cash_flow_annual
+2025-08-02 15:16:02,012 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-08-02 15:16:02,025 - AlphaLoader - INFO - CASH_FLOW data for OXSQ loaded into the database.
+2025-08-02 15:16:02,025 - AlphaLoader - INFO - Fetching EARNINGS data for OXSQ...
+2025-08-02 15:16:02,564 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:02,564 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:02,598 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 22 new rows into earnings_annual
+2025-08-02 15:16:02,620 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 86 new rows into earnings_quarterly
+2025-08-02 15:16:02,625 - AlphaLoader - INFO - EARNINGS data for OXSQ loaded into the database.
+2025-08-02 15:16:02,625 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for OXSQ...
+2025-08-02 15:16:03,213 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot safely cast non-equivalent float64 to int64
+2025-08-02 15:16:03,301 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_151603_214015_OXSQ_insider_transactions.csv
+2025-08-02 15:16:03,309 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_151603_214015_OXSQ_insider_transactions_quarterly.csv
+2025-08-02 15:16:03,317 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_151603_214015_OXSQ_insider_transactions_api_response.json
+2025-08-02 15:16:03,317 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for OXSQ...
+2025-08-02 15:16:03,816 - AlphaLoader - ERROR - An unexpected Exception occurred: Index(['symbol'], dtype='object')
+2025-08-02 15:16:03,822 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_151603_817650_OXSQ_stock_splits.csv
+2025-08-02 15:16:03,828 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_151603_817650_OXSQ_stock_splits_quarterly.csv
+2025-08-02 15:16:03,832 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_151603_817650_OXSQ_stock_splits_api_response.json
+2025-08-02 15:16:03,832 - AlphaLoader - INFO - Fetching DIVIDENDS data for OXSQ...
+2025-08-02 15:16:04,143 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:04,143 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:04,188 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 82 new rows into dividends
+2025-08-02 15:16:04,193 - AlphaLoader - INFO - Dividend data for OXSQ loaded into the database.
+2025-08-02 15:16:04,193 - db_initial_load_runner - INFO - Processing symbol: BHAT
+2025-08-02 15:16:04,193 - AlphaLoader - INFO - Fetching data for BHAT...
+2025-08-02 15:16:05,154 - infrastructure.alpha_adapter.transform_utils - WARNING - Daily timeseries data missing or malformed for symbol BHAT. Inserting dummy row.
+2025-08-02 15:16:05,157 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:05,157 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:05,189 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into daily_timeseries
+2025-08-02 15:16:05,195 - AlphaLoader - INFO - Candlestick data for BHAT loaded into the database.
+2025-08-02 15:16:05,195 - AlphaLoader - INFO - Fetching company base data for BHAT...
+2025-08-02 15:16:05,746 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:05,746 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:05,779 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
+2025-08-02 15:16:05,784 - AlphaLoader - INFO - Company base data for BHAT loaded into the database.
+2025-08-02 15:16:05,785 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for BHAT...
+2025-08-02 15:16:06,312 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:06,312 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:06,344 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 11 new rows into income_statement_annual
+2025-08-02 15:16:06,369 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 37 new rows into income_statement_quarterly
+2025-08-02 15:16:06,376 - AlphaLoader - INFO - INCOME_STATEMENT data for BHAT loaded into the database.
+2025-08-02 15:16:06,376 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for BHAT...
+2025-08-02 15:16:06,927 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:06,927 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:06,954 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 11 new rows into balance_sheet_annual
+2025-08-02 15:16:06,976 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 39 new rows into balance_sheet_quarterly
+2025-08-02 15:16:06,981 - AlphaLoader - INFO - BALANCE_SHEET data for BHAT loaded into the database.
+2025-08-02 15:16:06,982 - AlphaLoader - INFO - Fetching CASH_FLOW data for BHAT...
+2025-08-02 15:16:07,464 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:07,465 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:07,498 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 11 new rows into cash_flow_annual
+2025-08-02 15:16:07,530 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 38 new rows into cash_flow_statement_quarterly
+2025-08-02 15:16:07,536 - AlphaLoader - INFO - CASH_FLOW data for BHAT loaded into the database.
+2025-08-02 15:16:07,536 - AlphaLoader - INFO - Fetching EARNINGS data for BHAT...
+2025-08-02 15:16:07,823 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:07,824 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:07,848 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 8 new rows into earnings_annual
+2025-08-02 15:16:07,861 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 33 new rows into earnings_quarterly
+2025-08-02 15:16:07,863 - AlphaLoader - INFO - EARNINGS data for BHAT loaded into the database.
+2025-08-02 15:16:07,863 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for BHAT...
+2025-08-02 15:16:08,040 - infrastructure.alpha_adapter.transform_utils - WARNING - Insider transactions missing for symbol BHAT. Inserting dummy row.
+2025-08-02 15:16:08,044 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:08,044 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:08,074 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into insider_transactions
+2025-08-02 15:16:08,079 - AlphaLoader - INFO - Insider transaction data for BHAT loaded into the database.
+2025-08-02 15:16:08,080 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for BHAT...
+2025-08-02 15:16:08,269 - AlphaLoader - ERROR - An unexpected Exception occurred: Index(['symbol'], dtype='object')
+2025-08-02 15:16:08,274 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_151608_270569_BHAT_stock_splits.csv
+2025-08-02 15:16:08,279 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_151608_270569_BHAT_stock_splits_quarterly.csv
+2025-08-02 15:16:08,281 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_151608_270569_BHAT_stock_splits_api_response.json
+2025-08-02 15:16:08,281 - AlphaLoader - INFO - Fetching DIVIDENDS data for BHAT...
+2025-08-02 15:16:08,520 - infrastructure.alpha_adapter.transform_utils - WARNING - Dividends missing for symbol BHAT. Inserting dummy row.
+2025-08-02 15:16:08,523 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:08,523 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:08,557 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into dividends
+2025-08-02 15:16:08,562 - AlphaLoader - INFO - Dividend data for BHAT loaded into the database.
+2025-08-02 15:16:08,563 - db_initial_load_runner - INFO - Processing symbol: AGMH
+2025-08-02 15:16:08,563 - AlphaLoader - INFO - Fetching data for AGMH...
+2025-08-02 15:16:09,348 - infrastructure.alpha_adapter.transform_utils - WARNING - Daily timeseries data missing or malformed for symbol AGMH. Inserting dummy row.
+2025-08-02 15:16:09,351 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:09,351 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:09,383 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into daily_timeseries
+2025-08-02 15:16:09,389 - AlphaLoader - INFO - Candlestick data for AGMH loaded into the database.
+2025-08-02 15:16:09,389 - AlphaLoader - INFO - Fetching company base data for AGMH...
+2025-08-02 15:16:09,747 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:09,747 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:09,777 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
+2025-08-02 15:16:09,782 - AlphaLoader - INFO - Company base data for AGMH loaded into the database.
+2025-08-02 15:16:09,782 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for AGMH...
+2025-08-02 15:16:10,317 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:10,317 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:10,349 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 10 new rows into income_statement_annual
+2025-08-02 15:16:10,370 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 33 new rows into income_statement_quarterly
+2025-08-02 15:16:10,373 - AlphaLoader - INFO - INCOME_STATEMENT data for AGMH loaded into the database.
+2025-08-02 15:16:10,373 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for AGMH...
+2025-08-02 15:16:10,927 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:10,928 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:10,966 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 10 new rows into balance_sheet_annual
+2025-08-02 15:16:10,991 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 37 new rows into balance_sheet_quarterly
+2025-08-02 15:16:10,994 - AlphaLoader - INFO - BALANCE_SHEET data for AGMH loaded into the database.
+2025-08-02 15:16:10,994 - AlphaLoader - INFO - Fetching CASH_FLOW data for AGMH...
+2025-08-02 15:16:11,463 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:11,464 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:11,497 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 10 new rows into cash_flow_annual
+2025-08-02 15:16:11,526 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 35 new rows into cash_flow_statement_quarterly
+2025-08-02 15:16:11,529 - AlphaLoader - INFO - CASH_FLOW data for AGMH loaded into the database.
+2025-08-02 15:16:11,529 - AlphaLoader - INFO - Fetching EARNINGS data for AGMH...
+2025-08-02 15:16:11,823 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:11,823 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:11,848 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 7 new rows into earnings_annual
+2025-08-02 15:16:11,863 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 25 new rows into earnings_quarterly
+2025-08-02 15:16:11,868 - AlphaLoader - INFO - EARNINGS data for AGMH loaded into the database.
+2025-08-02 15:16:11,868 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for AGMH...
+2025-08-02 15:16:12,309 - infrastructure.alpha_adapter.transform_utils - WARNING - Insider transactions missing for symbol AGMH. Inserting dummy row.
+2025-08-02 15:16:12,313 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:12,314 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:12,344 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into insider_transactions
+2025-08-02 15:16:12,350 - AlphaLoader - INFO - Insider transaction data for AGMH loaded into the database.
+2025-08-02 15:16:12,350 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for AGMH...
+2025-08-02 15:16:12,545 - AlphaLoader - ERROR - An unexpected Exception occurred: Index(['symbol'], dtype='object')
+2025-08-02 15:16:12,549 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_151612_545997_AGMH_stock_splits.csv
+2025-08-02 15:16:12,553 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_151612_545997_AGMH_stock_splits_quarterly.csv
+2025-08-02 15:16:12,555 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_151612_545997_AGMH_stock_splits_api_response.json
+2025-08-02 15:16:12,555 - AlphaLoader - INFO - Fetching DIVIDENDS data for AGMH...
+2025-08-02 15:16:12,732 - infrastructure.alpha_adapter.transform_utils - WARNING - Dividends missing for symbol AGMH. Inserting dummy row.
+2025-08-02 15:16:12,735 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:12,735 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:12,760 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into dividends
+2025-08-02 15:16:12,766 - AlphaLoader - INFO - Dividend data for AGMH loaded into the database.
+2025-08-02 15:16:12,766 - db_initial_load_runner - INFO - Processing symbol: SAIA
+2025-08-02 15:16:12,766 - AlphaLoader - INFO - Fetching data for SAIA...
+2025-08-02 15:16:13,703 - infrastructure.alpha_adapter.transform_utils - WARNING - Daily timeseries data missing or malformed for symbol SAIA. Inserting dummy row.
+2025-08-02 15:16:13,706 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:13,707 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:13,737 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into daily_timeseries
+2025-08-02 15:16:13,743 - AlphaLoader - INFO - Candlestick data for SAIA loaded into the database.
+2025-08-02 15:16:13,743 - AlphaLoader - INFO - Fetching company base data for SAIA...
+2025-08-02 15:16:14,023 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:14,023 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:14,054 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
+2025-08-02 15:16:14,066 - AlphaLoader - INFO - Company base data for SAIA loaded into the database.
+2025-08-02 15:16:14,066 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for SAIA...
+2025-08-02 15:16:14,713 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:14,713 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:14,750 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into income_statement_annual
+2025-08-02 15:16:14,781 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-08-02 15:16:14,785 - AlphaLoader - INFO - INCOME_STATEMENT data for SAIA loaded into the database.
+2025-08-02 15:16:14,785 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for SAIA...
+2025-08-02 15:16:15,535 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:15,535 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:15,571 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-08-02 15:16:15,603 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-08-02 15:16:15,615 - AlphaLoader - INFO - BALANCE_SHEET data for SAIA loaded into the database.
+2025-08-02 15:16:15,615 - AlphaLoader - INFO - Fetching CASH_FLOW data for SAIA...
+2025-08-02 15:16:16,275 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:16,275 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:16,311 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into cash_flow_annual
+2025-08-02 15:16:16,344 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-08-02 15:16:16,352 - AlphaLoader - INFO - CASH_FLOW data for SAIA loaded into the database.
+2025-08-02 15:16:16,353 - AlphaLoader - INFO - Fetching EARNINGS data for SAIA...
+2025-08-02 15:16:16,666 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:16,667 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:16,699 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 24 new rows into earnings_annual
+2025-08-02 15:16:16,721 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 92 new rows into earnings_quarterly
+2025-08-02 15:16:16,726 - AlphaLoader - INFO - EARNINGS data for SAIA loaded into the database.
+2025-08-02 15:16:16,726 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for SAIA...
+2025-08-02 15:16:17,560 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot safely cast non-equivalent float64 to int64
+2025-08-02 15:16:17,573 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_151617_560967_SAIA_insider_transactions.csv
+2025-08-02 15:16:17,578 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_151617_560967_SAIA_insider_transactions_quarterly.csv
+2025-08-02 15:16:17,605 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_151617_560967_SAIA_insider_transactions_api_response.json
+2025-08-02 15:16:17,606 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for SAIA...
+2025-08-02 15:16:17,843 - AlphaLoader - ERROR - An unexpected Exception occurred: Index(['symbol'], dtype='object')
+2025-08-02 15:16:17,847 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_151617_843995_SAIA_stock_splits.csv
+2025-08-02 15:16:17,851 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_151617_843995_SAIA_stock_splits_quarterly.csv
+2025-08-02 15:16:17,853 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_151617_843995_SAIA_stock_splits_api_response.json
+2025-08-02 15:16:17,853 - AlphaLoader - INFO - Fetching DIVIDENDS data for SAIA...
+2025-08-02 15:16:18,043 - infrastructure.alpha_adapter.transform_utils - WARNING - Dividends missing for symbol SAIA. Inserting dummy row.
+2025-08-02 15:16:18,045 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:18,045 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:18,070 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into dividends
+2025-08-02 15:16:18,075 - AlphaLoader - INFO - Dividend data for SAIA loaded into the database.
+2025-08-02 15:16:18,076 - db_initial_load_runner - INFO - Processing symbol: ENSG
+2025-08-02 15:16:18,076 - AlphaLoader - INFO - Fetching data for ENSG...
+2025-08-02 15:16:18,690 - infrastructure.alpha_adapter.transform_utils - WARNING - Daily timeseries data missing or malformed for symbol ENSG. Inserting dummy row.
+2025-08-02 15:16:18,692 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:18,693 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:18,724 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into daily_timeseries
+2025-08-02 15:16:18,727 - AlphaLoader - INFO - Candlestick data for ENSG loaded into the database.
+2025-08-02 15:16:18,727 - AlphaLoader - INFO - Fetching company base data for ENSG...
+2025-08-02 15:16:19,244 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:19,244 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:19,277 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
+2025-08-02 15:16:19,282 - AlphaLoader - INFO - Company base data for ENSG loaded into the database.
+2025-08-02 15:16:19,283 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for ENSG...
+2025-08-02 15:16:19,941 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:19,941 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:19,974 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into income_statement_annual
+2025-08-02 15:16:20,004 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-08-02 15:16:20,010 - AlphaLoader - INFO - INCOME_STATEMENT data for ENSG loaded into the database.
+2025-08-02 15:16:20,010 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for ENSG...
+2025-08-02 15:16:30,069 - AlphaLoader - ERROR - Request failed for ENSG: HTTPSConnectionPool(host='www.alphavantage.co', port=443): Read timed out. (read timeout=10)
+2025-08-02 15:16:30,070 - AlphaLoader - INFO - Fetching CASH_FLOW data for ENSG...
+2025-08-02 15:16:30,662 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:30,662 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:30,697 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into cash_flow_annual
+2025-08-02 15:16:30,727 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 78 new rows into cash_flow_statement_quarterly
+2025-08-02 15:16:30,733 - AlphaLoader - INFO - CASH_FLOW data for ENSG loaded into the database.
+2025-08-02 15:16:30,734 - AlphaLoader - INFO - Fetching EARNINGS data for ENSG...
+2025-08-02 15:16:31,050 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:31,050 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:31,081 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 19 new rows into earnings_annual
+2025-08-02 15:16:31,098 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 72 new rows into earnings_quarterly
+2025-08-02 15:16:31,106 - AlphaLoader - INFO - EARNINGS data for ENSG loaded into the database.
+2025-08-02 15:16:31,106 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for ENSG...
+2025-08-02 15:16:31,869 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot safely cast non-equivalent float64 to int64
+2025-08-02 15:16:31,882 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_151631_870049_ENSG_insider_transactions.csv
+2025-08-02 15:16:31,887 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_151631_870049_ENSG_insider_transactions_quarterly.csv
+2025-08-02 15:16:31,911 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_151631_870049_ENSG_insider_transactions_api_response.json
+2025-08-02 15:16:31,911 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for ENSG...
+2025-08-02 15:16:32,178 - AlphaLoader - ERROR - An unexpected Exception occurred: Index(['symbol'], dtype='object')
+2025-08-02 15:16:32,182 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_151632_179064_ENSG_stock_splits.csv
+2025-08-02 15:16:32,185 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_151632_179064_ENSG_stock_splits_quarterly.csv
+2025-08-02 15:16:32,187 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_151632_179064_ENSG_stock_splits_api_response.json
+2025-08-02 15:16:32,188 - AlphaLoader - INFO - Fetching DIVIDENDS data for ENSG...
+2025-08-02 15:16:32,487 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:32,488 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:32,522 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 72 new rows into dividends
+2025-08-02 15:16:32,528 - AlphaLoader - INFO - Dividend data for ENSG loaded into the database.
+2025-08-02 15:16:32,528 - db_initial_load_runner - INFO - Processing symbol: DJTWW
+2025-08-02 15:16:32,528 - AlphaLoader - INFO - Fetching data for DJTWW...
+2025-08-02 15:16:32,995 - infrastructure.alpha_adapter.transform_utils - WARNING - Daily timeseries data missing or malformed for symbol DJTWW. Inserting dummy row.
+2025-08-02 15:16:32,997 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:32,997 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:33,025 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into daily_timeseries
+2025-08-02 15:16:33,030 - AlphaLoader - INFO - Candlestick data for DJTWW loaded into the database.
+2025-08-02 15:16:33,031 - AlphaLoader - INFO - Fetching company base data for DJTWW...
+2025-08-02 15:16:33,400 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:33,400 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:33,432 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
+2025-08-02 15:16:33,437 - AlphaLoader - INFO - Company base data for DJTWW loaded into the database.
+2025-08-02 15:16:33,437 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for DJTWW...
+2025-08-02 15:16:33,861 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:33,862 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:33,889 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 4 new rows into income_statement_annual
+2025-08-02 15:16:33,908 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 17 new rows into income_statement_quarterly
+2025-08-02 15:16:33,912 - AlphaLoader - INFO - INCOME_STATEMENT data for DJTWW loaded into the database.
+2025-08-02 15:16:33,912 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for DJTWW...
+2025-08-02 15:16:34,334 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:34,334 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:34,369 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 4 new rows into balance_sheet_annual
+2025-08-02 15:16:34,387 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 17 new rows into balance_sheet_quarterly
+2025-08-02 15:16:34,391 - AlphaLoader - INFO - BALANCE_SHEET data for DJTWW loaded into the database.
+2025-08-02 15:16:34,392 - AlphaLoader - INFO - Fetching CASH_FLOW data for DJTWW...
+2025-08-02 15:16:34,806 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:34,806 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:34,837 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 4 new rows into cash_flow_annual
+2025-08-02 15:16:34,865 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 17 new rows into cash_flow_statement_quarterly
+2025-08-02 15:16:34,868 - AlphaLoader - INFO - CASH_FLOW data for DJTWW loaded into the database.
+2025-08-02 15:16:34,868 - AlphaLoader - INFO - Fetching EARNINGS data for DJTWW...
+2025-08-02 15:16:35,145 - infrastructure.alpha_adapter.transform_utils - WARNING - Annual earnings missing for symbol DJTWW. Inserting dummy row.
+2025-08-02 15:16:35,146 - infrastructure.alpha_adapter.transform_utils - WARNING - Quarterly earnings missing for symbol DJTWW. Inserting dummy row.
+2025-08-02 15:16:35,148 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:35,148 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:35,176 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into earnings_annual
+2025-08-02 15:16:35,183 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into earnings_quarterly
+2025-08-02 15:16:35,185 - AlphaLoader - INFO - EARNINGS data for DJTWW loaded into the database.
+2025-08-02 15:16:35,186 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for DJTWW...
+2025-08-02 15:16:35,358 - infrastructure.alpha_adapter.transform_utils - WARNING - Insider transactions missing for symbol DJTWW. Inserting dummy row.
+2025-08-02 15:16:35,361 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:35,361 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:35,383 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into insider_transactions
+2025-08-02 15:16:35,388 - AlphaLoader - INFO - Insider transaction data for DJTWW loaded into the database.
+2025-08-02 15:16:35,388 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for DJTWW...
+2025-08-02 15:16:35,567 - infrastructure.alpha_adapter.transform_utils - WARNING - Stock splits missing for symbol DJTWW. Inserting dummy row.
+2025-08-02 15:16:35,571 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:35,571 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:35,599 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into stock_splits
+2025-08-02 15:16:35,605 - AlphaLoader - INFO - Stock split data for DJTWW loaded into the database.
+2025-08-02 15:16:35,605 - AlphaLoader - INFO - Fetching DIVIDENDS data for DJTWW...
+2025-08-02 15:16:35,861 - infrastructure.alpha_adapter.transform_utils - WARNING - Dividends missing for symbol DJTWW. Inserting dummy row.
+2025-08-02 15:16:35,863 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:35,863 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:35,892 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into dividends
+2025-08-02 15:16:35,897 - AlphaLoader - INFO - Dividend data for DJTWW loaded into the database.
+2025-08-02 15:16:35,897 - db_initial_load_runner - INFO - Processing symbol: CTNT
+2025-08-02 15:16:35,897 - AlphaLoader - INFO - Fetching data for CTNT...
+2025-08-02 15:16:36,479 - infrastructure.alpha_adapter.transform_utils - WARNING - Daily timeseries data missing or malformed for symbol CTNT. Inserting dummy row.
+2025-08-02 15:16:36,482 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:36,482 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:36,513 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into daily_timeseries
+2025-08-02 15:16:36,518 - AlphaLoader - INFO - Candlestick data for CTNT loaded into the database.
+2025-08-02 15:16:36,519 - AlphaLoader - INFO - Fetching company base data for CTNT...
+2025-08-02 15:16:36,948 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:36,948 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:36,982 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
+2025-08-02 15:16:36,987 - AlphaLoader - INFO - Company base data for CTNT loaded into the database.
+2025-08-02 15:16:36,988 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for CTNT...
+2025-08-02 15:16:37,417 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:37,417 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:37,446 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 4 new rows into income_statement_annual
+2025-08-02 15:16:37,461 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 13 new rows into income_statement_quarterly
+2025-08-02 15:16:37,466 - AlphaLoader - INFO - INCOME_STATEMENT data for CTNT loaded into the database.
+2025-08-02 15:16:37,467 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for CTNT...
+2025-08-02 15:16:37,892 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:37,893 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:37,923 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 4 new rows into balance_sheet_annual
+2025-08-02 15:16:37,940 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 13 new rows into balance_sheet_quarterly
+2025-08-02 15:16:37,943 - AlphaLoader - INFO - BALANCE_SHEET data for CTNT loaded into the database.
+2025-08-02 15:16:37,943 - AlphaLoader - INFO - Fetching CASH_FLOW data for CTNT...
+2025-08-02 15:16:38,395 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:38,395 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:38,426 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 4 new rows into cash_flow_annual
+2025-08-02 15:16:38,442 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 13 new rows into cash_flow_statement_quarterly
+2025-08-02 15:16:38,446 - AlphaLoader - INFO - CASH_FLOW data for CTNT loaded into the database.
+2025-08-02 15:16:38,446 - AlphaLoader - INFO - Fetching EARNINGS data for CTNT...
+2025-08-02 15:16:38,755 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:38,755 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:38,785 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 3 new rows into earnings_annual
+2025-08-02 15:16:38,796 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 7 new rows into earnings_quarterly
+2025-08-02 15:16:38,799 - AlphaLoader - INFO - EARNINGS data for CTNT loaded into the database.
+2025-08-02 15:16:38,799 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for CTNT...
+2025-08-02 15:16:38,970 - infrastructure.alpha_adapter.transform_utils - WARNING - Insider transactions missing for symbol CTNT. Inserting dummy row.
+2025-08-02 15:16:38,974 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:38,974 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:39,002 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into insider_transactions
+2025-08-02 15:16:39,007 - AlphaLoader - INFO - Insider transaction data for CTNT loaded into the database.
+2025-08-02 15:16:39,007 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for CTNT...
+2025-08-02 15:16:39,247 - AlphaLoader - ERROR - An unexpected Exception occurred: Index(['symbol'], dtype='object')
+2025-08-02 15:16:39,252 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_151639_247823_CTNT_stock_splits.csv
+2025-08-02 15:16:39,256 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_151639_247823_CTNT_stock_splits_quarterly.csv
+2025-08-02 15:16:39,258 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_151639_247823_CTNT_stock_splits_api_response.json
+2025-08-02 15:16:39,258 - AlphaLoader - INFO - Fetching DIVIDENDS data for CTNT...
+2025-08-02 15:16:39,443 - infrastructure.alpha_adapter.transform_utils - WARNING - Dividends missing for symbol CTNT. Inserting dummy row.
+2025-08-02 15:16:39,445 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:39,445 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:39,471 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into dividends
+2025-08-02 15:16:39,476 - AlphaLoader - INFO - Dividend data for CTNT loaded into the database.
+2025-08-02 15:16:39,476 - db_initial_load_runner - INFO - Processing symbol: BTOC
+2025-08-02 15:16:39,476 - AlphaLoader - INFO - Fetching data for BTOC...
+2025-08-02 15:16:39,878 - infrastructure.alpha_adapter.transform_utils - WARNING - Daily timeseries data missing or malformed for symbol BTOC. Inserting dummy row.
+2025-08-02 15:16:39,880 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:39,880 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:39,903 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into daily_timeseries
+2025-08-02 15:16:39,908 - AlphaLoader - INFO - Candlestick data for BTOC loaded into the database.
+2025-08-02 15:16:39,908 - AlphaLoader - INFO - Fetching company base data for BTOC...
+2025-08-02 15:16:40,169 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:40,170 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:40,201 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
+2025-08-02 15:16:40,206 - AlphaLoader - INFO - Company base data for BTOC loaded into the database.
+2025-08-02 15:16:40,206 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for BTOC...
+2025-08-02 15:16:40,639 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:40,639 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:40,668 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 4 new rows into income_statement_annual
+2025-08-02 15:16:40,687 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 13 new rows into income_statement_quarterly
+2025-08-02 15:16:40,690 - AlphaLoader - INFO - INCOME_STATEMENT data for BTOC loaded into the database.
+2025-08-02 15:16:40,690 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for BTOC...
+2025-08-02 15:16:41,127 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:41,127 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:41,160 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 4 new rows into balance_sheet_annual
+2025-08-02 15:16:41,177 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 13 new rows into balance_sheet_quarterly
+2025-08-02 15:16:41,180 - AlphaLoader - INFO - BALANCE_SHEET data for BTOC loaded into the database.
+2025-08-02 15:16:41,180 - AlphaLoader - INFO - Fetching CASH_FLOW data for BTOC...
+2025-08-02 15:16:41,534 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:41,534 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:41,562 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 4 new rows into cash_flow_annual
+2025-08-02 15:16:41,582 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 13 new rows into cash_flow_statement_quarterly
+2025-08-02 15:16:41,585 - AlphaLoader - INFO - CASH_FLOW data for BTOC loaded into the database.
+2025-08-02 15:16:41,585 - AlphaLoader - INFO - Fetching EARNINGS data for BTOC...
+2025-08-02 15:16:41,794 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:41,794 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:41,819 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 2 new rows into earnings_annual
+2025-08-02 15:16:41,829 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 4 new rows into earnings_quarterly
+2025-08-02 15:16:41,830 - AlphaLoader - INFO - EARNINGS data for BTOC loaded into the database.
+2025-08-02 15:16:41,831 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for BTOC...
+2025-08-02 15:16:42,009 - infrastructure.alpha_adapter.transform_utils - WARNING - Insider transactions missing for symbol BTOC. Inserting dummy row.
+2025-08-02 15:16:42,012 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:42,012 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:42,038 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into insider_transactions
+2025-08-02 15:16:42,043 - AlphaLoader - INFO - Insider transaction data for BTOC loaded into the database.
+2025-08-02 15:16:42,044 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for BTOC...
+2025-08-02 15:16:42,226 - infrastructure.alpha_adapter.transform_utils - WARNING - Stock splits missing for symbol BTOC. Inserting dummy row.
+2025-08-02 15:16:42,229 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:42,230 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:42,254 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into stock_splits
+2025-08-02 15:16:42,259 - AlphaLoader - INFO - Stock split data for BTOC loaded into the database.
+2025-08-02 15:16:42,259 - AlphaLoader - INFO - Fetching DIVIDENDS data for BTOC...
+2025-08-02 15:16:42,443 - infrastructure.alpha_adapter.transform_utils - WARNING - Dividends missing for symbol BTOC. Inserting dummy row.
+2025-08-02 15:16:42,445 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:42,445 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:42,471 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into dividends
+2025-08-02 15:16:42,476 - AlphaLoader - INFO - Dividend data for BTOC loaded into the database.
+2025-08-02 15:16:42,477 - db_initial_load_runner - INFO - Processing symbol: RVSB
+2025-08-02 15:16:42,477 - AlphaLoader - INFO - Fetching data for RVSB...
+2025-08-02 15:16:43,441 - infrastructure.alpha_adapter.transform_utils - WARNING - Daily timeseries data missing or malformed for symbol RVSB. Inserting dummy row.
+2025-08-02 15:16:43,444 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:43,444 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:43,472 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into daily_timeseries
+2025-08-02 15:16:43,477 - AlphaLoader - INFO - Candlestick data for RVSB loaded into the database.
+2025-08-02 15:16:43,478 - AlphaLoader - INFO - Fetching company base data for RVSB...
+2025-08-02 15:16:43,825 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:43,825 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:43,851 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
+2025-08-02 15:16:43,856 - AlphaLoader - INFO - Company base data for RVSB loaded into the database.
+2025-08-02 15:16:43,856 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for RVSB...
+2025-08-02 15:16:44,603 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:44,603 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:44,636 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into income_statement_annual
+2025-08-02 15:16:44,667 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-08-02 15:16:44,673 - AlphaLoader - INFO - INCOME_STATEMENT data for RVSB loaded into the database.
+2025-08-02 15:16:44,673 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for RVSB...
+2025-08-02 15:16:45,117 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:45,117 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:45,153 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-08-02 15:16:45,180 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-08-02 15:16:45,187 - AlphaLoader - INFO - BALANCE_SHEET data for RVSB loaded into the database.
+2025-08-02 15:16:45,187 - AlphaLoader - INFO - Fetching CASH_FLOW data for RVSB...
+2025-08-02 15:16:45,756 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:45,756 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:45,795 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into cash_flow_annual
+2025-08-02 15:16:45,831 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-08-02 15:16:45,837 - AlphaLoader - INFO - CASH_FLOW data for RVSB loaded into the database.
+2025-08-02 15:16:45,837 - AlphaLoader - INFO - Fetching EARNINGS data for RVSB...
+2025-08-02 15:16:46,148 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:46,148 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:46,182 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 29 new rows into earnings_annual
+2025-08-02 15:16:46,208 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 111 new rows into earnings_quarterly
+2025-08-02 15:16:46,216 - AlphaLoader - INFO - EARNINGS data for RVSB loaded into the database.
+2025-08-02 15:16:46,217 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for RVSB...
+2025-08-02 15:16:46,744 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:46,744 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:46,794 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 389 new rows into insider_transactions
+2025-08-02 15:16:46,799 - AlphaLoader - INFO - Insider transaction data for RVSB loaded into the database.
+2025-08-02 15:16:46,800 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for RVSB...
+2025-08-02 15:16:46,989 - AlphaLoader - ERROR - An unexpected Exception occurred: Index(['symbol'], dtype='object')
+2025-08-02 15:16:46,994 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_151646_989690_RVSB_stock_splits.csv
+2025-08-02 15:16:47,000 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_151646_989690_RVSB_stock_splits_quarterly.csv
+2025-08-02 15:16:47,003 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_151646_989690_RVSB_stock_splits_api_response.json
+2025-08-02 15:16:47,003 - AlphaLoader - INFO - Fetching DIVIDENDS data for RVSB...
+2025-08-02 15:16:47,350 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:47,350 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:47,385 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 81 new rows into dividends
+2025-08-02 15:16:47,391 - AlphaLoader - INFO - Dividend data for RVSB loaded into the database.
+2025-08-02 15:16:47,391 - db_initial_load_runner - INFO - Processing symbol: BCML
+2025-08-02 15:16:47,391 - AlphaLoader - INFO - Fetching data for BCML...
+2025-08-02 15:16:48,372 - infrastructure.alpha_adapter.transform_utils - WARNING - Daily timeseries data missing or malformed for symbol BCML. Inserting dummy row.
+2025-08-02 15:16:48,375 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:48,375 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:48,405 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into daily_timeseries
+2025-08-02 15:16:48,410 - AlphaLoader - INFO - Candlestick data for BCML loaded into the database.
+2025-08-02 15:16:48,411 - AlphaLoader - INFO - Fetching company base data for BCML...
+2025-08-02 15:16:48,668 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:48,668 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:48,699 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
+2025-08-02 15:16:48,704 - AlphaLoader - INFO - Company base data for BCML loaded into the database.
+2025-08-02 15:16:48,704 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for BCML...
+2025-08-02 15:16:49,437 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:49,438 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:49,472 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into income_statement_annual
+2025-08-02 15:16:49,504 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 64 new rows into income_statement_quarterly
+2025-08-02 15:16:49,509 - AlphaLoader - INFO - INCOME_STATEMENT data for BCML loaded into the database.
+2025-08-02 15:16:49,509 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for BCML...
+2025-08-02 15:16:50,256 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:50,257 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:50,296 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-08-02 15:16:50,325 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 64 new rows into balance_sheet_quarterly
+2025-08-02 15:16:50,333 - AlphaLoader - INFO - BALANCE_SHEET data for BCML loaded into the database.
+2025-08-02 15:16:50,334 - AlphaLoader - INFO - Fetching CASH_FLOW data for BCML...
+2025-08-02 15:16:50,880 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:50,881 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:50,916 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 18 new rows into cash_flow_annual
+2025-08-02 15:16:50,942 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 50 new rows into cash_flow_statement_quarterly
+2025-08-02 15:16:50,948 - AlphaLoader - INFO - CASH_FLOW data for BCML loaded into the database.
+2025-08-02 15:16:50,948 - AlphaLoader - INFO - Fetching EARNINGS data for BCML...
+2025-08-02 15:16:51,248 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:51,248 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:51,278 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 16 new rows into earnings_annual
+2025-08-02 15:16:51,298 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 62 new rows into earnings_quarterly
+2025-08-02 15:16:51,303 - AlphaLoader - INFO - EARNINGS data for BCML loaded into the database.
+2025-08-02 15:16:51,304 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for BCML...
+2025-08-02 15:16:51,759 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:51,759 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:51,798 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 116 new rows into insider_transactions
+2025-08-02 15:16:51,803 - AlphaLoader - INFO - Insider transaction data for BCML loaded into the database.
+2025-08-02 15:16:51,803 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for BCML...
+2025-08-02 15:16:52,040 - infrastructure.alpha_adapter.transform_utils - WARNING - Stock splits missing for symbol BCML. Inserting dummy row.
+2025-08-02 15:16:52,044 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:52,044 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:52,073 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into stock_splits
+2025-08-02 15:16:52,078 - AlphaLoader - INFO - Stock split data for BCML loaded into the database.
+2025-08-02 15:16:52,078 - AlphaLoader - INFO - Fetching DIVIDENDS data for BCML...
+2025-08-02 15:16:52,370 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:52,370 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:52,399 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 14 new rows into dividends
+2025-08-02 15:16:52,404 - AlphaLoader - INFO - Dividend data for BCML loaded into the database.
+2025-08-02 15:16:52,405 - db_initial_load_runner - INFO - Processing symbol: PRAX
+2025-08-02 15:16:52,405 - AlphaLoader - INFO - Fetching data for PRAX...
+2025-08-02 15:16:53,070 - infrastructure.alpha_adapter.transform_utils - WARNING - Daily timeseries data missing or malformed for symbol PRAX. Inserting dummy row.
+2025-08-02 15:16:53,073 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:53,073 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:53,103 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into daily_timeseries
+2025-08-02 15:16:53,106 - AlphaLoader - INFO - Candlestick data for PRAX loaded into the database.
+2025-08-02 15:16:53,106 - AlphaLoader - INFO - Fetching company base data for PRAX...
+2025-08-02 15:16:53,450 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:53,450 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:53,477 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
+2025-08-02 15:16:53,483 - AlphaLoader - INFO - Company base data for PRAX loaded into the database.
+2025-08-02 15:16:53,483 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for PRAX...
+2025-08-02 15:16:53,882 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:53,883 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:53,915 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 7 new rows into income_statement_annual
+2025-08-02 15:16:53,938 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 25 new rows into income_statement_quarterly
+2025-08-02 15:16:53,941 - AlphaLoader - INFO - INCOME_STATEMENT data for PRAX loaded into the database.
+2025-08-02 15:16:53,942 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for PRAX...
+2025-08-02 15:16:54,567 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:54,567 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:54,604 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 7 new rows into balance_sheet_annual
+2025-08-02 15:16:54,622 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 25 new rows into balance_sheet_quarterly
+2025-08-02 15:16:54,629 - AlphaLoader - INFO - BALANCE_SHEET data for PRAX loaded into the database.
+2025-08-02 15:16:54,629 - AlphaLoader - INFO - Fetching CASH_FLOW data for PRAX...
+2025-08-02 15:16:55,059 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:55,060 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:55,089 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 7 new rows into cash_flow_annual
+2025-08-02 15:16:55,105 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 25 new rows into cash_flow_statement_quarterly
+2025-08-02 15:16:55,110 - AlphaLoader - INFO - CASH_FLOW data for PRAX loaded into the database.
+2025-08-02 15:16:55,110 - AlphaLoader - INFO - Fetching EARNINGS data for PRAX...
+2025-08-02 15:16:55,342 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:55,342 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:55,369 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 6 new rows into earnings_annual
+2025-08-02 15:16:55,382 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into earnings_quarterly
+2025-08-02 15:16:55,384 - AlphaLoader - INFO - EARNINGS data for PRAX loaded into the database.
+2025-08-02 15:16:55,384 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for PRAX...
+2025-08-02 15:16:55,772 - AlphaLoader - ERROR - An unexpected Exception occurred: cannot safely cast non-equivalent float64 to int64
+2025-08-02 15:16:55,777 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_151655_772847_PRAX_insider_transactions.csv
+2025-08-02 15:16:55,781 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_151655_772847_PRAX_insider_transactions_quarterly.csv
+2025-08-02 15:16:55,785 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_151655_772847_PRAX_insider_transactions_api_response.json
+2025-08-02 15:16:55,785 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for PRAX...
+2025-08-02 15:16:56,038 - AlphaLoader - ERROR - An unexpected Exception occurred: Index(['symbol'], dtype='object')
+2025-08-02 15:16:56,042 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_151656_039067_PRAX_stock_splits.csv
+2025-08-02 15:16:56,046 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_151656_039067_PRAX_stock_splits_quarterly.csv
+2025-08-02 15:16:56,048 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_151656_039067_PRAX_stock_splits_api_response.json
+2025-08-02 15:16:56,048 - AlphaLoader - INFO - Fetching DIVIDENDS data for PRAX...
+2025-08-02 15:16:56,238 - infrastructure.alpha_adapter.transform_utils - WARNING - Dividends missing for symbol PRAX. Inserting dummy row.
+2025-08-02 15:16:56,240 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:56,240 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:56,266 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into dividends
+2025-08-02 15:16:56,272 - AlphaLoader - INFO - Dividend data for PRAX loaded into the database.
+2025-08-02 15:16:56,272 - db_initial_load_runner - INFO - Processing symbol: SABSW
+2025-08-02 15:16:56,272 - AlphaLoader - INFO - Fetching data for SABSW...
+2025-08-02 15:16:56,967 - infrastructure.alpha_adapter.transform_utils - WARNING - Daily timeseries data missing or malformed for symbol SABSW. Inserting dummy row.
+2025-08-02 15:16:56,970 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:56,970 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:57,002 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into daily_timeseries
+2025-08-02 15:16:57,008 - AlphaLoader - INFO - Candlestick data for SABSW loaded into the database.
+2025-08-02 15:16:57,008 - AlphaLoader - INFO - Fetching company base data for SABSW...
+2025-08-02 15:16:57,264 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:57,264 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:57,296 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
+2025-08-02 15:16:57,299 - AlphaLoader - INFO - Company base data for SABSW loaded into the database.
+2025-08-02 15:16:57,299 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for SABSW...
+2025-08-02 15:16:57,738 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:57,738 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:57,769 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 6 new rows into income_statement_annual
+2025-08-02 15:16:57,782 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 17 new rows into income_statement_quarterly
+2025-08-02 15:16:57,788 - AlphaLoader - INFO - INCOME_STATEMENT data for SABSW loaded into the database.
+2025-08-02 15:16:57,788 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for SABSW...
+2025-08-02 15:16:58,371 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:58,371 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:58,407 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 6 new rows into balance_sheet_annual
+2025-08-02 15:16:58,427 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 18 new rows into balance_sheet_quarterly
+2025-08-02 15:16:58,431 - AlphaLoader - INFO - BALANCE_SHEET data for SABSW loaded into the database.
+2025-08-02 15:16:58,431 - AlphaLoader - INFO - Fetching CASH_FLOW data for SABSW...
+2025-08-02 15:16:58,773 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:58,773 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:58,809 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 6 new rows into cash_flow_annual
+2025-08-02 15:16:58,825 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 17 new rows into cash_flow_statement_quarterly
+2025-08-02 15:16:58,829 - AlphaLoader - INFO - CASH_FLOW data for SABSW loaded into the database.
+2025-08-02 15:16:58,829 - AlphaLoader - INFO - Fetching EARNINGS data for SABSW...
+2025-08-02 15:16:59,139 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:59,139 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:59,167 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 3 new rows into earnings_annual
+2025-08-02 15:16:59,179 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 7 new rows into earnings_quarterly
+2025-08-02 15:16:59,180 - AlphaLoader - INFO - EARNINGS data for SABSW loaded into the database.
+2025-08-02 15:16:59,181 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for SABSW...
+2025-08-02 15:16:59,479 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:59,479 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:59,510 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 75 new rows into insider_transactions
+2025-08-02 15:16:59,515 - AlphaLoader - INFO - Insider transaction data for SABSW loaded into the database.
+2025-08-02 15:16:59,515 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for SABSW...
+2025-08-02 15:16:59,708 - infrastructure.alpha_adapter.transform_utils - WARNING - Stock splits missing for symbol SABSW. Inserting dummy row.
+2025-08-02 15:16:59,711 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:59,711 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:59,736 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into stock_splits
+2025-08-02 15:16:59,739 - AlphaLoader - INFO - Stock split data for SABSW loaded into the database.
+2025-08-02 15:16:59,740 - AlphaLoader - INFO - Fetching DIVIDENDS data for SABSW...
+2025-08-02 15:16:59,925 - infrastructure.alpha_adapter.transform_utils - WARNING - Dividends missing for symbol SABSW. Inserting dummy row.
+2025-08-02 15:16:59,927 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:59,927 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:16:59,950 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into dividends
+2025-08-02 15:16:59,955 - AlphaLoader - INFO - Dividend data for SABSW loaded into the database.
+2025-08-02 15:16:59,955 - db_initial_load_runner - INFO - Processing symbol: VRNS
+2025-08-02 15:16:59,955 - AlphaLoader - INFO - Fetching data for VRNS...
+2025-08-02 15:17:00,761 - infrastructure.alpha_adapter.transform_utils - WARNING - Daily timeseries data missing or malformed for symbol VRNS. Inserting dummy row.
+2025-08-02 15:17:00,763 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:00,763 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:00,790 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into daily_timeseries
+2025-08-02 15:17:00,793 - AlphaLoader - INFO - Candlestick data for VRNS loaded into the database.
+2025-08-02 15:17:00,793 - AlphaLoader - INFO - Fetching company base data for VRNS...
+2025-08-02 15:17:01,134 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:01,134 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:01,168 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
+2025-08-02 15:17:01,174 - AlphaLoader - INFO - Company base data for VRNS loaded into the database.
+2025-08-02 15:17:01,174 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for VRNS...
+2025-08-02 15:17:01,809 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:01,810 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:01,836 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 15 new rows into income_statement_annual
+2025-08-02 15:17:01,860 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 54 new rows into income_statement_quarterly
+2025-08-02 15:17:01,866 - AlphaLoader - INFO - INCOME_STATEMENT data for VRNS loaded into the database.
+2025-08-02 15:17:01,866 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for VRNS...
+2025-08-02 15:17:02,534 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:02,534 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:02,563 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 15 new rows into balance_sheet_annual
+2025-08-02 15:17:02,591 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 52 new rows into balance_sheet_quarterly
+2025-08-02 15:17:02,598 - AlphaLoader - INFO - BALANCE_SHEET data for VRNS loaded into the database.
+2025-08-02 15:17:02,599 - AlphaLoader - INFO - Fetching CASH_FLOW data for VRNS...
+2025-08-02 15:17:03,164 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:03,164 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:03,200 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 15 new rows into cash_flow_annual
+2025-08-02 15:17:03,236 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 52 new rows into cash_flow_statement_quarterly
+2025-08-02 15:17:03,242 - AlphaLoader - INFO - CASH_FLOW data for VRNS loaded into the database.
+2025-08-02 15:17:03,242 - AlphaLoader - INFO - Fetching EARNINGS data for VRNS...
+2025-08-02 15:17:03,468 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:03,468 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:03,495 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 12 new rows into earnings_annual
+2025-08-02 15:17:03,511 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 46 new rows into earnings_quarterly
+2025-08-02 15:17:03,515 - AlphaLoader - INFO - EARNINGS data for VRNS loaded into the database.
+2025-08-02 15:17:03,515 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for VRNS...
+2025-08-02 15:17:04,370 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:04,371 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:04,458 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 760 new rows into insider_transactions
+2025-08-02 15:17:04,464 - AlphaLoader - INFO - Insider transaction data for VRNS loaded into the database.
+2025-08-02 15:17:04,464 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for VRNS...
+2025-08-02 15:17:04,649 - AlphaLoader - ERROR - An unexpected Exception occurred: Index(['symbol'], dtype='object')
+2025-08-02 15:17:04,653 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_151704_650204_VRNS_stock_splits.csv
+2025-08-02 15:17:04,656 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_151704_650204_VRNS_stock_splits_quarterly.csv
+2025-08-02 15:17:04,658 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_151704_650204_VRNS_stock_splits_api_response.json
+2025-08-02 15:17:04,658 - AlphaLoader - INFO - Fetching DIVIDENDS data for VRNS...
+2025-08-02 15:17:04,840 - infrastructure.alpha_adapter.transform_utils - WARNING - Dividends missing for symbol VRNS. Inserting dummy row.
+2025-08-02 15:17:04,842 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:04,842 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:04,869 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into dividends
+2025-08-02 15:17:04,874 - AlphaLoader - INFO - Dividend data for VRNS loaded into the database.
+2025-08-02 15:17:04,875 - db_initial_load_runner - INFO - Processing symbol: MNST
+2025-08-02 15:17:04,875 - AlphaLoader - INFO - Fetching data for MNST...
+2025-08-02 15:17:05,867 - infrastructure.alpha_adapter.transform_utils - WARNING - Daily timeseries data missing or malformed for symbol MNST. Inserting dummy row.
+2025-08-02 15:17:05,869 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:05,869 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:05,900 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into daily_timeseries
+2025-08-02 15:17:05,903 - AlphaLoader - INFO - Candlestick data for MNST loaded into the database.
+2025-08-02 15:17:05,903 - AlphaLoader - INFO - Fetching company base data for MNST...
+2025-08-02 15:17:06,254 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:06,254 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:06,287 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
+2025-08-02 15:17:06,293 - AlphaLoader - INFO - Company base data for MNST loaded into the database.
+2025-08-02 15:17:06,293 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for MNST...
+2025-08-02 15:17:06,950 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:06,950 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:06,984 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into income_statement_annual
+2025-08-02 15:17:07,015 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 81 new rows into income_statement_quarterly
+2025-08-02 15:17:07,022 - AlphaLoader - INFO - INCOME_STATEMENT data for MNST loaded into the database.
+2025-08-02 15:17:07,023 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for MNST...
+2025-08-02 15:17:07,680 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:07,680 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:07,721 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into balance_sheet_annual
+2025-08-02 15:17:07,749 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 81 new rows into balance_sheet_quarterly
+2025-08-02 15:17:07,754 - AlphaLoader - INFO - BALANCE_SHEET data for MNST loaded into the database.
+2025-08-02 15:17:07,755 - AlphaLoader - INFO - Fetching CASH_FLOW data for MNST...
+2025-08-02 15:17:08,406 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:08,406 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:08,442 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 20 new rows into cash_flow_annual
+2025-08-02 15:17:08,471 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 81 new rows into cash_flow_statement_quarterly
+2025-08-02 15:17:08,479 - AlphaLoader - INFO - CASH_FLOW data for MNST loaded into the database.
+2025-08-02 15:17:08,479 - AlphaLoader - INFO - Fetching EARNINGS data for MNST...
+2025-08-02 15:17:08,967 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:08,967 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:08,999 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 30 new rows into earnings_annual
+2025-08-02 15:17:09,023 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 117 new rows into earnings_quarterly
+2025-08-02 15:17:09,031 - AlphaLoader - INFO - EARNINGS data for MNST loaded into the database.
+2025-08-02 15:17:09,031 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for MNST...
+2025-08-02 15:17:10,052 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:10,052 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:10,209 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1877 new rows into insider_transactions
+2025-08-02 15:17:10,223 - AlphaLoader - INFO - Insider transaction data for MNST loaded into the database.
+2025-08-02 15:17:10,223 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for MNST...
+2025-08-02 15:17:10,481 - AlphaLoader - ERROR - An unexpected Exception occurred: Index(['symbol'], dtype='object')
+2025-08-02 15:17:10,485 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_151710_481757_MNST_stock_splits.csv
+2025-08-02 15:17:10,491 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_151710_481757_MNST_stock_splits_quarterly.csv
+2025-08-02 15:17:10,494 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_151710_481757_MNST_stock_splits_api_response.json
+2025-08-02 15:17:10,494 - AlphaLoader - INFO - Fetching DIVIDENDS data for MNST...
+2025-08-02 15:17:10,780 - infrastructure.alpha_adapter.transform_utils - WARNING - Dividends missing for symbol MNST. Inserting dummy row.
+2025-08-02 15:17:10,783 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:10,783 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:10,813 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into dividends
+2025-08-02 15:17:10,819 - AlphaLoader - INFO - Dividend data for MNST loaded into the database.
+2025-08-02 15:17:10,820 - db_initial_load_runner - INFO - Processing symbol: AUUD
+2025-08-02 15:17:10,820 - AlphaLoader - INFO - Fetching data for AUUD...
+2025-08-02 15:17:11,449 - infrastructure.alpha_adapter.transform_utils - WARNING - Daily timeseries data missing or malformed for symbol AUUD. Inserting dummy row.
+2025-08-02 15:17:11,452 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:11,452 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:11,481 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into daily_timeseries
+2025-08-02 15:17:11,487 - AlphaLoader - INFO - Candlestick data for AUUD loaded into the database.
+2025-08-02 15:17:11,487 - AlphaLoader - INFO - Fetching company base data for AUUD...
+2025-08-02 15:17:11,746 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:11,746 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:11,776 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into company_fundamentals
+2025-08-02 15:17:11,781 - AlphaLoader - INFO - Company base data for AUUD loaded into the database.
+2025-08-02 15:17:11,781 - AlphaLoader - INFO - Fetching INCOME_STATEMENT data for AUUD...
+2025-08-02 15:17:12,206 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:12,206 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:12,236 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 8 new rows into income_statement_annual
+2025-08-02 15:17:12,255 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 26 new rows into income_statement_quarterly
+2025-08-02 15:17:12,259 - AlphaLoader - INFO - INCOME_STATEMENT data for AUUD loaded into the database.
+2025-08-02 15:17:12,259 - AlphaLoader - INFO - Fetching BALANCE_SHEET data for AUUD...
+2025-08-02 15:17:12,805 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:12,805 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:12,836 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 8 new rows into balance_sheet_annual
+2025-08-02 15:17:12,857 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 26 new rows into balance_sheet_quarterly
+2025-08-02 15:17:12,862 - AlphaLoader - INFO - BALANCE_SHEET data for AUUD loaded into the database.
+2025-08-02 15:17:12,862 - AlphaLoader - INFO - Fetching CASH_FLOW data for AUUD...
+2025-08-02 15:17:13,325 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:13,326 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:13,357 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 8 new rows into cash_flow_annual
+2025-08-02 15:17:13,376 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 26 new rows into cash_flow_statement_quarterly
+2025-08-02 15:17:13,379 - AlphaLoader - INFO - CASH_FLOW data for AUUD loaded into the database.
+2025-08-02 15:17:13,380 - AlphaLoader - INFO - Fetching EARNINGS data for AUUD...
+2025-08-02 15:17:13,686 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:13,686 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:13,714 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 7 new rows into earnings_annual
+2025-08-02 15:17:13,729 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 25 new rows into earnings_quarterly
+2025-08-02 15:17:13,730 - AlphaLoader - INFO - EARNINGS data for AUUD loaded into the database.
+2025-08-02 15:17:13,731 - AlphaLoader - INFO - Fetching INSIDER_TRANSACTIONS data for AUUD...
+2025-08-02 15:17:13,948 - infrastructure.alpha_adapter.transform_utils - WARNING - Insider transactions missing for symbol AUUD. Inserting dummy row.
+2025-08-02 15:17:13,950 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:13,951 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:13,975 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into insider_transactions
+2025-08-02 15:17:13,980 - AlphaLoader - INFO - Insider transaction data for AUUD loaded into the database.
+2025-08-02 15:17:13,980 - AlphaLoader - INFO - Fetching STOCK_SPLITS data for AUUD...
+2025-08-02 15:17:14,267 - AlphaLoader - ERROR - An unexpected Exception occurred: Index(['symbol'], dtype='object')
+2025-08-02 15:17:14,271 - AlphaLoader - ERROR - Failing DataFrame written to: logs/management/debug_data/20250802_151714_267702_AUUD_stock_splits.csv
+2025-08-02 15:17:14,275 - AlphaLoader - ERROR - Failing Quarterly DataFrame written to: logs/management/debug_data/20250802_151714_267702_AUUD_stock_splits_quarterly.csv
+2025-08-02 15:17:14,279 - AlphaLoader - ERROR - API response written to: logs/management/debug_data/20250802_151714_267702_AUUD_stock_splits_api_response.json
+2025-08-02 15:17:14,279 - AlphaLoader - INFO - Fetching DIVIDENDS data for AUUD...
+2025-08-02 15:17:14,455 - infrastructure.alpha_adapter.transform_utils - WARNING - Dividends missing for symbol AUUD. Inserting dummy row.
+2025-08-02 15:17:14,457 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:14,457 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:17:14,485 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Inserted 1 new rows into dividends
+2025-08-02 15:17:14,491 - AlphaLoader - INFO - Dividend data for AUUD loaded into the database.
+2025-08-02 15:17:14,491 - db_initial_load_runner - INFO - ✅ Initial loader finished its running.

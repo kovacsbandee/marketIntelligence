@@ -1,32 +1,32 @@
-2025-08-02 13:35:51,681 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-08-02 13:35:51,682 - db_drop_runner - INFO - Connected to the database successfully.
-2025-08-02 13:35:51,682 - db_drop_runner - WARNING - 
+2025-08-02 15:14:10,908 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-02 15:14:10,908 - db_drop_runner - INFO - Connected to the database successfully.
+2025-08-02 15:14:10,908 - db_drop_runner - WARNING - 
 ⚠️  WARNING: You are about to delete 13 tables:
-2025-08-02 13:35:54,802 - db_drop_runner - INFO - Dropping table: balance_sheet_annual
-2025-08-02 13:35:54,850 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table balance_sheet_annual dropped
-2025-08-02 13:35:54,850 - db_drop_runner - INFO - Dropping table: cash_flow_annual
-2025-08-02 13:35:54,862 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table cash_flow_annual dropped
-2025-08-02 13:35:54,862 - db_drop_runner - INFO - Dropping table: earnings_annual
-2025-08-02 13:35:54,870 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table earnings_annual dropped
-2025-08-02 13:35:54,870 - db_drop_runner - INFO - Dropping table: income_statement_annual
-2025-08-02 13:35:54,879 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table income_statement_annual dropped
-2025-08-02 13:35:54,880 - db_drop_runner - INFO - Dropping table: company_fundamentals
-2025-08-02 13:35:54,896 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table company_fundamentals dropped
-2025-08-02 13:35:54,896 - db_drop_runner - INFO - Dropping table: daily_timeseries
-2025-08-02 13:35:54,917 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table daily_timeseries dropped
-2025-08-02 13:35:54,917 - db_drop_runner - INFO - Dropping table: dividends
-2025-08-02 13:35:54,938 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table dividends dropped
-2025-08-02 13:35:54,938 - db_drop_runner - INFO - Dropping table: insider_transactions
-2025-08-02 13:35:54,950 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table insider_transactions dropped
-2025-08-02 13:35:54,950 - db_drop_runner - INFO - Dropping table: balance_sheet_quarterly
-2025-08-02 13:35:54,957 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table balance_sheet_quarterly dropped
-2025-08-02 13:35:54,958 - db_drop_runner - INFO - Dropping table: cash_flow_statement_quarterly
-2025-08-02 13:35:54,965 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table cash_flow_statement_quarterly dropped
-2025-08-02 13:35:54,966 - db_drop_runner - INFO - Dropping table: earnings_quarterly
-2025-08-02 13:35:54,976 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table earnings_quarterly dropped
-2025-08-02 13:35:54,977 - db_drop_runner - INFO - Dropping table: income_statement_quarterly
-2025-08-02 13:35:54,996 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table income_statement_quarterly dropped
-2025-08-02 13:35:54,997 - db_drop_runner - INFO - Dropping table: stock_splits
-2025-08-02 13:35:55,012 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table stock_splits dropped
-2025-08-02 13:35:55,012 - db_drop_runner - INFO - Dropped 13 tables
-2025-08-02 13:35:55,012 - db_drop_runner - INFO - All specified tables have been dropped.
+2025-08-02 15:14:14,032 - db_drop_runner - INFO - Dropping table: balance_sheet_annual
+2025-08-02 15:14:14,119 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table balance_sheet_annual dropped
+2025-08-02 15:14:14,119 - db_drop_runner - INFO - Dropping table: cash_flow_annual
+2025-08-02 15:14:14,137 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table cash_flow_annual dropped
+2025-08-02 15:14:14,138 - db_drop_runner - INFO - Dropping table: earnings_annual
+2025-08-02 15:14:14,152 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table earnings_annual dropped
+2025-08-02 15:14:14,152 - db_drop_runner - INFO - Dropping table: income_statement_annual
+2025-08-02 15:14:14,167 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table income_statement_annual dropped
+2025-08-02 15:14:14,168 - db_drop_runner - INFO - Dropping table: company_fundamentals
+2025-08-02 15:14:14,185 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table company_fundamentals dropped
+2025-08-02 15:14:14,185 - db_drop_runner - INFO - Dropping table: daily_timeseries
+2025-08-02 15:14:14,197 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table daily_timeseries dropped
+2025-08-02 15:14:14,198 - db_drop_runner - INFO - Dropping table: dividends
+2025-08-02 15:14:14,226 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table dividends dropped
+2025-08-02 15:14:14,226 - db_drop_runner - INFO - Dropping table: insider_transactions
+2025-08-02 15:14:14,239 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table insider_transactions dropped
+2025-08-02 15:14:14,239 - db_drop_runner - INFO - Dropping table: balance_sheet_quarterly
+2025-08-02 15:14:14,253 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table balance_sheet_quarterly dropped
+2025-08-02 15:14:14,253 - db_drop_runner - INFO - Dropping table: cash_flow_statement_quarterly
+2025-08-02 15:14:14,267 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table cash_flow_statement_quarterly dropped
+2025-08-02 15:14:14,268 - db_drop_runner - INFO - Dropping table: earnings_quarterly
+2025-08-02 15:14:14,282 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table earnings_quarterly dropped
+2025-08-02 15:14:14,282 - db_drop_runner - INFO - Dropping table: income_statement_quarterly
+2025-08-02 15:14:14,297 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table income_statement_quarterly dropped
+2025-08-02 15:14:14,297 - db_drop_runner - INFO - Dropping table: stock_splits
+2025-08-02 15:14:14,328 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Table stock_splits dropped
+2025-08-02 15:14:14,329 - db_drop_runner - INFO - Dropped 13 tables
+2025-08-02 15:14:14,329 - db_drop_runner - INFO - All specified tables have been dropped.
