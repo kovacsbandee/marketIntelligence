@@ -19,7 +19,7 @@ Note:
 import pandas as pd
 import numpy as np
 import logging
-
+import datetime
 logger = logging.getLogger(__name__)
 
 # transform_utils.py
@@ -317,6 +317,7 @@ def standardize_dividends_columns(df):
     if "symbol" in df.columns:
         df["symbol"] = df["symbol"].astype(str)
     df = df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan)
+    df = df.infer_objects(copy=False)
     for col in ["ex_dividend_date", "declaration_date", "record_date", "payment_date"]:
         if col in df.columns:
             df[col] = pd.to_datetime(df[col], errors="coerce").apply(lambda x: x.date() if pd.notnull(x) else None)
@@ -556,7 +557,6 @@ def preprocess_insider_transactions(df, symbol):
         "transaction_date", "symbol", "executive", "executive_title",
         "security_type", "acquisition_or_disposal", "shares", "share_price"
     ]
-    # If no data, create a dummy row with correct types
     if df is None or df.empty:
         logger.warning(f"Insider transactions missing for symbol {symbol}. Inserting dummy row.")
         dummy_row = {
@@ -571,48 +571,57 @@ def preprocess_insider_transactions(df, symbol):
         }
         df = pd.DataFrame([dummy_row])
     else:
-        # Standardize columns
         df = standardize_insider_transaction_columns(df)
         df["symbol"] = symbol
-        # Ensure all required columns exist
         for col in required_cols:
             if col not in df.columns:
-                df[col] = "" if col in ["executive", "executive_title", "security_type", "acquisition_or_disposal"] else 0.0 if col in ["shares", "share_price"] else symbol if col == "symbol" else datetime.date(1900, 1, 1)
-        # Clean types
+                if col == "transaction_date":
+                    df[col] = datetime.date(1900, 1, 1)
+                elif col in ["shares", "share_price"]:
+                    df[col] = 0.0
+                else:
+                    df[col] = ""
         df["transaction_date"] = pd.to_datetime(df["transaction_date"], errors="coerce").dt.date.fillna(datetime.date(1900, 1, 1))
-        df["shares"] = pd.to_numeric(df["shares"], errors="coerce").fillna(0.0)
-        df["share_price"] = pd.to_numeric(df["share_price"], errors="coerce").fillna(0.0)
+        df["shares"] = pd.to_numeric(df["shares"], errors="coerce").fillna(0.0).astype("float64")
+        df["share_price"] = pd.to_numeric(df["share_price"], errors="coerce").fillna(0.0).astype("float64")
         for col in ["executive", "executive_title", "security_type", "acquisition_or_disposal"]:
             df[col] = df[col].fillna("").astype(str)
         df = df.where(pd.notnull(df), None)
-    # Only keep required columns, in order
     df = df[required_cols]
     return df
 
 def preprocess_stock_splits(df, symbol):
-    required_cols = ["symbol", "effective_date", "split_factor", "data_state", "last_update"]
+    required_cols = ["symbol", "effective_date", "split_factor"]
+    # If no data, create a dummy row with correct types
     if df is None or df.empty:
         logger.warning(f"Stock splits missing for symbol {symbol}. Inserting dummy row.")
         dummy_row = {
             "symbol": symbol,
-            "effective_date": "1900-01-01",  # string, not Timestamp
-            "split_factor": 0.0,
-            "data_state": "dummy",
-            "last_update": pd.Timestamp.now()
+            "effective_date": "1900-01-01",  # string for missing date
+            "split_factor": 0.0
         }
         df = pd.DataFrame([dummy_row])
     else:
-        df = standardize_stock_split_columns(df)
-        df["symbol"] = symbol
-        df["data_state"] = ""
-        df["last_update"] = pd.Timestamp.now()
+        # Attach symbol if missing
+        if "symbol" not in df.columns:
+            df["symbol"] = symbol
+        # Fill missing columns with safe defaults
         for col in required_cols:
             if col not in df.columns:
-                df[col] = "" if col == "data_state" else 0.0 if col == "split_factor" else "1900-01-01" if col == "effective_date" else pd.Timestamp.now() if col == "last_update" else symbol
+                df[col] = "1900-01-01" if col == "effective_date" else 0.0 if col == "split_factor" else symbol
+        df = df[required_cols]
+    # Standardize columns and types
+    df = standardize_stock_split_columns(df)
+    # Clean numeric types for split_factor
+    if "split_factor" in df.columns:
         df["split_factor"] = pd.to_numeric(df["split_factor"], errors="coerce").fillna(0.0)
-        df["effective_date"] = df["effective_date"].apply(lambda x: str(x) if pd.notnull(x) else "1900-01-01")
-        df = df.where(pd.notnull(df), None)
-    # Ensure column order and shape
+    # Always set missing effective_date to "1900-01-01" string
+    if "effective_date" in df.columns:
+        df["effective_date"] = df["effective_date"].apply(
+            lambda x: "1900-01-01" if pd.isna(x) or x is None else str(x)
+        )
+    df = df.where(pd.notnull(df), None)
+    # Only keep required columns, in order
     df = df[required_cols]
     return df
 
