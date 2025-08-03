@@ -36,7 +36,7 @@ Notes:
 """
 
 import pandas as pd
-from infrastructure.databases.company.postgre_manager import CompanyDataManager
+from infrastructure.databases.company.postgre_manager.postgre_manager import CompanyDataManager
 #from data_manager.src_postgre_db.db_infrastructure.postgre_adapter import PostgresAdapter
 
 from infrastructure.databases.company.postgre_manager.postgre_objects import table_name_to_class

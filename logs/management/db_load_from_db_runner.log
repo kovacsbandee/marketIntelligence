@@ -1,29 +1,5 @@
-2025-07-28 18:41:47,466 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-07-28 18:41:47,466 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
-2025-07-28 18:41:47,632 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 1 filtered rows from company_fundamentals
-2025-07-28 18:41:47,656 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 20 filtered rows from balance_sheet_annual
-2025-07-28 18:41:47,660 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_annual' with 20 rows.
-2025-07-28 18:41:47,668 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 20 filtered rows from cash_flow_annual
-2025-07-28 18:41:47,672 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_annual' with 20 rows.
-2025-07-28 18:41:47,679 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 27 filtered rows from earnings_annual
-2025-07-28 18:41:47,681 - db_load_from_db_runner - INFO - Loaded table 'earnings_annual' with 27 rows.
-2025-07-28 18:41:47,688 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 20 filtered rows from income_statement_annual
-2025-07-28 18:41:47,691 - db_load_from_db_runner - INFO - Loaded table 'income_statement_annual' with 20 rows.
-2025-07-28 18:41:47,694 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 1 filtered rows from company_fundamentals
-2025-07-28 18:41:47,698 - db_load_from_db_runner - INFO - Loaded table 'company_fundamentals' with 1 rows.
-2025-07-28 18:41:47,784 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 6472 filtered rows from daily_timeseries
-2025-07-28 18:41:47,872 - db_load_from_db_runner - INFO - Loaded table 'daily_timeseries' with 6472 rows.
-2025-07-28 18:41:47,879 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 52 filtered rows from dividends
-2025-07-28 18:41:47,883 - db_load_from_db_runner - INFO - Loaded table 'dividends' with 52 rows.
-2025-07-28 18:41:47,913 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 2438 filtered rows from insider_transactions
-2025-07-28 18:41:47,947 - db_load_from_db_runner - INFO - Loaded table 'insider_transactions' with 2438 rows.
-2025-07-28 18:41:47,959 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 81 filtered rows from balance_sheet_quarterly
-2025-07-28 18:41:47,964 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_quarterly' with 81 rows.
-2025-07-28 18:41:47,972 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 81 filtered rows from cash_flow_statement_quarterly
-2025-07-28 18:41:47,977 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_statement_quarterly' with 81 rows.
-2025-07-28 18:41:47,983 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 105 filtered rows from earnings_quarterly
-2025-07-28 18:41:47,986 - db_load_from_db_runner - INFO - Loaded table 'earnings_quarterly' with 105 rows.
-2025-07-28 18:41:47,993 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 81 filtered rows from income_statement_quarterly
-2025-07-28 18:41:47,998 - db_load_from_db_runner - INFO - Loaded table 'income_statement_quarterly' with 81 rows.
-2025-07-28 18:41:48,003 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 6 filtered rows from stock_splits
-2025-07-28 18:41:48,005 - db_load_from_db_runner - INFO - Loaded table 'stock_splits' with 6 rows.
+2025-08-03 10:43:30,336 - dash.dash - INFO - Dash is running on http://127.0.0.1:8050/
+
+2025-08-03 10:43:30,340 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8050
+2025-08-03 10:43:30,340 - werkzeug - INFO - [33mPress CTRL+C to quit[0m

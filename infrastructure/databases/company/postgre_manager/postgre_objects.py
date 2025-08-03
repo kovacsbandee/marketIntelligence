@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, BigInteger, String, Float, Date, Sequence, DateTime
+from sqlalchemy import Column, Integer, BigInteger, String, Float, Date, Sequence, DateTime, PrimaryKeyConstraint
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -654,31 +654,39 @@ class QuarterlyIncomeStatement(Base):
     net_income = Column(Float, nullable=True)
 
 
-class InsiderTransactionTable(Base):
+class InsiderTransactions(Base):
     """
-    ORM osztály a vállalati bennfentes tranzakciók tárolására.
+    InsiderTransactions osztály, amely az "insider_transactions" adatbázis táblát reprezentálja.
 
-    Elsődleges kulcs:
-        - symbol (String): A vállalat tőzsdei jelzése, amelyhez a bennfentes tranzakció kapcsolódik (például AAPL az Apple-re, MSFT a Microsoft-ra).
-        - transaction_date (Date): Az a dátum, amikor a bennfentes tranzakció történt.
-        - executive (String): A tranzakcióban részt vevő vezető vagy bennfentes neve.
-        - security_type (String): A tranzakcióban szereplő értékpapír típusa (például közönséges részvény, opciók).
-
-    Mezők:
-        - executive_title (String): A vezető pozíciója vagy címe a vállalaton belül (például vezérigazgató, pénzügyi igazgató, igazgató).
-        - acquisition_or_disposal (String): Jelzi, hogy a bennfentes részvényeket vásárolt vagy értékesített (például 'Vásárlás' vagy 'Értékesítés').
-        - shares (Integer): A tranzakcióban érintett részvények száma.
-        - share_price (Float): Az egy részvényre jutó ár, amelyen a tranzakciót végrehajtották.
+    Attribútumok:
+        transaction_date (datetime.date): Az ügylet dátuma.
+        symbol (str): A részvény szimbóluma.
+        executive (str): Az ügyletet végrehajtó vezető neve.
+        executive_title (str): A vezető pozíciója.
+        security_type (str): Az értékpapír típusa.
+        acquisition_or_disposal (str): Az ügylet típusa (vásárlás vagy eladás).
+        shares (float): Az ügyletben érintett részvények száma.
+        share_price (float): Az egy részvényre jutó ár.
     """
-    __tablename__ = 'insider_transactions'
+    __tablename__ = "insider_transactions"
+    __table_args__ = (
+        PrimaryKeyConstraint(
+            "transaction_date",
+            "symbol",
+            "executive",
+            "executive_title",
+            "security_type",
+            "acquisition_or_disposal",
+            name="insider_transactions_pkey"
+        ),
+    )
 
-    transaction_date = Column(Date, primary_key=True)
-    symbol = Column(String, primary_key=True)
-    executive = Column(String, primary_key=True, nullable=True)
+    transaction_date = Column(Date, nullable=False)
+    symbol = Column(String, nullable=False)
+    executive = Column(String, nullable=False)
     executive_title = Column(String, nullable=True)
-    security_type = Column(String, primary_key=True, nullable=True)
-    # 'A' (acquire) or 'D' (dispose)
-    acquisition_or_disposal = Column(String, primary_key=True, nullable=True)
+    security_type = Column(String, nullable=False)
+    acquisition_or_disposal = Column(String, nullable=False)
     shares = Column(Float, nullable=True)
     share_price = Column(Float, nullable=True)
 
@@ -743,7 +751,7 @@ table_name_to_class = {
     "earnings_quarterly": QuarterlyEarningsTable,
     "income_statement_annual": AnnualIncomeStatement,
     "income_statement_quarterly": QuarterlyIncomeStatement,
-    "insider_transactions": InsiderTransactionTable,
+    "insider_transactions": InsiderTransactions,
     "stock_splits": StockSplit,
     "dividends": DividendsTable,
 }

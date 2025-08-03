@@ -11,7 +11,7 @@ import dash
 from dash import dcc, html, Input, Output, State, callback_context
 import dash_mantine_components as dmc
 from datetime import datetime, timedelta
-from symbol.symbol import DBSymbolStorage
+from symbol.symbol import Symbol
 #from data_manager.src_postgre_db.db_etl_jobs.db_load_from_db_runner import DBSymbolStorage
 from infrastructure.databases.company.postgre_manager.postgre_manager import CompanyDataManager
 #from data_manager.src_postgre_db.db_infrastructure.postgre_adapter import PostgresAdapter
@@ -186,7 +186,7 @@ def load_symbol(n_clicks, symbol):
     if not symbol:
         return None, None, "Please enter a symbol.", None, None, None
     adapter = CompanyDataManager()
-    storage = DBSymbolStorage(adapter, symbol.upper())
+    storage = Symbol(adapter, symbol.upper())
     price_df = storage.get_table("daily_timeseries")
     if price_df is None or price_df.empty:
         return None, None, storage.status_message, None, None, None
@@ -254,4 +254,4 @@ def update_price_indicator(tab, start_date, end_date, price_data, dividends_data
         return dmc.Text(f"Error generating plot: {e}", c="red"), False
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()

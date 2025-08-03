@@ -25,7 +25,7 @@ from infrastructure.databases.company.postgre_manager import postgre_objects
 from utils.logger import get_logger
 
 
-def main():
+def main(force_recreate=False):
     """
     Main entry point for database schema creation.
 
@@ -53,6 +53,8 @@ def main():
 
     for table_class in defined_classes:
         logger.info("Creating table for: %s", table_class.__name__)
+        if force_recreate:
+            table_manager.drop_table(table=table_class)
         table_manager.create_table(table=table_class)
 
     logger.info("Created %d tables", len(defined_classes))
@@ -62,4 +64,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # Set force_recreate=True to drop and recreate all tables
+    main(force_recreate=True)

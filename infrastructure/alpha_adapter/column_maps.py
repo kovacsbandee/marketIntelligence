@@ -375,3 +375,11 @@ DIVIDENDS_MAP = {
     "amount": "amount",
     "symbol": "symbol"
 }
+
+DAILY_TIMESERIES_MAP = {
+    "1. open": "open",
+    "2. high": "high", 
+    "3. low": "low",
+    "4. close": "close",
+    "5. volume": "volume"
+}

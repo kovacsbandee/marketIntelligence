@@ -27,7 +27,7 @@ from infrastructure.databases.company.postgre_manager.postgre_objects import (
     DailyTimeSeries, CompanyFundamentalsTable, AnnualIncomeStatement,
     QuarterlyIncomeStatement, AnnualBalanceSheetTable, QuarterlyBalanceSheetTable,
     AnnualCashFlowTable, QuarterlyCashFlowTable, AnnualEarningsTable, QuarterlyEarningsTable,
-    InsiderTransactionTable, StockSplit, DividendsTable
+    InsiderTransactions, StockSplit, DividendsTable
 )
 
 from infrastructure.alpha_adapter.transform_utils import (
@@ -93,7 +93,8 @@ class AlphaLoader:
         self.local_store_path = "/home/bandee/projects/marketIntelligence/dev_data/jsons"
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    def log_exception(self, e, exc_type="Exception", api_response=None, is_warning=False):
+    # PATCH: log_exception now accepts table_name and uses it for debug file naming
+    def log_exception(self, e, exc_type="Exception", api_response=None, is_warning=False, table_name=None):
         """
         Logs error or warning, and stores failing DataFrame and API response if verbosity is enabled.
         Writes out all debug data files for each error/warning (does NOT clean the folder).
@@ -104,17 +105,18 @@ class AlphaLoader:
             debug_dir = "logs/management/debug_data"
             os.makedirs(debug_dir, exist_ok=True)
             now_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+            table = table_name or self._get_table_name()
             # Store DataFrames
             if hasattr(self, "last_df") and self.last_df is not None:
-                fname = f"{now_str}_{self.symbol}_{self._get_table_name()}.csv"
+                fname = f"{now_str}_{self.symbol}_{table}.csv"
                 self.last_df.to_csv(os.path.join(debug_dir, fname), index=False)
                 self.logger.error("Failing DataFrame written to: %s", os.path.join(debug_dir, fname))
             if hasattr(self, "last_df_quarterly") and self.last_df_quarterly is not None:
-                fname = f"{now_str}_{self.symbol}_{self._get_table_name(quarterly=True)}.csv"
+                fname = f"{now_str}_{self.symbol}_{table}_quarterly.csv"
                 self.last_df_quarterly.to_csv(os.path.join(debug_dir, fname), index=False)
                 self.logger.error("Failing Quarterly DataFrame written to: %s", os.path.join(debug_dir, fname))
             # Store API response (even if None)
-            fname = f"{now_str}_{self.symbol}_{self._get_table_name()}_api_response.json"
+            fname = f"{now_str}_{self.symbol}_{table}_api_response.json"
             with open(os.path.join(debug_dir, fname), "w") as f:
                 json.dump(api_response, f, indent=2)
             self.logger.error("API response written to: %s", os.path.join(debug_dir, fname))
@@ -139,6 +141,7 @@ class AlphaLoader:
                     return base
         return "unknown"
 
+    # PATCH: Pass explicit table_name for each data handler
     def get_daily_timeseries(self):
         url = f"{self.base_url}TIME_SERIES_DAILY&outputsize=full&symbol={self.symbol}&apikey={ALPHA_API_KEY}"
         self.logger.info("Fetching data for %s...", self.symbol)
@@ -171,7 +174,7 @@ class AlphaLoader:
         except requests.exceptions.RequestException as e:
             self.logger.error("Request failed for %s: %s", self.symbol, e)
         except Exception as e:
-            self.log_exception(e, api_response=data)
+            self.log_exception(e, api_response=data, table_name="daily_time_series")
 
     def get_company_base(self):
         url = f'{self.base_url}OVERVIEW&symbol={self.symbol}&apikey={ALPHA_API_KEY}'
@@ -206,7 +209,7 @@ class AlphaLoader:
         except requests.exceptions.RequestException as e:
             self.logger.error("Request failed for %s: %s", self.symbol, e)
         except Exception as e:
-            self.log_exception(e, api_response=data)
+            self.log_exception(e, api_response=data, table_name="company_fundamentals")
 
     def get_financials(self, function: str):
         url = f'{self.base_url}{function}&symbol={self.symbol}&apikey={ALPHA_API_KEY}'
@@ -268,7 +271,7 @@ class AlphaLoader:
 
             if self.local_store_mode:
                 annual_df.to_csv(f"{self.local_store_path}/{self.symbol}_{function.lower()}_annual.csv", index=False)
-                quarterly_df.to_csv(f"{self.local_store_path}/{self.symbol}_{function.lower()}_quaterly.csv", index=False)
+                quarterly_df.to_csv(f"{self.local_store_path}/{self.symbol}_{function.lower()}_quarterly.csv", index=False)
                 self.logger.info("%s data saved locally for %s.", function, self.symbol)
 
             if not self.db_mode and not self.local_store_mode:
@@ -277,7 +280,7 @@ class AlphaLoader:
         except requests.exceptions.RequestException as e:
             self.logger.error("Request failed for %s: %s", self.symbol, e)
         except Exception as e:
-            self.log_exception(e, api_response=data)
+            self.log_exception(e, api_response=data, table_name=function.lower())
 
     def get_insider_transactions(self):
         url = f"{self.base_url}INSIDER_TRANSACTIONS&symbol={self.symbol}&apikey={ALPHA_API_KEY}"
@@ -296,7 +299,7 @@ class AlphaLoader:
 
             if self.db_mode:
                 adapter = CompanyDataManager()
-                adapter.insert_new_data(table=InsiderTransactionTable, rows=df.to_dict(orient="records"))
+                adapter.insert_new_data(table=InsiderTransactions, rows=df.to_dict(orient="records"))
                 self.logger.info("Insider transaction data for %s loaded into the database.", self.symbol)
 
             if self.local_store_mode:
@@ -309,7 +312,7 @@ class AlphaLoader:
         except requests.exceptions.RequestException as e:
             self.logger.error("Request failed for %s: %s", self.symbol, e)
         except Exception as e:
-            self.log_exception(e, api_response=data)
+            self.log_exception(e, api_response=data, table_name="insider_transactions")
 
     def get_stock_splits(self):
         url = f"{self.base_url}SPLITS&symbol={self.symbol}&apikey={ALPHA_API_KEY}"
@@ -341,7 +344,7 @@ class AlphaLoader:
         except requests.exceptions.RequestException as e:
             self.logger.error("Request failed for %s: %s", self.symbol, e)
         except Exception as e:
-            self.log_exception(e, api_response=data)
+            self.log_exception(e, api_response=data, table_name="stock_splits")
 
     def get_dividends(self):
         url = f"{self.base_url}DIVIDENDS&symbol={self.symbol}&apikey={ALPHA_API_KEY}"
@@ -373,7 +376,7 @@ class AlphaLoader:
         except requests.exceptions.RequestException as e:
             self.logger.error("Request failed for %s: %s", self.symbol, e)
         except Exception as e:
-            self.log_exception(e, api_response=data)
+            self.log_exception(e, api_response=data, table_name="dividends")
 
 
 # TODO: there is intraday data in the alphavantage
