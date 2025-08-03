@@ -1,28 +1,28 @@
-"""
-Standardization utilities for Alpha Vantage data frames.
+# """
+# Standardization utilities for Alpha Vantage data frames.
 
-This module provides a set of functions to:
-    - Rename, clean, and type-cast columns of data frames returned by Alpha Vantage API endpoints,
-      including company fundamentals, income statements, balance sheets, cash flows, earnings,
-      insider transactions, stock splits, and dividends.
-    - Ensure column names and types conform to a standardized schema compatible with downstream
-      database ingestion.
-    - Handle missing values, inconsistent types, and duplicate records in a consistent way.
-    - Designed to be reusable in ETL and data engineering workflows.
+# This module provides a set of functions to:
+#     - Rename, clean, and type-cast columns of data frames returned by Alpha Vantage API endpoints,
+#       including company fundamentals, income statements, balance sheets, cash flows, earnings,
+#       insider transactions, stock splits, and dividends.
+#     - Ensure column names and types conform to a standardized schema compatible with downstream
+#       database ingestion.
+#     - Handle missing values, inconsistent types, and duplicate records in a consistent way.
+#     - Designed to be reusable in ETL and data engineering workflows.
 
-Note:
-    If a function is defined multiple times in this script, only the **last occurrence** will be
-    available when the module is imported elsewhere.
-"""
+# Note:
+#     If a function is defined multiple times in this script, only the **last occurrence** will be
+#     available when the module is imported elsewhere.
+# """
 
 
-import pandas as pd
-import numpy as np
-import logging
-import datetime
-logger = logging.getLogger(__name__)
+# import pandas as pd
+# import numpy as np
+# import logging
+# import datetime
+# logger = logging.getLogger(__name__)
 
-# transform_utils.py
+# # transform_utils.py
 
 from .column_maps import (
     COMPANY_FUNDAMENTALS_MAP, 
@@ -40,459 +40,769 @@ from .column_maps import (
 )
 
 
-def clean_numeric_types_for_db(df, int_columns=None, float_columns=None):
-    """
-    Cleans a DataFrame before DB insert:
-    - Rounds and casts integer columns to Int64, missing values become None.
-    - Casts float columns to float64, missing values become None.
-    - Converts pd.NA, np.nan, NaT to None for all columns.
+# def clean_numeric_types_for_db(df, int_columns=None, float_columns=None):
+#     """
+#     Cleans a DataFrame before DB insert:
+#     - Rounds and casts integer columns to Int64, missing values become None.
+#     - Casts float columns to float64, missing values become None.
+#     - Converts pd.NA, np.nan, NaT to None for all columns.
 
-    Args:
-        df (pd.DataFrame): DataFrame to clean.
-        int_columns (list): List of columns expected to be integer.
-        float_columns (list): List of columns expected to be float.
+#     Args:
+#         df (pd.DataFrame): DataFrame to clean.
+#         int_columns (list): List of columns expected to be integer.
+#         float_columns (list): List of columns expected to be float.
 
-    Returns:
-        pd.DataFrame: Cleaned DataFrame ready for DB insert.
-    """
-    df = df.copy()
-    if int_columns:
-        for col in int_columns:
-            if col in df.columns:
-                df[col] = pd.to_numeric(df[col], errors='coerce').round().astype('Int64')
-    if float_columns:
-        for col in float_columns:
-            if col in df.columns:
-                df[col] = pd.to_numeric(df[col], errors='coerce').astype('float64')
-    # Replace all pd.NA, np.nan, NaT with None for DB compatibility
-    df = df.where(pd.notnull(df), None)
-    return df
+#     Returns:
+#         pd.DataFrame: Cleaned DataFrame ready for DB insert.
+#     """
+#     df = df.copy()
+#     if int_columns:
+#         for col in int_columns:
+#             if col in df.columns:
+#                 df[col] = pd.to_numeric(df[col], errors='coerce').round().astype('Int64')
+#     if float_columns:
+#         for col in float_columns:
+#             if col in df.columns:
+#                 df[col] = pd.to_numeric(df[col], errors='coerce').astype('float64')
+#     # Replace all pd.NA, np.nan, NaT with None for DB compatibility
+#     df = df.where(pd.notnull(df), None)
+#     return df
 
 
-def preprocess_daily_timeseries(df, symbol):
-    """
-    Preprocesses daily timeseries data for DB insert.
-    Handles missing data, column standardization, type conversion, metadata, and errors.
-    """
-    expected_columns = ['open', 'high', 'low', 'close', 'volume']
-    if df is None or df.empty or not all(col in df.columns for col in expected_columns):
-        logger.warning(f"Daily timeseries data missing or malformed for symbol {symbol}. Inserting dummy row.")
-        df = pd.DataFrame([{
-            "date": pd.Timestamp("1900-01-01"),
-            "symbol": symbol,
-            "open": None,
-            "high": None,
-            "low": None,
-            "close": None,
-            "volume": None,
-            "data_state": "dummy",
-            "last_update": pd.Timestamp.now()
-        }])
+# def preprocess_daily_timeseries(df, symbol):
+#     """
+#     Preprocesses daily timeseries data for DB insert.
+#     Handles missing data, column standardization, type conversion, metadata, and errors.
+#     """
+#     expected_columns = ['open', 'high', 'low', 'close', 'volume']
+#     if df is None or df.empty or not all(col in df.columns for col in expected_columns):
+#         logger.warning(f"Daily timeseries data missing or malformed for symbol {symbol}. Inserting dummy row.")
+#         df = pd.DataFrame([{
+#             "date": pd.Timestamp("1900-01-01"),
+#             "symbol": symbol,
+#             "open": None,
+#             "high": None,
+#             "low": None,
+#             "close": None,
+#             "volume": None,
+#             "data_state": "dummy",
+#             "last_update": pd.Timestamp.now()
+#         }])
+#         return df
+
+#     df = df.copy()
+#     df.columns = expected_columns
+#     df.index = pd.to_datetime(df.index, errors="coerce")
+#     df.sort_index(ascending=True, axis=0, inplace=True)
+#     df.reset_index(inplace=True, names=["date"])
+#     df["symbol"] = symbol
+#     df["data_state"] = ""
+#     df["last_update"] = pd.Timestamp.now()
+#     df = df[["date", "symbol", "open", "high", "low", "close", "volume", "data_state", "last_update"]]
+#     df["volume"] = pd.to_numeric(df["volume"], errors="coerce").round().astype("Int64")
+#     df.dropna(subset=["date"], inplace=True)
+#     df = df.where(pd.notnull(df), None)
+#     return df
+
+# def preprocess_company_fundamentals(df, symbol):
+#     if df is None or df.empty:
+#         logger.warning(f"Company fundamentals missing for symbol {symbol}. Inserting dummy row.")
+#         df = pd.DataFrame([{
+#             "symbol": symbol,
+#             "dividend_date": "1900-01-01",
+#             "ex_dividend_date": "1900-01-01",
+#             "data_state": "dummy",
+#             "last_update": pd.Timestamp.now()
+#         }])
+#         return df
+#     df = df.rename(columns=COMPANY_FUNDAMENTALS_MAP)
+#     df.replace(
+#         to_replace=["None", "none", "NaN", "nan", "", "-"],
+#         value=np.nan,
+#         inplace=True
+#     )
+#     df = df.infer_objects(copy=False)
+#     df = df.where(pd.notnull(df), None)
+#     df = clean_numeric_types_for_db(
+#         df,
+#         int_columns=COMPANY_FUNDAMENTALS_INT_COLUMNS,
+#         float_columns=COMPANY_FUNDAMENTALS_FLOAT_COLUMNS
+#     )
+#     df["symbol"] = symbol
+#     df["data_state"] = ""
+#     df["last_update"] = pd.Timestamp.now()
+#     for col in ["dividend_date", "ex_dividend_date"]:
+#         if col in df.columns:
+#             df[col] = df[col].apply(
+#                 lambda x: None if pd.isna(x) or str(x).lower() == "nan" else str(x)
+#             )
+#     df = df.where(pd.notnull(df), None)
+#     return df
+
+# def preprocess_annual_income_statement(df, symbol):
+#     if df is None or df.empty:
+#         logger.warning(f"Annual income statement missing for symbol {symbol}. Inserting dummy row.")
+#         df = pd.DataFrame([{
+#             "fiscal_date_ending": pd.Timestamp("1900-01-01"),
+#             "symbol": symbol,
+#             "data_state": "dummy",
+#             "last_update": pd.Timestamp.now()
+#         }])
+#         return df
+#     df = df.rename(columns=ANNUAL_INCOME_STATEMENT_MAP)
+#     df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan, inplace=True)
+#     df = df.infer_objects(copy=False)
+#     for col in INCOME_STATEMENT_NUMERIC_COLUMNS:
+#         if col in df.columns:
+#             df[col] = pd.to_numeric(df[col], errors="coerce")
+#     if 'fiscal_date_ending' in df.columns:
+#         df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors="coerce")
+#     df = df.where(pd.notnull(df), None)
+#     df = clean_numeric_types_for_db(df, int_columns=None, float_columns=INCOME_STATEMENT_NUMERIC_COLUMNS)
+#     df["symbol"] = symbol
+#     df["data_state"] = ""
+#     df["last_update"] = pd.Timestamp.now()
+#     df.dropna(subset=["fiscal_date_ending"], inplace=True)
+#     df = df.where(pd.notnull(df), None)
+#     return df
+
+# def preprocess_quarterly_income_statement(df, symbol):
+#     if df is None or df.empty:
+#         logger.warning(f"Quarterly income statement missing for symbol {symbol}. Inserting dummy row.")
+#         df = pd.DataFrame([{
+#             "fiscal_date_ending": pd.Timestamp("1900-01-01"),
+#             "symbol": symbol,
+#             "data_state": "dummy",
+#             "last_update": pd.Timestamp.now()
+#         }])
+#         return df
+#     df = df.rename(columns=QUARTERLY_INCOME_STATEMENT_MAP)
+#     df.replace(
+#         to_replace=["None", "none", "NaN", "nan", ""],
+#         value=np.nan,
+#         inplace=True
+#     )
+#     df = df.infer_objects(copy=False)
+#     for col in INCOME_STATEMENT_NUMERIC_COLUMNS:
+#         if col in df.columns:
+#             df[col] = pd.to_numeric(df[col], errors="coerce")
+#     if 'fiscal_date_ending' in df.columns:
+#         df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors="coerce")
+#     df = df.where(pd.notnull(df), None)
+#     df = clean_numeric_types_for_db(df, int_columns=None, float_columns=INCOME_STATEMENT_NUMERIC_COLUMNS)
+#     df["symbol"] = symbol
+#     df["data_state"] = ""
+#     df["last_update"] = pd.Timestamp.now()
+#     df.dropna(subset=["fiscal_date_ending"], inplace=True)
+#     df = df.where(pd.notnull(df), None)
+#     return df
+
+# def preprocess_annual_balance_sheet(df, symbol):
+#     if df is None or df.empty:
+#         logger.warning(f"Annual balance sheet missing for symbol {symbol}. Inserting dummy row.")
+#         df = pd.DataFrame([{
+#             "fiscal_date_ending": pd.Timestamp("1900-01-01"),
+#             "symbol": symbol,
+#             "data_state": "dummy",
+#             "last_update": pd.Timestamp.now()
+#         }])
+#         return df
+#     df = df.rename(columns=ANNUAL_BALANCE_SHEET_MAP)
+#     if 'fiscal_date_ending' in df.columns:
+#         df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
+#     for col in ANNUAL_BALANCE_SHEET_FLOAT_COLUMNS:
+#         if col in df.columns:
+#             df[col] = pd.to_numeric(df[col], errors='coerce')
+#     for col in ANNUAL_BALANCE_SHEET_INT_COLUMNS:
+#         if col in df.columns:
+#             df[col] = pd.to_numeric(df[col], errors='coerce').round().astype('Int64')
+#     df = df.where(pd.notnull(df), None)
+#     df = clean_numeric_types_for_db(
+#         df,
+#         int_columns=ANNUAL_BALANCE_SHEET_INT_COLUMNS,
+#         float_columns=ANNUAL_BALANCE_SHEET_FLOAT_COLUMNS
+#     )
+#     df["symbol"] = symbol
+#     df["data_state"] = ""
+#     df["last_update"] = pd.Timestamp.now()
+#     df.dropna(subset=["fiscal_date_ending"], inplace=True)
+#     df = df.where(pd.notnull(df), None)
+#     return df
+
+# def preprocess_quarterly_balance_sheet(df, symbol):
+#     if df is None or df.empty:
+#         logger.warning(f"Quarterly balance sheet missing for symbol {symbol}. Inserting dummy row.")
+#         df = pd.DataFrame([{
+#             "fiscal_date_ending": pd.Timestamp("1900-01-01"),
+#             "symbol": symbol,
+#             "data_state": "dummy",
+#             "last_update": pd.Timestamp.now()
+#         }])
+#         return df
+#     df = df.rename(columns=QUARTERLY_BALANCE_SHEET_MAP)
+#     if 'fiscal_date_ending' in df.columns:
+#         df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
+#     for col in QUARTERLY_BALANCE_SHEET_FLOAT_COLUMNS:
+#         if col in df.columns:
+#             df[col] = pd.to_numeric(df[col], errors='coerce')
+#     for col in QUARTERLY_BALANCE_SHEET_INT_COLUMNS:
+#         if col in df.columns:
+#             df[col] = pd.to_numeric(df[col], errors='coerce').round().astype('Int64')
+#     df = df.where(pd.notnull(df), None)
+#     df = clean_numeric_types_for_db(
+#         df,
+#         int_columns=QUARTERLY_BALANCE_SHEET_INT_COLUMNS,
+#         float_columns=QUARTERLY_BALANCE_SHEET_FLOAT_COLUMNS
+#     )
+#     df["symbol"] = symbol
+#     df["data_state"] = ""
+#     df["last_update"] = pd.Timestamp.now()
+#     df.dropna(subset=["fiscal_date_ending"], inplace=True)
+#     df = df.where(pd.notnull(df), None)
+#     return df
+
+# def preprocess_annual_cash_flow(df, symbol):
+#     if df is None or df.empty:
+#         logger.warning(f"Annual cash flow missing for symbol {symbol}. Inserting dummy row.")
+#         df = pd.DataFrame([{
+#             "fiscal_date_ending": pd.Timestamp("1900-01-01"),
+#             "symbol": symbol,
+#             "data_state": "dummy",
+#             "last_update": pd.Timestamp.now()
+#         }])
+#         return df
+#     df = df.rename(columns=ANNUAL_CASH_FLOW_MAP)
+#     df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan, inplace=True)
+#     df = df.infer_objects(copy=False)
+#     if 'fiscal_date_ending' in df.columns:
+#         df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
+#     float_cols = [col for col in df.columns if col not in ['symbol', 'fiscal_date_ending', 'reported_currency']]
+#     for col in float_cols:
+#         df[col] = pd.to_numeric(df[col], errors='coerce')
+#     df = df.where(pd.notnull(df), None)
+#     df["symbol"] = symbol
+#     df["data_state"] = ""
+#     df["last_update"] = pd.Timestamp.now()
+#     df.dropna(subset=["fiscal_date_ending"], inplace=True)
+#     df = df.where(pd.notnull(df), None)
+#     return df
+
+# def preprocess_quarterly_cash_flow(df, symbol):
+#     if df is None or df.empty:
+#         logger.warning(f"Quarterly cash flow missing for symbol {symbol}. Inserting dummy row.")
+#         df = pd.DataFrame([{
+#             "fiscal_date_ending": pd.Timestamp("1900-01-01"),
+#             "symbol": symbol,
+#             "data_state": "dummy",
+#             "last_update": pd.Timestamp.now()
+#         }])
+#         return df
+#     df = df.rename(columns=QUARTERLY_CASH_FLOW_MAP)
+#     df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan, inplace=True)
+#     df = df.infer_objects(copy=False)
+#     if 'fiscal_date_ending' in df.columns:
+#         df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
+#     float_cols = [col for col in df.columns if col not in ['symbol', 'fiscal_date_ending', 'reported_currency']]
+#     for col in float_cols:
+#         df[col] = pd.to_numeric(df[col], errors='coerce')
+#     df = df.where(pd.notnull(df), None)
+#     df["symbol"] = symbol
+#     df["data_state"] = ""
+#     df["last_update"] = pd.Timestamp.now()
+#     df.dropna(subset=["fiscal_date_ending"], inplace=True)
+#     df = df.where(pd.notnull(df), None)
+#     return df
+
+# def preprocess_annual_earnings(df, symbol):
+#     if df is None or df.empty:
+#         logger.warning(f"Annual earnings missing for symbol {symbol}. Inserting dummy row.")
+#         df = pd.DataFrame([{
+#             "fiscal_date_ending": pd.Timestamp("1900-01-01"),
+#             "symbol": symbol,
+#             "reported_eps": None,
+#             "data_state": "dummy",
+#             "last_update": pd.Timestamp.now()
+#         }])
+#         return df
+#     df = df.rename(columns=ANNUAL_EARNINGS_MAP)
+#     if 'fiscal_date_ending' in df.columns:
+#         df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
+#     if 'reported_eps' in df.columns:
+#         df['reported_eps'] = pd.to_numeric(df['reported_eps'], errors='coerce')
+#     if 'symbol' in df.columns and 'symbol' in ANNUAL_EARNINGS_MAP.values():
+#         df['symbol'] = df['symbol'].astype(str)
+#     df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan, inplace=True)
+#     df = df.infer_objects(copy=False)
+#     df = df.where(pd.notnull(df), None)
+#     df["symbol"] = symbol
+#     df["data_state"] = ""
+#     df["last_update"] = pd.Timestamp.now()
+#     df.dropna(subset=["fiscal_date_ending"], inplace=True)
+#     df = df.where(pd.notnull(df), None)
+#     return df
+
+# def preprocess_quarterly_earnings(df, symbol):
+#     if df is None or df.empty:
+#         logger.warning(f"Quarterly earnings missing for symbol {symbol}. Inserting dummy row.")
+#         df = pd.DataFrame([{
+#             "fiscal_date_ending": pd.Timestamp("1900-01-01"),
+#             "symbol": symbol,
+#             "reported_eps": None,
+#             "data_state": "dummy",
+#             "last_update": pd.Timestamp.now()
+#         }])
+#         return df
+#     df = df.rename(columns=QUARTERLY_EARNINGS_MAP)
+#     if 'fiscal_date_ending' in df.columns:
+#         df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
+#     if 'reported_date' in df.columns:
+#         df['reported_date'] = pd.to_datetime(df['reported_date'], errors='coerce')
+#     float_cols = ['reported_eps', 'estimated_eps', 'surprise', 'surprise_percentage']
+#     for col in float_cols:
+#         if col in df.columns:
+#             df[col] = pd.to_numeric(df[col], errors='coerce')
+#     if 'report_time' in df.columns:
+#         df['report_time'] = df['report_time'].astype(str)
+#     if 'symbol' in df.columns and 'symbol' in QUARTERLY_EARNINGS_MAP.values():
+#         df['symbol'] = df['symbol'].astype(str)
+#     df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan, inplace=True)
+#     df = df.infer_objects(copy=False)
+#     df = df.where(pd.notnull(df), None)
+#     df["symbol"] = symbol
+#     df["data_state"] = ""
+#     df["last_update"] = pd.Timestamp.now()
+#     df.dropna(subset=["fiscal_date_ending"], inplace=True)
+#     df = df.where(pd.notnull(df), None)
+#     return df
+
+# def preprocess_insider_transactions(df, symbol):
+#     required_cols = [
+#         "transaction_date", "symbol", "executive", "executive_title",
+#         "security_type", "acquisition_or_disposal", "shares", "share_price"
+#     ]
+#     if df is None or df.empty:
+#         logger.warning(f"Insider transactions missing for symbol {symbol}. Inserting dummy row.")
+#         dummy_row = {
+#             "transaction_date": datetime.date(1900, 1, 1),
+#             "symbol": symbol,
+#             "executive": "",
+#             "executive_title": "",
+#             "security_type": "",
+#             "acquisition_or_disposal": "",
+#             "shares": 0.0,
+#             "share_price": 0.0
+#         }
+#         df = pd.DataFrame([dummy_row])
+#     else:
+#         df = df.rename(columns=INSIDER_TRANSACTION_MAP)
+#         if "transaction_date" in df.columns:
+#             df["transaction_date"] = pd.to_datetime(df["transaction_date"], errors="coerce")
+#         for col in ["shares", "share_price"]:
+#             if col in df.columns:
+#                 df[col] = pd.to_numeric(df[col], errors="coerce")
+#         df = df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan)
+#         df = df.infer_objects(copy=False)
+#         df = df.where(pd.notnull(df), None)
+#         df.drop_duplicates(
+#             subset=[
+#                 "transaction_date",
+#                 "symbol",
+#                 "executive",
+#                 "security_type",
+#                 "acquisition_or_disposal"
+#             ],
+#             inplace=True)
+#         df["symbol"] = symbol
+#         for col in required_cols:
+#             if col not in df.columns:
+#                 if col == "transaction_date":
+#                     df[col] = datetime.date(1900, 1, 1)
+#                 elif col in ["shares", "share_price"]:
+#                     df[col] = 0.0
+#                 else:
+#                     df[col] = ""
+#         df["transaction_date"] = pd.to_datetime(df["transaction_date"], errors="coerce").dt.date.fillna(datetime.date(1900, 1, 1))
+#         df["shares"] = pd.to_numeric(df["shares"], errors="coerce").fillna(0.0).astype("float64")
+#         df["share_price"] = pd.to_numeric(df["share_price"], errors="coerce").fillna(0.0).astype("float64")
+#         for col in ["executive", "executive_title", "security_type", "acquisition_or_disposal"]:
+#             df[col] = df[col].fillna("").astype(str)
+#         df = df.where(pd.notnull(df), None)
+#     df = df[required_cols]
+#     return df
+
+# def preprocess_stock_splits(df, symbol):
+#     required_cols = ["symbol", "effective_date", "split_factor"]
+#     if df is None or df.empty:
+#         logger.warning(f"Stock splits missing for symbol {symbol}. Inserting dummy row.")
+#         dummy_row = {
+#             "symbol": symbol,
+#             "effective_date": "1900-01-01",
+#             "split_factor": 0.0
+#         }
+#         df = pd.DataFrame([dummy_row])
+#     else:
+#         df = df.rename(columns=STOCK_SPLIT_MAP)
+#         # Always add symbol column if missing
+#         if "symbol" not in df.columns:
+#             df["symbol"] = symbol
+#         df["effective_date"] = pd.to_datetime(df["effective_date"], errors="coerce")
+#         df["split_factor"] = pd.to_numeric(df["split_factor"], errors="coerce")
+#         df = df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan)
+#         df = df.infer_objects(copy=False)
+#         df = df.where(pd.notnull(df), None)
+#         df.drop_duplicates(subset=["symbol", "effective_date"], inplace=True)
+#         for col in required_cols:
+#             if col not in df.columns:
+#                 df[col] = "1900-01-01" if col == "effective_date" else 0.0 if col == "split_factor" else symbol
+#         df = df[required_cols]
+#     if "split_factor" in df.columns:
+#         df["split_factor"] = pd.to_numeric(df["split_factor"], errors="coerce").fillna(0.0)
+#     if "effective_date" in df.columns:
+#         df["effective_date"] = df["effective_date"].apply(
+#             lambda x: "1900-01-01" if pd.isna(x) or x is None else str(x)
+#         )
+#     df = df.where(pd.notnull(df), None)
+#     df = df[required_cols]
+#     return df
+
+# def preprocess_dividends(df, symbol):
+#     if df is None or df.empty:
+#         logger.warning(f"Dividends missing for symbol {symbol}. Inserting dummy row.")
+#         df = pd.DataFrame([{
+#             "symbol": symbol,
+#             "ex_dividend_date": pd.Timestamp("1900-01-01").date(),
+#             "amount": None,
+#             "data_state": "dummy",
+#             "last_update": pd.Timestamp.now()
+#         }])
+#         return df
+#     df = df.rename(columns=DIVIDENDS_MAP)
+#     df["ex_dividend_date"] = pd.to_datetime(df["ex_dividend_date"], errors="coerce")
+#     df["declaration_date"] = pd.to_datetime(df["declaration_date"], errors="coerce")
+#     df["record_date"] = pd.to_datetime(df["record_date"], errors="coerce")
+#     df["payment_date"] = pd.to_datetime(df["payment_date"], errors="coerce")
+#     df["amount"] = pd.to_numeric(df["amount"], errors="coerce")
+#     if "symbol" in df.columns:
+#         df["symbol"] = df["symbol"].astype(str)
+#     df = df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan)
+#     df = df.infer_objects(copy=False)
+#     for col in ["ex_dividend_date", "declaration_date", "record_date", "payment_date"]:
+#         if col in df.columns:
+#             df[col] = pd.to_datetime(df[col], errors="coerce").apply(lambda x: x.date() if pd.notnull(x) else None)
+#             df[col] = df[col].apply(lambda x: None if pd.isnull(x) or x is pd.NaT or x == "NaT" else x)
+#     df["symbol"] = symbol
+#     df["data_state"] = ""
+#     df["last_update"] = pd.Timestamp.now()
+#     df.dropna(subset=["ex_dividend_date"], inplace=True)
+#     df = df.where(pd.notnull(df), None)
+#     return df
+
+import pandas as pd
+import numpy as np
+import logging
+import datetime
+logger = logging.getLogger(__name__)
+
+def standardize_and_clean(
+    df,
+    column_map=None,
+    date_cols=None,
+    float_cols=None,
+    int_cols=None,
+    symbol=None,
+    dropna_col=None,
+    always_string_cols=None,
+    always_float_cols=None,
+    always_date_cols=None,
+    required_cols=None,
+    dummy_row=None
+):
+    if df is None or df.empty:
+        logger.warning(f"Missing or empty data for symbol {symbol}. Inserting dummy row.")
+        df = pd.DataFrame([dummy_row])
         return df
 
-    df = df.copy()
-    df.columns = expected_columns
-    df.index = pd.to_datetime(df.index, errors="coerce")
-    df.sort_index(ascending=True, axis=0, inplace=True)
-    df.reset_index(inplace=True, names=["date"])
-    df["symbol"] = symbol
-    df["data_state"] = ""
-    df["last_update"] = pd.Timestamp.now()
-    df = df[["date", "symbol", "open", "high", "low", "close", "volume", "data_state", "last_update"]]
-    df["volume"] = pd.to_numeric(df["volume"], errors="coerce").round().astype("Int64")
-    df.dropna(subset=["date"], inplace=True)
+    if column_map:
+        df = df.rename(columns=column_map)
+    df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan, inplace=True)
+    df = df.infer_objects(copy=False)
+
+    if date_cols:
+        for col in date_cols:
+            if col in df.columns:
+                df[col] = pd.to_datetime(df[col], errors="coerce")
+    if float_cols:
+        for col in float_cols:
+            if col in df.columns:
+                df[col] = pd.to_numeric(df[col], errors="coerce")
+    if int_cols:
+        for col in int_cols:
+            if col in df.columns:
+                df[col] = pd.to_numeric(df[col], errors="coerce").round().astype("Int64")
+    if always_string_cols:
+        for col in always_string_cols:
+            if col in df.columns:
+                df[col] = df[col].fillna("").astype(str)
+    if always_float_cols:
+        for col in always_float_cols:
+            if col in df.columns:
+                df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0).astype("float64")
+    if always_date_cols:
+        for col in always_date_cols:
+            if col in df.columns:
+                df[col] = pd.to_datetime(df[col], errors="coerce").dt.date.fillna(datetime.date(1900, 1, 1))
+    if symbol is not None:
+        df["symbol"] = symbol
+    df = df.where(pd.notnull(df), None)
+    if required_cols:
+        for col in required_cols:
+            if col not in df.columns:
+                df[col] = None
+        df = df[required_cols]
+    if dropna_col:
+        df.dropna(subset=[dropna_col], inplace=True)
     df = df.where(pd.notnull(df), None)
     return df
 
 def preprocess_company_fundamentals(df, symbol):
-    if df is None or df.empty:
-        logger.warning(f"Company fundamentals missing for symbol {symbol}. Inserting dummy row.")
-        df = pd.DataFrame([{
-            "symbol": symbol,
-            "dividend_date": "1900-01-01",
-            "ex_dividend_date": "1900-01-01",
-            "data_state": "dummy",
-            "last_update": pd.Timestamp.now()
-        }])
-        return df
-    df = df.rename(columns=COMPANY_FUNDAMENTALS_MAP)
-    df.replace(
-        to_replace=["None", "none", "NaN", "nan", "", "-"],
-        value=np.nan,
-        inplace=True
-    )
-    df = df.infer_objects(copy=False)
-    df = df.where(pd.notnull(df), None)
-    df = clean_numeric_types_for_db(
+    dummy_row = {
+        "symbol": symbol,
+        "dividend_date": "1900-01-01",
+        "ex_dividend_date": "1900-01-01",
+        "data_state": "dummy",
+        "last_update": pd.Timestamp.now()
+    }
+    return standardize_and_clean(
         df,
-        int_columns=COMPANY_FUNDAMENTALS_INT_COLUMNS,
-        float_columns=COMPANY_FUNDAMENTALS_FLOAT_COLUMNS
+        column_map=COMPANY_FUNDAMENTALS_MAP,
+        int_cols=COMPANY_FUNDAMENTALS_INT_COLUMNS,
+        float_cols=COMPANY_FUNDAMENTALS_FLOAT_COLUMNS,
+        symbol=symbol,
+        required_cols=["symbol", "dividend_date", "ex_dividend_date", "data_state", "last_update"],
+        dummy_row=dummy_row
     )
-    df["symbol"] = symbol
-    df["data_state"] = ""
-    df["last_update"] = pd.Timestamp.now()
-    for col in ["dividend_date", "ex_dividend_date"]:
-        if col in df.columns:
-            df[col] = df[col].apply(
-                lambda x: None if pd.isna(x) or str(x).lower() == "nan" else str(x)
-            )
-    df = df.where(pd.notnull(df), None)
-    return df
-
-def preprocess_annual_income_statement(df, symbol):
-    if df is None or df.empty:
-        logger.warning(f"Annual income statement missing for symbol {symbol}. Inserting dummy row.")
-        df = pd.DataFrame([{
-            "fiscal_date_ending": pd.Timestamp("1900-01-01"),
-            "symbol": symbol,
-            "data_state": "dummy",
-            "last_update": pd.Timestamp.now()
-        }])
-        return df
-    df = df.rename(columns=ANNUAL_INCOME_STATEMENT_MAP)
-    df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan, inplace=True)
-    df = df.infer_objects(copy=False)
-    for col in INCOME_STATEMENT_NUMERIC_COLUMNS:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors="coerce")
-    if 'fiscal_date_ending' in df.columns:
-        df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors="coerce")
-    df = df.where(pd.notnull(df), None)
-    df = clean_numeric_types_for_db(df, int_columns=None, float_columns=INCOME_STATEMENT_NUMERIC_COLUMNS)
-    df["symbol"] = symbol
-    df["data_state"] = ""
-    df["last_update"] = pd.Timestamp.now()
-    df.dropna(subset=["fiscal_date_ending"], inplace=True)
-    df = df.where(pd.notnull(df), None)
-    return df
-
-def preprocess_quarterly_income_statement(df, symbol):
-    if df is None or df.empty:
-        logger.warning(f"Quarterly income statement missing for symbol {symbol}. Inserting dummy row.")
-        df = pd.DataFrame([{
-            "fiscal_date_ending": pd.Timestamp("1900-01-01"),
-            "symbol": symbol,
-            "data_state": "dummy",
-            "last_update": pd.Timestamp.now()
-        }])
-        return df
-    df = df.rename(columns=QUARTERLY_INCOME_STATEMENT_MAP)
-    df.replace(
-        to_replace=["None", "none", "NaN", "nan", ""],
-        value=np.nan,
-        inplace=True
-    )
-    df = df.infer_objects(copy=False)
-    for col in INCOME_STATEMENT_NUMERIC_COLUMNS:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors="coerce")
-    if 'fiscal_date_ending' in df.columns:
-        df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors="coerce")
-    df = df.where(pd.notnull(df), None)
-    df = clean_numeric_types_for_db(df, int_columns=None, float_columns=INCOME_STATEMENT_NUMERIC_COLUMNS)
-    df["symbol"] = symbol
-    df["data_state"] = ""
-    df["last_update"] = pd.Timestamp.now()
-    df.dropna(subset=["fiscal_date_ending"], inplace=True)
-    df = df.where(pd.notnull(df), None)
-    return df
-
-def preprocess_annual_balance_sheet(df, symbol):
-    if df is None or df.empty:
-        logger.warning(f"Annual balance sheet missing for symbol {symbol}. Inserting dummy row.")
-        df = pd.DataFrame([{
-            "fiscal_date_ending": pd.Timestamp("1900-01-01"),
-            "symbol": symbol,
-            "data_state": "dummy",
-            "last_update": pd.Timestamp.now()
-        }])
-        return df
-    df = df.rename(columns=ANNUAL_BALANCE_SHEET_MAP)
-    if 'fiscal_date_ending' in df.columns:
-        df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
-    for col in ANNUAL_BALANCE_SHEET_FLOAT_COLUMNS:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors='coerce')
-    for col in ANNUAL_BALANCE_SHEET_INT_COLUMNS:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors='coerce').round().astype('Int64')
-    df = df.where(pd.notnull(df), None)
-    df = clean_numeric_types_for_db(
-        df,
-        int_columns=ANNUAL_BALANCE_SHEET_INT_COLUMNS,
-        float_columns=ANNUAL_BALANCE_SHEET_FLOAT_COLUMNS
-    )
-    df["symbol"] = symbol
-    df["data_state"] = ""
-    df["last_update"] = pd.Timestamp.now()
-    df.dropna(subset=["fiscal_date_ending"], inplace=True)
-    df = df.where(pd.notnull(df), None)
-    return df
-
-def preprocess_quarterly_balance_sheet(df, symbol):
-    if df is None or df.empty:
-        logger.warning(f"Quarterly balance sheet missing for symbol {symbol}. Inserting dummy row.")
-        df = pd.DataFrame([{
-            "fiscal_date_ending": pd.Timestamp("1900-01-01"),
-            "symbol": symbol,
-            "data_state": "dummy",
-            "last_update": pd.Timestamp.now()
-        }])
-        return df
-    df = df.rename(columns=QUARTERLY_BALANCE_SHEET_MAP)
-    if 'fiscal_date_ending' in df.columns:
-        df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
-    for col in QUARTERLY_BALANCE_SHEET_FLOAT_COLUMNS:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors='coerce')
-    for col in QUARTERLY_BALANCE_SHEET_INT_COLUMNS:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors='coerce').round().astype('Int64')
-    df = df.where(pd.notnull(df), None)
-    df = clean_numeric_types_for_db(
-        df,
-        int_columns=QUARTERLY_BALANCE_SHEET_INT_COLUMNS,
-        float_columns=QUARTERLY_BALANCE_SHEET_FLOAT_COLUMNS
-    )
-    df["symbol"] = symbol
-    df["data_state"] = ""
-    df["last_update"] = pd.Timestamp.now()
-    df.dropna(subset=["fiscal_date_ending"], inplace=True)
-    df = df.where(pd.notnull(df), None)
-    return df
 
 def preprocess_annual_cash_flow(df, symbol):
-    if df is None or df.empty:
-        logger.warning(f"Annual cash flow missing for symbol {symbol}. Inserting dummy row.")
-        df = pd.DataFrame([{
-            "fiscal_date_ending": pd.Timestamp("1900-01-01"),
-            "symbol": symbol,
-            "data_state": "dummy",
-            "last_update": pd.Timestamp.now()
-        }])
-        return df
-    df = df.rename(columns=ANNUAL_CASH_FLOW_MAP)
-    df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan, inplace=True)
-    df = df.infer_objects(copy=False)
-    if 'fiscal_date_ending' in df.columns:
-        df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
-    float_cols = [col for col in df.columns if col not in ['symbol', 'fiscal_date_ending', 'reported_currency']]
-    for col in float_cols:
-        df[col] = pd.to_numeric(df[col], errors='coerce')
-    df = df.where(pd.notnull(df), None)
-    df["symbol"] = symbol
-    df["data_state"] = ""
-    df["last_update"] = pd.Timestamp.now()
-    df.dropna(subset=["fiscal_date_ending"], inplace=True)
-    df = df.where(pd.notnull(df), None)
-    return df
+    dummy_row = {
+        "fiscal_date_ending": pd.Timestamp("1900-01-01"),
+        "symbol": symbol,
+        "data_state": "dummy",
+        "last_update": pd.Timestamp.now()
+    }
+    float_cols = [col for col in ANNUAL_CASH_FLOW_MAP.values() if col not in ['symbol', 'fiscal_date_ending', 'reported_currency']]
+    return standardize_and_clean(
+        df,
+        column_map=ANNUAL_CASH_FLOW_MAP,
+        date_cols=["fiscal_date_ending"],
+        float_cols=float_cols,
+        symbol=symbol,
+        dropna_col="fiscal_date_ending",
+        required_cols=["fiscal_date_ending", "symbol", "data_state", "last_update"],
+        dummy_row=dummy_row
+    )
 
 def preprocess_quarterly_cash_flow(df, symbol):
-    if df is None or df.empty:
-        logger.warning(f"Quarterly cash flow missing for symbol {symbol}. Inserting dummy row.")
-        df = pd.DataFrame([{
-            "fiscal_date_ending": pd.Timestamp("1900-01-01"),
-            "symbol": symbol,
-            "data_state": "dummy",
-            "last_update": pd.Timestamp.now()
-        }])
-        return df
-    df = df.rename(columns=QUARTERLY_CASH_FLOW_MAP)
-    df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan, inplace=True)
-    df = df.infer_objects(copy=False)
-    if 'fiscal_date_ending' in df.columns:
-        df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
-    float_cols = [col for col in df.columns if col not in ['symbol', 'fiscal_date_ending', 'reported_currency']]
-    for col in float_cols:
-        df[col] = pd.to_numeric(df[col], errors='coerce')
-    df = df.where(pd.notnull(df), None)
-    df["symbol"] = symbol
-    df["data_state"] = ""
-    df["last_update"] = pd.Timestamp.now()
-    df.dropna(subset=["fiscal_date_ending"], inplace=True)
-    df = df.where(pd.notnull(df), None)
-    return df
+    dummy_row = {
+        "fiscal_date_ending": pd.Timestamp("1900-01-01"),
+        "symbol": symbol,
+        "data_state": "dummy",
+        "last_update": pd.Timestamp.now()
+    }
+    float_cols = [col for col in QUARTERLY_CASH_FLOW_MAP.values() if col not in ['symbol', 'fiscal_date_ending', 'reported_currency']]
+    return standardize_and_clean(
+        df,
+        column_map=QUARTERLY_CASH_FLOW_MAP,
+        date_cols=["fiscal_date_ending"],
+        float_cols=float_cols,
+        symbol=symbol,
+        dropna_col="fiscal_date_ending",
+        required_cols=["fiscal_date_ending", "symbol", "data_state", "last_update"],
+        dummy_row=dummy_row
+    )
 
 def preprocess_annual_earnings(df, symbol):
-    if df is None or df.empty:
-        logger.warning(f"Annual earnings missing for symbol {symbol}. Inserting dummy row.")
-        df = pd.DataFrame([{
-            "fiscal_date_ending": pd.Timestamp("1900-01-01"),
-            "symbol": symbol,
-            "reported_eps": None,
-            "data_state": "dummy",
-            "last_update": pd.Timestamp.now()
-        }])
-        return df
-    df = df.rename(columns=ANNUAL_EARNINGS_MAP)
-    if 'fiscal_date_ending' in df.columns:
-        df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
-    if 'reported_eps' in df.columns:
-        df['reported_eps'] = pd.to_numeric(df['reported_eps'], errors='coerce')
-    if 'symbol' in df.columns and 'symbol' in ANNUAL_EARNINGS_MAP.values():
-        df['symbol'] = df['symbol'].astype(str)
-    df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan, inplace=True)
-    df = df.infer_objects(copy=False)
-    df = df.where(pd.notnull(df), None)
-    df["symbol"] = symbol
-    df["data_state"] = ""
-    df["last_update"] = pd.Timestamp.now()
-    df.dropna(subset=["fiscal_date_ending"], inplace=True)
-    df = df.where(pd.notnull(df), None)
-    return df
+    dummy_row = {
+        "fiscal_date_ending": pd.Timestamp("1900-01-01"),
+        "symbol": symbol,
+        "reported_eps": None,
+        "data_state": "dummy",
+        "last_update": pd.Timestamp.now()
+    }
+    return standardize_and_clean(
+        df,
+        column_map=ANNUAL_EARNINGS_MAP,
+        date_cols=["fiscal_date_ending"],
+        float_cols=["reported_eps"],
+        symbol=symbol,
+        dropna_col="fiscal_date_ending",
+        required_cols=["fiscal_date_ending", "symbol", "reported_eps", "data_state", "last_update"],
+        dummy_row=dummy_row
+    )
 
 def preprocess_quarterly_earnings(df, symbol):
-    if df is None or df.empty:
-        logger.warning(f"Quarterly earnings missing for symbol {symbol}. Inserting dummy row.")
-        df = pd.DataFrame([{
-            "fiscal_date_ending": pd.Timestamp("1900-01-01"),
-            "symbol": symbol,
-            "reported_eps": None,
-            "data_state": "dummy",
-            "last_update": pd.Timestamp.now()
-        }])
-        return df
-    df = df.rename(columns=QUARTERLY_EARNINGS_MAP)
-    if 'fiscal_date_ending' in df.columns:
-        df['fiscal_date_ending'] = pd.to_datetime(df['fiscal_date_ending'], errors='coerce')
-    if 'reported_date' in df.columns:
-        df['reported_date'] = pd.to_datetime(df['reported_date'], errors='coerce')
+    dummy_row = {
+        "fiscal_date_ending": pd.Timestamp("1900-01-01"),
+        "symbol": symbol,
+        "reported_eps": None,
+        "data_state": "dummy",
+        "last_update": pd.Timestamp.now()
+    }
     float_cols = ['reported_eps', 'estimated_eps', 'surprise', 'surprise_percentage']
-    for col in float_cols:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors='coerce')
-    if 'report_time' in df.columns:
-        df['report_time'] = df['report_time'].astype(str)
-    if 'symbol' in df.columns and 'symbol' in QUARTERLY_EARNINGS_MAP.values():
-        df['symbol'] = df['symbol'].astype(str)
-    df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan, inplace=True)
-    df = df.infer_objects(copy=False)
-    df = df.where(pd.notnull(df), None)
-    df["symbol"] = symbol
-    df["data_state"] = ""
-    df["last_update"] = pd.Timestamp.now()
-    df.dropna(subset=["fiscal_date_ending"], inplace=True)
-    df = df.where(pd.notnull(df), None)
-    return df
+    return standardize_and_clean(
+        df,
+        column_map=QUARTERLY_EARNINGS_MAP,
+        date_cols=["fiscal_date_ending", "reported_date"],
+        float_cols=float_cols,
+        always_string_cols=["report_time"],
+        symbol=symbol,
+        dropna_col="fiscal_date_ending",
+        required_cols=["fiscal_date_ending", "symbol", "reported_eps", "data_state", "last_update"],
+        dummy_row=dummy_row
+    )
+
+def preprocess_annual_balance_sheet(df, symbol):
+    dummy_row = {
+        "fiscal_date_ending": pd.Timestamp("1900-01-01"),
+        "symbol": symbol,
+        "data_state": "dummy",
+        "last_update": pd.Timestamp.now()
+    }
+    return standardize_and_clean(
+        df,
+        column_map=ANNUAL_BALANCE_SHEET_MAP,
+        date_cols=["fiscal_date_ending"],
+        float_cols=ANNUAL_BALANCE_SHEET_FLOAT_COLUMNS,
+        int_cols=ANNUAL_BALANCE_SHEET_INT_COLUMNS,
+        symbol=symbol,
+        dropna_col="fiscal_date_ending",
+        required_cols=["fiscal_date_ending", "symbol", "data_state", "last_update"],
+        dummy_row=dummy_row
+    )
+
+def preprocess_quarterly_balance_sheet(df, symbol):
+    dummy_row = {
+        "fiscal_date_ending": pd.Timestamp("1900-01-01"),
+        "symbol": symbol,
+        "data_state": "dummy",
+        "last_update": pd.Timestamp.now()
+    }
+    return standardize_and_clean(
+        df,
+        column_map=QUARTERLY_BALANCE_SHEET_MAP,
+        date_cols=["fiscal_date_ending"],
+        float_cols=QUARTERLY_BALANCE_SHEET_FLOAT_COLUMNS,
+        int_cols=QUARTERLY_BALANCE_SHEET_INT_COLUMNS,
+        symbol=symbol,
+        dropna_col="fiscal_date_ending",
+        required_cols=["fiscal_date_ending", "symbol", "data_state", "last_update"],
+        dummy_row=dummy_row
+    )
+
+def preprocess_annual_income_statement(df, symbol):
+    dummy_row = {
+        "fiscal_date_ending": pd.Timestamp("1900-01-01"),
+        "symbol": symbol,
+        "data_state": "dummy",
+        "last_update": pd.Timestamp.now()
+    }
+    return standardize_and_clean(
+        df,
+        column_map=ANNUAL_INCOME_STATEMENT_MAP,
+        float_cols=INCOME_STATEMENT_NUMERIC_COLUMNS,
+        date_cols=["fiscal_date_ending"],
+        symbol=symbol,
+        dropna_col="fiscal_date_ending",
+        required_cols=["fiscal_date_ending", "symbol", "data_state", "last_update"],
+        dummy_row=dummy_row
+    )
+
+def preprocess_quarterly_income_statement(df, symbol):
+    dummy_row = {
+        "fiscal_date_ending": pd.Timestamp("1900-01-01"),
+        "symbol": symbol,
+        "data_state": "dummy",
+        "last_update": pd.Timestamp.now()
+    }
+    return standardize_and_clean(
+        df,
+        column_map=QUARTERLY_INCOME_STATEMENT_MAP,
+        float_cols=INCOME_STATEMENT_NUMERIC_COLUMNS,
+        date_cols=["fiscal_date_ending"],
+        symbol=symbol,
+        dropna_col="fiscal_date_ending",
+        required_cols=["fiscal_date_ending", "symbol", "data_state", "last_update"],
+        dummy_row=dummy_row
+    )
 
 def preprocess_insider_transactions(df, symbol):
     required_cols = [
         "transaction_date", "symbol", "executive", "executive_title",
         "security_type", "acquisition_or_disposal", "shares", "share_price"
     ]
-    if df is None or df.empty:
-        logger.warning(f"Insider transactions missing for symbol {symbol}. Inserting dummy row.")
-        dummy_row = {
-            "transaction_date": datetime.date(1900, 1, 1),
-            "symbol": symbol,
-            "executive": "",
-            "executive_title": "",
-            "security_type": "",
-            "acquisition_or_disposal": "",
-            "shares": 0.0,
-            "share_price": 0.0
-        }
-        df = pd.DataFrame([dummy_row])
-    else:
-        df = df.rename(columns=INSIDER_TRANSACTION_MAP)
-        if "transaction_date" in df.columns:
-            df["transaction_date"] = pd.to_datetime(df["transaction_date"], errors="coerce")
-        for col in ["shares", "share_price"]:
-            if col in df.columns:
-                df[col] = pd.to_numeric(df[col], errors="coerce")
-        df = df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan)
-        df = df.infer_objects(copy=False)
-        df = df.where(pd.notnull(df), None)
-        df.drop_duplicates(
-            subset=[
-                "transaction_date",
-                "symbol",
-                "executive",
-                "security_type",
-                "acquisition_or_disposal"
-            ],
-            inplace=True)
-        df["symbol"] = symbol
-        for col in required_cols:
-            if col not in df.columns:
-                if col == "transaction_date":
-                    df[col] = datetime.date(1900, 1, 1)
-                elif col in ["shares", "share_price"]:
-                    df[col] = 0.0
-                else:
-                    df[col] = ""
-        df["transaction_date"] = pd.to_datetime(df["transaction_date"], errors="coerce").dt.date.fillna(datetime.date(1900, 1, 1))
-        df["shares"] = pd.to_numeric(df["shares"], errors="coerce").fillna(0.0).astype("float64")
-        df["share_price"] = pd.to_numeric(df["share_price"], errors="coerce").fillna(0.0).astype("float64")
-        for col in ["executive", "executive_title", "security_type", "acquisition_or_disposal"]:
-            df[col] = df[col].fillna("").astype(str)
-        df = df.where(pd.notnull(df), None)
-    df = df[required_cols]
-    return df
+    dummy_row = {
+        "transaction_date": datetime.date(1900, 1, 1),
+        "symbol": symbol,
+        "executive": "",
+        "executive_title": "",
+        "security_type": "",
+        "acquisition_or_disposal": "",
+        "shares": 0.0,
+        "share_price": 0.0
+    }
+    return standardize_and_clean(
+        df,
+        column_map=INSIDER_TRANSACTION_MAP,
+        always_date_cols=["transaction_date"],
+        always_float_cols=["shares", "share_price"],
+        always_string_cols=["executive", "executive_title", "security_type", "acquisition_or_disposal"],
+        symbol=symbol,
+        required_cols=required_cols,
+        dummy_row=dummy_row
+    )
 
 def preprocess_stock_splits(df, symbol):
     required_cols = ["symbol", "effective_date", "split_factor"]
-    if df is None or df.empty:
-        logger.warning(f"Stock splits missing for symbol {symbol}. Inserting dummy row.")
-        dummy_row = {
-            "symbol": symbol,
-            "effective_date": "1900-01-01",
-            "split_factor": 0.0
-        }
-        df = pd.DataFrame([dummy_row])
-    else:
-        df = df.rename(columns=STOCK_SPLIT_MAP)
-        # Always add symbol column if missing
-        if "symbol" not in df.columns:
-            df["symbol"] = symbol
-        df["effective_date"] = pd.to_datetime(df["effective_date"], errors="coerce")
-        df["split_factor"] = pd.to_numeric(df["split_factor"], errors="coerce")
-        df = df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan)
-        df = df.infer_objects(copy=False)
-        df = df.where(pd.notnull(df), None)
-        df.drop_duplicates(subset=["symbol", "effective_date"], inplace=True)
-        for col in required_cols:
-            if col not in df.columns:
-                df[col] = "1900-01-01" if col == "effective_date" else 0.0 if col == "split_factor" else symbol
-        df = df[required_cols]
-    if "split_factor" in df.columns:
-        df["split_factor"] = pd.to_numeric(df["split_factor"], errors="coerce").fillna(0.0)
+    dummy_row = {
+        "symbol": symbol,
+        "effective_date": "1900-01-01",
+        "split_factor": 0.0
+    }
+    df = standardize_and_clean(
+        df,
+        column_map=STOCK_SPLIT_MAP,
+        date_cols=["effective_date"],
+        float_cols=["split_factor"],
+        symbol=symbol,
+        required_cols=required_cols,
+        dummy_row=dummy_row
+    )
     if "effective_date" in df.columns:
         df["effective_date"] = df["effective_date"].apply(
             lambda x: "1900-01-01" if pd.isna(x) or x is None else str(x)
         )
-    df = df.where(pd.notnull(df), None)
-    df = df[required_cols]
     return df
 
 def preprocess_dividends(df, symbol):
-    if df is None or df.empty:
-        logger.warning(f"Dividends missing for symbol {symbol}. Inserting dummy row.")
-        df = pd.DataFrame([{
-            "symbol": symbol,
-            "ex_dividend_date": pd.Timestamp("1900-01-01").date(),
-            "amount": None,
-            "data_state": "dummy",
-            "last_update": pd.Timestamp.now()
-        }])
-        return df
-    df = df.rename(columns=DIVIDENDS_MAP)
-    df["ex_dividend_date"] = pd.to_datetime(df["ex_dividend_date"], errors="coerce")
-    df["declaration_date"] = pd.to_datetime(df["declaration_date"], errors="coerce")
-    df["record_date"] = pd.to_datetime(df["record_date"], errors="coerce")
-    df["payment_date"] = pd.to_datetime(df["payment_date"], errors="coerce")
-    df["amount"] = pd.to_numeric(df["amount"], errors="coerce")
-    if "symbol" in df.columns:
-        df["symbol"] = df["symbol"].astype(str)
-    df = df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan)
-    df = df.infer_objects(copy=False)
+    dummy_row = {
+        "symbol": symbol,
+        "ex_dividend_date": pd.Timestamp("1900-01-01").date(),
+        "amount": None,
+        "data_state": "dummy",
+        "last_update": pd.Timestamp.now()
+    }
+    df = standardize_and_clean(
+        df,
+        column_map=DIVIDENDS_MAP,
+        date_cols=["ex_dividend_date", "declaration_date", "record_date", "payment_date"],
+        float_cols=["amount"],
+        symbol=symbol,
+        required_cols=["symbol", "ex_dividend_date", "amount", "data_state", "last_update"],
+        dummy_row=dummy_row
+    )
     for col in ["ex_dividend_date", "declaration_date", "record_date", "payment_date"]:
         if col in df.columns:
             df[col] = pd.to_datetime(df[col], errors="coerce").apply(lambda x: x.date() if pd.notnull(x) else None)
             df[col] = df[col].apply(lambda x: None if pd.isnull(x) or x is pd.NaT or x == "NaT" else x)
-    df["symbol"] = symbol
-    df["data_state"] = ""
-    df["last_update"] = pd.Timestamp.now()
     df.dropna(subset=["ex_dividend_date"], inplace=True)
     df = df.where(pd.notnull(df), None)
     return df
