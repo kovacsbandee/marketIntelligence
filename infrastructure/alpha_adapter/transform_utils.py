@@ -147,7 +147,8 @@ def create_dummy_row_with_dates(orm_columns, symbol):
     with appropriate default values for each column type. Date columns receive
     a default date of 1900-01-01, symbol columns receive the provided symbol,
     and all other columns receive None.
-    
+    #todo needs to be rewised and the ORM type definitions should be applied
+    # to create the dummy row!
     Args:
         orm_columns (list): List of SQLAlchemy column objects from ORM model
         symbol (str): Stock symbol to use for the symbol column
