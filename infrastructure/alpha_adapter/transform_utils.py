@@ -165,6 +165,7 @@ def create_dummy_row_with_dates(orm_columns, symbol):
     for col in orm_columns:
         if col.name == 'symbol':
             dummy_row[col.name] = symbol
+        #todo change startswith to contains!
         elif str(col.type).lower().startswith('date'):
             dummy_row[col.name] = dummy_date
         else:
