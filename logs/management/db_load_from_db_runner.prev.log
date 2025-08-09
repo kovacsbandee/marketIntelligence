@@ -1,2 +1,50 @@
-2025-07-26 15:39:23,763 - dash.dash - INFO - Dash is running on http://127.0.0.1:8050/
+2025-08-03 10:37:32,226 - dash.dash - INFO - Dash is running on http://127.0.0.1:8050/
 
+2025-08-03 10:37:32,229 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8050
+2025-08-03 10:37:32,229 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-03 10:37:36,693 - werkzeug - INFO - 127.0.0.1 - - [03/Aug/2025 10:37:36] "GET / HTTP/1.1" 200 -
+2025-08-03 10:37:36,753 - werkzeug - INFO - 127.0.0.1 - - [03/Aug/2025 10:37:36] "GET /_dash-component-suites/dash/deps/react@18.v3_1_1m1752607861.3.1.min.js HTTP/1.1" 200 -
+2025-08-03 10:37:36,758 - werkzeug - INFO - 127.0.0.1 - - [03/Aug/2025 10:37:36] "GET /_dash-component-suites/dash/deps/prop-types@15.v3_1_1m1752607861.8.1.min.js HTTP/1.1" 200 -
+2025-08-03 10:37:36,759 - werkzeug - INFO - 127.0.0.1 - - [03/Aug/2025 10:37:36] "GET /_dash-component-suites/dash/deps/react-dom@18.v3_1_1m1752607861.3.1.min.js HTTP/1.1" 200 -
+2025-08-03 10:37:36,759 - werkzeug - INFO - 127.0.0.1 - - [03/Aug/2025 10:37:36] "GET /_dash-component-suites/dash/dash-renderer/build/dash_renderer.v3_1_1m1752607861.min.js HTTP/1.1" 200 -
+2025-08-03 10:37:37,081 - werkzeug - INFO - 127.0.0.1 - - [03/Aug/2025 10:37:37] "GET /_dash-layout HTTP/1.1" 200 -
+2025-08-03 10:37:37,083 - werkzeug - INFO - 127.0.0.1 - - [03/Aug/2025 10:37:37] "GET /_dash-dependencies HTTP/1.1" 200 -
+2025-08-03 10:38:13,635 - werkzeug - INFO - 127.0.0.1 - - [03/Aug/2025 10:38:13] "POST /_dash-update-component HTTP/1.1" 200 -
+2025-08-03 10:38:15,259 - werkzeug - INFO - 127.0.0.1 - - [03/Aug/2025 10:38:15] "POST /_dash-update-component HTTP/1.1" 200 -
+2025-08-03 10:38:16,637 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-03 10:38:16,637 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - CompanyDataHandler initialized with database connection.
+2025-08-03 10:38:16,770 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 1 filtered rows from company_fundamentals
+2025-08-03 10:38:16,786 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 20 filtered rows from balance_sheet_annual
+2025-08-03 10:38:16,791 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_annual' with 20 rows.
+2025-08-03 10:38:16,800 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 20 filtered rows from cash_flow_annual
+2025-08-03 10:38:16,803 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_annual' with 20 rows.
+2025-08-03 10:38:16,809 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 30 filtered rows from earnings_annual
+2025-08-03 10:38:16,811 - db_load_from_db_runner - INFO - Loaded table 'earnings_annual' with 30 rows.
+2025-08-03 10:38:16,820 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 20 filtered rows from income_statement_annual
+2025-08-03 10:38:16,823 - db_load_from_db_runner - INFO - Loaded table 'income_statement_annual' with 20 rows.
+2025-08-03 10:38:16,826 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 1 filtered rows from company_fundamentals
+2025-08-03 10:38:16,830 - db_load_from_db_runner - INFO - Loaded table 'company_fundamentals' with 1 rows.
+2025-08-03 10:38:16,834 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 1 filtered rows from daily_timeseries
+2025-08-03 10:38:16,835 - db_load_from_db_runner - INFO - Loaded table 'daily_timeseries' with 1 rows.
+2025-08-03 10:38:16,840 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 107 filtered rows from dividends
+2025-08-03 10:38:16,843 - db_load_from_db_runner - INFO - Loaded table 'dividends' with 107 rows.
+2025-08-03 10:38:16,888 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 3125 filtered rows from insider_transactions
+2025-08-03 10:38:16,922 - db_load_from_db_runner - INFO - Loaded table 'insider_transactions' with 3125 rows.
+2025-08-03 10:38:16,928 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 81 filtered rows from balance_sheet_quarterly
+2025-08-03 10:38:16,931 - db_load_from_db_runner - INFO - Loaded table 'balance_sheet_quarterly' with 81 rows.
+2025-08-03 10:38:16,937 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 81 filtered rows from cash_flow_statement_quarterly
+2025-08-03 10:38:16,940 - db_load_from_db_runner - INFO - Loaded table 'cash_flow_statement_quarterly' with 81 rows.
+2025-08-03 10:38:16,945 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 118 filtered rows from earnings_quarterly
+2025-08-03 10:38:16,947 - db_load_from_db_runner - INFO - Loaded table 'earnings_quarterly' with 118 rows.
+2025-08-03 10:38:16,952 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 81 filtered rows from income_statement_quarterly
+2025-08-03 10:38:16,955 - db_load_from_db_runner - INFO - Loaded table 'income_statement_quarterly' with 81 rows.
+2025-08-03 10:38:16,958 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - Loaded 8 filtered rows from stock_splits
+2025-08-03 10:38:16,959 - db_load_from_db_runner - INFO - Loaded table 'stock_splits' with 8 rows.
+2025-08-03 10:38:16,991 - werkzeug - INFO - 127.0.0.1 - - [03/Aug/2025 10:38:16] "POST /_dash-update-component HTTP/1.1" 200 -
+2025-08-03 10:38:17,032 - werkzeug - INFO - 127.0.0.1 - - [03/Aug/2025 10:38:17] "POST /_dash-update-component HTTP/1.1" 200 -
+2025-08-03 10:38:17,035 - werkzeug - INFO - 127.0.0.1 - - [03/Aug/2025 10:38:17] "POST /_dash-update-component HTTP/1.1" 200 -
+2025-08-03 10:38:18,992 - werkzeug - INFO - 127.0.0.1 - - [03/Aug/2025 10:38:18] "POST /_dash-update-component HTTP/1.1" 200 -
+2025-08-03 10:38:19,299 - werkzeug - INFO - 127.0.0.1 - - [03/Aug/2025 10:38:19] "POST /_dash-update-component HTTP/1.1" 200 -
+2025-08-03 10:38:19,322 - werkzeug - INFO - 127.0.0.1 - - [03/Aug/2025 10:38:19] "[36mGET /_dash-component-suites/dash/dcc/async-graph.js HTTP/1.1[0m" 304 -
+2025-08-03 10:38:19,333 - werkzeug - INFO - 127.0.0.1 - - [03/Aug/2025 10:38:19] "[36mGET /_dash-component-suites/plotly/package_data/plotly.min.js HTTP/1.1[0m" 304 -

@@ -2,12 +2,13 @@
 
 ## Overview
 This project is intended to help me in having a data based understanding of stock market behaviour aiming for a profitable trading strategy. 
-The project will evolve into an LLM based trading agent.
+The project will evolve into an LLM based trading agent, with RAG architecuture applying Claude (if needed LLM fine tuning is required!)
 Right now the data source is the alphavantage API the database for daily price data, company financials and other tabular information.
 The data pipeline and the postgre db is up and running, dockerization and the initial load is needed.
 The next phases and steps are the following:
 
-    Phase 1. - from PostgreDB to Dash app with news capabilities
+    Phase 1. 
+        - from PostgreDB to Dash app with news capabilities
         - An interface is needed from the database to the application with an intermediate optional data enrichment step 
           to calculate various price indicators and other derived information from the raw data. An input object will be the result of this step.
         - Creating an informative and logical visualization system with plotly plots for all the information stored in the database. 

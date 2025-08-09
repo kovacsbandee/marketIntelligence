@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *.so
 
+# === Build artifacts ===
+kubectl
+minikube-linux-amd64
+
+
 # === Virtual environments ===
 .venv/
 
@@ -21,6 +26,7 @@ configs/alpha_vantage_column_description_hun.json
 configs/alpha_vantage_column_description.json
 
 # === Raw and intermediate data ===
+logs/management/debug_data/
 dev_data
 dev_data/jsons
 dev_data/csv
