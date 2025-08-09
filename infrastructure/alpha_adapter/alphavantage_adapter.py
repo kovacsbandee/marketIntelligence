@@ -61,6 +61,18 @@ from infrastructure.alpha_adapter.column_maps import (
 # e.g. missing values, and add a logger for these stuff!
 
 
+def dump_api_response(symbol, table, api_response):
+    now_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    fname = f"debug_data/input/{now_str}_{symbol}_{table}_api.json"
+    with open(fname, "w") as f:
+        json.dump(api_response, f, indent=2)
+
+def dump_dataframe(symbol, table, df):
+    now_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    fname = f"debug_data/output/{now_str}_{symbol}_{table}_df.csv"
+    df.to_csv(fname, index=False)
+
+
 class AlphaLoader:
 
     """
@@ -150,6 +162,8 @@ class AlphaLoader:
             r = requests.get(url, timeout=10)
             r.raise_for_status()
             data = r.json()
+            dump_api_response(self.symbol, "daily_time_series", data)  # <-- Dump API response
+
             if "Time Series (Daily)" not in data:
                 self.logger.error("Error in API response for %s: %s", self.symbol, data.get('Note') or data)
                 return
@@ -157,6 +171,8 @@ class AlphaLoader:
             data_df = pd.DataFrame.from_dict(data=data["Time Series (Daily)"], orient='index')
             self.last_df = data_df
             data_df = preprocess_daily_timeseries(data_df, self.symbol)
+            dump_dataframe(self.symbol, "daily_time_series", data_df)  # <-- Dump DataFrame
+
             if data_df is None or data_df.empty:
                 self.logger.info(f"Skipped {self.symbol}: No valid daily timeseries data to insert.")
                 return
@@ -187,6 +203,8 @@ class AlphaLoader:
             r = requests.get(url, timeout=10)
             r.raise_for_status()
             data = r.json()
+            dump_api_response(self.symbol, "company_fundamentals", data)  # <-- Dump API response
+
             if "Error Message" in data or "Note" in data:
                 self.logger.error("Error in API response for %s: %s", self.symbol, data.get('Note') or data)
                 return
@@ -194,6 +212,8 @@ class AlphaLoader:
             data_df = pd.DataFrame([data])
             self.last_df = data_df
             data_df = preprocess_company_fundamentals(data_df, self.symbol)
+            dump_dataframe(self.symbol, "company_fundamentals", data_df)  # <-- Dump DataFrame
+
             if data_df is None or data_df.empty:
                 self.logger.info(f"Skipped {self.symbol}: No valid company fundamentals data to insert.")
                 return
@@ -225,6 +245,7 @@ class AlphaLoader:
             r = requests.get(url, timeout=10)
             r.raise_for_status()
             data = r.json()
+            dump_api_response(self.symbol, function.lower(), data)  # <-- Dump API response
 
             if function == 'EARNINGS':
                 annual_key = "annualEarnings"
@@ -269,6 +290,9 @@ class AlphaLoader:
             self.last_df = annual_df
             self.last_df_quarterly = quarterly_df
 
+            dump_dataframe(self.symbol, f"{function.lower()}_annual", annual_df)      # <-- Dump annual DataFrame
+            dump_dataframe(self.symbol, f"{function.lower()}_quarterly", quarterly_df) # <-- Dump quarterly DataFrame
+
             # PATCH: skip DB/local insert if None or empty
             if annual_df is None or annual_df.empty:
                 self.logger.info(f"Skipped {self.symbol}: No valid annual {function.lower()} data to insert.")
@@ -308,12 +332,16 @@ class AlphaLoader:
             r = requests.get(url, timeout=10)
             r.raise_for_status()
             data = r.json()
+            dump_api_response(self.symbol, "insider_transactions", data)  # <-- Dump API response
+
             if isinstance(data, dict) and "data" in data:
                 data = data["data"]
 
             df = pd.DataFrame(data)
             self.last_df = df
             df = preprocess_insider_transactions(df, self.symbol)
+            dump_dataframe(self.symbol, "insider_transactions", df)  # <-- Dump DataFrame
+
             if df is None or df.empty:
                 self.logger.info(f"Skipped {self.symbol}: No valid insider transactions data to insert.")
                 return
@@ -343,12 +371,16 @@ class AlphaLoader:
             r = requests.get(url, timeout=10)
             r.raise_for_status()
             data = r.json()
+            dump_api_response(self.symbol, "stock_splits", data)  # <-- Dump API response
+
             if isinstance(data, dict) and "data" in data:
                 data = data["data"]
 
             df = pd.DataFrame(data)
             self.last_df = df
             df = preprocess_stock_splits(df, self.symbol)
+            dump_dataframe(self.symbol, "stock_splits", df)  # <-- Dump DataFrame
+
             if df is None or df.empty:
                 self.logger.info(f"Skipped {self.symbol}: No valid stock splits data to insert.")
                 return
@@ -378,12 +410,16 @@ class AlphaLoader:
             r = requests.get(url, timeout=10)
             r.raise_for_status()
             data = r.json()
+            dump_api_response(self.symbol, "dividends", data)  # <-- Dump API response
+
             if isinstance(data, dict) and "data" in data:
                 data = data["data"]
 
             df = pd.DataFrame(data)
             self.last_df = df
             df = preprocess_dividends(df, self.symbol)
+            dump_dataframe(self.symbol, "dividends", df)  # <-- Dump DataFrame
+
             if df is None or df.empty:
                 self.logger.info(f"Skipped {self.symbol}: No valid dividends data to insert.")
                 return

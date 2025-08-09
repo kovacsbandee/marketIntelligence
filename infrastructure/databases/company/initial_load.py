@@ -106,8 +106,8 @@ def main():
     Defines a static list of symbols and triggers the initial load.
     """
     all_symbols = get_symbols_from_csv(csv_path="configs/nasdaq_screener.csv")
-    num_to_load = 30  # Change as needed
-    random.seed(42)
+    num_to_load = 3  # Change as needed
+    random.seed(2)
     symbols = random.sample(all_symbols, min(num_to_load, len(all_symbols)))# + ["AAPL", "GOOGL", "MSFT"]
     download_stock_data(symbols)
 
