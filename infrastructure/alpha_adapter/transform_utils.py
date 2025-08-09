@@ -53,56 +53,42 @@ def standardize_and_clean(
 ):
     """
     Standardize and clean a DataFrame for database ingestion.
-    
-    This function performs comprehensive data cleaning and standardization including:
-    - Column renaming based on provided mapping
-    - Data type conversion and validation
-    - Missing value handling
-    - Column alignment with ORM schema
-    - Insertion of dummy rows for missing data
-    
-    Args:
-        df (pd.DataFrame): Input DataFrame to be cleaned and standardized
-        column_map (dict, optional): Mapping of original column names to standardized names
-        date_cols (list, optional): Columns to convert to datetime format
-        float_cols (list, optional): Columns to convert to float format
-        int_cols (list, optional): Columns to convert to integer format
-        symbol (str, optional): Stock symbol to add as a column
-        dropna_col (str, optional): Column name to drop rows where this column is NaN
-        always_string_cols (list, optional): Columns to always convert to string type
-        always_float_cols (list, optional): Columns to always convert to float with 0.0 default
-        always_date_cols (list, optional): Columns to always convert to date with 1900-01-01 default
-        orm_columns (list, optional): List of expected ORM column names for alignment
-        dummy_row (dict, optional): Dictionary representing a dummy row for missing data
-    
-    Returns:
-        pd.DataFrame: Cleaned and standardized DataFrame ready for database ingestion
-        
-    Examples:
-        >>> df = standardize_and_clean(
-        ...     df, 
-        ...     column_map={"old_name": "new_name"}, 
-        ...     symbol="AAPL",
-        ...     orm_columns=["date", "symbol", "open", "high", "low", "close"]
-        ... )
     """
     if df is None or df.empty:
-        logger.warning(f"Missing or empty data for symbol {symbol}. Inserting dummy row.")
-        df = pd.DataFrame([dummy_row])
-        return df
+        return pd.DataFrame([dummy_row]) if dummy_row else pd.DataFrame()
 
     logger.info(f"Raw columns: {list(df.columns)}")
     if column_map:
         logger.info(f"Column map: {column_map}")
         df = df.rename(columns=column_map)
         logger.info(f"Columns after renaming: {list(df.columns)}")
-    df.replace(to_replace=["None", "none", "NaN", "nan", ""], value=np.nan, inplace=True)
+
+    # Replace common placeholders with np.nan
+    df.replace(to_replace=["None", "none", "NaN", "nan", "", "-", "null", "NULL"], value=np.nan, inplace=True)
     df = df.infer_objects(copy=False)
 
-    if date_cols:
-        for col in date_cols:
+    # --- PATCH: Improved type conversion ---
+    # Use ORM schema if provided, otherwise use explicit lists
+    if orm_columns:
+        # Get column names and types from ORM
+        orm_col_objs = orm_columns if hasattr(orm_columns[0], "type") else None
+        orm_col_names = [col.name if orm_col_objs else col for col in orm_columns]
+        for idx, col in enumerate(orm_col_names):
+            # Determine type
+            if orm_col_objs:
+                col_type = str(orm_columns[idx].type).lower()
+            else:
+                # Fallback: guess type from column name
+                col_type = "float" if col in (float_cols or []) else "int" if col in (int_cols or []) else "date" if col in (date_cols or []) else ""
             if col in df.columns:
-                df[col] = pd.to_datetime(df[col], errors="coerce")
+                if "float" in col_type or "numeric" in col_type or "double" in col_type:
+                    df[col] = pd.to_numeric(df[col], errors="coerce")
+                elif "integer" in col_type or "bigint" in col_type:
+                    df[col] = pd.to_numeric(df[col], errors="coerce").round().astype("Int64")
+                elif "date" in col_type:
+                    df[col] = pd.to_datetime(df[col], errors="coerce").dt.date
+
+    # Fallback for explicit lists
     if float_cols:
         for col in float_cols:
             if col in df.columns:
@@ -111,37 +97,45 @@ def standardize_and_clean(
         for col in int_cols:
             if col in df.columns:
                 df[col] = pd.to_numeric(df[col], errors="coerce").round().astype("Int64")
+    if date_cols:
+        for col in date_cols:
+            if col in df.columns:
+                df[col] = pd.to_datetime(df[col], errors="coerce").dt.date
+
+    # Always convert specified columns to string, float, or date
     if always_string_cols:
         for col in always_string_cols:
             if col in df.columns:
-                df[col] = df[col].fillna("").astype(str)
+                df[col] = df[col].astype(str)
     if always_float_cols:
         for col in always_float_cols:
             if col in df.columns:
-                df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0).astype("float64")
+                df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0)
     if always_date_cols:
+        dummy_date = date(1900, 1, 1)
         for col in always_date_cols:
             if col in df.columns:
-                df[col] = pd.to_datetime(df[col], errors="coerce").dt.date.fillna(datetime.date(1900, 1, 1))
+                df[col] = pd.to_datetime(df[col], errors="coerce").dt.date
+                df[col] = df[col].apply(lambda x: dummy_date if pd.isna(x) or str(x) == "NaT" else x)
+
+    # Add symbol column if needed
     if symbol is not None:
         df["symbol"] = symbol
-    
-    df = df.where(pd.notnull(df), None)
-    
+
+    # Align columns with ORM schema
     if orm_columns:
-        logger.info(f"ORM columns: {orm_columns}")
-        missing = [col for col in orm_columns if col not in df.columns]
-        logger.info(f"Missing ORM columns: {missing}")
-        for col in orm_columns:
+        orm_col_names = [col.name if hasattr(col, "name") else col for col in orm_columns]
+        for col in orm_col_names:
             if col not in df.columns:
                 df[col] = None
-        df = df[orm_columns]
+        df = df[orm_col_names]
 
-    if dropna_col:
-        logger.info(f"Non-NA count for dropna_col '{dropna_col}': {df[dropna_col].notna().sum() if dropna_col in df.columns else 'Column missing'}")
-        df.dropna(subset=[dropna_col], inplace=True)
-
+    # Replace remaining NaN with None for DB compatibility
     df = df.where(pd.notnull(df), None)
+
+    # If DataFrame is empty, insert dummy row
+    if df.empty and dummy_row:
+        df = pd.DataFrame([dummy_row])
 
     return df
 
@@ -181,31 +175,64 @@ def create_dummy_row_with_dates(orm_columns, symbol):
 def preprocess_company_fundamentals(df, symbol):
     """
     Preprocess company fundamentals data from Alpha Vantage API.
-    
+
     Transforms raw company fundamentals data into a format compatible with
     the CompanyFundamentalsTable ORM model. Handles column mapping, data
     type conversion, and missing value management.
-    
-    Args:
-        df (pd.DataFrame): Raw company fundamentals DataFrame from Alpha Vantage
-        symbol (str): Stock ticker symbol (e.g., "AAPL", "MSFT")
-    
-    Returns:
-        pd.DataFrame: Processed DataFrame ready for database insertion
-        
-    Examples:
-        >>> processed_df = preprocess_company_fundamentals(raw_df, "AAPL")
     """
+    if should_skip_symbol(df, symbol, "company fundamentals"):
+        return None
     logger.info(f"Before transforming company_fundamentals for {symbol}:\n{df.to_string()}")
+
     orm_columns = [col for col in CompanyFundamentalsTable.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
-    df = standardize_and_clean(
-        df,
-        column_map=COMPANY_FUNDAMENTALS_MAP,
-        symbol=symbol,
-        orm_columns=[col.name for col in orm_columns],
-        dummy_row=dummy_row
-    )
+
+    # --- PATCH: Robust missing data and type conversion ---
+    # Replace all common placeholders with np.nan
+    placeholders = ["None", "none", "NaN", "nan", "", "-", "null", "NULL"]
+    df.replace(to_replace=placeholders, value=np.nan, inplace=True)
+
+    # Rename columns
+    df = df.rename(columns=COMPANY_FUNDAMENTALS_MAP)
+
+    # Type conversion based on ORM schema
+    for col in orm_columns:
+        col_name = col.name
+        col_type = str(col.type).lower()
+        if col_name in df.columns:
+            if "float" in col_type:
+                df[col_name] = pd.to_numeric(df[col_name], errors="coerce")
+            elif "integer" in col_type or "bigint" in col_type:
+                df[col_name] = pd.to_numeric(df[col_name], errors="coerce").round().astype("Int64")
+            elif "date" in col_type:
+                df[col_name] = pd.to_datetime(df[col_name], errors="coerce").dt.date
+
+    # --- PATCH: Replace NaT/nan in date columns with dummy date ---
+    dummy_date = date(1900, 1, 1)
+    for col in orm_columns:
+        col_name = col.name
+        col_type = str(col.type).lower()
+        if "date" in col_type and col_name in df.columns:
+            df[col_name] = df[col_name].apply(lambda x: dummy_date if pd.isna(x) or str(x) == "NaT" else x)
+
+    # Add symbol column if needed
+    if symbol is not None:
+        df["symbol"] = symbol
+
+    # Align columns with ORM schema
+    orm_col_names = [col.name for col in orm_columns]
+    for col in orm_col_names:
+        if col not in df.columns:
+            df[col] = None
+    df = df[orm_col_names]
+
+    # Replace remaining NaN with None for DB compatibility
+    df = df.where(pd.notnull(df), None)
+
+    # If DataFrame is empty, insert dummy row
+    if df.empty:
+        df = pd.DataFrame([dummy_row])
+
     logger.info(f"Transformed company_fundamentals for {symbol}:\n{df.head().to_string()}")
     return df
 
@@ -227,14 +254,13 @@ def preprocess_daily_timeseries(df, symbol):
     Examples:
         >>> processed_df = preprocess_daily_timeseries(raw_df, "AAPL")
     """
-    logger.info(f"Before transforming daily_timeseries for {symbol}:\n{df.to_string()} original columns: {list(df.columns)}")
+    if should_skip_symbol(df, symbol, "daily timeseries"):
+        return None
     
     # Reset index to convert date index to a column
     df = df.reset_index()
     df = df.rename(columns={'index': 'date'})  # Rename the index column to 'date'
-    
-    logger.info(f"After reset_index for {symbol}, columns: {list(df.columns)}")
-    
+        
     orm_columns = [col for col in DailyTimeSeries.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
     
@@ -255,14 +281,9 @@ def preprocess_annual_balance_sheet(df, symbol):
     Transforms raw annual balance sheet data into a format compatible with
     the AnnualBalanceSheetTable ORM model. Handles financial statement
     data formatting and standardization.
-    
-    Args:
-        df (pd.DataFrame): Raw annual balance sheet DataFrame from Alpha Vantage
-        symbol (str): Stock ticker symbol (e.g., "AAPL", "MSFT")
-    
-    Returns:
-        pd.DataFrame: Processed DataFrame ready for database insertion
     """
+    if should_skip_symbol(df, symbol, "annual balance sheet"):
+        return None
     logger.info(f"Before transforming annual_balance_sheet for {symbol}:\n{df.to_string()}")
     orm_columns = [col for col in AnnualBalanceSheetTable.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
@@ -273,6 +294,15 @@ def preprocess_annual_balance_sheet(df, symbol):
         orm_columns=[col.name for col in orm_columns],
         dummy_row=dummy_row
     )
+
+    # --- PATCH: Robust integer conversion for common_stock_shares_outstanding ---
+    if 'common_stock_shares_outstanding' in df.columns:
+        df['common_stock_shares_outstanding'] = (
+            pd.to_numeric(df['common_stock_shares_outstanding'], errors='coerce')
+            .round()
+            .astype('Int64')
+        )
+
     logger.info(f"Transformed annual_balance_sheet for {symbol}:\n{df.head().to_string()}")
     return df
 
@@ -283,14 +313,9 @@ def preprocess_quarterly_balance_sheet(df, symbol):
     Transforms raw quarterly balance sheet data into a format compatible with
     the QuarterlyBalanceSheetTable ORM model. Handles quarterly financial
     statement data formatting and standardization.
-    
-    Args:
-        df (pd.DataFrame): Raw quarterly balance sheet DataFrame from Alpha Vantage
-        symbol (str): Stock ticker symbol (e.g., "AAPL", "MSFT")
-    
-    Returns:
-        pd.DataFrame: Processed DataFrame ready for database insertion
     """
+    if should_skip_symbol(df, symbol, "quarterly balance sheet"):
+        return None
     logger.info(f"Before transforming quarterly_balance_sheet for {symbol}:\n{df.to_string()}")
     orm_columns = [col for col in QuarterlyBalanceSheetTable.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
@@ -301,6 +326,15 @@ def preprocess_quarterly_balance_sheet(df, symbol):
         orm_columns=[col.name for col in orm_columns],
         dummy_row=dummy_row
     )
+
+    # --- PATCH: Robust integer conversion for common_stock_shares_outstanding ---
+    if 'common_stock_shares_outstanding' in df.columns:
+        df['common_stock_shares_outstanding'] = (
+            pd.to_numeric(df['common_stock_shares_outstanding'], errors='coerce')
+            .round()
+            .astype('Int64')
+        )
+
     logger.info(f"Transformed quarterly_balance_sheet for {symbol}:\n{df.head().to_string()}")
     return df
 
@@ -319,7 +353,9 @@ def preprocess_annual_cash_flow(df, symbol):
     Returns:
         pd.DataFrame: Processed DataFrame ready for database insertion
     """
-    logger.info(f"Before transforming annual_cash_flow for {symbol}:\n{df.to_string()}")
+    if should_skip_symbol(df, symbol, "annual cash flow"):
+        return None
+    # logger.info(f"Before transforming annual_cash_flow for {symbol}:\n{df.to_string()}")
     orm_columns = [col for col in AnnualCashFlowTable.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
     df = standardize_and_clean(
@@ -347,7 +383,9 @@ def preprocess_quarterly_cash_flow(df, symbol):
     Returns:
         pd.DataFrame: Processed DataFrame ready for database insertion
     """
-    logger.info(f"Before transforming quarterly_cash_flow for {symbol}:\n{df.to_string()}")
+    if should_skip_symbol(df, symbol, "quarterly cash flow"):
+        return None
+    # logger.info(f"Before transforming quarterly_cash_flow for {symbol}:\n{df.to_string()}")
     orm_columns = [col for col in QuarterlyCashFlowTable.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
     df = standardize_and_clean(
@@ -375,7 +413,9 @@ def preprocess_annual_earnings(df, symbol):
     Returns:
         pd.DataFrame: Processed DataFrame ready for database insertion
     """
-    logger.info(f"Before transforming annual_earnings for {symbol}:\n{df.to_string()}")
+    if should_skip_symbol(df, symbol, "annual earnings"):
+        return None
+    # logger.info(f"Before transforming annual_earnings for {symbol}:\n{df.to_string()}")
     orm_columns = [col for col in AnnualEarningsTable.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
     df = standardize_and_clean(
@@ -403,7 +443,9 @@ def preprocess_quarterly_earnings(df, symbol):
     Returns:
         pd.DataFrame: Processed DataFrame ready for database insertion
     """
-    logger.info(f"Before transforming quarterly_earnings for {symbol}:\n{df.to_string()}")
+    if should_skip_symbol(df, symbol, "quarterly earnings"):
+        return None
+    # logger.info(f"Before transforming quarterly_earnings for {symbol}:\n{df.to_string()}")
     orm_columns = [col for col in QuarterlyEarningsTable.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
     df = standardize_and_clean(
@@ -431,7 +473,9 @@ def preprocess_annual_income_statement(df, symbol):
     Returns:
         pd.DataFrame: Processed DataFrame ready for database insertion
     """
-    logger.info(f"Before transforming annual_income_statement for {symbol}:\n{df.to_string()}")
+    if should_skip_symbol(df, symbol, "annual income statement"):
+        return None
+    # logger.info(f"Before transforming annual_income_statement for {symbol}:\n{df.to_string()}")
     orm_columns = [col for col in AnnualIncomeStatement.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
     df = standardize_and_clean(
@@ -459,7 +503,9 @@ def preprocess_quarterly_income_statement(df, symbol):
     Returns:
         pd.DataFrame: Processed DataFrame ready for database insertion
     """
-    logger.info(f"Before transforming quarterly_income_statement for {symbol}:\n{df.to_string()}")
+    if should_skip_symbol(df, symbol, "quarterly income statement"):
+        return None
+    # logger.info(f"Before transforming quarterly_income_statement for {symbol}:\n{df.to_string()}")
     orm_columns = [col for col in QuarterlyIncomeStatement.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
     df = standardize_and_clean(
@@ -495,7 +541,9 @@ def preprocess_insider_transactions(df, symbol):
     Examples:
         >>> processed_df = preprocess_insider_transactions(raw_df, "AAPL")
     """
-    logger.info(f"Before transforming insider_transactions for {symbol}:\n{df.to_string()}")
+    if should_skip_symbol(df, symbol, "insider transactions"):
+        return None
+    # logger.info(f"Before transforming insider_transactions for {symbol}:\n{df.to_string()}")
     orm_columns = [col for col in InsiderTransactions.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
     df = standardize_and_clean(
@@ -564,6 +612,8 @@ def preprocess_stock_splits(df, symbol):
     Returns:
         pd.DataFrame: Processed DataFrame ready for database insertion
     """
+    if should_skip_symbol(df, symbol, "stock splits"):
+        return None
     logger.info(f"Before transforming stock_splits for {symbol}:\n{df.to_string()}")
     orm_columns = [col for col in StockSplit.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
@@ -580,7 +630,7 @@ def preprocess_stock_splits(df, symbol):
 def preprocess_dividends(df, symbol):
     """
     Preprocess dividend data from Alpha Vantage API.
-    
+
     Transforms raw dividend data into a format compatible with
     the DividendsTable ORM model. Handles dividend payment data
     formatting and standardization, including filtering of records
@@ -597,6 +647,8 @@ def preprocess_dividends(df, symbol):
         Records without valid ex_dividend_date values are dropped as they represent
         incomplete dividend information.
     """
+    if should_skip_symbol(df, symbol, "dividends"):
+        return None
     logger.info(f"Before transforming dividends for {symbol}:\n{df.to_string()}")
     orm_columns = [col for col in DividendsTable.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
@@ -609,5 +661,36 @@ def preprocess_dividends(df, symbol):
     )
     df.dropna(subset=["ex_dividend_date"], inplace=True)
     df = df.where(pd.notnull(df), None)
-    logger.info(f"Transformed dividends for {symbol}:\n{df.head().to_string()}")
+    logger.info(f"After dropping rows without ex_dividend_date for {symbol}, remaining rows: {df.to_string()}")
+
+    # Fill every non-valid date with the dummy date
+    dummy_date = date(1900, 1, 1)
+    date_cols = ["declaration_date", "record_date", "payment_date"]
+    df[date_cols] = df[date_cols].fillna(dummy_date)
+    logger.info(f"After filling date columns with dummy date for {symbol}:\n{df[date_cols].to_string()}")
+
+    df["amount"] = pd.to_numeric(df["amount"], errors="coerce").fillna(0.0)
+
+    # Group by symbol and ex_dividend_date, sum amount, take first non-null for dates
+    if not df.empty:
+        df = (
+            df.groupby(["symbol", "ex_dividend_date"], as_index=False)
+            .agg({
+                "amount": "sum",
+                "declaration_date": lambda x: next((d for d in x if d is not None and not (isinstance(d, float) and np.isnan(d))), dummy_date),
+                "record_date": lambda x: next((d for d in x if d is not None and not (isinstance(d, float) and np.isnan(d))), dummy_date),
+                "payment_date": lambda x: next((d for d in x if d is not None and not (isinstance(d, float) and np.isnan(d))), dummy_date),
+            })
+        )
+    logger.info(f"Transformed dividends for {symbol}:\n{df.to_string()}")
     return df
+
+def should_skip_symbol(df, symbol, data_type):
+    """
+    Utility to check if the DataFrame is empty and log a skip message.
+    Returns True if the symbol should be skipped.
+    """
+    if df is None or df.empty:
+        logger.warning(f"Skipping {symbol}: No {data_type} data returned by API.")
+        return True
+    return False

@@ -18,8 +18,8 @@ Dependencies:
 """
 
 import inspect
-from data_manager.src_postgre_db.db_infrastructure.postgre_adapter import PostgresAdapter
-from data_manager.src_postgre_db.db_infrastructure import postgre_objects
+from infrastructure.databases.company.postgre_manager.postgre_manager import CompanyTableManager
+from infrastructure.databases.company.postgre_manager import postgre_objects
 from utils.logger import get_logger
 
 
@@ -33,7 +33,7 @@ def main():
     logger = get_logger("db_build_runner")
 
     try:
-        adapter = PostgresAdapter()
+        adapter = CompanyTableManager()
     except ValueError as e:
         logger.error(f"Failed to initialize PostgresAdapter: {e}", exc_info=True)
         return

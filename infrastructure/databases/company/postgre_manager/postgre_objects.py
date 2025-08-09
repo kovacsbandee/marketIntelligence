@@ -729,10 +729,12 @@ class DividendsTable(Base):
         - A `declaration_date`, `record_date` és `payment_date` opcionális, mert ezek az információk nem mindig állnak rendelkezésre.
     """
     __tablename__ = 'dividends'
+    # __table_args__ = (
+    #     PrimaryKeyConstraint("symbol", "ex_dividend_date", name="dividends_pkey"),
+    # )
 
-    id = Column(Integer, Sequence('dividends_id_seq'), primary_key=True, autoincrement=True)
-    symbol = Column(String, nullable=True)
-    ex_dividend_date = Column(Date, nullable=True)
+    symbol = Column(String, primary_key=True,  nullable=False)
+    ex_dividend_date = Column(Date, primary_key=True, nullable=False)
     amount = Column(Float, nullable=True)
     declaration_date = Column(Date, nullable=True)
     record_date = Column(Date, nullable=True)

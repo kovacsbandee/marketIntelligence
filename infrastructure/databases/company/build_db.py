@@ -20,12 +20,10 @@ Dependencies:
 import inspect
 from infrastructure.databases.company.postgre_manager.postgre_manager import CompanyTableManager
 from infrastructure.databases.company.postgre_manager import postgre_objects
-# from data_manager.src_postgre_db.db_infrastructure.postgre_adapter import PostgresAdapter
-# from data_manager.src_postgre_db.db_infrastructure import postgre_objects
 from utils.logger import get_logger
 
 
-def main(force_recreate=False):
+def main(force_recreate=True):
     """
     Main entry point for database schema creation.
 

@@ -17,13 +17,28 @@ Dependencies:
 """
 
 import random
+import shutil
+from pathlib import Path
 from utils.logger import get_logger
 from utils.utils import get_symbols_from_csv
 from infrastructure.alpha_adapter.alphavantage_adapter import AlphaLoader
 
 
 
+def clear_debug_data():
+    """
+    Delete all files in logs/management/debug_data before each run.
+    """
+    debug_dir = Path(__file__).resolve().parents[3] / "logs" / "management" / "debug_data"
+    if debug_dir.exists() and debug_dir.is_dir():
+        for item in debug_dir.iterdir():
+            if item.is_file():
+                item.unlink()
+            elif item.is_dir():
+                shutil.rmtree(item)
+
 def download_stock_data(symbols):
+    clear_debug_data()
     """
     Load stock data for the provided list of symbols.
 
@@ -91,9 +106,9 @@ def main():
     Defines a static list of symbols and triggers the initial load.
     """
     all_symbols = get_symbols_from_csv(csv_path="configs/nasdaq_screener.csv")
-    num_to_load = 20  # Change as needed
-    random.seed(8)
-    symbols = random.sample(all_symbols, min(num_to_load, len(all_symbols))) + ["AAPL", "GOOGL", "MSFT"]
+    num_to_load = 30  # Change as needed
+    random.seed(42)
+    symbols = random.sample(all_symbols, min(num_to_load, len(all_symbols)))# + ["AAPL", "GOOGL", "MSFT"]
     download_stock_data(symbols)
 
 

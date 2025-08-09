@@ -157,6 +157,9 @@ class AlphaLoader:
             data_df = pd.DataFrame.from_dict(data=data["Time Series (Daily)"], orient='index')
             self.last_df = data_df
             data_df = preprocess_daily_timeseries(data_df, self.symbol)
+            if data_df is None or data_df.empty:
+                self.logger.info(f"Skipped {self.symbol}: No valid daily timeseries data to insert.")
+                return
 
             if self.db_mode:
                 adapter = CompanyDataManager()
@@ -191,6 +194,9 @@ class AlphaLoader:
             data_df = pd.DataFrame([data])
             self.last_df = data_df
             data_df = preprocess_company_fundamentals(data_df, self.symbol)
+            if data_df is None or data_df.empty:
+                self.logger.info(f"Skipped {self.symbol}: No valid company fundamentals data to insert.")
+                return
 
             if self.db_mode:
                 adapter = CompanyDataManager()
@@ -263,16 +269,28 @@ class AlphaLoader:
             self.last_df = annual_df
             self.last_df_quarterly = quarterly_df
 
-            if self.db_mode:
-                adapter = CompanyDataManager()
-                adapter.insert_new_data(table=AnnualTable, rows=annual_df.to_dict(orient="records"))
-                adapter.insert_new_data(table=QuarterlyTable, rows=quarterly_df.to_dict(orient="records"))
-                self.logger.info("%s data for %s loaded into the database.", function, self.symbol)
+            # PATCH: skip DB/local insert if None or empty
+            if annual_df is None or annual_df.empty:
+                self.logger.info(f"Skipped {self.symbol}: No valid annual {function.lower()} data to insert.")
+            else:
+                if self.db_mode:
+                    adapter = CompanyDataManager()
+                    adapter.insert_new_data(table=AnnualTable, rows=annual_df.to_dict(orient="records"))
+                    self.logger.info("%s annual data for %s loaded into the database.", function, self.symbol)
+                if self.local_store_mode:
+                    annual_df.to_csv(f"{self.local_store_path}/{self.symbol}_{function.lower()}_annual.csv", index=False)
+                    self.logger.info("%s annual data saved locally for %s.", function, self.symbol)
 
-            if self.local_store_mode:
-                annual_df.to_csv(f"{self.local_store_path}/{self.symbol}_{function.lower()}_annual.csv", index=False)
-                quarterly_df.to_csv(f"{self.local_store_path}/{self.symbol}_{function.lower()}_quarterly.csv", index=False)
-                self.logger.info("%s data saved locally for %s.", function, self.symbol)
+            if quarterly_df is None or quarterly_df.empty:
+                self.logger.info(f"Skipped {self.symbol}: No valid quarterly {function.lower()} data to insert.")
+            else:
+                if self.db_mode:
+                    adapter = CompanyDataManager()
+                    adapter.insert_new_data(table=QuarterlyTable, rows=quarterly_df.to_dict(orient="records"))
+                    self.logger.info("%s quarterly data for %s loaded into the database.", function, self.symbol)
+                if self.local_store_mode:
+                    quarterly_df.to_csv(f"{self.local_store_path}/{self.symbol}_{function.lower()}_quarterly.csv", index=False)
+                    self.logger.info("%s quarterly data saved locally for %s.", function, self.symbol)
 
             if not self.db_mode and not self.local_store_mode:
                 self.logger.warning('Choose a place where you want to store the data from the API!')
@@ -296,6 +314,9 @@ class AlphaLoader:
             df = pd.DataFrame(data)
             self.last_df = df
             df = preprocess_insider_transactions(df, self.symbol)
+            if df is None or df.empty:
+                self.logger.info(f"Skipped {self.symbol}: No valid insider transactions data to insert.")
+                return
 
             if self.db_mode:
                 adapter = CompanyDataManager()
@@ -328,6 +349,9 @@ class AlphaLoader:
             df = pd.DataFrame(data)
             self.last_df = df
             df = preprocess_stock_splits(df, self.symbol)
+            if df is None or df.empty:
+                self.logger.info(f"Skipped {self.symbol}: No valid stock splits data to insert.")
+                return
 
             if self.db_mode:
                 adapter = CompanyDataManager()
@@ -360,6 +384,9 @@ class AlphaLoader:
             df = pd.DataFrame(data)
             self.last_df = df
             df = preprocess_dividends(df, self.symbol)
+            if df is None or df.empty:
+                self.logger.info(f"Skipped {self.symbol}: No valid dividends data to insert.")
+                return
 
             if self.db_mode:
                 adapter = CompanyDataManager()
