@@ -42,11 +42,11 @@ def drop_and_build():
         print(f" - {table_class.__tablename__}")
     logger.debug("Tables to drop/build: %s", [cls.__tablename__ for cls in defined_classes])
 
-    # Prompt for confirmation
-    confirmation = input("\nType 'DELETE' to confirm and drop/recreate all tables: ")
-    if confirmation != "DELETE":
-        logger.info("Aborted. No tables were deleted or recreated.")
-        return
+    # # Prompt for confirmation
+    # confirmation = input("\nType 'DELETE' to confirm and drop/recreate all tables: ")
+    # if confirmation != "DELETE":
+    #     logger.info("Aborted. No tables were deleted or recreated.")
+    #     return
 
     # Drop each table
     for table_class in defined_classes:

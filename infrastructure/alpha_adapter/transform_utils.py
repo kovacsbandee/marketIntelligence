@@ -553,13 +553,42 @@ def preprocess_insider_transactions(df, symbol):
         orm_columns=[col.name for col in orm_columns],
         dummy_row=dummy_row
     )
-    
+
+    # Ensure transaction_date is a valid date
+    if 'transaction_date' in df.columns:
+        df['transaction_date'] = pd.to_datetime(df['transaction_date'], errors='coerce').dt.date
+        df = df[df['transaction_date'].notna()]
+
     # Ensure numeric columns are properly converted
     if 'shares' in df.columns:
         df['shares'] = pd.to_numeric(df['shares'], errors='coerce')
     if 'share_price' in df.columns:
         df['share_price'] = pd.to_numeric(df['share_price'], errors='coerce')
-    
+
+    # Remove rows missing required fields
+    required_fields = [
+        'transaction_date', 'symbol', 'executive', 'security_type', 'acquisition_or_disposal'
+    ]
+    for col in required_fields:
+        df = df[df[col].notna()]
+
+    # Security types that allow zero price
+    zero_price_allowed = [
+        "Non-Qualified Stock Option (right to buy)",
+        "Incentive Stock Option (right to buy)",
+        "Restricted Stock Unit"
+    ]
+
+    # Remove rows with shares <= 0 or NaN
+    df = df[(df['shares'].notna()) & (df['shares'] > 0)]
+
+    # Remove rows with share_price <= 0 or NaN for types that require price
+    df = df[
+        (df['security_type'].isin(zero_price_allowed)) |
+        ((df['share_price'].notna()) & (df['share_price'] > 0))
+    ]
+
+    df['share_price'] = df['share_price'].fillna(0.0)  # Fill NaN prices with 0.0
     # Group by primary key columns and aggregate to handle duplicates
     if not df.empty and len(df) > 1:
         pk_columns = ['transaction_date', 'symbol', 'executive', 'executive_title', 'security_type', 'acquisition_or_disposal']

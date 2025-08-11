@@ -19,23 +19,31 @@ Dependencies:
 import random
 import shutil
 from pathlib import Path
+import os
+
 from utils.logger import get_logger
 from utils.utils import get_symbols_from_csv
 from infrastructure.alpha_adapter.alphavantage_adapter import AlphaLoader
 
-
+# Use the same debug data root as AlphaLoader
+DEBUG_DATA_ROOT = Path(__file__).resolve().parents[3] / "logs" / "management" / "debug_data"
+INPUT_DIR = DEBUG_DATA_ROOT / "input"
+OUTPUT_DIR = DEBUG_DATA_ROOT / "output"
 
 def clear_debug_data():
     """
     Delete all files in logs/management/debug_data before each run.
+    Also ensures 'input' and 'output' subdirectories exist for debug data.
     """
-    debug_dir = Path(__file__).resolve().parents[3] / "logs" / "management" / "debug_data"
-    if debug_dir.exists() and debug_dir.is_dir():
-        for item in debug_dir.iterdir():
+    if DEBUG_DATA_ROOT.exists() and DEBUG_DATA_ROOT.is_dir():
+        for item in DEBUG_DATA_ROOT.iterdir():
             if item.is_file():
                 item.unlink()
             elif item.is_dir():
                 shutil.rmtree(item)
+    # Ensure input and output subfolders exist
+    INPUT_DIR.mkdir(parents=True, exist_ok=True)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 def download_stock_data(symbols):
     clear_debug_data()
@@ -52,31 +60,18 @@ def download_stock_data(symbols):
         symbols (list[str]): List of stock ticker symbols.
     """
     logger = get_logger("db_initial_load_runner")
-
     logger.info("Starting initial load for %d symbols...", len(symbols))
 
     loader_functions = [
-        ("get_daily_timeseries", lambda loader: loader.get_daily_timeseries()),
-        ("get_company_base", lambda loader: loader.get_company_base()),
-        (
-            "get_financials:INCOME_STATEMENT",
-            lambda loader: loader.get_financials(function="INCOME_STATEMENT"),
-        ),
-        (
-            "get_financials:BALANCE_SHEET",
-            lambda loader: loader.get_financials(function="BALANCE_SHEET"),
-        ),
-        (
-            "get_financials:CASH_FLOW",
-            lambda loader: loader.get_financials(function="CASH_FLOW"),
-        ),
-        (
-            "get_financials:EARNINGS",
-            lambda loader: loader.get_financials(function="EARNINGS"),
-        ),
-        ("get_insider_transactions", lambda loader: loader.get_insider_transactions()),
-        ("get_stock_splits", lambda loader: loader.get_stock_splits()),
-        ("get_dividends", lambda loader: loader.get_dividends()),
+        #("get_daily_timeseries", lambda loader: loader.get_daily_timeseries()),
+        #("get_company_base", lambda loader: loader.get_company_base()),
+        ("get_financials:INCOME_STATEMENT", lambda loader: loader.get_financials(function="INCOME_STATEMENT")),
+        # ("get_financials:BALANCE_SHEET", lambda loader: loader.get_financials(function="BALANCE_SHEET")),
+        # ("get_financials:CASH_FLOW", lambda loader: loader.get_financials(function="CASH_FLOW")),
+        # ("get_financials:EARNINGS", lambda loader: loader.get_financials(function="EARNINGS")),
+        #("get_insider_transactions", lambda loader: loader.get_insider_transactions()),
+        # ("get_stock_splits", lambda loader: loader.get_stock_splits()),
+        # ("get_dividends", lambda loader: loader.get_dividends()),
     ]
 
     for symbol in symbols:
@@ -106,9 +101,9 @@ def main():
     Defines a static list of symbols and triggers the initial load.
     """
     all_symbols = get_symbols_from_csv(csv_path="configs/nasdaq_screener.csv")
-    num_to_load = 3  # Change as needed
-    random.seed(2)
-    symbols = random.sample(all_symbols, min(num_to_load, len(all_symbols)))# + ["AAPL", "GOOGL", "MSFT"]
+    num_to_load = 10  # Change as needed
+    random.seed(3)
+    symbols = random.sample(all_symbols, min(num_to_load, len(all_symbols)))
     download_stock_data(symbols)
 
 

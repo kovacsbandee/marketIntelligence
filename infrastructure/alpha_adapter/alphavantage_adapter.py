@@ -60,17 +60,23 @@ from infrastructure.alpha_adapter.column_maps import (
 # TODO: ADD  ROW FOR EACH DATA HANDLER TO CHECK FOR DATABASE COMPLIANCE AND DATA QUALITY
 # e.g. missing values, and add a logger for these stuff!
 
+DEBUG_DATA_ROOT = os.path.join(os.path.dirname(__file__), "../../../logs/management/debug_data")
+INPUT_DIR = os.path.join(DEBUG_DATA_ROOT, "input")
+OUTPUT_DIR = os.path.join(DEBUG_DATA_ROOT, "output")
+
 
 def dump_api_response(symbol, table, api_response):
+    os.makedirs(INPUT_DIR, exist_ok=True)
     now_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-    fname = f"debug_data/input/{now_str}_{symbol}_{table}_api.json"
-    with open(fname, "w") as f:
+    fname = f"{now_str}_{symbol}_{table}_api.json"
+    with open(os.path.join(INPUT_DIR, fname), "w") as f:
         json.dump(api_response, f, indent=2)
 
 def dump_dataframe(symbol, table, df):
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
     now_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-    fname = f"debug_data/output/{now_str}_{symbol}_{table}_df.csv"
-    df.to_csv(fname, index=False)
+    fname = f"{now_str}_{symbol}_{table}_df.csv"
+    df.to_csv(os.path.join(OUTPUT_DIR, fname), index=False)
 
 
 class AlphaLoader:
@@ -205,6 +211,11 @@ class AlphaLoader:
             data = r.json()
             dump_api_response(self.symbol, "company_fundamentals", data)  # <-- Dump API response
 
+            # PATCH: Skip processing if API response is empty list or empty dict
+            if (isinstance(data, list) and len(data) == 0) or (isinstance(data, dict) and not data):
+                self.logger.warning(f"Skipping {self.symbol}: No company fundamentals data returned by API.")
+                return
+
             if "Error Message" in data or "Note" in data:
                 self.logger.error("Error in API response for %s: %s", self.symbol, data.get('Note') or data)
                 return
@@ -334,17 +345,24 @@ class AlphaLoader:
             data = r.json()
             dump_api_response(self.symbol, "insider_transactions", data)  # <-- Dump API response
 
+            # PATCH: Skip processing if API response is empty list or empty dict
+            if (isinstance(data, list) and len(data) == 0) or (isinstance(data, dict) and not data):
+                self.logger.warning(f"Skipping {self.symbol}: No insider transactions data returned by API.")
+                return
+
             if isinstance(data, dict) and "data" in data:
                 data = data["data"]
 
             df = pd.DataFrame(data)
             self.last_df = df
             df = preprocess_insider_transactions(df, self.symbol)
-            dump_dataframe(self.symbol, "insider_transactions", df)  # <-- Dump DataFrame
 
             if df is None or df.empty:
                 self.logger.info(f"Skipped {self.symbol}: No valid insider transactions data to insert.")
                 return
+
+            dump_dataframe(self.symbol, "insider_transactions", df)  # <-- Dump DataFrame
+
 
             if self.db_mode:
                 adapter = CompanyDataManager()
