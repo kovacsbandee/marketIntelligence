@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
-class CompanyFundamentalsTable(Base):
+class CompanyFundamentals(Base):
     """
     ORM osztály a vállalat alapvető pénzügyi mutatóinak tárolására.
 
@@ -160,7 +160,7 @@ class DailyTimeSeries(Base):
     volume = Column(BigInteger, nullable=True)
 
 
-class AnnualBalanceSheetTable(Base):
+class AnnualBalanceSheet(Base):
     """
     ORM osztály az éves mérlegek tárolására.
 
@@ -242,7 +242,7 @@ class AnnualBalanceSheetTable(Base):
     common_stock_shares_outstanding = Column(BigInteger, nullable=True)
 
 
-class QuarterlyBalanceSheetTable(Base):
+class QuarterlyBalanceSheet(Base):
     """
     ORM osztály a vállalatok negyedéves mérlegadatainak tárolására.
 
@@ -314,7 +314,7 @@ class QuarterlyBalanceSheetTable(Base):
     common_stock_shares_outstanding = Column(BigInteger, nullable=True)
 
 
-class AnnualCashFlowTable(Base):
+class AnnualCashFlow(Base):
     """
     ORM osztály a vállalatok pénzforgalmi kimutatásainak tárolására.
 
@@ -391,7 +391,7 @@ class AnnualCashFlowTable(Base):
     net_income = Column(Float, nullable=True)
 
 
-class QuarterlyCashFlowTable(Base):
+class QuarterlyCashFlow(Base):
     """
     ORM osztály a vállalatok negyedéves pénzforgalmi kimutatásainak tárolására.
 
@@ -433,7 +433,7 @@ class QuarterlyCashFlowTable(Base):
         - A `symbol` és `fiscal_date_ending` kombináció biztosítja az egyedi rekordokat.
         - Bizonyos pénzügyi mezők lehetnek `NULL`, mivel ezek az adatok nem mindig állnak rendelkezésre.
     """
-    __tablename__ = 'cash_flow_statement_quarterly'
+    __tablename__ = 'cash_flow_quarterly'
 
     symbol = Column(String, primary_key=True, nullable=True)
     fiscal_date_ending = Column(Date, primary_key=True, nullable=True)
@@ -468,7 +468,7 @@ class QuarterlyCashFlowTable(Base):
     net_income = Column(Float, nullable=True)
 
 
-class AnnualEarningsTable(Base):
+class AnnualEarnings(Base):
     """
     ORM osztály a vállalatok éves eredményjelentéseinek tárolására.
 
@@ -490,7 +490,7 @@ class AnnualEarningsTable(Base):
     reported_eps = Column(Float, nullable=True)
 
 
-class QuarterlyEarningsTable(Base):
+class QuarterlyEarnings(Base):
     """
     ORM osztály a vállalatok negyedéves eredményjelentéseinek tárolására.
 
@@ -709,7 +709,7 @@ class StockSplit(Base):
     split_factor = Column(Float, nullable=True)
 
 
-class DividendsTable(Base):
+class Dividends(Base):
     """
     ORM osztály a vállalatok által fizetett osztalékok tárolására.
 
@@ -743,17 +743,17 @@ class DividendsTable(Base):
 
 # --- Table name to ORM class mapping ---
 table_name_to_class = {
-    "company_fundamentals": CompanyFundamentalsTable,
+    "company_fundamentals": CompanyFundamentals,
     "daily_timeseries": DailyTimeSeries,
-    "balance_sheet_annual": AnnualBalanceSheetTable,
-    "balance_sheet_quarterly": QuarterlyBalanceSheetTable,
-    "cash_flow_annual": AnnualCashFlowTable,
-    "cash_flow_statement_quarterly": QuarterlyCashFlowTable,
-    "earnings_annual": AnnualEarningsTable,
-    "earnings_quarterly": QuarterlyEarningsTable,
+    "balance_sheet_annual": AnnualBalanceSheet,
+    "balance_sheet_quarterly": QuarterlyBalanceSheet,
+    "cash_flow_annual": AnnualCashFlow,
+    "cash_flow_quarterly": QuarterlyCashFlow,
+    "earnings_annual": AnnualEarnings,
+    "earnings_quarterly": QuarterlyEarnings,
     "income_statement_annual": AnnualIncomeStatement,
     "income_statement_quarterly": QuarterlyIncomeStatement,
     "insider_transactions": InsiderTransactions,
     "stock_splits": StockSplit,
-    "dividends": DividendsTable,
+    "dividends": Dividends,
 }

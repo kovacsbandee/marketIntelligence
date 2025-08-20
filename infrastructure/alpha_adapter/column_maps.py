@@ -189,7 +189,10 @@ ANNUAL_BALANCE_SHEET_MAP = {
     'treasuryStock': 'treasury_stock',
     'retainedEarnings': 'retained_earnings',
     'commonStock': 'common_stock',
-    'commonStockSharesOutstanding': 'common_stock_shares_outstanding'
+    'commonStockSharesOutstanding': 'common_stock_shares_outstanding',
+    'intangibleAssetsExcludingGoodwill': 'intangible_assets_excluding_goodwill',
+    'currentLongTermDebt': 'current_long_term_debt',
+    'longTermDebtNoncurrent': 'long_term_debt_noncurrent'
 }
 
 ANNUAL_BALANCE_SHEET_FLOAT_COLUMNS = [
@@ -248,7 +251,10 @@ QUARTERLY_BALANCE_SHEET_MAP = {
     'treasuryStock': 'treasury_stock',
     'retainedEarnings': 'retained_earnings',
     'commonStock': 'common_stock',
-    'commonStockSharesOutstanding': 'common_stock_shares_outstanding'
+    'commonStockSharesOutstanding': 'common_stock_shares_outstanding',
+    'intangibleAssetsExcludingGoodwill': 'intangible_assets_excluding_goodwill',
+    'currentLongTermDebt': 'current_long_term_debt',
+    'longTermDebtNoncurrent': 'long_term_debt_noncurrent'
 }
 
 QUARTERLY_BALANCE_SHEET_FLOAT_COLUMNS = [

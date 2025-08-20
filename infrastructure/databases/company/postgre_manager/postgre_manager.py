@@ -13,6 +13,21 @@ from sqlalchemy.dialects.postgresql import insert
 # Load environment variables from .env file
 load_dotenv()
 
+logger = logging.getLogger(__name__)
+
+# Singleton holder for the manager
+_HANDLER_SINGLETON = None
+
+def get_company_data_handler():
+    """
+    Returns a process-wide singleton CompanyDataManager to reuse engine/session.
+    """
+    global _HANDLER_SINGLETON
+    if _HANDLER_SINGLETON is None:
+        _HANDLER_SINGLETON = CompanyDataManager()
+        logger.info("CompanyDataManager initialized with database connection.")
+    return _HANDLER_SINGLETON
+
 
 class PostgresManager:
     """
@@ -106,7 +121,8 @@ class CompanyTableManager(PostgresManager):
         Initialize the CompanyDataHandler with database connection parameters.
         """
         super().__init__(db_host, db_name, db_user, db_password, db_port)
-        self.logger.info("CompanyDataHandler initialized with database connection.")
+        # Downgrade noisy init log to avoid duplicate INFO lines
+        self.logger.debug("CompanyTableManager ready.")
 
     def table_exists(self, table_name: str) -> bool:
         """
@@ -205,7 +221,8 @@ class CompanyDataManager(CompanyTableManager):
         Initialize the CompanyDataHandler with database connection parameters.
         """
         super().__init__(db_host, db_name, db_user, db_password, db_port)
-        self.logger.info("CompanyDataHandler initialized with database connection.")
+        # Downgrade noisy init log to avoid duplicate INFO lines
+        self.logger.debug("CompanyDataManager ready.")
 
     def _row_to_dict(self, row):
         """

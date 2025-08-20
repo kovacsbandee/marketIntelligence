@@ -72,9 +72,9 @@ def download_stock_data(symbols):
                 logger.debug("Calling %s for %s", func_name, symbol)
                 func(loader)
             except Exception:
-                logger.error("❌ Error in %s for %s", func_name, symbol, exc_info=True)
+                logger.error("Error in %s for %s", func_name, symbol, exc_info=True)
 
-    logger.info("✅ Initial loader finished its running.")
+    logger.info("Initial loader finished its running.")
 
 
 def main():
