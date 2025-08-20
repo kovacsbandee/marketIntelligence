@@ -24,8 +24,8 @@ from .column_maps import (
 )
 
 from infrastructure.databases.company.postgre_manager.postgre_objects import (
-    CompanyFundamentalsTable, DailyTimeSeries, AnnualBalanceSheetTable, QuarterlyBalanceSheetTable,
-    AnnualCashFlowTable, QuarterlyCashFlowTable, AnnualEarningsTable, QuarterlyEarningsTable,
+    CompanyFundamentals, DailyTimeSeries, AnnualBalanceSheet, QuarterlyBalanceSheet,
+    AnnualCashFlow, QuarterlyCashFlow, AnnualEarnings, QuarterlyEarnings,
     AnnualIncomeStatement, QuarterlyIncomeStatement, InsiderTransactions, StockSplit, DividendsTable
 )
 
@@ -184,7 +184,7 @@ def preprocess_company_fundamentals(df, symbol):
         return None
     logger.info(f"Before transforming company_fundamentals for {symbol}:\n{df.to_string()}")
 
-    orm_columns = [col for col in CompanyFundamentalsTable.__table__.columns]
+    orm_columns = [col for col in CompanyFundamentals.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
 
     # --- PATCH: Robust missing data and type conversion ---
@@ -285,7 +285,7 @@ def preprocess_annual_balance_sheet(df, symbol):
     if should_skip_symbol(df, symbol, "annual balance sheet"):
         return None
     logger.info(f"Before transforming annual_balance_sheet for {symbol}:\n{df.to_string()}")
-    orm_columns = [col for col in AnnualBalanceSheetTable.__table__.columns]
+    orm_columns = [col for col in AnnualBalanceSheet.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
     df = standardize_and_clean(
         df,
@@ -317,7 +317,7 @@ def preprocess_quarterly_balance_sheet(df, symbol):
     if should_skip_symbol(df, symbol, "quarterly balance sheet"):
         return None
     logger.info(f"Before transforming quarterly_balance_sheet for {symbol}:\n{df.to_string()}")
-    orm_columns = [col for col in QuarterlyBalanceSheetTable.__table__.columns]
+    orm_columns = [col for col in QuarterlyBalanceSheet.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
     df = standardize_and_clean(
         df,
@@ -356,7 +356,7 @@ def preprocess_annual_cash_flow(df, symbol):
     if should_skip_symbol(df, symbol, "annual cash flow"):
         return None
     # logger.info(f"Before transforming annual_cash_flow for {symbol}:\n{df.to_string()}")
-    orm_columns = [col for col in AnnualCashFlowTable.__table__.columns]
+    orm_columns = [col for col in AnnualCashFlow.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
     df = standardize_and_clean(
         df,
@@ -386,7 +386,7 @@ def preprocess_quarterly_cash_flow(df, symbol):
     if should_skip_symbol(df, symbol, "quarterly cash flow"):
         return None
     # logger.info(f"Before transforming quarterly_cash_flow for {symbol}:\n{df.to_string()}")
-    orm_columns = [col for col in QuarterlyCashFlowTable.__table__.columns]
+    orm_columns = [col for col in QuarterlyCashFlow.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
     df = standardize_and_clean(
         df,
@@ -416,7 +416,7 @@ def preprocess_annual_earnings(df, symbol):
     if should_skip_symbol(df, symbol, "annual earnings"):
         return None
     # logger.info(f"Before transforming annual_earnings for {symbol}:\n{df.to_string()}")
-    orm_columns = [col for col in AnnualEarningsTable.__table__.columns]
+    orm_columns = [col for col in AnnualEarnings.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
     df = standardize_and_clean(
         df,
@@ -446,7 +446,7 @@ def preprocess_quarterly_earnings(df, symbol):
     if should_skip_symbol(df, symbol, "quarterly earnings"):
         return None
     # logger.info(f"Before transforming quarterly_earnings for {symbol}:\n{df.to_string()}")
-    orm_columns = [col for col in QuarterlyEarningsTable.__table__.columns]
+    orm_columns = [col for col in QuarterlyEarnings.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
     df = standardize_and_clean(
         df,
