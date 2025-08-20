@@ -16,10 +16,12 @@ from symbol.symbol import Symbol
 from infrastructure.databases.company.postgre_manager.postgre_manager import CompanyDataManager
 #from data_manager.src_postgre_db.db_infrastructure.postgre_adapter import PostgresAdapter
 from infrastructure.ui.dash.plots import plot_price_with_indicators
+from infrastructure.ui.dash.plots import plot_balance_sheet_time_series
 #from visualization.base_plots import plot_price_with_indicators
 from infrastructure.ui.dash.app_util import get_last_6_months_range
 #from visualization.dash.app_util import get_last_6_months_range
 import pandas as pd
+import plotly.graph_objects as go
 
 app = dash.Dash(
     __name__,
@@ -166,6 +168,8 @@ app.layout = dmc.MantineProvider(
         dcc.Store(id="price-store"),
         dcc.Store(id="dividends-store"),
         dcc.Store(id="company-base-store"),
+        dcc.Store(id="q_balance-store"),
+        dcc.Store(id="a_balance-store"),
     ], p=30, shadow="md")
 )
 
@@ -178,6 +182,8 @@ app.layout = dmc.MantineProvider(
     Output("price-store", "data"),
     Output("dividends-store", "data"),
     Output("company-base-store", "data"),
+    Output("q_balance-store", "data"),
+    Output("a_balance-store", "data"),
     Input("load-btn", "n_clicks"),
     State("symbol-input", "value"),
     prevent_initial_call=True
@@ -192,6 +198,8 @@ def load_symbol(n_clicks, symbol):
         return None, None, storage.status_message, None, None, None
     dividends_df = storage.get_table("dividends")
     company_base_df = storage.get_table("company_fundamentals")
+    annual_balance_sheet_df = storage.get_table("annual_balance_sheet")
+    quarterly_balance_sheet_df = storage.get_table("quarterly_balance_sheet")
     start_date, end_date = get_last_6_months_range(price_df)
     return (
         start_date,
@@ -199,7 +207,9 @@ def load_symbol(n_clicks, symbol):
         storage.status_message,
         price_df.to_dict("records"),
         dividends_df.to_dict("records") if dividends_df is not None else None,
-        company_base_df.to_dict("records")[0] if company_base_df is not None and not company_base_df.empty else None
+        company_base_df.to_dict("records")[0] if company_base_df is not None and not company_base_df.empty else None,
+        quarterly_balance_sheet_df.to_dict("records") if quarterly_balance_sheet_df is not None and not quarterly_balance_sheet_df.empty else None,
+        annual_balance_sheet_df.to_dict("records") if annual_balance_sheet_df is not None and not annual_balance_sheet_df.empty else None,
     )
 
 @app.callback(
@@ -235,7 +245,7 @@ def update_price_indicator(tab, start_date, end_date, price_data, dividends_data
     price_df = pd.DataFrame(price_data)
     dividends_df = pd.DataFrame(dividends_data) if dividends_data else None
     if not start_date or not end_date:
-        start_date, end_date = get_last_6_months_range(price_df)
+        start_date, end_date = get_last_6_months_range(price_df)   
     date_range = [start_date, end_date]
     mask = (price_df["date"] >= date_range[0]) & (price_df["date"] <= date_range[1])
     selected_df = price_df.loc[mask]
@@ -253,5 +263,68 @@ def update_price_indicator(tab, start_date, end_date, price_data, dividends_data
     except Exception as e:
         return dmc.Text(f"Error generating plot: {e}", c="red"), False
 
+@app.callback(
+    Output("balance-sheet-content", "children"),
+    Output("balance-sheet-loading", "visible"),
+    Input("main-tabs", "value"),
+    Input("start-date-picker", "value"),
+    Input("end-date-picker", "value"),
+    Input("q_balance-store", "data"),
+    prevent_initial_call=True
+)
+def update_balance_sheet(tab, start_date, end_date, q_balance_data):
+    if tab != "balance-sheet":
+        return dash.no_update, False
+    if not q_balance_data:
+        return dmc.Text("No balance sheet data loaded.", c="red"), False
+
+    df = pd.DataFrame(q_balance_data)
+    if df.empty or "fiscal_date_ending" not in df.columns:
+        return dmc.Text("No balance sheet data loaded.", c="red"), False
+
+    # Ensure fiscal_date_ending is datetime and sort
+    df["fiscal_date_ending"] = pd.to_datetime(df["fiscal_date_ending"])
+    df = df.sort_values("fiscal_date_ending")
+
+    # Date filtering (if dates are provided)
+    if start_date and end_date:
+        # Convert picker values to datetime
+        start_dt = pd.to_datetime(start_date)
+        end_dt = pd.to_datetime(end_date)
+        mask = (df["fiscal_date_ending"] >= start_dt) & (df["fiscal_date_ending"] <= end_dt)
+        selected_df = df.loc[mask]
+    else:
+        selected_df = df
+
+    metrics = [
+        "total_assets",
+        "total_liabilities",
+        "total_shareholder_equity",
+        "total_current_assets",
+        "total_current_liabilities",
+        "cash_and_cash_equivalents",
+        "property_plant_equipment"
+    ]
+
+    if selected_df.empty:
+        fig = go.Figure()
+        fig.update_layout(
+            title="No balance sheet data available for the selected date range.",
+            xaxis_title="Fiscal Date Ending",
+            yaxis_title="Value"
+        )
+        return dcc.Graph(figure=fig), False
+
+    try:
+        fig = plot_balance_sheet_time_series(
+            balance_df=selected_df,
+            columns=metrics
+        )
+        if start_date and end_date:
+            fig.update_layout(xaxis_range=[start_date, end_date])
+        return dcc.Graph(figure=fig), False
+    except Exception as e:
+        return dmc.Text(f"Error generating plot: {e}", c="red"), False
+
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
