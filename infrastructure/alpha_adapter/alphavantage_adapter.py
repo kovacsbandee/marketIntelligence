@@ -20,14 +20,15 @@ import datetime
 import os
 import shutil
 import json
+from pathlib import Path
 
 from configs.config import ALPHA_API_KEY
 from infrastructure.databases.company.postgre_manager.postgre_manager import CompanyDataManager
 from infrastructure.databases.company.postgre_manager.postgre_objects import (
-    DailyTimeSeries, CompanyFundamentalsTable, AnnualIncomeStatement,
-    QuarterlyIncomeStatement, AnnualBalanceSheetTable, QuarterlyBalanceSheetTable,
-    AnnualCashFlowTable, QuarterlyCashFlowTable, AnnualEarningsTable, QuarterlyEarningsTable,
-    InsiderTransactions, StockSplit, DividendsTable
+    DailyTimeSeries, CompanyFundamentals, AnnualIncomeStatement,
+    QuarterlyIncomeStatement, AnnualBalanceSheet, QuarterlyBalanceSheet,
+    AnnualCashFlow, QuarterlyCashFlow, AnnualEarnings, QuarterlyEarnings,
+    InsiderTransactions, StockSplit, Dividends
 )
 
 from infrastructure.alpha_adapter.transform_utils import (
@@ -108,8 +109,12 @@ class AlphaLoader:
         self.local_store_mode = local_store_mode
         self.verbose_data_logging = verbose_data_logging
         self.base_url = "https://www.alphavantage.co/query?function="
-        self.local_store_path = "/home/bandee/projects/marketIntelligence/dev_data/jsons"
+        # Use env var or default to repo-root dev_data
+        repo_root = Path(__file__).resolve().parents[2]
+        self.local_store_path = os.getenv("ALPHA_LOCAL_STORE_PATH", str(repo_root / "dev_data" / "jsons"))
         self.logger = logging.getLogger(self.__class__.__name__)
+        # Reuse a single DB adapter per loader instance
+        self.adapter = CompanyDataManager() if self.db_mode else None
 
     # PATCH: log_exception now accepts table_name and uses it for debug file naming
     def log_exception(self, e, exc_type="Exception", api_response=None, is_warning=False, table_name=None):
@@ -120,8 +125,10 @@ class AlphaLoader:
         msg_type = "Warning" if is_warning else "Exception"
         self.logger.error("An unexpected %s occurred: %s", msg_type, e)
         if self.verbose_data_logging:
-            debug_dir = "logs/management/debug_data"
-            os.makedirs(debug_dir, exist_ok=True)
+            # Use absolute path anchored at repo root
+            repo_root = Path(__file__).resolve().parents[2]
+            debug_dir = repo_root / "logs" / "management" / "debug_data"
+            debug_dir.mkdir(parents=True, exist_ok=True)
             now_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S_%f")
             table = table_name or self._get_table_name()
             # Store DataFrames
@@ -183,9 +190,8 @@ class AlphaLoader:
                 self.logger.info(f"Skipped {self.symbol}: No valid daily timeseries data to insert.")
                 return
 
-            if self.db_mode:
-                adapter = CompanyDataManager()
-                adapter.insert_new_data(table=DailyTimeSeries, rows=data_df.to_dict(orient="records"))
+            if self.db_mode and self.adapter:
+                self.adapter.insert_new_data(table=DailyTimeSeries, rows=data_df.to_dict(orient="records"))
                 self.logger.info("Candlestick data for %s loaded into the database.", self.symbol)
 
             if self.local_store_mode:
@@ -229,9 +235,8 @@ class AlphaLoader:
                 self.logger.info(f"Skipped {self.symbol}: No valid company fundamentals data to insert.")
                 return
 
-            if self.db_mode:
-                adapter = CompanyDataManager()
-                adapter.insert_new_data(table=CompanyFundamentalsTable, rows=data_df.to_dict(orient="records"))
+            if self.db_mode and self.adapter:
+                self.adapter.insert_new_data(table=CompanyFundamentals, rows=data_df.to_dict(orient="records"))
                 self.logger.info("Company base data for %s loaded into the database.", self.symbol)
 
             if self.local_store_mode:
@@ -256,24 +261,30 @@ class AlphaLoader:
             r = requests.get(url, timeout=10)
             r.raise_for_status()
             data = r.json()
-            dump_api_response(self.symbol, function.lower(), data)  # <-- Dump API response
 
+            # Only dump API response if an error occurs (invalid/missing data)
             if function == 'EARNINGS':
-                annual_key = "annualEarnings"
-                quarterly_key = "quarterlyEarnings"
-                if annual_key not in data or quarterly_key not in data:
+                if "annualEarnings" not in data or "quarterlyEarnings" not in data:
                     self.logger.error("Error in API response for %s: %s", self.symbol, data.get('Note') or data)
+                    dump_api_response(self.symbol, function.lower(), data)
                     return
-                annual_df = pd.DataFrame(data[annual_key])
-                quarterly_df = pd.DataFrame(data[quarterly_key])
+                annual_df = pd.DataFrame(data.get("annualEarnings") or [])
+                quarterly_df = pd.DataFrame(data.get("quarterlyEarnings") or [])
             else:
                 if "annualReports" not in data or "quarterlyReports" not in data:
                     self.logger.error("Error in API response for %s: %s", self.symbol, data.get('Note') or data)
+                    dump_api_response(self.symbol, function.lower(), data)
                     return
-                annual_df = pd.DataFrame(data["annualReports"])
-                quarterly_df = pd.DataFrame(data["quarterlyReports"])
+                annual_df = pd.DataFrame(data.get("annualReports") or [])
+                quarterly_df = pd.DataFrame(data.get("quarterlyReports") or [])
 
-            # Preprocess by table type
+            # If both sides are empty, skip cleanly
+            if (annual_df is None or annual_df.empty) and (quarterly_df is None or quarterly_df.empty):
+                self.logger.info(f"Skipped {self.symbol}: No {function.lower()} data returned by API.")
+                dump_api_response(self.symbol, function.lower(), data)
+                return
+
+            # Preprocess
             if function == 'INCOME_STATEMENT':
                 annual_df = preprocess_annual_income_statement(annual_df, self.symbol)
                 quarterly_df = preprocess_quarterly_income_statement(quarterly_df, self.symbol)
@@ -282,18 +293,18 @@ class AlphaLoader:
             elif function == 'BALANCE_SHEET':
                 annual_df = preprocess_annual_balance_sheet(annual_df, self.symbol)
                 quarterly_df = preprocess_quarterly_balance_sheet(quarterly_df, self.symbol)
-                AnnualTable = AnnualBalanceSheetTable
-                QuarterlyTable = QuarterlyBalanceSheetTable
+                AnnualTable = AnnualBalanceSheet
+                QuarterlyTable = QuarterlyBalanceSheet
             elif function == 'CASH_FLOW':
                 annual_df = preprocess_annual_cash_flow(annual_df, self.symbol)
                 quarterly_df = preprocess_quarterly_cash_flow(quarterly_df, self.symbol)
-                AnnualTable = AnnualCashFlowTable
-                QuarterlyTable = QuarterlyCashFlowTable
+                AnnualTable = AnnualCashFlow
+                QuarterlyTable = QuarterlyCashFlow
             elif function == 'EARNINGS':
                 annual_df = preprocess_annual_earnings(annual_df, self.symbol)
                 quarterly_df = preprocess_quarterly_earnings(quarterly_df, self.symbol)
-                AnnualTable = AnnualEarningsTable
-                QuarterlyTable = QuarterlyEarningsTable
+                AnnualTable = AnnualEarnings
+                QuarterlyTable = QuarterlyEarnings
             else:
                 self.logger.error("Unknown function '%s'", function)
                 return
@@ -301,27 +312,29 @@ class AlphaLoader:
             self.last_df = annual_df
             self.last_df_quarterly = quarterly_df
 
-            dump_dataframe(self.symbol, f"{function.lower()}_annual", annual_df)      # <-- Dump annual DataFrame
-            dump_dataframe(self.symbol, f"{function.lower()}_quarterly", quarterly_df) # <-- Dump quarterly DataFrame
+            # Only dump DataFrames when present
+            if annual_df is not None and not annual_df.empty:
+                dump_dataframe(self.symbol, f"{function.lower()}_annual", annual_df)
+            if quarterly_df is not None and not quarterly_df.empty:
+                dump_dataframe(self.symbol, f"{function.lower()}_quarterly", quarterly_df)
 
             # PATCH: skip DB/local insert if None or empty
             if annual_df is None or annual_df.empty:
                 self.logger.info(f"Skipped {self.symbol}: No valid annual {function.lower()} data to insert.")
             else:
-                if self.db_mode:
-                    adapter = CompanyDataManager()
-                    adapter.insert_new_data(table=AnnualTable, rows=annual_df.to_dict(orient="records"))
+                if self.db_mode and self.adapter:
+                    self.adapter.insert_new_data(table=AnnualTable, rows=annual_df.to_dict(orient="records"))
                     self.logger.info("%s annual data for %s loaded into the database.", function, self.symbol)
                 if self.local_store_mode:
                     annual_df.to_csv(f"{self.local_store_path}/{self.symbol}_{function.lower()}_annual.csv", index=False)
                     self.logger.info("%s annual data saved locally for %s.", function, self.symbol)
 
+            # Insert quarterly
             if quarterly_df is None or quarterly_df.empty:
                 self.logger.info(f"Skipped {self.symbol}: No valid quarterly {function.lower()} data to insert.")
             else:
-                if self.db_mode:
-                    adapter = CompanyDataManager()
-                    adapter.insert_new_data(table=QuarterlyTable, rows=quarterly_df.to_dict(orient="records"))
+                if self.db_mode and self.adapter:
+                    self.adapter.insert_new_data(table=QuarterlyTable, rows=quarterly_df.to_dict(orient="records"))
                     self.logger.info("%s quarterly data for %s loaded into the database.", function, self.symbol)
                 if self.local_store_mode:
                     quarterly_df.to_csv(f"{self.local_store_path}/{self.symbol}_{function.lower()}_quarterly.csv", index=False)
@@ -363,10 +376,8 @@ class AlphaLoader:
 
             dump_dataframe(self.symbol, "insider_transactions", df)  # <-- Dump DataFrame
 
-
-            if self.db_mode:
-                adapter = CompanyDataManager()
-                adapter.insert_new_data(table=InsiderTransactions, rows=df.to_dict(orient="records"))
+            if self.db_mode and self.adapter:
+                self.adapter.insert_new_data(table=InsiderTransactions, rows=df.to_dict(orient="records"))
                 self.logger.info("Insider transaction data for %s loaded into the database.", self.symbol)
 
             if self.local_store_mode:
@@ -389,7 +400,8 @@ class AlphaLoader:
             r = requests.get(url, timeout=10)
             r.raise_for_status()
             data = r.json()
-            dump_api_response(self.symbol, "stock_splits", data)  # <-- Dump API response
+            self.logger.info("API response for %s: %s", self.symbol, data)
+            dump_api_response(self.symbol, "stock_splits", data)
 
             if isinstance(data, dict) and "data" in data:
                 data = data["data"]
@@ -397,15 +409,15 @@ class AlphaLoader:
             df = pd.DataFrame(data)
             self.last_df = df
             df = preprocess_stock_splits(df, self.symbol)
-            dump_dataframe(self.symbol, "stock_splits", df)  # <-- Dump DataFrame
 
             if df is None or df.empty:
                 self.logger.info(f"Skipped {self.symbol}: No valid stock splits data to insert.")
                 return
 
-            if self.db_mode:
-                adapter = CompanyDataManager()
-                adapter.insert_new_data(table=StockSplit, rows=df.to_dict(orient="records"))
+            dump_dataframe(self.symbol, "stock_splits", df)
+
+            if self.db_mode and self.adapter:
+                self.adapter.insert_new_data(table=StockSplit, rows=df.to_dict(orient="records"))
                 self.logger.info("Stock split data for %s loaded into the database.", self.symbol)
 
             if self.local_store_mode:
@@ -436,15 +448,13 @@ class AlphaLoader:
             df = pd.DataFrame(data)
             self.last_df = df
             df = preprocess_dividends(df, self.symbol)
-            dump_dataframe(self.symbol, "dividends", df)  # <-- Dump DataFrame
-
             if df is None or df.empty:
                 self.logger.info(f"Skipped {self.symbol}: No valid dividends data to insert.")
                 return
+            dump_dataframe(self.symbol, "dividends", df)  # <-- Dump DataFrame
 
-            if self.db_mode:
-                adapter = CompanyDataManager()
-                adapter.insert_new_data(table=DividendsTable, rows=df.to_dict(orient="records"))
+            if self.db_mode and self.adapter:
+                self.adapter.insert_new_data(table=Dividends, rows=df.to_dict(orient="records"))
                 self.logger.info("Dividend data for %s loaded into the database.", self.symbol)
 
             if self.local_store_mode:

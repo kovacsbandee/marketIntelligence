@@ -46,7 +46,6 @@ def clear_debug_data():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 def download_stock_data(symbols):
-    clear_debug_data()
     """
     Load stock data for the provided list of symbols.
 
@@ -59,19 +58,20 @@ def download_stock_data(symbols):
     Args:
         symbols (list[str]): List of stock ticker symbols.
     """
+    clear_debug_data()
     logger = get_logger("db_initial_load_runner")
     logger.info("Starting initial load for %d symbols...", len(symbols))
 
     loader_functions = [
-        #("get_daily_timeseries", lambda loader: loader.get_daily_timeseries()),
-        #("get_company_base", lambda loader: loader.get_company_base()),
+        ("get_daily_timeseries", lambda loader: loader.get_daily_timeseries()),
+        ("get_company_base", lambda loader: loader.get_company_base()),
         ("get_financials:INCOME_STATEMENT", lambda loader: loader.get_financials(function="INCOME_STATEMENT")),
-        # ("get_financials:BALANCE_SHEET", lambda loader: loader.get_financials(function="BALANCE_SHEET")),
-        # ("get_financials:CASH_FLOW", lambda loader: loader.get_financials(function="CASH_FLOW")),
-        # ("get_financials:EARNINGS", lambda loader: loader.get_financials(function="EARNINGS")),
-        #("get_insider_transactions", lambda loader: loader.get_insider_transactions()),
-        # ("get_stock_splits", lambda loader: loader.get_stock_splits()),
-        # ("get_dividends", lambda loader: loader.get_dividends()),
+        ("get_financials:BALANCE_SHEET", lambda loader: loader.get_financials(function="BALANCE_SHEET")),
+        ("get_financials:CASH_FLOW", lambda loader: loader.get_financials(function="CASH_FLOW")),
+        ("get_financials:EARNINGS", lambda loader: loader.get_financials(function="EARNINGS")),
+        ("get_insider_transactions", lambda loader: loader.get_insider_transactions()),
+        ("get_stock_splits", lambda loader: loader.get_stock_splits()),
+        ("get_dividends", lambda loader: loader.get_dividends()),
     ]
 
     for symbol in symbols:
@@ -101,8 +101,8 @@ def main():
     Defines a static list of symbols and triggers the initial load.
     """
     all_symbols = get_symbols_from_csv(csv_path="configs/nasdaq_screener.csv")
-    num_to_load = 10  # Change as needed
-    random.seed(3)
+    num_to_load = 3  # Change as needed
+    random.seed(4)
     symbols = random.sample(all_symbols, min(num_to_load, len(all_symbols)))
     download_stock_data(symbols)
 
