@@ -26,7 +26,7 @@ from .column_maps import (
 from infrastructure.databases.company.postgre_manager.postgre_objects import (
     CompanyFundamentals, DailyTimeSeries, AnnualBalanceSheet, QuarterlyBalanceSheet,
     AnnualCashFlow, QuarterlyCashFlow, AnnualEarnings, QuarterlyEarnings,
-    AnnualIncomeStatement, QuarterlyIncomeStatement, InsiderTransactions, StockSplit, DividendsTable
+    AnnualIncomeStatement, QuarterlyIncomeStatement, InsiderTransactions, StockSplit, Dividends
 )
 
 import pandas as pd
