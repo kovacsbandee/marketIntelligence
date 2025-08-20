@@ -72,7 +72,7 @@ class CompanyFundamentals(Base):
 
     __tablename__ = 'company_fundamentals'
 
-    symbol = Column(String, nullable=True, primary_key=True)
+    symbol = Column(String, nullable=False, primary_key=True)
     asset_type = Column(String, nullable=True)
     name = Column(String, nullable=True)
     description = Column(String, nullable=True)
@@ -151,8 +151,8 @@ class DailyTimeSeries(Base):
     """
     __tablename__ = 'daily_timeseries'
 
-    date = Column(Date, nullable=True, primary_key=True)
-    symbol = Column(String, nullable=True, primary_key=True)
+    date = Column(Date, nullable=False, primary_key=True)
+    symbol = Column(String, nullable=False, primary_key=True)
     open = Column(Float, nullable=True)
     high = Column(Float, nullable=True)
     low = Column(Float, nullable=True)
@@ -205,8 +205,8 @@ class AnnualBalanceSheet(Base):
     """
     __tablename__ = 'balance_sheet_annual'
 
-    symbol = Column(String, primary_key=True, nullable=True)
-    fiscal_date_ending = Column(Date, primary_key=True, nullable=True)
+    symbol = Column(String, primary_key=True, nullable=False)
+    fiscal_date_ending = Column(Date, primary_key=True, nullable=False)
     reported_currency = Column(String, nullable=True)
     total_assets = Column(Float, nullable=True)
     total_current_assets = Column(Float, nullable=True)
@@ -292,7 +292,7 @@ class QuarterlyBalanceSheet(Base):
     __tablename__ = 'balance_sheet_quarterly'
 
     symbol = Column(String, primary_key=True, nullable=False)
-    fiscal_date_ending = Column(Date, primary_key=True, nullable=True)
+    fiscal_date_ending = Column(Date, primary_key=True, nullable=False)
     reported_currency = Column(String, nullable=True)
     total_assets = Column(Float, nullable=True)
     total_current_assets = Column(Float, nullable=True)
@@ -358,8 +358,8 @@ class AnnualCashFlow(Base):
     """
     __tablename__ = 'cash_flow_annual'
 
-    symbol = Column(String, primary_key=True, nullable=True)
-    fiscal_date_ending = Column(Date, primary_key=True, nullable=True)
+    symbol = Column(String, primary_key=True, nullable=False)
+    fiscal_date_ending = Column(Date, primary_key=True, nullable=False)
     reported_currency = Column(String, nullable=True)
     operating_cashflow = Column(Float, nullable=True)
     payments_for_operating_activities = Column(Float, nullable=True)
@@ -435,8 +435,8 @@ class QuarterlyCashFlow(Base):
     """
     __tablename__ = 'cash_flow_quarterly'
 
-    symbol = Column(String, primary_key=True, nullable=True)
-    fiscal_date_ending = Column(Date, primary_key=True, nullable=True)
+    symbol = Column(String, primary_key=True, nullable=False)
+    fiscal_date_ending = Column(Date, primary_key=True, nullable=False)
     reported_currency = Column(String, nullable=True)
     operating_cashflow = Column(Float, nullable=True)
     payments_for_operating_activities = Column(Float, nullable=True)
@@ -485,8 +485,8 @@ class AnnualEarnings(Base):
     """
     __tablename__ = 'earnings_annual'
 
-    symbol = Column(String, primary_key=True, nullable=True)
-    fiscal_date_ending = Column(Date, primary_key=True, nullable=True)
+    symbol = Column(String, primary_key=True, nullable=False)
+    fiscal_date_ending = Column(Date, primary_key=True, nullable=False)
     reported_eps = Column(Float, nullable=True)
 
 
@@ -512,8 +512,8 @@ class QuarterlyEarnings(Base):
     """
     __tablename__ = 'earnings_quarterly'
 
-    symbol = Column(String, primary_key=True, nullable=True)
-    fiscal_date_ending = Column(Date, primary_key=True, nullable=True)
+    symbol = Column(String, primary_key=True, nullable=False)
+    fiscal_date_ending = Column(Date, primary_key=True, nullable=False)
     reported_date = Column(Date, nullable=True)
     reported_eps = Column(Float, nullable=True)
     estimated_eps = Column(Float, nullable=True)
@@ -559,8 +559,8 @@ class AnnualIncomeStatement(Base):
     """
     __tablename__ = 'income_statement_annual'
 
-    symbol = Column(String, primary_key=True, nullable=True)
-    fiscal_date_ending = Column(Date, primary_key=True, nullable=True)
+    symbol = Column(String, primary_key=True, nullable=False)
+    fiscal_date_ending = Column(Date, primary_key=True, nullable=False)
     reported_currency = Column(String, nullable=True)
     gross_profit = Column(Float, nullable=True)
     total_revenue = Column(Float, nullable=True)
@@ -625,8 +625,8 @@ class QuarterlyIncomeStatement(Base):
     """
     __tablename__ = 'income_statement_quarterly'
 
-    symbol = Column(String, primary_key=True, nullable=True)
-    fiscal_date_ending = Column(Date, primary_key=True, nullable=True)
+    symbol = Column(String, primary_key=True, nullable=False)
+    fiscal_date_ending = Column(Date, primary_key=True, nullable=False)
     reported_currency = Column(String, nullable=True)
     gross_profit = Column(Float, nullable=True)
     total_revenue = Column(Float, nullable=True)
@@ -704,8 +704,8 @@ class StockSplit(Base):
     """
     __tablename__ = 'stock_splits'
 
-    symbol = Column(String, primary_key=True, nullable=True)
-    effective_date = Column(Date, primary_key=True, nullable=True)
+    symbol = Column(String, primary_key=True, nullable=False)
+    effective_date = Column(Date, primary_key=True, nullable=False)
     split_factor = Column(Float, nullable=True)
 
 
