@@ -277,10 +277,6 @@ def preprocess_daily_timeseries(df, symbol):
 def preprocess_annual_balance_sheet(df, symbol):
     """
     Preprocess annual balance sheet data from Alpha Vantage API.
-    
-    Transforms raw annual balance sheet data into a format compatible with
-    the AnnualBalanceSheetTable ORM model. Handles financial statement
-    data formatting and standardization.
     """
     if should_skip_symbol(df, symbol, "annual balance sheet"):
         return None
@@ -303,16 +299,22 @@ def preprocess_annual_balance_sheet(df, symbol):
             .astype('Int64')
         )
 
+    # --- PATCH: Assert no raw API keys remain ---
+    raw_keys = [
+        "intangibleAssetsExcludingGoodwill",
+        "currentLongTermDebt",
+        "longTermDebtNoncurrent",
+    ]
+    leftover = [col for col in raw_keys if col in df.columns]
+    if leftover:
+        raise ValueError(f"Unmapped API keys remain in annual balance sheet DataFrame: {leftover}")
+
     logger.info(f"Transformed annual_balance_sheet for {symbol}:\n{df.head().to_string()}")
     return df
 
 def preprocess_quarterly_balance_sheet(df, symbol):
     """
     Preprocess quarterly balance sheet data from Alpha Vantage API.
-    
-    Transforms raw quarterly balance sheet data into a format compatible with
-    the QuarterlyBalanceSheetTable ORM model. Handles quarterly financial
-    statement data formatting and standardization.
     """
     if should_skip_symbol(df, symbol, "quarterly balance sheet"):
         return None
@@ -334,6 +336,16 @@ def preprocess_quarterly_balance_sheet(df, symbol):
             .round()
             .astype('Int64')
         )
+
+    # --- PATCH: Assert no raw API keys remain ---
+    raw_keys = [
+        "intangibleAssetsExcludingGoodwill",
+        "currentLongTermDebt",
+        "longTermDebtNoncurrent",
+    ]
+    leftover = [col for col in raw_keys if col in df.columns]
+    if leftover:
+        raise ValueError(f"Unmapped API keys remain in quarterly balance sheet DataFrame: {leftover}")
 
     logger.info(f"Transformed quarterly_balance_sheet for {symbol}:\n{df.head().to_string()}")
     return df
@@ -679,7 +691,7 @@ def preprocess_dividends(df, symbol):
     if should_skip_symbol(df, symbol, "dividends"):
         return None
     logger.info(f"Before transforming dividends for {symbol}:\n{df.to_string()}")
-    orm_columns = [col for col in DividendsTable.__table__.columns]
+    orm_columns = [col for col in Dividends.__table__.columns]
     dummy_row = create_dummy_row_with_dates(orm_columns, symbol)
     df = standardize_and_clean(
         df,

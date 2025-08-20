@@ -64,7 +64,7 @@ def drop_and_build():
 
     tables = table_manager.list_tables()
     logger.info("Tables currently in the database: %s", tables)
-    print("\n✅ Drop and build completed. Current tables:", tables)
+    print("Drop and build completed. Current tables:", tables)
 
 if __name__ == "__main__":
     drop_and_build()

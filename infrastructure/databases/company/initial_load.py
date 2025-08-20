@@ -83,7 +83,7 @@ def download_stock_data(symbols):
                 func(loader)
             except Exception as e:
                 logger.error(
-                    "❌ Error in %s for %s: %s", func_name, symbol, str(e), exc_info=True
+                    "Error in %s for %s: %s", func_name, symbol, str(e), exc_info=True
                 )
                 # If loader has a last_df or last_row attribute, log it:
                 if hasattr(loader, "last_df") and loader.last_df is not None:
@@ -91,7 +91,7 @@ def download_stock_data(symbols):
                 if hasattr(loader, "last_row") and loader.last_row is not None:
                     logger.error("Failing row for %s: %s", func_name, loader.last_row)
 
-    logger.info("✅ Initial loader finished its running.")
+    logger.info("Initial loader finished its running.")
 
 
 def main():
@@ -101,8 +101,8 @@ def main():
     Defines a static list of symbols and triggers the initial load.
     """
     all_symbols = get_symbols_from_csv(csv_path="configs/nasdaq_screener.csv")
-    num_to_load = 1  # Change as needed
-    random.seed(5)
+    num_to_load = 42  # Change as needed
+    random.seed(42)
     symbols = random.sample(all_symbols, min(num_to_load, len(all_symbols)))
     download_stock_data(symbols)
 

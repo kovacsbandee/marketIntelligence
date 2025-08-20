@@ -20,6 +20,8 @@ import datetime
 import os
 import shutil
 import json
+import time
+import random
 from pathlib import Path
 
 from configs.config import ALPHA_API_KEY
@@ -166,13 +168,50 @@ class AlphaLoader:
                     return base
         return "unknown"
 
+    def _is_rate_limited(self, resp):
+        """
+        Detects Alpha Vantage rate limit responses.
+        Accepts a requests.Response or a dict (parsed JSON).
+        """
+        # If resp is a requests.Response, get JSON/text
+        try:
+            data = resp.json() if hasattr(resp, "json") else resp
+        except Exception:
+            data = {}
+        note = ""
+        if isinstance(data, dict):
+            note = data.get("Note") or data.get("Information") or ""
+        if "frequency" in note.lower() or "please visit" in note.lower():
+            return True
+        return False
+
+    def _http_get(self, url, **kwargs):
+        """
+        Wrapper for HTTP GET requests.
+        """
+        return requests.get(url, timeout=30, **kwargs)
+
+    def _call_api_with_backoff(self, url, max_retries=5, base=1.5, **kwargs):
+        """
+        Calls Alpha Vantage API with exponential backoff and jitter on rate limit.
+        Returns a requests.Response.
+        """
+        for attempt in range(max_retries):
+            resp = self._http_get(url, **kwargs)
+            if not self._is_rate_limited(resp):
+                return resp
+            sleep_s = (base ** attempt) + random.uniform(0, 0.5)
+            self.logger.warning("Rate limited by API. Retrying in %.2fs...", sleep_s)
+            time.sleep(sleep_s)
+        raise RuntimeError("Exceeded retries due to API rate limiting")
+
     # PATCH: Pass explicit table_name for each data handler
     def get_daily_timeseries(self):
         url = f"{self.base_url}TIME_SERIES_DAILY&outputsize=full&symbol={self.symbol}&apikey={ALPHA_API_KEY}"
         self.logger.info("Fetching data for %s...", self.symbol)
         data = None
         try:
-            r = requests.get(url, timeout=10)
+            r = self._call_api_with_backoff(url)
             r.raise_for_status()
             data = r.json()
             dump_api_response(self.symbol, "daily_time_series", data)  # <-- Dump API response
@@ -212,7 +251,7 @@ class AlphaLoader:
         self.logger.info("Fetching company base data for %s...", self.symbol)
         data = None
         try:
-            r = requests.get(url, timeout=10)
+            r = self._call_api_with_backoff(url)
             r.raise_for_status()
             data = r.json()
             dump_api_response(self.symbol, "company_fundamentals", data)  # <-- Dump API response
@@ -258,7 +297,7 @@ class AlphaLoader:
         self.logger.info("Fetching %s data for %s...", function, self.symbol)
         data = None
         try:
-            r = requests.get(url, timeout=10)
+            r = self._call_api_with_backoff(url)
             r.raise_for_status()
             data = r.json()
 
@@ -353,7 +392,7 @@ class AlphaLoader:
         self.logger.info("Fetching INSIDER_TRANSACTIONS data for %s...", self.symbol)
         data = None
         try:
-            r = requests.get(url, timeout=10)
+            r = self._call_api_with_backoff(url)
             r.raise_for_status()
             data = r.json()
             dump_api_response(self.symbol, "insider_transactions", data)  # <-- Dump API response
@@ -397,7 +436,7 @@ class AlphaLoader:
         self.logger.info("Fetching STOCK_SPLITS data for %s...", self.symbol)
         data = None
         try:
-            r = requests.get(url, timeout=10)
+            r = self._call_api_with_backoff(url)
             r.raise_for_status()
             data = r.json()
             self.logger.info("API response for %s: %s", self.symbol, data)
@@ -437,7 +476,7 @@ class AlphaLoader:
         self.logger.info("Fetching DIVIDENDS data for %s...", self.symbol)
         data = None
         try:
-            r = requests.get(url, timeout=10)
+            r = self._call_api_with_backoff(url)
             r.raise_for_status()
             data = r.json()
             dump_api_response(self.symbol, "dividends", data)  # <-- Dump API response
