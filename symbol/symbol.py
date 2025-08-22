@@ -85,6 +85,17 @@ class Symbol:
         rows = self._adapter.load_filtered_with_matching_values(orm_company_fundamentals, {"symbol": self._symbol})
         return bool(rows)
 
+    def _update_price_data_with_splits(self):
+        """
+        Update the price data with stock splits if applicable.
+        This method is a placeholder and should be implemented with actual logic.
+        """
+        try:
+            raise NotImplementedError("The _update_price_data_with_splits method is not yet implemented.")
+        except NotImplementedError as e:
+            logger.error("An error occurred: %s", str(e))
+
+
     def _load_tables(self, auto_load_if_missing: bool):
         """
         Load all tables for the given symbol. If the symbol is missing and auto_load_if_missing is True,
@@ -140,6 +151,9 @@ class Symbol:
             loaded_df = pd.DataFrame(rows)
             setattr(self, table_name, loaded_df)
             logger.info("Loaded table '%s' with %d rows.", table_name, len(loaded_df))
+
+        # TODO: Implement logic to update price data with splits if applicable
+
 
     def get_table(self, table_name: str) -> pd.DataFrame:
         """

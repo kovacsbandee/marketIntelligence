@@ -5,6 +5,7 @@ import os
 from plotly.subplots import make_subplots
 from plotly.colors import qualitative
 from infrastructure.ui.dash.add_price_indicators import AddPriceIndicators
+import dash_mantine_components as dmc
 
 
 def add_dividends(dividend_points: pd.DataFrame,
@@ -247,6 +248,55 @@ def plot_insider_transactions(insider_transaction):
     return fig
 
 
+def _auto_load_balance_descriptions(balance_df):
+    config_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
+        "configs",
+        "alpha_vantage_column_description.json"
+    )
+    with open(config_path, "r") as f:
+        config = json.load(f)
+    # Heuristic: if there are more than 12 unique dates, it's quarterly
+    if "fiscal_date_ending" in balance_df.columns:
+        unique_dates = pd.to_datetime(balance_df["fiscal_date_ending"].dropna().unique())
+        if len(unique_dates) > 12:
+            section = "balance_sheet_quarterly"
+        else:
+            section = "balance_sheet_annual"
+    else:
+        section = "balance_sheet_annual"
+    descriptions = {}
+    for entry in config.get(section, []):
+        for k, v in entry.items():
+            descriptions[k] = v
+    return descriptions
+
+
+def _flatten_group(group):
+    """Recursively flatten a nested group dict into a list of column names."""
+    if isinstance(group, dict):
+        cols = []
+        for v in group.values():
+            cols.extend(_flatten_group(v))
+        return cols
+    elif isinstance(group, list):
+        cols = []
+        for v in group:
+            cols.extend(_flatten_group(v))
+        return cols
+    else:
+        return [group]
+
+
+def _find_row_by_date(balance_df, date):
+    # Accepts date as string or datetime, returns the row for the closest matching date
+    if not isinstance(date, pd.Timestamp):
+        date = pd.to_datetime(date)
+    # Find the row with the exact date, or the closest previous date if not found
+    idx = balance_df["fiscal_date_ending"].sub(date).abs().idxmin()
+    return balance_df.loc[idx]
+
+
 def plot_balance_sheet_time_series(
     balance_df: pd.DataFrame,
     columns: list,
@@ -315,65 +365,154 @@ def plot_balance_sheet_time_series(
         xaxis_title="Fiscal Date Ending",
         yaxis_title="Value",
         legend_title="Metric",
-        hovermode="x unified"
+        hovermode="x unified",
+        template="plotly_white",
+        width=1800,  # Consistent wide width
+        height=700,
+        margin=dict(l=50, r=50, t=80, b=50),
+        font=dict(size=14)
     )
     return fig
 
 
-def plot_balance_sheet_stacked_area(balance_df: pd.DataFrame, stack_groups: dict, descriptions: dict) -> go.Figure:
+def plot_balance_sheet_stacked_area(balance_df: pd.DataFrame, stack_groups: dict, descriptions: dict = None) -> go.Figure:
     """
     Plot stacked area chart to visualize the composition of assets or liabilities over time.
-
-    Parameters:
-    - balance_df (pd.DataFrame): DataFrame with balance sheet data.
-    - stack_groups (dict): Dictionary mapping group names (e.g., 'Assets') to lists of column names to stack.
-    - descriptions (dict): Mapping of column names to descriptions for hovertext.
-
-    Returns:
-    - go.Figure: Plotly figure object with stacked area plots for each group.
+    Supports nested grouping.
     """
-    pass
+    if descriptions is None:
+        descriptions = _auto_load_balance_descriptions(balance_df)
+    if "fiscal_date_ending" not in balance_df.columns:
+        raise ValueError("DataFrame must contain 'fiscal_date_ending' column.")
+    x = pd.to_datetime(balance_df["fiscal_date_ending"])
+    fig = go.Figure()
+    color_idx = 0
+    color_list = qualitative.Plotly + qualitative.G10 + qualitative.Pastel
+    def add_area_traces(group, parent_name=""):
+        nonlocal color_idx
+        if isinstance(group, dict):
+            for k, v in group.items():
+                add_area_traces(v, parent_name + k + " - " if parent_name else k + " - ")
+        else:
+            for col in group if isinstance(group, list) else [group]:
+                y = pd.to_numeric(balance_df[col], errors="coerce") if col in balance_df.columns else pd.Series([float('nan')] * len(x))
+                fig.add_trace(
+                    go.Scatter(
+                        x=x,
+                        y=y,
+                        mode="lines",
+                        stackgroup="one",
+                        name=parent_name + descriptions.get(col, col),
+                        line=dict(width=0.5, color=color_list[color_idx % len(color_list)]),
+                        hovertemplate=f"<b>{descriptions.get(col, col)}</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+                    )
+                )
+                color_idx += 1
+    add_area_traces(stack_groups)
+    fig.update_layout(
+        title="Balance Sheet Stacked Area",
+        xaxis_title="Fiscal Date Ending",
+        yaxis_title="Value",
+        legend_title="Component",
+        hovermode="x unified",
+        template="plotly_white",
+        width=1800,  # Consistent wide width
+        height=700,
+        margin=dict(l=50, r=50, t=80, b=50),
+        font=dict(size=14)
+    )
+    return fig
 
-def plot_balance_sheet_bar(balance_df: pd.DataFrame, group_columns: dict, descriptions: dict) -> go.Figure:
+
+def plot_balance_sheet_bar(balance_df: pd.DataFrame, group_columns: dict, descriptions: dict = None) -> go.Figure:
     """
     Plot grouped or stacked bar chart comparing current vs. non-current assets and liabilities.
-
-    Parameters:
-    - balance_df (pd.DataFrame): DataFrame with balance sheet data.
-    - group_columns (dict): Dictionary with keys like 'Current Assets', 'Non-Current Assets', etc., and values as column names.
-    - descriptions (dict): Mapping of column names to descriptions for hovertext.
-
-    Returns:
-    - go.Figure: Plotly figure object with grouped/stacked bars for each period.
+    Supports nested grouping.
     """
-    pass
+    if descriptions is None:
+        descriptions = _auto_load_balance_descriptions(balance_df)
+    if "fiscal_date_ending" not in balance_df.columns:
+        raise ValueError("DataFrame must contain 'fiscal_date_ending' column.")
+    x = pd.to_datetime(balance_df["fiscal_date_ending"])
+    fig = go.Figure()
+    color_idx = 0
+    color_list = qualitative.Plotly + qualitative.G10 + qualitative.Pastel
+    for group_name, group in group_columns.items():
+        cols = _flatten_group(group)
+        y = balance_df[cols].sum(axis=1, numeric_only=True) if cols else pd.Series([float('nan')] * len(x))
+        fig.add_trace(
+            go.Bar(
+                x=x,
+                y=y,
+                name=descriptions.get(group_name, group_name),
+                marker_color=color_list[color_idx % len(color_list)],
+                hovertemplate=f"<b>{descriptions.get(group_name, group_name)}</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+            )
+        )
+        color_idx += 1
+    fig.update_layout(
+        barmode="group",
+        title="Balance Sheet Bar Chart",
+        xaxis_title="Fiscal Date Ending",
+        yaxis_title="Value",
+        legend_title="Group",
+        hovermode="x unified",
+        template="plotly_white",
+        width=1800,  # Consistent wide width
+        height=700,
+        margin=dict(l=50, r=50, t=80, b=50),
+        font=dict(size=14)
+    )
+    return fig
 
-def plot_balance_sheet_pie(balance_df: pd.DataFrame, date: str, columns: list, descriptions: dict) -> go.Figure:
-    """
-    Plot pie or donut chart showing the breakdown of assets or liabilities for a selected date.
 
-    Parameters:
-    - balance_df (pd.DataFrame): DataFrame with balance sheet data.
-    - date (str): The fiscal date to visualize (must match a row in balance_df).
-    - columns (list): List of columns to include in the pie chart.
-    - descriptions (dict): Mapping of column names to descriptions for labels/hovertext.
+def plot_balance_sheet_pie(balance_df: pd.DataFrame, date: str, columns: list, descriptions: dict = None) -> go.Figure:
+    if descriptions is None:
+        descriptions = _auto_load_balance_descriptions(balance_df)
+    if "fiscal_date_ending" not in balance_df.columns:
+        raise ValueError("DataFrame must contain 'fiscal_date_ending' column.")
+    row = _find_row_by_date(balance_df, date)
+    values = [row[col] if col in row else 0 for col in columns]
+    labels = [descriptions.get(col, col) for col in columns]
+    fig = go.Figure(go.Pie(
+        labels=labels,
+        values=values,
+        hole=0.4,
+        hovertemplate="<b>%{label}</b><br>Value: %{value:,.0f}<extra></extra>"
+    ))
+    fig.update_layout(
+        title=f"Balance Sheet Breakdown ({row['fiscal_date_ending'].date()})",
+        template="plotly_white",
+        width=1000,  # Pie chart can be a bit smaller, but you can set to 1800 if you want
+        height=700,
+        margin=dict(l=50, r=50, t=80, b=50),
+        font=dict(size=14)
+    )
+    return fig
 
-    Returns:
-    - go.Figure: Plotly figure object with a pie or donut chart.
-    """
-    pass
 
-def render_balance_sheet_metric_cards(balance_df: pd.DataFrame, date: str, metrics: list, descriptions: dict):
-    """
-    Generate Dash components (e.g., html.Div or dmc.Paper) displaying key balance sheet metrics as cards.
+def render_balance_sheet_metric_cards(balance_df: pd.DataFrame, date: str, metrics: list, descriptions: dict = None):
+    if descriptions is None:
+        descriptions = _auto_load_balance_descriptions(balance_df)
+    if "fiscal_date_ending" not in balance_df.columns:
+        raise ValueError("DataFrame must contain 'fiscal_date_ending' column.")
+    row = _find_row_by_date(balance_df, date)
+    cards = []
+    for metric in metrics:
+        value = row[metric] if metric in row else None
+        formatted = f"${value:,.0f}" if value is not None and pd.notnull(value) else "N/A"
+        cards.append(
+            dmc.Paper(
+                [
+                    dmc.Text(descriptions.get(metric, metric), size="sm", c="dimmed"),
+                    dmc.Text(formatted, size="xl", fw=700)
+                ],
+                p="md",
+                shadow="sm",
+                radius="md",
+                style={"width": 200, "display": "inline-block", "margin": "8px"}
+            )
+        )
+    return cards
 
-    Parameters:
-    - balance_df (pd.DataFrame): DataFrame with balance sheet data.
-    - date (str): The fiscal date to display metrics for.
-    - metrics (list): List of metric column names to display.
-    - descriptions (dict): Mapping of column names to descriptions for tooltips.
 
-    Returns:
-    - list: List of Dash components representing metric cards.
-    """
-    pass
