@@ -13,6 +13,7 @@ from infrastructure.ui.dash.plots import (
     plot_balance_sheet_bar,
     plot_balance_sheet_pie,
     render_balance_sheet_metric_cards,
+    plot_company_fundamentals_table
 )
 from infrastructure.ui.dash.app_util import get_last_6_months_range
 
@@ -69,33 +70,6 @@ def register_callbacks(app: dash.Dash) -> None:
         )
 
     @app.callback(
-        Output("company-base-content", "children"),
-        Output("company-base-loading", "visible"),
-        Input("main-tabs", "value"),
-        Input("company-base-store", "data"),
-        prevent_initial_call=True
-    )
-    def update_company_base(
-        tab: str,
-        company_base_data: dict
-    ) -> tuple[Component, bool]:
-        """
-        Callback to update the company base info panel.
-
-        Args:
-            tab (str): The currently selected tab.
-            company_base_data (dict): The company base data from the store.
-
-        Returns:
-            tuple: Updated content and loading state for the company base panel.
-        """
-        if tab != "company-base":
-            return no_update, False
-        if not company_base_data:
-            return dmc.Text("No company info loaded.", c="red"), False
-        return dmc.Text(f"Company: {company_base_data.get('name', 'N/A')}"), False
-
-    @app.callback(
         Output("price-indicator-content", "children"),
         Output("price-indicator-loading", "visible"),
         Input("main-tabs", "value"),
@@ -143,7 +117,8 @@ def register_callbacks(app: dash.Dash) -> None:
             fig = plot_price_with_indicators(
                 price_table=selected_df,
                 include_macd=True,
-                include_rsi=True
+                include_rsi=True,
+                include_vwap=True
             )
             fig.update_layout(xaxis_range=[start_date, end_date])
             return dcc.Graph(figure=fig), False
@@ -301,3 +276,38 @@ def register_callbacks(app: dash.Dash) -> None:
             ], gap=16), False
         except Exception as e:
             return dmc.Text(f"Error generating plot: {e}", c="red"), False
+        
+    @app.callback(
+        Output("company-base-content", "children"),
+        Output("company-base-loading", "visible"),
+        Input("main-tabs", "value"),
+        Input("company-base-store", "data"),
+        prevent_initial_call=True
+    )
+    def update_company_base(
+        tab: str,
+        company_base_data: dict
+    ) -> tuple[Component, bool]:
+        """
+        Callback to update the company base info panel with a Plotly table.
+
+        Args:
+            tab (str): The currently selected tab.
+            company_base_data (dict): The company base data from the store.
+
+        Returns:
+            tuple: Updated content and loading state for the company base panel.
+        """
+        if tab != "company-base":
+            return no_update, False
+        if not company_base_data:
+            return dmc.Text("No company info loaded.", c="red"), False
+
+        try:
+            # Convert dict to DataFrame for compatibility with the plotting function
+            fundamentals_df = pd.DataFrame([company_base_data])
+            symbol = company_base_data.get("symbol", "")
+            fig = plot_company_fundamentals_table(fundamentals_df, symbol)
+            return dcc.Graph(figure=fig, config={"displayModeBar": False}), False
+        except Exception as e:
+            return dmc.Text(f"Error displaying company fundamentals: {e}", c="red"), False

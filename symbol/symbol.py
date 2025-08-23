@@ -28,22 +28,17 @@ Example:
     ```
     python [db_load_from_db_runner.py](http://_vscodecontentref_/0)
     ```
-Notes:
-    - Ensure that the `PostgresAdapter` and `postgre_objects` modules are correctly 
-      implemented and available in the specified paths.
-    - Replace the hardcoded symbol "IBM" with user input or another mechanism as needed.
-
 """
 
 import pandas as pd
 from infrastructure.databases.company.postgre_manager.postgre_manager import CompanyDataManager
-#from data_manager.src_postgre_db.db_infrastructure.postgre_adapter import PostgresAdapter
 
 from infrastructure.databases.company.postgre_manager.postgre_objects import table_name_to_class
 
-#import data_manager.src_postgre_db.db_infrastructure.postgre_objects as orm_module
 from data_manager.src_postgre_db.db_etl_jobs.db_initial_load_runner import download_stock_data
 from utils.logger import get_logger  # <-- Import your project logger
+
+#from analyst.analyst import Analyst, FinancialAnalyst, NewsAnalyst, QuantitativeAnalyst, LLMAnalyst
 
 # Set up project-standard logger
 logger = get_logger("db_load_from_db_runner")
@@ -87,14 +82,42 @@ class Symbol:
 
     def _update_price_data_with_splits(self):
         """
-        Update the price data with stock splits if applicable.
-        This method is a placeholder and should be implemented with actual logic.
+        Adjusts the daily_timeseries DataFrame for stock splits using the stock_splits DataFrame.
+        Only updates the DataFrame in memory.
         """
         try:
-            raise NotImplementedError("The _update_price_data_with_splits method is not yet implemented.")
-        except NotImplementedError as e:
-            logger.error("An error occurred: %s", str(e))
+            price_df = getattr(self, "daily_timeseries", None)
+            stock_splits_df = getattr(self, "stock_splits", None)
+            if price_df is None or stock_splits_df is None:
+                logger.warning("Price data or stock_splits data not loaded; skipping split adjustment.")
+                return
 
+            price_df = price_df.copy()
+            price_df["date"] = pd.to_datetime(price_df["date"])
+            stock_splits_df = stock_splits_df[stock_splits_df["symbol"] == self._symbol].copy()
+            stock_splits_df["effective_date"] = pd.to_datetime(stock_splits_df["effective_date"])
+            stock_splits_df = stock_splits_df.sort_values("effective_date")
+
+            price_df = price_df.sort_values("date")
+            price_df["adj_factor"] = 1.0
+
+            for _, split in stock_splits_df.iterrows():
+                mask = price_df["date"] < split["effective_date"]
+                price_df.loc[mask, "adj_factor"] *= float(split["split_factor"])
+
+            for col in ["open", "high", "low", "close"]:
+                if col in price_df.columns:
+                    price_df[col] = price_df[col] / price_df["adj_factor"]
+
+            if "volume" in price_df.columns:
+                price_df["volume"] = price_df["volume"] * price_df["adj_factor"]
+
+            price_df = price_df.drop(columns=["adj_factor"])
+            setattr(self, "daily_timeseries", price_df)
+            logger.info("Adjusted daily_timeseries for splits.")
+
+        except Exception as e:
+            logger.error("Error adjusting prices for splits: %s", str(e))
 
     def _load_tables(self, auto_load_if_missing: bool):
         """
@@ -152,7 +175,8 @@ class Symbol:
             setattr(self, table_name, loaded_df)
             logger.info("Loaded table '%s' with %d rows.", table_name, len(loaded_df))
 
-        # TODO: Implement logic to update price data with splits if applicable
+        # Adjust price data for splits after all tables are loaded
+        self._update_price_data_with_splits()
 
 
     def get_table(self, table_name: str) -> pd.DataFrame:
@@ -195,8 +219,6 @@ class Symbol:
         except NotImplementedError as e:
             logger.error("An error occurred: %s", str(e))
             
-
-
 
 def print_loaded_tables(storage: Symbol):
     """

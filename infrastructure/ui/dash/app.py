@@ -73,9 +73,14 @@ app.layout = dmc.MantineProvider(
                             ]),
                             dmc.TabsPanel(value="company-base", children=[
                                 dmc.Box([
-                                    dmc.Paper(id="company-base-content", p=10, children=[
-                                        dmc.Text("Company base info will appear here.", c="dimmed")
-                                    ]),
+                                    dmc.Paper(
+                                        id="company-base-content",
+                                        p=10,
+                                        style={"width": "100%", "minWidth": 1200, "maxWidth": 1800},
+                                        children=[
+                                            dmc.Text("Company base info will appear here.", c="dimmed")
+                                        ]
+                                    ),
                                     dmc.LoadingOverlay(
                                         id="company-base-loading",
                                         visible=False,

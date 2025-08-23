@@ -11,7 +11,7 @@ class AddPriceIndicators:
         self.price_col = price_col
         self.rsi_period = None
 
-    def add_macd(self,
+    def macd(self,
                  macd_short_period=12,
                  macd_long_period=26,
                  macd_signal_period=9,
@@ -73,7 +73,7 @@ class AddPriceIndicators:
 
         return self.table
 
-    def add_rsi(self,
+    def rsi(self,
                 rsi_period=14,
                 clean_intermediates=True):
         """
@@ -127,8 +127,29 @@ class AddPriceIndicators:
 
         return self.table
 
-    def add_indicator(self,
-                      macd=True):
-        if macd:
-            self.add_macd()
-        print("Adding indicators was successfull!")
+    def vwap(self):
+        """
+        Adds VWAP (Volume Weighted Average Price) to the table.
+
+        VWAP is calculated as the cumulative sum of (price * volume) divided by the cumulative sum of volume.
+
+        Returns:
+        pd.DataFrame: The updated table with VWAP.
+        """
+        if "volume" not in self.table.columns:
+            raise ValueError("The table must contain a 'volume' column to calculate VWAP.")
+
+        # Compute cumulative price * volume and cumulative volume
+        self.table["cum_price_volume"] = (self.table[self.price_col] * self.table["volume"]).cumsum()
+        self.table["cum_volume"] = self.table["volume"].cumsum()
+
+        # Compute VWAP
+        self.table["VWAP"] = self.table["cum_price_volume"] / self.table["cum_volume"]
+
+        # Log parameters
+        print("VWAP calculation completed.")
+
+        # Drop intermediate columns
+        self.table.drop(columns=["cum_price_volume", "cum_volume"], inplace=True)
+
+        return self.table
