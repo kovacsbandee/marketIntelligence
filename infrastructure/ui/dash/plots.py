@@ -1,3 +1,5 @@
+
+    
 import pandas as pd
 import plotly.graph_objects as go
 import json
@@ -6,6 +8,31 @@ from plotly.subplots import make_subplots
 from plotly.colors import qualitative
 from infrastructure.ui.dash.add_price_indicators import AddPriceIndicators
 import dash_mantine_components as dmc
+
+
+class Plotting():
+    """
+    This will be a base class for all the plotting functionalities used in the callbacks.
+    Every tab will have a child class originating from this base class, where the actual plotting will be implemented,
+    as a separate Plotly figure for each metric or indicator.
+    """
+    def __init__(self):
+        self.descriptions = self._load_column_description_json()
+        pass
+
+    def _load_column_description_json(self):
+        """
+        Loads the alpha_vantage_column_description_hun.json config as a Python dict.
+        Returns:
+            dict: The loaded JSON content.
+        """
+        config_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
+            "configs",
+            "alpha_vantage_column_description_hun.json"
+        )
+        with open(config_path, "r") as f:
+            return json.load(f)
 
 
 def add_dividends(dividend_points: pd.DataFrame,
@@ -292,27 +319,61 @@ def plot_insider_transactions(insider_transaction):
     return fig
 
 
-def _auto_load_balance_descriptions(balance_df):
+
+def _auto_load_table_descriptions(df, table_name=None):
+    """
+    Generic loader for column descriptions for any ORM table.
+    If table_name is None, tries to infer from DataFrame columns.
+    Returns a dict mapping column names to descriptions.
+    """
     config_path = os.path.join(
         os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
         "configs",
-        "alpha_vantage_column_description.json"
+        "alpha_vantage_column_description_hun.json"
     )
     with open(config_path, "r") as f:
         config = json.load(f)
-    # Heuristic: if there are more than 12 unique dates, it's quarterly
-    if "fiscal_date_ending" in balance_df.columns:
-        unique_dates = pd.to_datetime(balance_df["fiscal_date_ending"].dropna().unique())
-        if len(unique_dates) > 12:
-            section = "balance_sheet_quarterly"
+
+    # Try to infer table_name if not given
+    if table_name is None:
+        # Heuristic for balance sheet
+        if "fiscal_date_ending" in df.columns:
+            unique_dates = pd.to_datetime(df["fiscal_date_ending"].dropna().unique())
+            if len(unique_dates) > 12:
+                table_name = "balance_sheet_quarterly"
+            else:
+                table_name = "balance_sheet_annual"
+        elif "latest_quarter" in df.columns and "name" in df.columns:
+            table_name = "company_fundamentals"
+        elif "date" in df.columns and "open" in df.columns and "close" in df.columns:
+            table_name = "daily_timeseries"
+        elif "ex_dividend_date" in df.columns and "amount" in df.columns:
+            table_name = "dividends"
+        # Add more heuristics as needed
         else:
-            section = "balance_sheet_annual"
-    else:
-        section = "balance_sheet_annual"
+            table_name = None
+
+    # Fallback: try to use the first matching section
+    section = table_name if table_name in config else None
+    if not section:
+        # Try to find a section that matches most columns
+        max_overlap = 0
+        for sec, entries in config.items():
+            if not isinstance(entries, list):
+                continue
+            cols = set()
+            for entry in entries:
+                cols.update(entry.keys())
+            overlap = len(set(df.columns) & cols)
+            if overlap > max_overlap:
+                max_overlap = overlap
+                section = sec
+
     descriptions = {}
-    for entry in config.get(section, []):
-        for k, v in entry.items():
-            descriptions[k] = v
+    if section and section in config:
+        for entry in config.get(section, []):
+            for k, v in entry.items():
+                descriptions[k] = v
     return descriptions
 
 
@@ -360,28 +421,7 @@ def plot_balance_sheet_time_series(
     """
     # Auto-load descriptions if not provided
     if descriptions is None:
-        config_path = os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
-            "configs",
-            "alpha_vantage_column_description.json"
-        )
-        with open(config_path, "r") as f:
-            config = json.load(f)
-        # Try to autodetect annual or quarterly
-        if "fiscal_date_ending" in balance_df.columns:
-            # Heuristic: if there are more than 12 unique dates, it's quarterly
-            unique_dates = pd.to_datetime(balance_df["fiscal_date_ending"].dropna().unique())
-            if len(unique_dates) > 12:
-                section = "balance_sheet_quarterly"
-            else:
-                section = "balance_sheet_annual"
-        else:
-            section = "balance_sheet_annual"
-        # Build descriptions dict
-        descriptions = {}
-        for entry in config.get(section, []):
-            for k, v in entry.items():
-                descriptions[k] = v
+        descriptions = _auto_load_table_descriptions(balance_df)
 
     # Prepare figure
     fig = go.Figure()
@@ -425,7 +465,7 @@ def plot_balance_sheet_stacked_area(balance_df: pd.DataFrame, stack_groups: dict
     Supports nested grouping.
     """
     if descriptions is None:
-        descriptions = _auto_load_balance_descriptions(balance_df)
+        descriptions = _auto_load_table_descriptions(balance_df)
     if "fiscal_date_ending" not in balance_df.columns:
         raise ValueError("DataFrame must contain 'fiscal_date_ending' column.")
     x = pd.to_datetime(balance_df["fiscal_date_ending"])
@@ -474,7 +514,7 @@ def plot_balance_sheet_bar(balance_df: pd.DataFrame, group_columns: dict, descri
     Supports nested grouping.
     """
     if descriptions is None:
-        descriptions = _auto_load_balance_descriptions(balance_df)
+        descriptions = _auto_load_table_descriptions(balance_df)
     if "fiscal_date_ending" not in balance_df.columns:
         raise ValueError("DataFrame must contain 'fiscal_date_ending' column.")
     x = pd.to_datetime(balance_df["fiscal_date_ending"])
@@ -540,7 +580,7 @@ def plot_balance_sheet_pie(balance_df: pd.DataFrame, date: str, columns: list, d
         fig.show()
     """
     if descriptions is None:
-        descriptions = _auto_load_balance_descriptions(balance_df)
+        descriptions = _auto_load_table_descriptions(balance_df)
     if "fiscal_date_ending" not in balance_df.columns:
         raise ValueError("DataFrame must contain 'fiscal_date_ending' column.")
     row = _find_row_by_date(balance_df, date)
@@ -587,7 +627,7 @@ def render_balance_sheet_metric_cards(balance_df: pd.DataFrame, date: str, metri
         - Cards are styled with a fixed width, shadow, and margin for inline display.
     """
     if descriptions is None:
-        descriptions = _auto_load_balance_descriptions(balance_df)
+        descriptions = _auto_load_table_descriptions(balance_df)
     if "fiscal_date_ending" not in balance_df.columns:
         raise ValueError("DataFrame must contain 'fiscal_date_ending' column.")
     row = _find_row_by_date(balance_df, date)

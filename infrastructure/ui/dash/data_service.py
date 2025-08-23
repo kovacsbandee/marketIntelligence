@@ -18,38 +18,38 @@ def load_symbol_data(symbol: str):
     Returns:
         dict: A dictionary with the following keys:
             - status_message (str): Status or error message from the Symbol loader.
-            - price_df (pd.DataFrame or None): Daily price time series.
-            - dividends_df (pd.DataFrame or None): Dividend data.
-            - company_base_df (pd.DataFrame or None): Company fundamentals.
-            - annual_balance_sheet_df (pd.DataFrame or None): Annual balance sheet.
-            - quarterly_balance_sheet_df (pd.DataFrame or None): Quarterly balance sheet.
+            - daily_timeseries (pd.DataFrame or None): Daily price time series.
+            - dividends (pd.DataFrame or None): Dividend data.
+            - company_fundamentals (pd.DataFrame or None): Company fundamentals.
+            - annual_balance_sheet (pd.DataFrame or None): Annual balance sheet.
+            - quarterly_balance_sheet (pd.DataFrame or None): Quarterly balance sheet.
             - start_date (str): Start date for the default 6-month range.
             - end_date (str): End date for the default 6-month range.
     """
     adapter = CompanyDataManager()
     storage = Symbol(adapter, symbol.upper())
-    price_df = storage.get_table("daily_timeseries")
-    if price_df is None or price_df.empty:
+    daily_timeseries = storage.get_table("daily_timeseries")
+    if daily_timeseries is None or daily_timeseries.empty:
         return {
             "status_message": storage.status_message,
-            "price_df": None,
-            "dividends_df": None,
-            "company_base_df": None,
-            "annual_balance_sheet_df": None,
-            "quarterly_balance_sheet_df": None,
+            "daily_timeseries": None,
+            "dividends": None,
+            "company_fundamentals": None,
+            "annual_balance_sheet": None,
+            "balance_sheet_quarterly": None,
         }
-    dividends_df = storage.get_table("dividends")
-    company_base_df = storage.get_table("company_fundamentals")
-    annual_balance_sheet_df = storage.get_table("balance_sheet_annual")
-    quarterly_balance_sheet_df = storage.get_table("balance_sheet_quarterly")
-    start_date, end_date = get_last_6_months_range(price_df)
+    dividends = storage.get_table("dividends")
+    company_fundamentals = storage.get_table("company_fundamentals")
+    balance_sheet_annual = storage.get_table("balance_sheet_annual")
+    balance_sheet_quarterly = storage.get_table("balance_sheet_quarterly")
+    start_date, end_date = get_last_6_months_range(daily_timeseries)
     return {
         "status_message": storage.status_message,
-        "price_df": price_df,
-        "dividends_df": dividends_df,
-        "company_base_df": company_base_df,
-        "annual_balance_sheet_df": annual_balance_sheet_df,
-        "quarterly_balance_sheet_df": quarterly_balance_sheet_df,
+        "daily_timeseries": daily_timeseries,
+        "dividends": dividends,
+        "company_fundamentals": company_fundamentals,
+        "annual_balance_sheet": balance_sheet_annual,
+        "balance_sheet_quarterly": balance_sheet_quarterly,
         "start_date": start_date,
         "end_date": end_date,
     }

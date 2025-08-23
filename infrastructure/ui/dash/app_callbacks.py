@@ -4,6 +4,7 @@ import dash_mantine_components as dmc
 import pandas as pd
 import plotly.graph_objects as go
 from dash.development.base_component import Component
+from typing import Any
 
 from infrastructure.ui.dash.data_service import load_symbol_data
 from infrastructure.ui.dash.plots import (
@@ -56,17 +57,21 @@ def register_callbacks(app: dash.Dash) -> None:
         if not symbol:
             return None, None, "Please enter a symbol.", None, None, None, None, None
         data = load_symbol_data(symbol)
-        if data["price_df"] is None:
+        if data["daily_timeseries"] is None:
             return None, None, data["status_message"], None, None, None, None, None
+
+        def df_to_records(df):
+            return df.to_dict("records") if df is not None and not df.empty else None
+
         return (
             data["start_date"],
             data["end_date"],
             data["status_message"],
-            data["price_df"].to_dict("records"),
-            data["dividends_df"].to_dict("records") if data["dividends_df"] is not None else None,
-            data["company_base_df"].to_dict("records")[0] if data["company_base_df"] is not None and not data["company_base_df"].empty else None,
-            data["quarterly_balance_sheet_df"].to_dict("records") if data["quarterly_balance_sheet_df"] is not None and not data["quarterly_balance_sheet_df"].empty else None,
-            data["annual_balance_sheet_df"].to_dict("records") if data["annual_balance_sheet_df"] is not None and not data["annual_balance_sheet_df"].empty else None,
+            df_to_records(data["daily_timeseries"]),
+            df_to_records(data["dividends"]),
+            df_to_records(data["company_fundamentals"]),
+            df_to_records(data["balance_sheet_quarterly"]),
+            df_to_records(data["annual_balance_sheet"]),
         )
 
     @app.callback(
@@ -83,8 +88,8 @@ def register_callbacks(app: dash.Dash) -> None:
         tab: str,
         start_date: str,
         end_date: str,
-        price_data: list[dict],
-        dividends_data: list[dict]
+        daily_timeseries: list[dict] | None,
+        dividends: list[dict] | None
     ) -> tuple[Component, bool]:
         """
         Callback to update the price indicator panel with a plot.
@@ -101,21 +106,22 @@ def register_callbacks(app: dash.Dash) -> None:
         """
         if tab != "price-indicator":
             return no_update, False
-        if not price_data:
+        if daily_timeseries is None or len(daily_timeseries) == 0:
             return dmc.Text("No price data loaded.", c="red"), False
-        price_df = pd.DataFrame(price_data)
-        dividends_df = pd.DataFrame(dividends_data) if dividends_data else None
+        # Convert to DataFrame if needed
+        daily_timeseries_df = pd.DataFrame(daily_timeseries)
+        dividends_df = pd.DataFrame(dividends) if dividends is not None else None
         if not start_date or not end_date:
-            start_date, end_date = get_last_6_months_range(price_df)
+            start_date, end_date = get_last_6_months_range(daily_timeseries_df)
         date_range = [start_date, end_date]
-        mask = (price_df["date"] >= date_range[0]) & (price_df["date"] <= date_range[1])
-        selected_df = price_df.loc[mask]
+        mask = (daily_timeseries_df["date"] >= date_range[0]) & (daily_timeseries_df["date"] <= date_range[1])
+        selected_timeseries = daily_timeseries_df.loc[mask]
         if dividends_df is not None and not dividends_df.empty and "ex_dividend_date" in dividends_df.columns:
             div_mask = (dividends_df["ex_dividend_date"] >= date_range[0]) & (dividends_df["ex_dividend_date"] <= date_range[1])
             dividends_df = dividends_df.loc[div_mask]
         try:
             fig = plot_price_with_indicators(
-                price_table=selected_df,
+                price_table=selected_timeseries,
                 include_macd=True,
                 include_rsi=True,
                 include_vwap=True
@@ -138,7 +144,7 @@ def register_callbacks(app: dash.Dash) -> None:
         tab: str,
         start_date: str,
         end_date: str,
-        q_balance_data: list[dict]
+        balance_sheet_quarterly: list[dict] | None
     ) -> tuple[Component, bool]:
         """
         Callback to update the balance sheet panel with a time series plot.
@@ -147,30 +153,30 @@ def register_callbacks(app: dash.Dash) -> None:
             tab (str): The currently selected tab.
             start_date (str): Selected start date.
             end_date (str): Selected end date.
-            q_balance_data (list[dict]): Quarterly balance sheet data from the store.
+            balance_sheet_quarterly (list[dict]): Quarterly balance sheet data from the store.
 
         Returns:
             tuple: Updated content and loading state for the balance sheet panel.
         """
         if tab != "balance-sheet":
             return no_update, False
-        if not q_balance_data:
+        if balance_sheet_quarterly is None or len(balance_sheet_quarterly) == 0:
             return dmc.Text("No balance sheet data loaded.", c="red"), False
 
-        df = pd.DataFrame(q_balance_data)
-        if df.empty or "fiscal_date_ending" not in df.columns:
+        balance_sheet_quarterly_df = pd.DataFrame(balance_sheet_quarterly)
+        if balance_sheet_quarterly_df.empty or "fiscal_date_ending" not in balance_sheet_quarterly_df.columns:
             return dmc.Text("No balance sheet data loaded.", c="red"), False
 
-        df["fiscal_date_ending"] = pd.to_datetime(df["fiscal_date_ending"])
-        df = df.sort_values("fiscal_date_ending")
+        balance_sheet_quarterly_df["fiscal_date_ending"] = pd.to_datetime(balance_sheet_quarterly_df["fiscal_date_ending"])
+        balance_sheet_quarterly_df = balance_sheet_quarterly_df.sort_values("fiscal_date_ending")
 
         if start_date and end_date:
             start_dt = pd.to_datetime(start_date)
             end_dt = pd.to_datetime(end_date)
-            mask = (df["fiscal_date_ending"] >= start_dt) & (df["fiscal_date_ending"] <= end_dt)
-            selected_df = df.loc[mask]
+            mask = (balance_sheet_quarterly_df["fiscal_date_ending"] >= start_dt) & (balance_sheet_quarterly_df["fiscal_date_ending"] <= end_dt)
+            selected_balance_sheet = balance_sheet_quarterly_df.loc[mask]
         else:
-            selected_df = df
+            selected_balance_sheet = balance_sheet_quarterly_df
 
         metrics = [
             "total_assets",
@@ -182,7 +188,7 @@ def register_callbacks(app: dash.Dash) -> None:
             "property_plant_equipment"
         ]
 
-        if selected_df.empty:
+        if selected_balance_sheet.empty:
             fig = go.Figure()
             fig.update_layout(
                 title="No balance sheet data available for the selected date range.",
@@ -209,7 +215,7 @@ def register_callbacks(app: dash.Dash) -> None:
                         "total_current_liabilities"
                     ],
                     "Non-Current Liabilities": [
-                        "long_term_debt"  # Only if present in your data
+                        "long_term_debt"
                     ]
                 }
             }
@@ -250,14 +256,14 @@ def register_callbacks(app: dash.Dash) -> None:
                 "property_plant_equipment"
             ]
             # Use the most recent date for pie/cards
-            latest_date = str(selected_df["fiscal_date_ending"].max().date())
+            latest_date = str(selected_balance_sheet["fiscal_date_ending"].max().date())
 
             # Compose all plots and cards
-            time_series_fig = plot_balance_sheet_time_series(selected_df, columns=metrics)
-            stacked_area_fig = plot_balance_sheet_stacked_area(selected_df, stack_groups)
-            bar_fig = plot_balance_sheet_bar(selected_df, bar_groups)
-            pie_fig = plot_balance_sheet_pie(selected_df, latest_date, pie_columns)
-            cards = render_balance_sheet_metric_cards(selected_df, latest_date, metrics)
+            time_series_fig = plot_balance_sheet_time_series(selected_balance_sheet, columns=metrics)
+            stacked_area_fig = plot_balance_sheet_stacked_area(selected_balance_sheet, stack_groups)
+            bar_fig = plot_balance_sheet_bar(selected_balance_sheet, bar_groups)
+            pie_fig = plot_balance_sheet_pie(selected_balance_sheet, latest_date, pie_columns)
+            cards = render_balance_sheet_metric_cards(selected_balance_sheet, latest_date, metrics)
 
             return dmc.Stack([
                 dmc.Group(cards, justify="flex-start", gap="xs"),
@@ -286,7 +292,7 @@ def register_callbacks(app: dash.Dash) -> None:
     )
     def update_company_base(
         tab: str,
-        company_base_data: dict
+        company_fundamentals: list[dict] | None
     ) -> tuple[Component, bool]:
         """
         Callback to update the company base info panel with a Plotly table.
@@ -300,14 +306,14 @@ def register_callbacks(app: dash.Dash) -> None:
         """
         if tab != "company-base":
             return no_update, False
-        if not company_base_data:
+        if company_fundamentals is None or len(company_fundamentals) == 0:
             return dmc.Text("No company info loaded.", c="red"), False
 
         try:
-            # Convert dict to DataFrame for compatibility with the plotting function
-            fundamentals_df = pd.DataFrame([company_base_data])
-            symbol = company_base_data.get("symbol", "")
-            fig = plot_company_fundamentals_table(fundamentals_df, symbol)
+            company_fundamentals_df = pd.DataFrame(company_fundamentals)
+            company_fundamentals_row = company_fundamentals_df.iloc[[0]]
+            symbol = company_fundamentals_row.iloc[0].get("symbol", "") if not company_fundamentals_row.empty else ""
+            fig = plot_company_fundamentals_table(company_fundamentals_row, symbol)
             return dcc.Graph(figure=fig, config={"displayModeBar": False}), False
         except Exception as e:
             return dmc.Text(f"Error displaying company fundamentals: {e}", c="red"), False
