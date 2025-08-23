@@ -162,11 +162,13 @@ app.layout = dmc.MantineProvider(
                 ),
             ], style={"marginTop": 30, "justifyContent": "flex-start", "width": "100%"}),
         ]),
-        dcc.Store(id="price-store"),
-        dcc.Store(id="dividends-store"),
-        dcc.Store(id="company-base-store"),
-        dcc.Store(id="q_balance-store"),
-        dcc.Store(id="a_balance-store"),
+    dcc.Store(id="price-store"),
+    dcc.Store(id="dividends-store"),
+    dcc.Store(id="company-base-store"),
+    dcc.Store(id="q_balance-store"),
+    dcc.Store(id="a_balance-store"),
+    dcc.Store(id="earnings-store"),
+    dcc.Store(id="q_income-store"),  # <-- Add this line
     ]
 )
 

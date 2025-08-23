@@ -42,6 +42,8 @@ def load_symbol_data(symbol: str):
     company_fundamentals = storage.get_table("company_fundamentals")
     balance_sheet_annual = storage.get_table("balance_sheet_annual")
     balance_sheet_quarterly = storage.get_table("balance_sheet_quarterly")
+    earnings = storage.get_table("earnings_quarterly")
+    income_statement_quarterly = storage.get_table("income_statement_quarterly")
     start_date, end_date = get_last_6_months_range(daily_timeseries)
     return {
         "status_message": storage.status_message,
@@ -50,6 +52,8 @@ def load_symbol_data(symbol: str):
         "company_fundamentals": company_fundamentals,
         "annual_balance_sheet": balance_sheet_annual,
         "balance_sheet_quarterly": balance_sheet_quarterly,
+        "earnings": earnings,
+        "income_statement_quarterly": income_statement_quarterly,
         "start_date": start_date,
         "end_date": end_date,
     }

@@ -1,5 +1,3 @@
-
-    
 import pandas as pd
 import plotly.graph_objects as go
 import json
@@ -8,6 +6,10 @@ from plotly.subplots import make_subplots
 from plotly.colors import qualitative
 from infrastructure.ui.dash.add_price_indicators import AddPriceIndicators
 import dash_mantine_components as dmc
+
+# --- Default Plotly Figure Size ---
+DEFAULT_PLOTLY_WIDTH = 1800
+DEFAULT_PLOTLY_HEIGHT = 700
 
 
 class Plotting():
@@ -20,20 +22,34 @@ class Plotting():
         self.descriptions = self._load_column_description_json()
         pass
 
-    def _load_column_description_json(self):
-        """
-        Loads the alpha_vantage_column_description_hun.json config as a Python dict.
-        Returns:
-            dict: The loaded JSON content.
-        """
-        config_path = os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
-            "configs",
-            "alpha_vantage_column_description_hun.json"
-        )
-        with open(config_path, "r") as f:
-            return json.load(f)
 
+def _load_column_description_json():
+    """
+    Loads the alpha_vantage_column_description_hun.json config as a Python dict.
+    Returns:
+        dict: The loaded JSON content.
+    """
+    config_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
+        "configs",
+        "alpha_vantage_column_description_hun.json"
+    )
+    with open(config_path, "r") as f:
+        return json.load(f)
+
+def _get_column_descriptions(table_name: str = None):
+    """
+    Loads column descriptions for a given table from the Hungarian JSON config.
+    Args:
+        table_name (str): The table name section in the JSON config.
+    Returns:
+        dict: Mapping of column names to Hungarian descriptions.
+    """
+    config = _load_column_description_json()
+    desc = {}
+    for entry in config.get(table_name, []):
+        desc.update(entry)
+    return desc
 
 def add_dividends(dividend_points: pd.DataFrame,
                   filtered_dividends: pd.DataFrame,
@@ -221,8 +237,8 @@ def plot_price_with_indicators(price_table,
         xaxis_rangeslider_visible=False,
         template="plotly_white",
         showlegend=True,
-        width=1800,
-        height=1800,
+        width=DEFAULT_PLOTLY_WIDTH,
+        height=DEFAULT_PLOTLY_WIDTH,  # This plot is intentionally square (1800x1800)
         margin=dict(l=50, r=50, t=80, b=50),
         font=dict(size=14)
     )
@@ -310,8 +326,8 @@ def plot_insider_transactions(insider_transaction):
         },
         legend=dict(title="Legend"),
         template="plotly_white",
-        width=1000,
-        height=700,
+        width=DEFAULT_PLOTLY_WIDTH,
+        height=DEFAULT_PLOTLY_HEIGHT,
         margin=dict(l=50, r=50, t=80, b=50),
         font=dict(size=14)
     )
@@ -451,8 +467,8 @@ def plot_balance_sheet_time_series(
         legend_title="Metric",
         hovermode="x unified",
         template="plotly_white",
-        width=1800,  # Consistent wide width
-        height=700,
+        width=DEFAULT_PLOTLY_WIDTH,
+        height=DEFAULT_PLOTLY_HEIGHT,
         margin=dict(l=50, r=50, t=80, b=50),
         font=dict(size=14)
     )
@@ -500,8 +516,8 @@ def plot_balance_sheet_stacked_area(balance_df: pd.DataFrame, stack_groups: dict
         legend_title="Component",
         hovermode="x unified",
         template="plotly_white",
-        width=1800,  # Consistent wide width
-        height=700,
+        width=DEFAULT_PLOTLY_WIDTH,
+        height=DEFAULT_PLOTLY_HEIGHT,
         margin=dict(l=50, r=50, t=80, b=50),
         font=dict(size=14)
     )
@@ -542,8 +558,8 @@ def plot_balance_sheet_bar(balance_df: pd.DataFrame, group_columns: dict, descri
         legend_title="Group",
         hovermode="x unified",
         template="plotly_white",
-        width=1800,  # Consistent wide width
-        height=700,
+        width=DEFAULT_PLOTLY_WIDTH,
+        height=DEFAULT_PLOTLY_HEIGHT,
         margin=dict(l=50, r=50, t=80, b=50),
         font=dict(size=14)
     )
@@ -595,8 +611,8 @@ def plot_balance_sheet_pie(balance_df: pd.DataFrame, date: str, columns: list, d
     fig.update_layout(
         title=f"Balance Sheet Breakdown ({row['fiscal_date_ending'].date()})",
         template="plotly_white",
-        width=1000,  # Pie chart can be a bit smaller, but you can set to 1800 if you want
-        height=700,
+        width=DEFAULT_PLOTLY_WIDTH,
+        height=DEFAULT_PLOTLY_HEIGHT,
         margin=dict(l=50, r=50, t=80, b=50),
         font=dict(size=14)
     )
@@ -704,10 +720,510 @@ def plot_company_fundamentals_table(fundamentals_df: pd.DataFrame, symbol: str) 
             "xanchor": "center",
             "font": {"size": 22, "family": "Inter, sans-serif", "color": "#1c7ed6"}
         },
-        width=1800,
-        height=700,
+        width=DEFAULT_PLOTLY_WIDTH,
+        height=DEFAULT_PLOTLY_HEIGHT,
         margin=dict(l=50, r=50, t=80, b=50),
         font=dict(size=14, family="Inter, sans-serif", color="#212529"),
         template="plotly_white"
     )
     return fig
+
+
+def plot_eps_actual_vs_estimate(symbol, data):
+    """
+    Plots a time-series of the company’s **reported EPS** vs **estimated EPS** each quarter, highlighting where actual earnings beat or missed expectations. 
+    This line chart uses quarter-end dates on the X-axis and EPS on the Y-axis, with one trace for actual EPS and another for consensus estimates:contentReference[oaicite:0]{index=0}. 
+    Markers or annotations can indicate positive surprises (actual above estimate) and negative surprises (actual below estimate) for each quarter. 
+    This visualization helps investors see trends in earnings performance over time
+    – whether EPS is growing and how consistently the company exceeds or falls short of forecasts – providing insight into the company’s track record and earnings momentum.
+
+    Plots a time-series of the company’s reported EPS vs estimated EPS each quarter,
+    highlighting where actual earnings beat or missed expectations.
+
+    Args:
+        symbol (str): Stock symbol.
+        data (pd.DataFrame): DataFrame with columns:
+            - fiscal_date_ending (quarter end date)
+            - reported_eps (actual EPS)
+            - estimated_eps (consensus estimate)
+            - surprise (actual - estimate)
+            - surprise_percentage (optional)
+            - report_time (optional, e.g. 'BTO', 'AMC')
+    Returns:
+        go.Figure: Plotly figure with two lines (actual, estimate) and markers for beats/misses.
+    """
+    descriptions = _get_column_descriptions("earnings_quarterly")
+    if not isinstance(data, pd.DataFrame):
+        data = pd.DataFrame(data)
+    if data.empty or "fiscal_date_ending" not in data.columns:
+        return go.Figure()
+    df = data.copy()
+    df = df.sort_values("fiscal_date_ending")
+    x = pd.to_datetime(df["fiscal_date_ending"])
+    actual = pd.to_numeric(df["reported_eps"], errors="coerce")
+    estimate = pd.to_numeric(df["estimated_eps"], errors="coerce")
+
+    # Markers for beat/miss
+    beat_mask = (actual > estimate) & estimate.notnull() & actual.notnull()
+    miss_mask = (actual < estimate) & estimate.notnull() & actual.notnull()
+
+    fig = go.Figure()
+    # Actual EPS line
+    fig.add_trace(go.Scatter(
+        x=x,
+        y=actual,
+        mode="lines+markers",
+        name=descriptions.get("reported_eps", "Actual EPS"),
+        line=dict(color="#228be6", width=3),
+        marker=dict(symbol="circle", size=8, color="#228be6"),
+        hovertemplate=f"<b>{descriptions.get('reported_eps', 'Actual EPS')}</b><br>{descriptions.get('fiscal_date_ending', 'Date')}: "+"%{x|%Y-%m-%d}<br>"+f"{descriptions.get('reported_eps', 'EPS')}: "+"%{y:.2f}<extra></extra>"
+    ))
+    # Estimate EPS line
+    fig.add_trace(go.Scatter(
+        x=x,
+        y=estimate,
+        mode="lines+markers",
+        name=descriptions.get("estimated_eps", "Estimate EPS"),
+        line=dict(color="#fab005", width=3, dash="dash"),
+        marker=dict(symbol="diamond", size=8, color="#fab005"),
+        hovertemplate=f"<b>{descriptions.get('estimated_eps', 'Estimate EPS')}</b><br>{descriptions.get('fiscal_date_ending', 'Date')}: "+"%{x|%Y-%m-%d}<br>"+f"{descriptions.get('estimated_eps', 'EPS')}: "+"%{y:.2f}<extra></extra>"
+    ))
+    # Beat markers (green up triangle)
+    fig.add_trace(go.Scatter(
+        x=x[beat_mask],
+        y=actual[beat_mask],
+        mode="markers",
+        name="Beat",
+        marker=dict(symbol="triangle-up", size=14, color="green", line=dict(width=1, color="black")),
+        showlegend=True,
+        hovertemplate="<b>Beat</b><br>"+f"{descriptions.get('fiscal_date_ending', 'Date')}: "+"%{x|%Y-%m-%d}<br>"+f"{descriptions.get('reported_eps', 'Actual EPS')}: "+"%{y:.2f}<extra></extra>"
+    ))
+    # Miss markers (red down triangle)
+    fig.add_trace(go.Scatter(
+        x=x[miss_mask],
+        y=actual[miss_mask],
+        mode="markers",
+        name="Miss",
+        marker=dict(symbol="triangle-down", size=14, color="red", line=dict(width=1, color="black")),
+        showlegend=True,
+        hovertemplate="<b>Miss</b><br>"+f"{descriptions.get('fiscal_date_ending', 'Date')}: "+"%{x|%Y-%m-%d}<br>"+f"{descriptions.get('reported_eps', 'Actual EPS')}: "+"%{y:.2f}<extra></extra>"
+    ))
+
+    fig.update_layout(
+        title=f"{symbol.upper()} EPS: {descriptions.get('reported_eps', 'Actual EPS')} vs {descriptions.get('estimated_eps', 'Estimate EPS')} (Quarterly)",
+        xaxis_title=descriptions.get("fiscal_date_ending", "Fiscal Quarter End"),
+        yaxis_title=descriptions.get("reported_eps", "EPS"),
+        legend_title="Legend",
+        template="plotly_white",
+        width=DEFAULT_PLOTLY_WIDTH,
+        height=DEFAULT_PLOTLY_HEIGHT,
+        margin=dict(l=50, r=50, t=60, b=50),
+        font=dict(size=14)
+    )
+    return fig
+
+def plot_eps_surprise_percentage(symbol, data):
+    """
+    Creates a bar chart showing the **earnings surprise** for each quarter as a percentage. 
+    Each bar represents how much the reported EPS diverged from the consensus estimate (in percentage terms):contentReference[oaicite:1]{index=1}.
+      Bars extend upward (often colored green) for positive surprises (beats) and downward (colored red) for negative surprises (misses), with a zero line as the “met expectations” baseline. 
+      This chart lets investors quickly gauge the magnitude of each earnings beat or miss and spot patterns (e.g. consistently beating estimates or occasional large misses). 
+      Such surprise percentages are crucial since bigger positive surprises often coincide with stock price jumps, while big misses can trigger drops:contentReference[oaicite:2]{index=2}. 
+      This visualization uses the `surprise_percentage` from the data to include every quarter’s surprise, helping to illustrate the volatility and reliability of earnings relative to expectations.
+
+    Plots a bar chart showing the earnings surprise for each quarter as a percentage.
+    Uses 'surprise_percentage' if available, else computes from reported/estimated EPS.
+
+    Args:
+        symbol (str): Stock symbol.
+        data (pd.DataFrame): DataFrame with columns:
+            - fiscal_date_ending (quarter end date)
+            - reported_eps (actual EPS)
+            - estimated_eps (consensus estimate)
+            - surprise (actual - estimate)
+            - surprise_percentage (optional)
+    Returns:
+        go.Figure: Plotly bar chart of surprise percentages per quarter.
+    """
+    descriptions = _get_column_descriptions("earnings_quarterly")
+    if not isinstance(data, pd.DataFrame):
+        data = pd.DataFrame(data)
+    if data.empty or "fiscal_date_ending" not in data.columns:
+        return go.Figure()
+    df = data.copy()
+    df = df.sort_values("fiscal_date_ending")
+    x = pd.to_datetime(df["fiscal_date_ending"])
+    # Use surprise_percentage if available, else compute
+    if "surprise_percentage" in df.columns and df["surprise_percentage"].notnull().any():
+        surprise_pct = pd.to_numeric(df["surprise_percentage"], errors="coerce")
+    else:
+        actual = pd.to_numeric(df["reported_eps"], errors="coerce")
+        estimate = pd.to_numeric(df["estimated_eps"], errors="coerce")
+        surprise_pct = ((actual - estimate) / estimate * 100).where(estimate != 0)
+
+    # Color bars: green for positive, red for negative
+    colors = ["green" if v > 0 else "red" if v < 0 else "gray" for v in surprise_pct.fillna(0)]
+
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        x=x,
+        y=surprise_pct,
+        marker_color=colors,
+        name=descriptions.get("surprise_percentage", "Surprise %"),
+        hovertemplate=f"<b>{descriptions.get('fiscal_date_ending', 'Date')}</b>: "+"%{x|%Y-%m-%d}<br>"+f"{descriptions.get('surprise_percentage', 'Surprise %')}: "+"%{y:.2f}%<extra></extra>"
+    ))
+    fig.add_shape(
+        type="line",
+        x0=min(x), x1=max(x),
+        y0=0, y1=0,
+        line=dict(color="black", width=1, dash="dash"),
+        xref="x", yref="y"
+    )
+    fig.update_layout(
+        title=f"{symbol.upper()} {descriptions.get('surprise_percentage', 'EPS Surprise Percentage')} (Quarterly)",
+        xaxis_title=descriptions.get("fiscal_date_ending", "Fiscal Quarter End"),
+        yaxis_title=descriptions.get("surprise_percentage", "Surprise (%)"),
+        template="plotly_white",
+        width=DEFAULT_PLOTLY_WIDTH,
+        height=DEFAULT_PLOTLY_HEIGHT,
+        margin=dict(l=50, r=50, t=60, b=50),
+        font=dict(size=14)
+    )
+    return fig
+
+
+def plot_eps_actual_vs_estimate_scatter(symbol, data):
+    """
+    Plots actual EPS against estimated EPS for each quarterly report as a scatter plot, to visualize the **accuracy of forecasts** and the company’s bias in beating or missing. 
+    Each point represents a quarter, with the X-coordinate as the estimated EPS and the Y-coordinate as the reported actual EPS. 
+    A 45° reference line (where Actual = Estimate) is drawn; points above this line indicate quarters where earnings beat estimates, and points below indicate misses. 
+    The distance from the line reflects the surprise magnitude – farther above means a bigger beat, farther below means a bigger miss. 
+    This chart provides a clear view of the company’s overall track record: for example, a cluster of points above the line signals the company tends to outperform estimates. 
+    We utilize all relevant data – reported vs estimated EPS for each quarter – and can even distinguish **announcement timing** (pre-market vs post-market) by using different marker colors or shapes for `report_time`. 
+    This helps investors understand not just the trend over time, but the relationship between forecasts and actual performance in one view, reinforcing how often and by how much the company surprises the market.
+
+    Plots actual EPS against estimated EPS for each quarterly report as a scatter plot.
+    Uses ORM column names if present.
+
+    Args:
+        symbol (str): Stock symbol.
+        data (pd.DataFrame): DataFrame with columns:
+            - fiscal_date_ending (quarter end date)
+            - reported_eps (actual EPS)
+            - estimated_eps (consensus estimate)
+            - report_time (optional, e.g. 'BTO', 'AMC')
+    Returns:
+        go.Figure: Plotly scatter plot of actual vs estimate EPS.
+    """
+    descriptions = _get_column_descriptions("earnings_quarterly")
+    if not isinstance(data, pd.DataFrame):
+        data = pd.DataFrame(data)
+    if data.empty or "reported_eps" not in data.columns or "estimated_eps" not in data.columns:
+        return go.Figure()
+    df = data.copy()
+    df = df.dropna(subset=["reported_eps", "estimated_eps"])
+    if df.empty:
+        return go.Figure()
+    actual = pd.to_numeric(df["reported_eps"], errors="coerce")
+    estimate = pd.to_numeric(df["estimated_eps"], errors="coerce")
+    hover_text = [
+        f"{descriptions.get('fiscal_date_ending', 'Quarter')}: {str(row['fiscal_date_ending'])[:10]}<br>"
+        f"{descriptions.get('reported_eps', 'Actual EPS')}: {row['reported_eps']:.2f}<br>"
+        f"{descriptions.get('estimated_eps', 'Estimate EPS')}: {row['estimated_eps']:.2f}"
+        + (f"<br>{descriptions.get('report_time', 'Report Time')}: {row['report_time']}" if "report_time" in df.columns and pd.notnull(row['report_time']) else "")
+        for _, row in df.iterrows()
+    ]
+    # Marker style by report_time if available
+    if "report_time" in df.columns:
+        report_time = df["report_time"].fillna("Unknown")
+        unique_times = report_time.unique()
+        marker_symbols = {val: sym for val, sym in zip(unique_times, ["circle", "diamond", "square", "triangle-up", "triangle-down", "star"])}
+        marker_colors = {val: col for val, col in zip(unique_times, ["#228be6", "#fab005", "#40c057", "#e8590c", "#ae3ec9", "#868e96"])}
+        fig = go.Figure()
+        for rt in unique_times:
+            mask = report_time == rt
+            fig.add_trace(go.Scatter(
+                x=estimate[mask],
+                y=actual[mask],
+                mode="markers",
+                name=f"{descriptions.get('report_time', 'Report Time')}: {rt}",
+                marker=dict(
+                    symbol=marker_symbols[rt],
+                    size=14,
+                    color=marker_colors[rt],
+                    line=dict(width=1, color="black")
+                ),
+                hovertext=[hover_text[i] for i in range(len(df)) if mask.iloc[i]],
+                hoverinfo="text"
+            ))
+    else:
+        fig = go.Figure(go.Scatter(
+            x=estimate,
+            y=actual,
+            mode="markers",
+            marker=dict(symbol="circle", size=14, color="#228be6", line=dict(width=1, color="black")),
+            name="Quarter",
+            hovertext=hover_text,
+            hoverinfo="text"
+        ))
+    # 45-degree reference line
+    min_val = min(estimate.min(), actual.min())
+    max_val = max(estimate.max(), actual.max())
+    fig.add_trace(go.Scatter(
+        x=[min_val, max_val],
+        y=[min_val, max_val],
+        mode="lines",
+        line=dict(color="black", width=2, dash="dash"),
+        name="Actual = Estimate",
+        showlegend=True,
+        hoverinfo="skip"
+    ))
+    fig.update_layout(
+        title=f"{symbol.upper()} EPS: {descriptions.get('reported_eps', 'Actual EPS')} vs {descriptions.get('estimated_eps', 'Estimate EPS')} Scatter",
+        xaxis_title=descriptions.get("estimated_eps", "Estimated EPS"),
+        yaxis_title=descriptions.get("reported_eps", "Actual EPS"),
+        legend_title=descriptions.get("report_time", "Report Time"),
+        template="plotly_white",
+        width=DEFAULT_PLOTLY_WIDTH,
+        height=DEFAULT_PLOTLY_HEIGHT,
+        margin=dict(l=50, r=50, t=60, b=50),
+        font=dict(size=14)
+    )
+    fig.update_xaxes(constrain="domain")
+    fig.update_yaxes(scaleanchor="x", scaleratio=1)
+    return fig
+
+
+
+
+def plot_quarterly_revenue_net_income_vs_stock_price(symbol: str, income_df: pd.DataFrame, price_df: pd.DataFrame) -> go.Figure:
+    print(f"[DEBUG] plot_quarterly_revenue_net_income_vs_stock_price called with symbol={symbol}")
+    if income_df is None or price_df is None or len(income_df) == 0 or len(price_df) == 0:
+        print("[DEBUG] Empty income_df or price_df.")
+        return go.Figure()
+    df_income = income_df.copy()
+    df_price = price_df.copy()
+    print(f"[DEBUG] df_income columns: {df_income.columns.tolist()}")
+    print(f"[DEBUG] df_price columns: {df_price.columns.tolist()}")
+    if "symbol" in df_income.columns:
+        df_income = df_income[df_income["symbol"].str.upper() == symbol.upper()]
+        print(f"[DEBUG] Filtered df_income for symbol={symbol}, shape={df_income.shape}")
+    if "symbol" in df_price.columns:
+        df_price = df_price[df_price["symbol"].str.upper() == symbol.upper()]
+        print(f"[DEBUG] Filtered df_price for symbol={symbol}, shape={df_price.shape}")
+    if df_income.empty or df_price.empty:
+        print("[DEBUG] df_income or df_price is empty after filtering.")
+        return go.Figure()
+    if "fiscal_date_ending" not in df_income.columns or "total_revenue" not in df_income.columns or "net_income" not in df_income.columns:
+        print("[DEBUG] Required columns missing in df_income.")
+        return go.Figure()
+    if "date" not in df_price.columns or "close" not in df_price.columns:
+        print("[DEBUG] Required columns missing in df_price.")
+        return go.Figure()
+    df_income = df_income.sort_values("fiscal_date_ending")
+    x = pd.to_datetime(df_income["fiscal_date_ending"])
+    revenue = pd.to_numeric(df_income["total_revenue"], errors="coerce")
+    net_income = pd.to_numeric(df_income["net_income"], errors="coerce")
+    df_price["date"] = pd.to_datetime(df_price["date"])
+    close_prices = []
+    for dt in x:
+        price_row = df_price[df_price["date"] >= dt]
+        if not price_row.empty:
+            close_prices.append(price_row.iloc[0]["close"])
+        else:
+            close_prices.append(df_price.iloc[-1]["close"])
+    print(f"[DEBUG] x (fiscal_date_ending): {x.tolist()}")
+    print(f"[DEBUG] revenue: {revenue.tolist()}")
+    print(f"[DEBUG] net_income: {net_income.tolist()}")
+    print(f"[DEBUG] close_prices: {close_prices}")
+    descriptions = _get_column_descriptions("income_statement_quarterly")
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=x,
+        y=revenue,
+        mode="lines+markers",
+        name=descriptions.get("total_revenue", "Total Revenue"),
+        line=dict(color="#228be6", width=3),
+        marker=dict(symbol="circle", size=8, color="#228be6"),
+        yaxis="y1"
+    ))
+    fig.add_trace(go.Scatter(
+        x=x,
+        y=net_income,
+        mode="lines+markers",
+        name=descriptions.get("net_income", "Net Income"),
+        line=dict(color="#40c057", width=3),
+        marker=dict(symbol="diamond", size=8, color="#40c057"),
+        yaxis="y1"
+    ))
+    fig.add_trace(go.Scatter(
+        x=x,
+        y=close_prices,
+        mode="lines+markers",
+        name="Stock Price",
+        line=dict(color="#fab005", width=3, dash="dash"),
+        marker=dict(symbol="square", size=8, color="#fab005"),
+        yaxis="y2"
+    ))
+    fig.update_layout(
+        title=f"{symbol.upper()} Quarterly Revenue, Net Income & Stock Price",
+        xaxis_title=descriptions.get("fiscal_date_ending", "Fiscal Quarter End"),
+        yaxis=dict(
+            title="Revenue / Net Income",
+            showgrid=True,
+            zeroline=True
+        ),
+        yaxis2=dict(
+            title="Stock Price",
+            overlaying="y",
+            side="right",
+            showgrid=False
+        ),
+        legend_title="Metric",
+        template="plotly_white",
+        width=DEFAULT_PLOTLY_WIDTH,
+        height=DEFAULT_PLOTLY_HEIGHT,
+        margin=dict(l=50, r=50, t=80, b=50),
+        font=dict(size=14)
+    )
+    print("[DEBUG] plot_quarterly_revenue_net_income_vs_stock_price finished.")
+    return fig
+
+
+def plot_quarterly_profit_margins(symbol: str, income_df: pd.DataFrame) -> go.Figure:
+    """
+    Plots gross, operating and net profit margins over time to assess profitability trends.
+
+    The function filters `income_df` for the chosen `symbol` and computes three margins for each quarter:
+
+    * **Gross profit margin** = `gross_profit` divided by `total_revenue`.
+    * **Operating profit margin** = `operating_income` divided by `total_revenue`.
+    * **Net profit margin** = `net_income` divided by `total_revenue`.
+
+    It then builds a line chart with `fiscal_date_ending` on the x‑axis and the calculated margins (expressed as
+    percentages) on the y‑axis.  Investors and analysts watch these margins closely because they indicate how
+    efficiently a company turns sales into profits.  A higher gross profit margin suggests efficient operations and
+    provides a basis for comparison with peers:contentReference[oaicite:2]{index=2}; operating and net profit margins offer
+    insight into how much profit is generated after operating expenses, taxes and interest:contentReference[oaicite:3]{index=3}.
+    By examining margin trends quarter over quarter, investors can identify improvements or deterioration in
+    profitability and evaluate whether the company’s fundamentals justify changes in its stock price:contentReference[oaicite:4]{index=4}.
+    """
+    pass
+
+def plot_expense_breakdown_vs_revenue(symbol: str, income_df: pd.DataFrame) -> go.Figure:
+    """
+    Creates small multiple bar charts to visualize how major operating expenses compare with total revenue each quarter.
+
+    After filtering `income_df` by `symbol`, the function extracts the series for `total_revenue` alongside key
+    expense categories such as `cost_of_revenue`, `cost_of_goods_and_services_sold`,
+    `selling_general_and_administrative`, `research_and_development`, and `operating_expenses`.  For each
+    expense, it calculates the amount as a percentage of `total_revenue` and produces a separate bar chart
+    (small multiple) showing the expense and revenue trends across `fiscal_date_ending`.  Small multiple bar charts
+    are well suited to P&L trend and breakdown analysis because they allow easy comparison of different items on
+    the same scale and highlight which categories drive changes:contentReference[oaicite:5]{index=5}.  Displaying expenses
+    relative to revenue helps investors gauge whether costs are scaling efficiently or eating into profitability,
+    providing context for how operational decisions may influence future earnings and stock performance:contentReference[oaicite:6]{index=6}.
+    """
+    pass
+
+def plot_income_statement_waterfall(symbol: str, income_df: pd.DataFrame) -> go.Figure:
+    """
+    Builds a waterfall chart to illustrate the progression from total revenue to net income in a single quarter.
+
+    The waterfall visualization starts with `total_revenue` and sequentially subtracts or adds intermediate line
+    items from the income statement — including `cost_of_revenue`, `operating_expenses`, `investment_income_net`,
+    `net_interest_income`, `other_non_operating_income`, `income_tax_expense` and `interest_and_debt_expense` —
+    ending with `net_income`.  By clearly showing how each component contributes to or detracts from profits, a
+    waterfall chart provides a full income statement overview:contentReference[oaicite:7]{index=7}.  It is especially useful
+    for comparing how different segments or quarters flow into net income and for highlighting which line items have
+    the largest impact on profitability:contentReference[oaicite:8]{index=8}.  While waterfall charts excel at explaining
+    differences and relationships between items, they are less effective for showing long‑term trends:contentReference[oaicite:9]{index=9}.
+    """
+    pass
+
+def plot_operating_profit_ebit_ebitda_trends(symbol: str, income_df: pd.DataFrame) -> go.Figure:
+    """
+    Generates a line chart comparing `operating_income`, `ebit` and `ebitda` across fiscal quarters.
+
+    This function filters `income_df` by `symbol` and selects `fiscal_date_ending`, `operating_income`, `ebit` and
+    `ebitda`.  It plots each metric as a separate line to highlight how operating profit, earnings before
+    interest and taxes (EBIT) and earnings before interest, taxes, depreciation and amortization (EBITDA) evolve
+    over time.  EBITDA is widely used by analysts to track underlying profitability because it adds back
+    interest, tax and non‑cash expenses such as depreciation and amortization, focusing on core operations:contentReference[oaicite:10]{index=10}.
+    EBIT, which includes depreciation and amortization, provides a more conservative measure of profitability, while
+    `operating_income` reflects earnings from the company’s primary business before accounting for financing and
+    non‑operating items.  Comparing these measures helps investors understand how changes in capital structure,
+    tax rates or asset intensity affect reported earnings and assess whether improvements in operational
+    performance are driving stock price movements:contentReference[oaicite:11]{index=11}.
+    """
+    pass
+
+def plot_expense_growth_scatter(symbol: str, income_df: pd.DataFrame) -> go.Figure:
+    """
+    Constructs a bubble scatter plot to analyze quarter‑over‑quarter changes in expense categories relative to revenue.
+
+    For each pair of consecutive quarters in `income_df` (filtered by `symbol`), the function calculates the
+    percentage change in major expense categories — such as `selling_general_and_administrative`,
+    `research_and_development`, `operating_expenses`, and `cost_of_goods_and_services_sold` — as well as the
+    percentage change in `total_revenue`.  Each expense item is represented as a point whose x‑coordinate is its
+    relative growth rate, y‑coordinate is its absolute growth (difference in dollar amount) and bubble size
+    corresponds to its proportion of total expenses in the prior quarter.  A reference line represents the revenue
+    growth rate for comparison.  Bubble charts excel at showing which items drive changes from period to period
+    and whether expenses are growing faster than revenue:contentReference[oaicite:12]{index=12}.  This visualization helps
+    investors identify cost categories that may erode profitability or signal strategic investment and to evaluate
+    whether expense growth is sustainable relative to revenue:contentReference[oaicite:13]{index=13}.
+    """
+    pass
+
+def plot_tax_and_interest_effects(symbol: str, income_df: pd.DataFrame) -> go.Figure:
+    """
+    Visualizes how interest and tax expenses impact income before tax and net income on a quarterly basis.
+
+    After filtering `income_df` for the selected `symbol`, the function creates a stacked bar chart showing
+    `income_before_tax` broken down into `interest_and_debt_expense` and `income_tax_expense`, with `net_income`
+    overlaid as a line.  This combination highlights how financing costs and tax liabilities reduce pre‑tax earnings
+    to arrive at net income.  By comparing the sizes of `interest_and_debt_expense` and `income_tax_expense` across
+    quarters, investors can see whether changes in capital structure or tax rates affect profitability.  The
+    effective tax rate (computed as `income_tax_expense` divided by `income_before_tax`) and interest burden
+    provide context for evaluating how much of the company’s earnings are consumed by obligations rather than
+    operations.  Monitoring these components helps investors anticipate how future income statement items may
+    influence earnings and, ultimately, stock price:contentReference[oaicite:14]{index=14}.
+    """
+    pass
+
+def plot_metric_vs_future_stock_return(symbol: str, income_df: pd.DataFrame, price_df: pd.DataFrame, metric: str) -> go.Figure:
+    """
+    Creates a scatter plot showing the relationship between a chosen income statement metric and the stock’s
+    subsequent quarterly return.
+
+    The `metric` argument should be the name of a column in `income_df` (e.g., `total_revenue`, `net_income`,
+    `operating_income`, `gross_profit`, `ebitda`, or any other income statement field).  For each fiscal quarter,
+    the function computes the value of the selected metric and the percentage change in stock price from the
+    earnings announcement date to the end of the next quarter using `price_df`.  It then plots the metric on the
+    x‑axis and the subsequent return on the y‑axis.  By fitting a trend line or calculating the correlation,
+    investors can assess whether higher values of the chosen fundamental measure lead to positive future stock
+    performance.  This analysis operationalizes the principle that earnings and profitability drive stock prices
+    over the long term:contentReference[oaicite:15]{index=15}:contentReference[oaicite:16]{index=16} and allows retail investors to test which
+    income statement variables have the strongest predictive power for returns.  The function is flexible and
+    encourages experimentation across all columns in the Alpha Vantage income statement file, enabling
+    comprehensive exploration of how fundamentals influence future stock movements.
+    """
+    pass
+
+def plot_key_metrics_dashboard(symbol: str, income_df: pd.DataFrame, price_df: pd.DataFrame) -> go.Figure:
+    """
+    Produces a summary dashboard displaying headline income statement metrics and their recent changes alongside stock performance.
+
+    This function aggregates the most recent quarter’s values for key metrics — including `total_revenue`,
+    `gross_profit`, `operating_income`, `net_income`, `ebit`, and `ebitda` — and calculates their quarter‑over‑quarter
+    percentage changes.  It also computes gross, operating and net profit margins and displays the current stock
+    price and its change since the previous quarter using `price_df`.  The dashboard arranges these values in a
+    compact layout (e.g., with cards or tiles) so that investors can quickly grasp how the company’s financial
+    position has evolved.  A mini line chart or sparkline for each metric can show recent trends.  This type of
+    key‑metrics dashboard is ideal for summarizing earnings updates: it provides a quick overview of the most
+    important P&L figures and how they changed versus the previous period:contentReference[oaicite:17]{index=17}, catering to
+    users who already understand the company’s structure and just want to see the latest numbers:contentReference[oaicite:18]{index=18}.
+    By juxtaposing these fundamentals with the stock price, the dashboard helps investors evaluate whether market
+    reactions align with changes in the underlying business.
+    """
+    pass
