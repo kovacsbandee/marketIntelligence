@@ -1,29 +1,303 @@
-2025-08-25 00:19:46,962 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 1 filtered rows from company_fundamentals
-2025-08-25 00:19:46,970 - db_load_from_db_runner - WARNING - symbol.py:168 - ORM class for table 'cash_flow_statement_quarterly' not found. Skipping.
-2025-08-25 00:19:46,980 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 19 filtered rows from balance_sheet_annual
-2025-08-25 00:19:46,984 - db_load_from_db_runner - INFO - symbol.py:176 - Loaded table 'balance_sheet_annual' with 19 rows.
-2025-08-25 00:19:46,994 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 19 filtered rows from cash_flow_annual
-2025-08-25 00:19:46,997 - db_load_from_db_runner - INFO - symbol.py:176 - Loaded table 'cash_flow_annual' with 19 rows.
-2025-08-25 00:19:47,002 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 16 filtered rows from earnings_annual
-2025-08-25 00:19:47,005 - db_load_from_db_runner - INFO - symbol.py:176 - Loaded table 'earnings_annual' with 16 rows.
-2025-08-25 00:19:47,026 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 19 filtered rows from income_statement_annual
-2025-08-25 00:19:47,030 - db_load_from_db_runner - INFO - symbol.py:176 - Loaded table 'income_statement_annual' with 19 rows.
-2025-08-25 00:19:47,034 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 1 filtered rows from company_fundamentals
-2025-08-25 00:19:47,040 - db_load_from_db_runner - INFO - symbol.py:176 - Loaded table 'company_fundamentals' with 1 rows.
-2025-08-25 00:19:47,106 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 3809 filtered rows from daily_timeseries
-2025-08-25 00:19:47,167 - db_load_from_db_runner - INFO - symbol.py:176 - Loaded table 'daily_timeseries' with 3809 rows.
-2025-08-25 00:19:47,175 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 0 filtered rows from dividends
-2025-08-25 00:19:47,181 - db_load_from_db_runner - INFO - symbol.py:176 - Loaded table 'dividends' with 0 rows.
-2025-08-25 00:19:47,213 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 1653 filtered rows from insider_transactions
-2025-08-25 00:19:47,254 - db_load_from_db_runner - INFO - symbol.py:176 - Loaded table 'insider_transactions' with 1653 rows.
-2025-08-25 00:19:47,263 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 71 filtered rows from balance_sheet_quarterly
-2025-08-25 00:19:47,268 - db_load_from_db_runner - INFO - symbol.py:176 - Loaded table 'balance_sheet_quarterly' with 71 rows.
-2025-08-25 00:19:47,276 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 0 filtered rows from cash_flow_quarterly
-2025-08-25 00:19:47,279 - db_load_from_db_runner - INFO - symbol.py:176 - Loaded table 'cash_flow_quarterly' with 0 rows.
-2025-08-25 00:19:47,285 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 61 filtered rows from earnings_quarterly
-2025-08-25 00:19:47,288 - db_load_from_db_runner - INFO - symbol.py:176 - Loaded table 'earnings_quarterly' with 61 rows.
-2025-08-25 00:19:47,298 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 71 filtered rows from income_statement_quarterly
-2025-08-25 00:19:47,303 - db_load_from_db_runner - INFO - symbol.py:176 - Loaded table 'income_statement_quarterly' with 71 rows.
-2025-08-25 00:19:47,308 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 2 filtered rows from stock_splits
-2025-08-25 00:19:47,310 - db_load_from_db_runner - INFO - symbol.py:176 - Loaded table 'stock_splits' with 2 rows.
-2025-08-25 00:19:47,328 - db_load_from_db_runner - INFO - symbol.py:117 - Adjusted daily_timeseries for splits.
+2025-08-25 01:28:06,985 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 0 filtered rows from company_fundamentals
+2025-08-25 01:28:06,987 - db_load_from_db_runner - WARNING - symbol.py:154 - Symbol 'DELL' not found in database. Attempting to load...
+2025-08-25 01:28:06,989 - db_initial_load_runner - INFO - db_initial_load_runner.py:41 - Starting initial load for 1 symbols...
+2025-08-25 01:28:06,989 - db_initial_load_runner - INFO - db_initial_load_runner.py:69 - Processing symbol: DELL
+2025-08-25 01:28:06,990 - AlphaLoader - INFO - alphavantage_adapter.py:88 - Fetching data for DELL...
+2025-08-25 01:28:08,272 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - postgre_adapter.py:242 - Inserted 1676 new rows into daily_timeseries
+2025-08-25 01:28:08,276 - AlphaLoader - INFO - alphavantage_adapter.py:118 - Candlestick data for DELL loaded into the database.
+2025-08-25 01:28:08,276 - AlphaLoader - INFO - alphavantage_adapter.py:140 - Fetching company base data for DELL...
+2025-08-25 01:28:09,688 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - postgre_adapter.py:242 - Inserted 1 new rows into company_fundamentals
+2025-08-25 01:28:09,691 - AlphaLoader - INFO - alphavantage_adapter.py:176 - Company base data for DELL loaded into the database.
+2025-08-25 01:28:09,691 - AlphaLoader - INFO - alphavantage_adapter.py:203 - Fetching INCOME_STATEMENT data for DELL...
+2025-08-25 01:28:10,432 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - postgre_adapter.py:242 - Inserted 20 new rows into income_statement_annual
+2025-08-25 01:28:10,452 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - postgre_adapter.py:242 - Inserted 49 new rows into income_statement_quarterly
+2025-08-25 01:28:10,454 - AlphaLoader - INFO - alphavantage_adapter.py:280 - INCOME_STATEMENT data for DELL loaded into the database.
+2025-08-25 01:28:10,455 - AlphaLoader - INFO - alphavantage_adapter.py:203 - Fetching BALANCE_SHEET data for DELL...
+2025-08-25 01:28:11,386 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - postgre_adapter.py:242 - Inserted 20 new rows into balance_sheet_annual
+2025-08-25 01:28:11,407 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - postgre_adapter.py:242 - Inserted 49 new rows into balance_sheet_quarterly
+2025-08-25 01:28:11,410 - AlphaLoader - INFO - alphavantage_adapter.py:280 - BALANCE_SHEET data for DELL loaded into the database.
+2025-08-25 01:28:11,411 - AlphaLoader - INFO - alphavantage_adapter.py:203 - Fetching CASH_FLOW data for DELL...
+2025-08-25 01:28:12,256 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - postgre_adapter.py:242 - Inserted 20 new rows into cash_flow_annual
+2025-08-25 01:28:12,282 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - postgre_adapter.py:242 - Inserted 49 new rows into cash_flow_statement_quarterly
+2025-08-25 01:28:12,284 - AlphaLoader - INFO - alphavantage_adapter.py:280 - CASH_FLOW data for DELL loaded into the database.
+2025-08-25 01:28:12,285 - AlphaLoader - INFO - alphavantage_adapter.py:203 - Fetching EARNINGS data for DELL...
+2025-08-25 01:28:12,540 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - postgre_adapter.py:242 - Inserted 10 new rows into earnings_annual
+2025-08-25 01:28:12,555 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - postgre_adapter.py:242 - Inserted 35 new rows into earnings_quarterly
+2025-08-25 01:28:12,557 - AlphaLoader - INFO - alphavantage_adapter.py:280 - EARNINGS data for DELL loaded into the database.
+2025-08-25 01:28:12,558 - AlphaLoader - INFO - alphavantage_adapter.py:305 - Fetching INSIDER_TRANSACTIONS data for DELL...
+2025-08-25 01:28:13,778 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - postgre_adapter.py:242 - Inserted 1090 new rows into insider_transactions
+2025-08-25 01:28:13,781 - AlphaLoader - INFO - alphavantage_adapter.py:329 - Insider transaction data for DELL loaded into the database.
+2025-08-25 01:28:13,782 - AlphaLoader - INFO - alphavantage_adapter.py:352 - Fetching STOCK_SPLITS data for DELL...
+2025-08-25 01:28:14,035 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - INFO - postgre_adapter.py:242 - Inserted 1 new rows into stock_splits
+2025-08-25 01:28:14,041 - AlphaLoader - INFO - alphavantage_adapter.py:375 - Stock split data for DELL loaded into the database.
+2025-08-25 01:28:14,041 - AlphaLoader - INFO - alphavantage_adapter.py:397 - Fetching DIVIDENDS data for DELL...
+2025-08-25 01:28:14,572 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - ERROR - postgre_adapter.py:248 - Failed to insert new rows into dividends
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UndefinedColumn: column "id" of relation "dividends" does not exist
+LINE 1: INSERT INTO dividends (id, symbol, ex_dividend_date, amount,...
+                               ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column "id" of relation "dividends" does not exist
+LINE 1: INSERT INTO dividends (id, symbol, ex_dividend_date, amount,...
+                               ^
+
+[SQL: INSERT INTO dividends (id, symbol, ex_dividend_date, amount, declaration_date, record_date, payment_date) VALUES (nextval('dividends_id_seq'), %(symbol__0)s, %(ex_dividend_date__0)s, %(amount__0)s, %(declaration_date__0)s, %(record_date__0)s, %(payme ... 1913 characters truncated ... end_date__13)s, %(amount__13)s, %(declaration_date__13)s, %(record_date__13)s, %(payment_date__13)s)]
+[parameters: {'payment_date__0': datetime.date(2025, 8, 1), 'amount__0': 0.525, 'declaration_date__0': datetime.date(2025, 6, 17), 'symbol__0': 'DELL', 'record_date__0': datetime.date(2025, 7, 22), 'ex_dividend_date__0': datetime.date(2025, 7, 22), 'payment_date__1': datetime.date(2025, 5, 2), 'amount__1': 0.525, 'declaration_date__1': datetime.date(2025, 2, 27), 'symbol__1': 'DELL', 'record_date__1': datetime.date(2025, 4, 22), 'ex_dividend_date__1': datetime.date(2025, 4, 22), 'payment_date__2': datetime.date(2025, 1, 31), 'amount__2': 0.445, 'declaration_date__2': datetime.date(2024, 12, 3), 'symbol__2': 'DELL', 'record_date__2': datetime.date(2025, 1, 22), 'ex_dividend_date__2': datetime.date(2025, 1, 22), 'payment_date__3': datetime.date(2024, 11, 1), 'amount__3': 0.445, 'declaration_date__3': datetime.date(2024, 9, 18), 'symbol__3': 'DELL', 'record_date__3': datetime.date(2024, 10, 22), 'ex_dividend_date__3': datetime.date(2024, 10, 22), 'payment_date__4': datetime.date(2024, 8, 2), 'amount__4': 0.445, 'declaration_date__4': datetime.date(2024, 6, 11), 'symbol__4': 'DELL', 'record_date__4': datetime.date(2024, 7, 23), 'ex_dividend_date__4': datetime.date(2024, 7, 23), 'payment_date__5': datetime.date(2024, 5, 3), 'amount__5': 0.445, 'declaration_date__5': datetime.date(2024, 2, 29), 'symbol__5': 'DELL', 'record_date__5': datetime.date(2024, 4, 23), 'ex_dividend_date__5': datetime.date(2024, 4, 22), 'payment_date__6': datetime.date(2024, 2, 2), 'amount__6': 0.37, 'declaration_date__6': datetime.date(2023, 12, 5), 'symbol__6': 'DELL', 'record_date__6': datetime.date(2024, 1, 23), 'ex_dividend_date__6': datetime.date(2024, 1, 22), 'payment_date__7': datetime.date(2023, 11, 3), 'amount__7': 0.37, 'declaration_date__7': datetime.date(2023, 9, 28), 'symbol__7': 'DELL', 'record_date__7': datetime.date(2023, 10, 24), 'ex_dividend_date__7': datetime.date(2023, 10, 23), 'payment_date__8': datetime.date(2023, 8, 4), 'amount__8': 0.37, 'declaration_date__8': datetime.date(2023, 6, 16), 'symbol__8': 'DELL', 'record_date__8': datetime.date(2023, 7, 25), 'ex_dividend_date__8': datetime.date(2023, 7, 24), 'payment_date__9': datetime.date(2023, 5, 5), 'amount__9': 0.37, 'declaration_date__9': datetime.date(2023, 3, 2), 'symbol__9': 'DELL', 'record_date__9': datetime.date(2023, 4, 25), 'ex_dividend_date__9': datetime.date(2023, 4, 24), 'payment_date__10': datetime.date(2023, 2, 3), 'amount__10': 0.33, 'declaration_date__10': datetime.date(2022, 12, 6), 'symbol__10': 'DELL', 'record_date__10': datetime.date(2023, 1, 25), 'ex_dividend_date__10': datetime.date(2023, 1, 24), 'payment_date__11': datetime.date(2022, 10, 28), 'amount__11': 0.33, 'declaration_date__11': datetime.date(2022, 9, 6), 'symbol__11': 'DELL', 'record_date__11': datetime.date(2022, 10, 19), 'ex_dividend_date__11': datetime.date(2022, 10, 18), 'payment_date__12': datetime.date(2022, 7, 29), 'amount__12': 0.33, 'declaration_date__12': datetime.date(2022, 6, 7), 'symbol__12': 'DELL', 'record_date__12': datetime.date(2022, 7, 20), 'ex_dividend_date__12': datetime.date(2022, 7, 19), 'payment_date__13': datetime.date(2022, 4, 29), 'amount__13': 0.33, 'declaration_date__13': datetime.date(2022, 2, 24), 'symbol__13': 'DELL', 'record_date__13': datetime.date(2022, 4, 20), 'ex_dividend_date__13': datetime.date(2022, 4, 19)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-25 01:28:14,588 - data_manager.src_postgre_db.db_infrastructure.postgre_adapter - ERROR - postgre_adapter.py:91 - Transaction failed
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UndefinedColumn: column "id" of relation "dividends" does not exist
+LINE 1: INSERT INTO dividends (id, symbol, ex_dividend_date, amount,...
+                               ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 86, in session_scope
+    yield session
+  File "/home/bandee/projects/marketIntelligence/data_manager/src_postgre_db/db_infrastructure/postgre_adapter.py", line 241, in insert_new_data
+    session.bulk_insert_mappings(table, rows)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4669, in bulk_insert_mappings
+    self._bulk_save_mappings(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<5 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4763, in _bulk_save_mappings
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 4752, in _bulk_save_mappings
+    bulk_persistence._bulk_insert(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        mapper,
+        ^^^^^^^
+    ...<4 lines>...
+        render_nulls=render_nulls,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/bulk_persistence.py", line 222, in _bulk_insert
+    result = persistence._emit_insert_statements(
+        base_mapper,
+    ...<6 lines>...
+        execution_options=execution_options,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py", line 1048, in _emit_insert_statements
+    result = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 1841, in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2123, in _exec_insertmany_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e,
+        ^^
+    ...<4 lines>...
+        is_sub_exec=True,
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2115, in _exec_insertmany_context
+    dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~^
+        cursor,
+        ^^^^^^^
+    ...<2 lines>...
+        context,
+        ^^^^^^^^
+    )
+    ^
+  File "/home/bandee/projects/marketIntelligence/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column "id" of relation "dividends" does not exist
+LINE 1: INSERT INTO dividends (id, symbol, ex_dividend_date, amount,...
+                               ^
+
+[SQL: INSERT INTO dividends (id, symbol, ex_dividend_date, amount, declaration_date, record_date, payment_date) VALUES (nextval('dividends_id_seq'), %(symbol__0)s, %(ex_dividend_date__0)s, %(amount__0)s, %(declaration_date__0)s, %(record_date__0)s, %(payme ... 1913 characters truncated ... end_date__13)s, %(amount__13)s, %(declaration_date__13)s, %(record_date__13)s, %(payment_date__13)s)]
+[parameters: {'payment_date__0': datetime.date(2025, 8, 1), 'amount__0': 0.525, 'declaration_date__0': datetime.date(2025, 6, 17), 'symbol__0': 'DELL', 'record_date__0': datetime.date(2025, 7, 22), 'ex_dividend_date__0': datetime.date(2025, 7, 22), 'payment_date__1': datetime.date(2025, 5, 2), 'amount__1': 0.525, 'declaration_date__1': datetime.date(2025, 2, 27), 'symbol__1': 'DELL', 'record_date__1': datetime.date(2025, 4, 22), 'ex_dividend_date__1': datetime.date(2025, 4, 22), 'payment_date__2': datetime.date(2025, 1, 31), 'amount__2': 0.445, 'declaration_date__2': datetime.date(2024, 12, 3), 'symbol__2': 'DELL', 'record_date__2': datetime.date(2025, 1, 22), 'ex_dividend_date__2': datetime.date(2025, 1, 22), 'payment_date__3': datetime.date(2024, 11, 1), 'amount__3': 0.445, 'declaration_date__3': datetime.date(2024, 9, 18), 'symbol__3': 'DELL', 'record_date__3': datetime.date(2024, 10, 22), 'ex_dividend_date__3': datetime.date(2024, 10, 22), 'payment_date__4': datetime.date(2024, 8, 2), 'amount__4': 0.445, 'declaration_date__4': datetime.date(2024, 6, 11), 'symbol__4': 'DELL', 'record_date__4': datetime.date(2024, 7, 23), 'ex_dividend_date__4': datetime.date(2024, 7, 23), 'payment_date__5': datetime.date(2024, 5, 3), 'amount__5': 0.445, 'declaration_date__5': datetime.date(2024, 2, 29), 'symbol__5': 'DELL', 'record_date__5': datetime.date(2024, 4, 23), 'ex_dividend_date__5': datetime.date(2024, 4, 22), 'payment_date__6': datetime.date(2024, 2, 2), 'amount__6': 0.37, 'declaration_date__6': datetime.date(2023, 12, 5), 'symbol__6': 'DELL', 'record_date__6': datetime.date(2024, 1, 23), 'ex_dividend_date__6': datetime.date(2024, 1, 22), 'payment_date__7': datetime.date(2023, 11, 3), 'amount__7': 0.37, 'declaration_date__7': datetime.date(2023, 9, 28), 'symbol__7': 'DELL', 'record_date__7': datetime.date(2023, 10, 24), 'ex_dividend_date__7': datetime.date(2023, 10, 23), 'payment_date__8': datetime.date(2023, 8, 4), 'amount__8': 0.37, 'declaration_date__8': datetime.date(2023, 6, 16), 'symbol__8': 'DELL', 'record_date__8': datetime.date(2023, 7, 25), 'ex_dividend_date__8': datetime.date(2023, 7, 24), 'payment_date__9': datetime.date(2023, 5, 5), 'amount__9': 0.37, 'declaration_date__9': datetime.date(2023, 3, 2), 'symbol__9': 'DELL', 'record_date__9': datetime.date(2023, 4, 25), 'ex_dividend_date__9': datetime.date(2023, 4, 24), 'payment_date__10': datetime.date(2023, 2, 3), 'amount__10': 0.33, 'declaration_date__10': datetime.date(2022, 12, 6), 'symbol__10': 'DELL', 'record_date__10': datetime.date(2023, 1, 25), 'ex_dividend_date__10': datetime.date(2023, 1, 24), 'payment_date__11': datetime.date(2022, 10, 28), 'amount__11': 0.33, 'declaration_date__11': datetime.date(2022, 9, 6), 'symbol__11': 'DELL', 'record_date__11': datetime.date(2022, 10, 19), 'ex_dividend_date__11': datetime.date(2022, 10, 18), 'payment_date__12': datetime.date(2022, 7, 29), 'amount__12': 0.33, 'declaration_date__12': datetime.date(2022, 6, 7), 'symbol__12': 'DELL', 'record_date__12': datetime.date(2022, 7, 20), 'ex_dividend_date__12': datetime.date(2022, 7, 19), 'payment_date__13': datetime.date(2022, 4, 29), 'amount__13': 0.33, 'declaration_date__13': datetime.date(2022, 2, 24), 'symbol__13': 'DELL', 'record_date__13': datetime.date(2022, 4, 20), 'ex_dividend_date__13': datetime.date(2022, 4, 19)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-25 01:28:14,594 - AlphaLoader - ERROR - alphavantage_adapter.py:435 - An unexpected error occurred: (psycopg2.errors.UndefinedColumn) column "id" of relation "dividends" does not exist
+LINE 1: INSERT INTO dividends (id, symbol, ex_dividend_date, amount,...
+                               ^
+
+[SQL: INSERT INTO dividends (id, symbol, ex_dividend_date, amount, declaration_date, record_date, payment_date) VALUES (nextval('dividends_id_seq'), %(symbol__0)s, %(ex_dividend_date__0)s, %(amount__0)s, %(declaration_date__0)s, %(record_date__0)s, %(payme ... 1913 characters truncated ... end_date__13)s, %(amount__13)s, %(declaration_date__13)s, %(record_date__13)s, %(payment_date__13)s)]
+[parameters: {'payment_date__0': datetime.date(2025, 8, 1), 'amount__0': 0.525, 'declaration_date__0': datetime.date(2025, 6, 17), 'symbol__0': 'DELL', 'record_date__0': datetime.date(2025, 7, 22), 'ex_dividend_date__0': datetime.date(2025, 7, 22), 'payment_date__1': datetime.date(2025, 5, 2), 'amount__1': 0.525, 'declaration_date__1': datetime.date(2025, 2, 27), 'symbol__1': 'DELL', 'record_date__1': datetime.date(2025, 4, 22), 'ex_dividend_date__1': datetime.date(2025, 4, 22), 'payment_date__2': datetime.date(2025, 1, 31), 'amount__2': 0.445, 'declaration_date__2': datetime.date(2024, 12, 3), 'symbol__2': 'DELL', 'record_date__2': datetime.date(2025, 1, 22), 'ex_dividend_date__2': datetime.date(2025, 1, 22), 'payment_date__3': datetime.date(2024, 11, 1), 'amount__3': 0.445, 'declaration_date__3': datetime.date(2024, 9, 18), 'symbol__3': 'DELL', 'record_date__3': datetime.date(2024, 10, 22), 'ex_dividend_date__3': datetime.date(2024, 10, 22), 'payment_date__4': datetime.date(2024, 8, 2), 'amount__4': 0.445, 'declaration_date__4': datetime.date(2024, 6, 11), 'symbol__4': 'DELL', 'record_date__4': datetime.date(2024, 7, 23), 'ex_dividend_date__4': datetime.date(2024, 7, 23), 'payment_date__5': datetime.date(2024, 5, 3), 'amount__5': 0.445, 'declaration_date__5': datetime.date(2024, 2, 29), 'symbol__5': 'DELL', 'record_date__5': datetime.date(2024, 4, 23), 'ex_dividend_date__5': datetime.date(2024, 4, 22), 'payment_date__6': datetime.date(2024, 2, 2), 'amount__6': 0.37, 'declaration_date__6': datetime.date(2023, 12, 5), 'symbol__6': 'DELL', 'record_date__6': datetime.date(2024, 1, 23), 'ex_dividend_date__6': datetime.date(2024, 1, 22), 'payment_date__7': datetime.date(2023, 11, 3), 'amount__7': 0.37, 'declaration_date__7': datetime.date(2023, 9, 28), 'symbol__7': 'DELL', 'record_date__7': datetime.date(2023, 10, 24), 'ex_dividend_date__7': datetime.date(2023, 10, 23), 'payment_date__8': datetime.date(2023, 8, 4), 'amount__8': 0.37, 'declaration_date__8': datetime.date(2023, 6, 16), 'symbol__8': 'DELL', 'record_date__8': datetime.date(2023, 7, 25), 'ex_dividend_date__8': datetime.date(2023, 7, 24), 'payment_date__9': datetime.date(2023, 5, 5), 'amount__9': 0.37, 'declaration_date__9': datetime.date(2023, 3, 2), 'symbol__9': 'DELL', 'record_date__9': datetime.date(2023, 4, 25), 'ex_dividend_date__9': datetime.date(2023, 4, 24), 'payment_date__10': datetime.date(2023, 2, 3), 'amount__10': 0.33, 'declaration_date__10': datetime.date(2022, 12, 6), 'symbol__10': 'DELL', 'record_date__10': datetime.date(2023, 1, 25), 'ex_dividend_date__10': datetime.date(2023, 1, 24), 'payment_date__11': datetime.date(2022, 10, 28), 'amount__11': 0.33, 'declaration_date__11': datetime.date(2022, 9, 6), 'symbol__11': 'DELL', 'record_date__11': datetime.date(2022, 10, 19), 'ex_dividend_date__11': datetime.date(2022, 10, 18), 'payment_date__12': datetime.date(2022, 7, 29), 'amount__12': 0.33, 'declaration_date__12': datetime.date(2022, 6, 7), 'symbol__12': 'DELL', 'record_date__12': datetime.date(2022, 7, 20), 'ex_dividend_date__12': datetime.date(2022, 7, 19), 'payment_date__13': datetime.date(2022, 4, 29), 'amount__13': 0.33, 'declaration_date__13': datetime.date(2022, 2, 24), 'symbol__13': 'DELL', 'record_date__13': datetime.date(2022, 4, 20), 'ex_dividend_date__13': datetime.date(2022, 4, 19)}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-25 01:28:14,595 - db_initial_load_runner - INFO - db_initial_load_runner.py:77 - Initial loader finished its running.
+2025-08-25 01:28:14,595 - db_load_from_db_runner - INFO - symbol.py:157 - Called load_stock_data for symbol: DELL
+2025-08-25 01:28:14,599 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 1 filtered rows from company_fundamentals
+2025-08-25 01:28:14,609 - db_load_from_db_runner - WARNING - symbol.py:179 - ORM class for table 'cash_flow_statement_quarterly' not found. Skipping.
+2025-08-25 01:28:14,622 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 20 filtered rows from balance_sheet_annual
+2025-08-25 01:28:14,625 - db_load_from_db_runner - INFO - symbol.py:187 - Loaded table 'balance_sheet_annual' with 20 rows.
+2025-08-25 01:28:14,633 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 20 filtered rows from cash_flow_annual
+2025-08-25 01:28:14,636 - db_load_from_db_runner - INFO - symbol.py:187 - Loaded table 'cash_flow_annual' with 20 rows.
+2025-08-25 01:28:14,641 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 10 filtered rows from earnings_annual
+2025-08-25 01:28:14,644 - db_load_from_db_runner - INFO - symbol.py:187 - Loaded table 'earnings_annual' with 10 rows.
+2025-08-25 01:28:14,660 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 20 filtered rows from income_statement_annual
+2025-08-25 01:28:14,663 - db_load_from_db_runner - INFO - symbol.py:187 - Loaded table 'income_statement_annual' with 20 rows.
+2025-08-25 01:28:14,667 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 1 filtered rows from company_fundamentals
+2025-08-25 01:28:14,675 - db_load_from_db_runner - INFO - symbol.py:187 - Loaded table 'company_fundamentals' with 1 rows.
+2025-08-25 01:28:14,707 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 1676 filtered rows from daily_timeseries
+2025-08-25 01:28:14,736 - db_load_from_db_runner - INFO - symbol.py:187 - Loaded table 'daily_timeseries' with 1676 rows.
+2025-08-25 01:28:14,743 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 0 filtered rows from dividends
+2025-08-25 01:28:14,746 - db_load_from_db_runner - INFO - symbol.py:187 - Loaded table 'dividends' with 0 rows.
+2025-08-25 01:28:14,766 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 1090 filtered rows from insider_transactions
+2025-08-25 01:28:14,782 - db_load_from_db_runner - INFO - symbol.py:187 - Loaded table 'insider_transactions' with 1090 rows.
+2025-08-25 01:28:14,791 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 49 filtered rows from balance_sheet_quarterly
+2025-08-25 01:28:14,795 - db_load_from_db_runner - INFO - symbol.py:187 - Loaded table 'balance_sheet_quarterly' with 49 rows.
+2025-08-25 01:28:14,802 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 0 filtered rows from cash_flow_quarterly
+2025-08-25 01:28:14,805 - db_load_from_db_runner - INFO - symbol.py:187 - Loaded table 'cash_flow_quarterly' with 0 rows.
+2025-08-25 01:28:14,812 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 35 filtered rows from earnings_quarterly
+2025-08-25 01:28:14,815 - db_load_from_db_runner - INFO - symbol.py:187 - Loaded table 'earnings_quarterly' with 35 rows.
+2025-08-25 01:28:14,825 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 49 filtered rows from income_statement_quarterly
+2025-08-25 01:28:14,829 - db_load_from_db_runner - INFO - symbol.py:187 - Loaded table 'income_statement_quarterly' with 49 rows.
+2025-08-25 01:28:14,834 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:461 - Loaded 1 filtered rows from stock_splits
+2025-08-25 01:28:14,835 - db_load_from_db_runner - INFO - symbol.py:187 - Loaded table 'stock_splits' with 1 rows.
+2025-08-25 01:28:14,850 - db_load_from_db_runner - INFO - symbol.py:128 - Adjusted daily_timeseries for splits.

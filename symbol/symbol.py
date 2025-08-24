@@ -32,10 +32,21 @@ Example:
 
 import pandas as pd
 from infrastructure.databases.company.postgre_manager.postgre_manager import CompanyDataManager
-
 from infrastructure.databases.company.postgre_manager.postgre_objects import table_name_to_class
-
 from data_manager.src_postgre_db.db_etl_jobs.db_initial_load_runner import download_stock_data
+
+from analyst.quantitative_analyst.add_indicators_to_price_data import (
+    calculate_sma,
+    calculate_ema,
+    calculate_rsi,
+    calculate_macd,
+    calculate_bollinger_bands,
+    calculate_vwap,
+    calculate_stochastic,
+    calculate_obv,
+    calculate_adx,
+)
+
 from utils.logger import get_logger  # <-- Import your project logger
 
 #from analyst.analyst import Analyst, FinancialAnalyst, NewsAnalyst, QuantitativeAnalyst, LLMAnalyst
@@ -119,7 +130,7 @@ class Symbol:
         except Exception as e:
             logger.error("Error adjusting prices for splits: %s", str(e))
 
-    def _load_tables(self, auto_load_if_missing: bool):
+    def _load_tables(self, auto_load_if_missing: bool, add_price_indicators = False):
         """
         Load all tables for the given symbol. If the symbol is missing and auto_load_if_missing is True,
         attempt to load the data using the ETL utility.
@@ -178,6 +189,9 @@ class Symbol:
         # Adjust price data for splits after all tables are loaded
         self._update_price_data_with_splits()
 
+        if add_price_indicators:
+            self.add_all_price_indicators()
+
 
     def get_table(self, table_name: str) -> pd.DataFrame:
         """
@@ -199,15 +213,32 @@ class Symbol:
             list: A list of attribute names (strings) that are pandas DataFrame objects.
         """
         return [attr for attr in self.__dict__ if isinstance(getattr(self, attr), pd.DataFrame)]
-    
-    def do_financial_analysis(self):
+
+    def add_all_price_indicators(self):
         """
-        This is a placeholder for applying the financial analysis logic implemented in the analyst module.
+        This method adds all relevant price indicators to the symbol's daily_timeseries DataFrame.
         """
         try:
-            raise NotImplementedError("The financial analysis logic is not yet implemented.")
-        except NotImplementedError as e:
-            logger.error("An error occurred: %s", str(e))
+            price_df = getattr(self, "daily_timeseries", None)
+            if price_df is None or price_df.empty:
+                logger.warning("No daily_timeseries data loaded; cannot compute indicators.")
+                return
+
+            # Add indicators in-place, chaining each function
+            price_df = calculate_sma(price_df, window=20)  # Example window
+            price_df = calculate_ema(price_df, window=20)  # Example window
+            price_df = calculate_rsi(price_df, window=14)
+            price_df = calculate_macd(price_df)
+            price_df = calculate_bollinger_bands(price_df, window=20, num_std=2)
+            price_df = calculate_vwap(price_df)
+            price_df = calculate_stochastic(price_df, k_window=14, d_window=3)
+            price_df = calculate_obv(price_df)
+            price_df = calculate_adx(price_df, window=14)
+
+            setattr(self, "daily_timeseries", price_df)
+            logger.info("All price indicators added to daily_timeseries.")
+        except Exception as e:
+            logger.error("Error adding price indicators: %s", str(e))
             
 
     def hand_over_to_brokerage(self):
