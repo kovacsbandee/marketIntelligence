@@ -57,3 +57,4 @@ def load_symbol_data(symbol: str):
         "start_date": start_date,
         "end_date": end_date,
     }
+

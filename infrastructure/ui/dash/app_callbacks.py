@@ -7,16 +7,37 @@ from dash.development.base_component import Component
 from typing import Any
 
 from infrastructure.ui.dash.data_service import load_symbol_data
-from infrastructure.ui.dash.plots.plots import (
-    plot_price_with_indicators,
+
+from infrastructure.ui.dash.plots.daily_timeseries_plots import plot_price_with_indicators
+from infrastructure.ui.dash.plots.company_fundamentals_plots import plot_company_fundamentals_table
+
+from infrastructure.ui.dash.plots.balance_sheet_plots import (
     plot_balance_sheet_time_series,
     plot_balance_sheet_stacked_area,
     plot_balance_sheet_bar,
     plot_balance_sheet_pie,
     render_balance_sheet_metric_cards,
-    plot_company_fundamentals_table,
-    plot_quarterly_revenue_net_income_vs_stock_price,
 )
+
+from infrastructure.ui.dash.plots.income_plots import (
+                plot_key_metrics_dashboard,
+                plot_quarterly_profit_margins,
+                plot_expense_breakdown_vs_revenue,
+                plot_income_statement_waterfall,
+                plot_operating_profit_ebit_ebitda_trends,
+                plot_expense_growth_scatter,
+                plot_tax_and_interest_effects,
+                plot_metric_vs_future_stock_return,
+                plot_quarterly_revenue_net_income_vs_stock_price
+)
+
+from infrastructure.ui.dash.plots.earnings_plots import (
+    plot_eps_actual_vs_estimate,
+    plot_eps_surprise_percentage,
+    plot_eps_actual_vs_estimate_scatter
+)
+
+
 from infrastructure.ui.dash.app_util import get_last_6_months_range
 
 
@@ -34,11 +55,6 @@ def register_callbacks(app: dash.Dash) -> None:
         if earnings_data is None or len(earnings_data) == 0:
             return dmc.Text("No earnings data loaded.", c="red"), False
         try:
-            from infrastructure.ui.dash.plots.plots import (
-                plot_eps_actual_vs_estimate,
-                plot_eps_surprise_percentage,
-                plot_eps_actual_vs_estimate_scatter
-            )
             earnings_df = pd.DataFrame(earnings_data)
             symbol = earnings_df["symbol"].iloc[0] if "symbol" in earnings_df.columns and len(earnings_df) > 0 else ""
             fig_eps_vs_est = plot_eps_actual_vs_estimate(symbol, earnings_df)
@@ -396,16 +412,6 @@ def register_callbacks(app: dash.Dash) -> None:
             print(f"[DEBUG] price_df shape: {price_df.shape}, columns: {price_df.columns.tolist()}")
             symbol = income_df["symbol"].iloc[0] if "symbol" in income_df.columns and len(income_df) > 0 else ""
             print(f"[DEBUG] Using symbol: {symbol}")
-            from infrastructure.ui.dash.plots.plots import (
-                plot_key_metrics_dashboard,
-                plot_quarterly_profit_margins,
-                plot_expense_breakdown_vs_revenue,
-                plot_income_statement_waterfall,
-                plot_operating_profit_ebit_ebitda_trends,
-                plot_expense_growth_scatter,
-                plot_tax_and_interest_effects,
-                plot_metric_vs_future_stock_return
-            )
             fig_dashboard = plot_key_metrics_dashboard(symbol, income_df, price_df)
             fig_margins = plot_quarterly_profit_margins(symbol, income_df)
             fig_expenses = plot_expense_breakdown_vs_revenue(symbol, income_df)
