@@ -7,7 +7,7 @@ from dash.development.base_component import Component
 from typing import Any
 
 from infrastructure.ui.dash.data_service import load_symbol_data
-from infrastructure.ui.dash.plots import (
+from infrastructure.ui.dash.plots.plots import (
     plot_price_with_indicators,
     plot_balance_sheet_time_series,
     plot_balance_sheet_stacked_area,
@@ -34,7 +34,7 @@ def register_callbacks(app: dash.Dash) -> None:
         if earnings_data is None or len(earnings_data) == 0:
             return dmc.Text("No earnings data loaded.", c="red"), False
         try:
-            from infrastructure.ui.dash.plots import (
+            from infrastructure.ui.dash.plots.plots import (
                 plot_eps_actual_vs_estimate,
                 plot_eps_surprise_percentage,
                 plot_eps_actual_vs_estimate_scatter
@@ -396,11 +396,47 @@ def register_callbacks(app: dash.Dash) -> None:
             print(f"[DEBUG] price_df shape: {price_df.shape}, columns: {price_df.columns.tolist()}")
             symbol = income_df["symbol"].iloc[0] if "symbol" in income_df.columns and len(income_df) > 0 else ""
             print(f"[DEBUG] Using symbol: {symbol}")
+            from infrastructure.ui.dash.plots.plots import (
+                plot_key_metrics_dashboard,
+                plot_quarterly_profit_margins,
+                plot_expense_breakdown_vs_revenue,
+                plot_income_statement_waterfall,
+                plot_operating_profit_ebit_ebitda_trends,
+                plot_expense_growth_scatter,
+                plot_tax_and_interest_effects,
+                plot_metric_vs_future_stock_return
+            )
+            fig_dashboard = plot_key_metrics_dashboard(symbol, income_df, price_df)
+            fig_margins = plot_quarterly_profit_margins(symbol, income_df)
+            fig_expenses = plot_expense_breakdown_vs_revenue(symbol, income_df)
+            fig_expense_growth = plot_expense_growth_scatter(symbol, income_df)
+            fig_tax_interest = plot_tax_and_interest_effects(symbol, income_df)
+            fig_op_trends = plot_operating_profit_ebit_ebitda_trends(symbol, income_df)
+            fig_waterfall = plot_income_statement_waterfall(symbol, income_df)
             fig = plot_quarterly_revenue_net_income_vs_stock_price(symbol, income_df, price_df)
+            # Default metric for the scatter plot (can be made dynamic via UI)
+            default_metric = "net_income" if "net_income" in income_df.columns else income_df.columns[0]
+            fig_metric_vs_return = plot_metric_vs_future_stock_return(symbol, income_df, price_df, default_metric)
             print("[DEBUG] plot_quarterly_revenue_net_income_vs_stock_price returned a figure.")
             return dmc.Stack([
+                dmc.Divider(label="Key Metrics Dashboard", my=10),
+                dcc.Graph(figure=fig_dashboard),
+                dmc.Divider(label="Quarterly Profit Margins", my=10),
+                dcc.Graph(figure=fig_margins),
+                dmc.Divider(label="Expense Breakdown vs Revenue", my=10),
+                dcc.Graph(figure=fig_expenses),
+                dmc.Divider(label="Expense Growth vs Revenue (Bubble Chart)", my=10),
+                dcc.Graph(figure=fig_expense_growth),
+                dmc.Divider(label="Tax & Interest Effects on Pre-Tax and Net Income", my=10),
+                dcc.Graph(figure=fig_tax_interest),
+                dmc.Divider(label="Operating Profit, EBIT & EBITDA Trends", my=10),
+                dcc.Graph(figure=fig_op_trends),
+                dmc.Divider(label="Income Statement Waterfall (Most Recent Quarter)", my=10),
+                dcc.Graph(figure=fig_waterfall),
                 dmc.Divider(label="Quarterly Revenue, Net Income & Stock Price", my=10),
                 dcc.Graph(figure=fig),
+                dmc.Divider(label="Metric vs Future Stock Return (Quarterly)", my=10),
+                dcc.Graph(figure=fig_metric_vs_return),
             ], gap=16), False
         except Exception as e:
             print(f"[DEBUG] Exception in update_income_statement_tab: {e}")
