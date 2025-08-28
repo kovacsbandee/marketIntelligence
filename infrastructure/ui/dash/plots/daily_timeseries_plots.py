@@ -205,7 +205,132 @@ def plot_candlestick_chart(data):
         >>> fig = plot_candlestick_chart(price_data_df)
         >>> fig.show()
     """
-    pass
+    if data is None or data.empty:
+        raise ValueError("Data cannot be None or empty")
+    
+    # Create a copy to avoid modifying original data
+    df = data.copy()
+    
+    # Standardize column names (handle case variations)
+    column_mapping = {}
+    for col in df.columns:
+        col_lower = col.lower()
+        if col_lower in ['open']:
+            column_mapping[col] = 'Open'
+        elif col_lower in ['high']:
+            column_mapping[col] = 'High'
+        elif col_lower in ['low']:
+            column_mapping[col] = 'Low'
+        elif col_lower in ['close']:
+            column_mapping[col] = 'Close'
+        elif col_lower in ['volume']:
+            column_mapping[col] = 'Volume'
+        elif col_lower in ['date']:
+            column_mapping[col] = 'Date'
+    
+    # Rename columns
+    df = df.rename(columns=column_mapping)
+    
+    # Check for required columns
+    required_cols = ['Open', 'High', 'Low', 'Close']
+    missing_cols = [col for col in required_cols if col not in df.columns]
+    if missing_cols:
+        raise ValueError(f"Missing required columns: {missing_cols}")
+    
+    # Determine if we have volume data
+    has_volume = 'Volume' in df.columns and not df['Volume'].isna().all()
+    
+    # Get date column (use index if no Date column)
+    if 'Date' in df.columns:
+        x_data = df['Date']
+    elif 'date' in df.columns:
+        x_data = df['date']
+    else:
+        x_data = df.index
+    
+    # Create subplots if volume is present
+    if has_volume:
+        fig = make_subplots(
+            rows=2, 
+            cols=1,
+            shared_xaxes=True,
+            vertical_spacing=0.05,
+            row_heights=[0.7, 0.3],
+            subplot_titles=["Price", "Volume"]
+        )
+        
+        # Add candlestick chart
+        fig.add_trace(
+            go.Candlestick(
+                x=x_data,
+                open=df['Open'],
+                high=df['High'],
+                low=df['Low'],
+                close=df['Close'],
+                name="Price"
+            ),
+            row=1, col=1
+        )
+        
+        # Add volume bars
+        fig.add_trace(
+            go.Bar(
+                x=x_data,
+                y=df['Volume'],
+                name="Volume",
+                marker_color='rgba(158,202,225,0.6)',
+                marker_line_color='rgba(8,48,107,0.6)',
+                marker_line_width=0.5
+            ),
+            row=2, col=1
+        )
+        
+        # Update y-axis labels
+        fig.update_yaxes(title_text="Price", row=1, col=1)
+        fig.update_yaxes(title_text="Volume", row=2, col=1)
+        fig.update_xaxes(title_text="Date", row=2, col=1)
+        
+    else:
+        # Create single plot without volume
+        fig = go.Figure()
+        
+        # Add candlestick chart
+        fig.add_trace(
+            go.Candlestick(
+                x=x_data,
+                open=df['Open'],
+                high=df['High'],
+                low=df['Low'],
+                close=df['Close'],
+                name="Price"
+            )
+        )
+        
+        # Update layout
+        fig.update_layout(
+            yaxis_title="Price",
+            xaxis_title="Date"
+        )
+    
+    # Apply consistent styling
+    fig.update_layout(
+        title={
+            "text": "Candlestick Chart",
+            "x": 0.5,
+            "xanchor": "center",
+            "yanchor": "top",
+            "font": {"size": 20}
+        },
+        template="plotly_white",
+        showlegend=True,
+        width=DEFAULT_PLOTLY_WIDTH,
+        height=DEFAULT_PLOTLY_HEIGHT,
+        margin=dict(l=50, r=50, t=80, b=50),
+        font=dict(size=14),
+        xaxis_rangeslider_visible=False
+    )
+    
+    return fig
 
 
 def plot_candlestick_with_moving_averages(data, windows=(50, 200)):
