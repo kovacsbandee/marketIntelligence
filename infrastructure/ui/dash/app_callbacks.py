@@ -5,6 +5,12 @@ import pandas as pd
 import plotly.graph_objects as go
 from dash.development.base_component import Component
 
+from infrastructure.ui.dash.plots.insider_transactions_plots import (
+    prepare_insider_data,
+    plot_insider_price_chart,
+    plot_insider_transactions_over_time
+)
+
 from infrastructure.ui.dash.data_service import load_symbol_data
 
 from infrastructure.ui.dash.plots.daily_timeseries_plots import (
@@ -542,3 +548,77 @@ def register_callbacks(app: dash.Dash) -> None:
         except Exception as e:
             return dmc.Text(f"Error generating plot: {e}", c="red"), False
         
+
+    @app.callback(
+        Output("insider-transactions-content", "children"),
+        Output("insider-transactions-loading", "visible"),
+        Input("main-tabs", "value"),
+        Input("start-date-picker", "value"),
+        Input("end-date-picker", "value"),
+        Input("insider-transactions-store", "data"),
+        Input("price-store", "data"),
+        prevent_initial_call=True
+    )
+    def update_insider_transactions(
+        tab: str,
+        start_date: str,
+        end_date: str,
+        insider_transactions: list[dict] | None,
+        price_data: list[dict] | None
+    ) -> tuple[Component, bool]:
+        """
+        Callback to update the insider transactions tab with relevant plots.
+
+        Args:
+            tab (str): The currently selected tab.
+            start_date (str): Selected start date.
+            end_date (str): Selected end date.
+            insider_transactions (list[dict] | None): Insider transactions data from the store.
+            price_data (list[dict] | None): Daily price data from the store.
+
+        Returns:
+            tuple: Updated content and loading state for the insider transactions panel.
+        """
+
+        if tab != "insider-transactions":
+            return no_update, False
+        if insider_transactions is None or len(insider_transactions) == 0:
+            return dmc.Text("No insider transactions data available.", c="dimmed"), False
+        if price_data is None or len(price_data) == 0:
+            return dmc.Text("No price data available for insider transactions plot.", c="dimmed"), False
+
+        insider_df = pd.DataFrame(insider_transactions)
+        price_df = pd.DataFrame(price_data)
+        if insider_df.empty or price_df.empty:
+            return dmc.Text("No data to display for insider transactions.", c="dimmed"), False
+
+        # Filter by date if possible
+        if start_date and end_date:
+            if "transaction_date" in insider_df.columns:
+                insider_df["transaction_date"] = pd.to_datetime(insider_df["transaction_date"])
+                mask = (insider_df["transaction_date"] >= pd.to_datetime(start_date)) & (insider_df["transaction_date"] <= pd.to_datetime(end_date))
+                insider_df = insider_df.loc[mask]
+            if "date" in price_df.columns:
+                price_df["date"] = pd.to_datetime(price_df["date"])
+                mask = (price_df["date"] >= pd.to_datetime(start_date)) & (price_df["date"] <= pd.to_datetime(end_date))
+                price_df = price_df.loc[mask]
+
+        if insider_df.empty:
+            return dmc.Text("No insider transactions in selected date range.", c="dimmed"), False
+        if price_df.empty:
+            return dmc.Text("No price data in selected date range.", c="dimmed"), False
+
+        # Prepare and plot
+        try:
+            insider_df = prepare_insider_data(insider_df)
+            fig1 = plot_insider_price_chart(price_df, insider_df)
+            fig2 = plot_insider_transactions_over_time(insider_df)
+            content = dmc.Stack([
+                dmc.Text("Insider Trades on Price Chart", size="md", fw=700),
+                dcc.Graph(figure=fig1, style={"height": 400}),
+                dmc.Text("Insider Transaction Prices Over Time", size="md", fw=700, mt=20),
+                dcc.Graph(figure=fig2, style={"height": 400}),
+            ], gap=24)
+            return content, False
+        except Exception as e:
+            return dmc.Text(f"Error displaying insider transactions: {e}", c="red"), False

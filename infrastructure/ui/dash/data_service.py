@@ -44,6 +44,7 @@ def load_symbol_data(symbol: str):
     balance_sheet_quarterly = storage.get_table("balance_sheet_quarterly")
     earnings = storage.get_table("earnings_quarterly")
     income_statement_quarterly = storage.get_table("income_statement_quarterly")
+    insider_transactions = storage.get_table("insider_transactions")
     cashflow_statement_quarterly = storage.get_table("cash_flow_quarterly")
     print("Debug: Loaded cash flow data:", cashflow_statement_quarterly)
     start_date, end_date = get_last_6_months_range(daily_timeseries)
@@ -57,6 +58,7 @@ def load_symbol_data(symbol: str):
         "earnings": earnings,
         "income_statement_quarterly": income_statement_quarterly,
         "cashflow_statement_quarterly": cashflow_statement_quarterly,
+        "insider_transactions": insider_transactions,
         "start_date": start_date,
         "end_date": end_date,
     }

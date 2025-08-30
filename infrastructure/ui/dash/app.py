@@ -170,6 +170,7 @@ app.layout = dmc.MantineProvider(
     dcc.Store(id="earnings-store"),
     dcc.Store(id="q_income-store"),
     dcc.Store(id="cashflow-store"),
+    dcc.Store(id="insider-transactions-store")
     ]
 )
 
