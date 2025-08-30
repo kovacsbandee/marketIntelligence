@@ -1,3 +1,5 @@
+import plotly.graph_objects as go
+
 def plot_cash_flow_categories(df):
     """
     Create a bar chart comparing cash flows from operating, investing, and financing activities over time.
@@ -31,7 +33,65 @@ def plot_cash_flow_categories(df):
     ```
     This might produce a chart where each quarter has three bars: a green bar for OCF, a red bar for CFI (negative values going downward), and a blue bar for CFF. Analysts can quickly see trends, such as improving operating cash flow or increasing investment outflows over time.
     """
-    pass
+    if df is None or df.empty:
+        return go.Figure()
+    x_col = next((col for col in df.columns if 'fiscal_date' in col.lower() or 'date' in col.lower()), None)
+    if not x_col:
+        return go.Figure()
+    x = df[x_col]
+    fig = go.Figure()
+    # Operating Cash Flow
+    if 'operating_cashflow' in df.columns and df['operating_cashflow'].notnull().any():
+        fig.add_trace(go.Bar(
+            x=x,
+            y=df['operating_cashflow'],
+            name='Operating Cash Flow',
+            marker_color='green',
+            hovertemplate=f"<b>Operating Cash Flow</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+        ))
+    else:
+        print("Note: 'operating_cashflow' column missing or empty.")
+    # Investing Cash Flow
+    if 'cashflow_from_investment' in df.columns and df['cashflow_from_investment'].notnull().any():
+        fig.add_trace(go.Bar(
+            x=x,
+            y=df['cashflow_from_investment'],
+            name='Investing Cash Flow',
+            marker_color='red',
+            hovertemplate=f"<b>Investing Cash Flow</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+        ))
+    else:
+        print("Note: 'cashflow_from_investment' column missing or empty.")
+    # Financing Cash Flow
+    if 'cashflow_from_financing' in df.columns and df['cashflow_from_financing'].notnull().any():
+        fig.add_trace(go.Bar(
+            x=x,
+            y=df['cashflow_from_financing'],
+            name='Financing Cash Flow',
+            marker_color='blue',
+            hovertemplate=f"<b>Financing Cash Flow</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+        ))
+    else:
+        print("Note: 'cashflow_from_financing' column missing or empty.")
+    fig.update_layout(
+        barmode='group',
+        title={
+            "text": "Cash Flow Categories (Operating, Investing, Financing)",
+            "x": 0.5,
+            "xanchor": "center",
+            "yanchor": "top",
+            "font": {"size": 20}
+        },
+        xaxis_title="Period",
+        yaxis_title="Cash Flow (in USD)",
+        template="plotly_white",
+        width=1000,
+        height=500,
+        margin=dict(l=50, r=50, t=80, b=50),
+        font=dict(size=14),
+        showlegend=True
+    )
+    return fig
 
 def plot_operating_vs_net_income(df):
     """
@@ -69,7 +129,55 @@ def plot_operating_vs_net_income(df):
     ```
     The resulting line chart might show net income rising steadily from $500M to $800M over several years, while operating cash flow rises from $450M to $900M. In such a case, by the final year OCF exceeds net income – a potentially good sign that earnings are backed by cash. The docstring's references and the chart together emphasize how users can spot trends like a widening gap (which would warrant investigation into why cash isn’t keeping up with profit, or vice versa).
     """
-    pass
+    if df is None or df.empty:
+        return go.Figure()
+    x_col = next((col for col in df.columns if 'fiscal_date' in col.lower() or 'date' in col.lower()), None)
+    if not x_col:
+        return go.Figure()
+    x = df[x_col]
+    fig = go.Figure()
+    # Operating Cash Flow
+    if 'operating_cashflow' in df.columns and df['operating_cashflow'].notnull().any():
+        fig.add_trace(go.Scatter(
+            x=x,
+            y=df['operating_cashflow'],
+            mode='lines+markers',
+            name='Operating Cash Flow',
+            line=dict(color='green', width=2),
+            hovertemplate=f"<b>Operating Cash Flow</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+        ))
+    else:
+        print("Note: 'operating_cashflow' column missing or empty.")
+    # Net Income
+    if 'net_income' in df.columns and df['net_income'].notnull().any():
+        fig.add_trace(go.Scatter(
+            x=x,
+            y=df['net_income'],
+            mode='lines+markers',
+            name='Net Income',
+            line=dict(color='orange', width=2, dash='dash'),
+            hovertemplate=f"<b>Net Income</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+        ))
+    else:
+        print("Note: 'net_income' column missing or empty.")
+    fig.update_layout(
+        title={
+            "text": "Operating Cash Flow vs Net Income",
+            "x": 0.5,
+            "xanchor": "center",
+            "yanchor": "top",
+            "font": {"size": 20}
+        },
+        xaxis_title="Period",
+        yaxis_title="Amount (in USD)",
+        template="plotly_white",
+        width=1000,
+        height=500,
+        margin=dict(l=50, r=50, t=80, b=50),
+        font=dict(size=14),
+        showlegend=True
+    )
+    return fig
 
 def plot_free_cash_flow(df):
     """
@@ -105,5 +213,41 @@ def plot_free_cash_flow(df):
     ```
     The output might be a bar chart where most bars are positive and growing, say from $1B to $3B over several years, except for a couple of quarters where FCF is slightly negative due to a big capex project (shown by a red bar). Such visualization quickly conveys how much real cash the company is generating after investments, complementing the understanding gained from the operating cash flow alone.
     """
-    pass
+    if df is None or df.empty:
+        return go.Figure()
+    x_col = next((col for col in df.columns if 'fiscal_date' in col.lower() or 'date' in col.lower()), None)
+    if not x_col:
+        return go.Figure()
+    x = df[x_col]
+    if 'operating_cashflow' not in df.columns or 'capital_expenditures' not in df.columns:
+        print("Note: Required columns for FCF ('operating_cashflow', 'capital_expenditures') missing.")
+        return go.Figure()
+    fcf = df['operating_cashflow'] - df['capital_expenditures']
+    colors = ['green' if v >= 0 else 'red' for v in fcf]
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        x=x,
+        y=fcf,
+        name='Free Cash Flow',
+        marker_color=colors,
+        hovertemplate=f"<b>Free Cash Flow</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+    ))
+    fig.update_layout(
+        title={
+            "text": "Free Cash Flow per Period",
+            "x": 0.5,
+            "xanchor": "center",
+            "yanchor": "top",
+            "font": {"size": 20}
+        },
+        xaxis_title="Period",
+        yaxis_title="Free Cash Flow (in USD)",
+        template="plotly_white",
+        width=1000,
+        height=500,
+        margin=dict(l=50, r=50, t=80, b=50),
+        font=dict(size=14),
+        showlegend=True
+    )
+    return fig
 

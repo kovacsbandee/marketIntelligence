@@ -19,7 +19,7 @@ def calculate_sma(data, window):
 
     prices = df['close']
     sma = prices.rolling(window=window, min_periods=window).mean()
-    df['sma'] = sma
+    df[f'sma_win_len_{window}'] = sma
     return df
 
 
@@ -40,7 +40,7 @@ def calculate_ema(data, window):
 
     prices = df['close']
     ema = prices.ewm(span=window, adjust=False).mean()
-    df['ema'] = ema
+    df[f'ema_win_len_{window}'] = ema
     return df
 
 
@@ -65,7 +65,7 @@ def calculate_rsi(data, window=14):
     avg_loss = loss.ewm(alpha=1 / window, min_periods=window, adjust=False).mean()
     rs = avg_gain / avg_loss
     rsi = 100 - (100 / (1 + rs))
-    df['rsi'] = rsi
+    df[f'rsi_win_len_{window}'] = rsi
     return df
 
 
@@ -92,8 +92,8 @@ def calculate_macd(data, fast=12, slow=26, signal=9):
     macd = ema_fast - ema_slow
     macd_signal = macd.ewm(span=signal, adjust=False).mean()
     macd_hist = macd - macd_signal
-    df['macd'] = macd
-    df['macd_signal'] = macd_signal
+    df[f'macd_f_{fast}_s_{slow}'] = macd
+    df[f'macd_signal_{signal}'] = macd_signal
     df['macd_hist'] = macd_hist
     return df
 
@@ -124,7 +124,7 @@ def calculate_bollinger_bands(data, window=20, num_std=2):
     std = prices.rolling(window=window, min_periods=window).std()
     upper = middle + num_std * std
     lower = middle - num_std * std
-    df['bb_middle'] = middle
+    df[f'bb_middle_win_{window}_std_{num_std}'] = middle
     df['bb_upper'] = upper
     df['bb_lower'] = lower
     return df
@@ -188,8 +188,8 @@ def calculate_stochastic(data, k_window=14, d_window=3):
     highest_high = high.rolling(window=k_window, min_periods=k_window).max()
     percent_k = 100 * (close - lowest_low) / (highest_high - lowest_low)
     percent_d = percent_k.rolling(window=d_window, min_periods=d_window).mean()
-    df['%K'] = percent_k
-    df['%D'] = percent_d
+    df[f'%K_kwin_{k_window}'] = percent_k
+    df[f'%D_dwin_{d_window}'] = percent_d
     return df
 
 
@@ -250,7 +250,7 @@ def calculate_adx(data, window=14):
     minus_di = 100 * (minus_dm.rolling(window=window, min_periods=window).sum() / atr)
     dx = 100 * (plus_di - minus_di).abs() / (plus_di + minus_di)
     adx = dx.rolling(window=window, min_periods=window).mean()
-    df['adx'] = adx
-    df['plus_di'] = plus_di
-    df['minus_di'] = minus_di
+    df[f'adx_win_{window}'] = adx
+    df[f'plus_di_win_{window}'] = plus_di
+    df[f'minus_di_win_{window}'] = minus_di
     return df

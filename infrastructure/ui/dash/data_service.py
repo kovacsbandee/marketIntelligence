@@ -27,7 +27,7 @@ def load_symbol_data(symbol: str):
             - end_date (str): End date for the default 6-month range.
     """
     adapter = CompanyDataManager()
-    storage = Symbol(adapter, symbol.upper())
+    storage = Symbol(adapter, symbol.upper(), add_price_indicators=True)
     daily_timeseries = storage.get_table("daily_timeseries")
     if daily_timeseries is None or daily_timeseries.empty:
         return {
@@ -44,6 +44,8 @@ def load_symbol_data(symbol: str):
     balance_sheet_quarterly = storage.get_table("balance_sheet_quarterly")
     earnings = storage.get_table("earnings_quarterly")
     income_statement_quarterly = storage.get_table("income_statement_quarterly")
+    cashflow_statement_quarterly = storage.get_table("cash_flow_quarterly")
+    print("Debug: Loaded cash flow data:", cashflow_statement_quarterly)
     start_date, end_date = get_last_6_months_range(daily_timeseries)
     return {
         "status_message": storage.status_message,
@@ -54,6 +56,7 @@ def load_symbol_data(symbol: str):
         "balance_sheet_quarterly": balance_sheet_quarterly,
         "earnings": earnings,
         "income_statement_quarterly": income_statement_quarterly,
+        "cashflow_statement_quarterly": cashflow_statement_quarterly,
         "start_date": start_date,
         "end_date": end_date,
     }

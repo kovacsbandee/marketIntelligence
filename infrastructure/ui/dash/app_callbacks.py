@@ -4,11 +4,21 @@ import dash_mantine_components as dmc
 import pandas as pd
 import plotly.graph_objects as go
 from dash.development.base_component import Component
-from typing import Any
 
 from infrastructure.ui.dash.data_service import load_symbol_data
 
-from infrastructure.ui.dash.plots.daily_timeseries_plots import plot_price_with_indicators
+from infrastructure.ui.dash.plots.daily_timeseries_plots import (
+    plot_candlestick_chart,
+    add_moving_averages_to_candlestick,
+    add_bollinger_bands_to_candlestick,
+    plot_candlestick_with_vwap,
+    plot_rsi,
+    plot_macd,
+    plot_stochastic,
+    plot_obv,
+    plot_adx
+)
+
 from infrastructure.ui.dash.plots.company_fundamentals_plots import plot_company_fundamentals_table
 
 from infrastructure.ui.dash.plots.balance_sheet_plots import (
@@ -42,41 +52,70 @@ from infrastructure.ui.dash.app_util import get_last_6_months_range
 
 
 def register_callbacks(app: dash.Dash) -> None:
+
     @app.callback(
-        Output("earnings-content", "children"),
-        Output("earnings-loading", "visible"),
+        Output("cash-flow-content", "children"),
+        Output("cash-flow-loading", "visible"),
         Input("main-tabs", "value"),
-        Input("earnings-store", "data"),
+        Input("start-date-picker", "value"),
+        Input("end-date-picker", "value"),
+        Input("cashflow-store", "data"),
         prevent_initial_call=True
     )
-    def update_earnings_panel(tab: str, earnings_data: list[dict] | None):
-        if tab != "earnings":
+    def update_cash_flow(
+        tab: str,
+        start_date: str,
+        end_date: str,
+        cashflow_data: list[dict] | None
+    ) -> tuple[Component, bool]:
+        """
+        Callback to update the cash flow panel with all relevant plots.
+
+        Args:
+            tab (str): The currently selected tab.
+            start_date (str): Selected start date.
+            end_date (str): Selected end date.
+            cashflow_data (list[dict]): Cash flow data from the store.
+
+        Returns:
+            tuple: Updated content and loading state for the cash flow panel.
+        """
+        print(f"Debug: {tab}, {start_date}, {end_date}, {cashflow_data}")
+        if tab != "cash-flow":
             return no_update, False
-        if earnings_data is None or len(earnings_data) == 0:
-            return dmc.Text("No earnings data loaded.", c="red"), False
+        if cashflow_data is None or len(cashflow_data) == 0:
+            return dmc.Text("No cash flow data loaded.", c="red"), False
+        cashflow_df = pd.DataFrame(cashflow_data)
+        print(f"Debug: {tab}, {start_date}, {end_date}, {cashflow_df}")
+        if cashflow_df.empty:
+            return dmc.Text("No cash flow data loaded.", c="red"), False
+        # Filter by date if possible
+        date_col = next((col for col in cashflow_df.columns if 'fiscal_date' in col.lower() or 'date' in col.lower()), None)
+        if date_col and start_date and end_date:
+            cashflow_df[date_col] = pd.to_datetime(cashflow_df[date_col])
+            mask = (cashflow_df[date_col] >= pd.to_datetime(start_date)) & (cashflow_df[date_col] <= pd.to_datetime(end_date))
+            selected_cashflow = cashflow_df.loc[mask]
+        else:
+            selected_cashflow = cashflow_df
         try:
-            earnings_df = pd.DataFrame(earnings_data)
-            symbol = earnings_df["symbol"].iloc[0] if "symbol" in earnings_df.columns and len(earnings_df) > 0 else ""
-            fig_eps_vs_est = plot_eps_actual_vs_estimate(symbol, earnings_df)
-            fig_surprise_pct = plot_eps_surprise_percentage(symbol, earnings_df)
-            fig_eps_scatter = plot_eps_actual_vs_estimate_scatter(symbol, earnings_df)
+            from infrastructure.ui.dash.plots.cashflow_plots import (
+                plot_cash_flow_categories,
+                plot_operating_vs_net_income,
+                plot_free_cash_flow
+            )
+            fig_categories = plot_cash_flow_categories(selected_cashflow)
+            fig_ocf_vs_ni = plot_operating_vs_net_income(selected_cashflow)
+            fig_fcf = plot_free_cash_flow(selected_cashflow)
             return dmc.Stack([
-                dmc.Divider(label="EPS Actual vs Estimate", my=10),
-                dcc.Graph(figure=fig_eps_vs_est),
-                dmc.Divider(label="EPS Surprise Percentage", my=10),
-                dcc.Graph(figure=fig_surprise_pct),
-                dmc.Divider(label="EPS Actual vs Estimate Scatter", my=10),
-                dcc.Graph(figure=fig_eps_scatter),
+                dmc.Divider(label="Cash Flow Categories (Operating, Investing, Financing)", my=10),
+                dcc.Graph(figure=fig_categories),
+                dmc.Divider(label="Operating Cash Flow vs Net Income", my=10),
+                dcc.Graph(figure=fig_ocf_vs_ni),
+                dmc.Divider(label="Free Cash Flow per Period", my=10),
+                dcc.Graph(figure=fig_fcf),
             ], gap=16), False
         except Exception as e:
-            return dmc.Text(f"Error displaying earnings plots: {e}", c="red"), False
-    """
-    Register all Dash callbacks for the application.
-
-    Args:
-        app (dash.Dash): The Dash app instance.
-    """
-
+            return dmc.Text(f"Error generating cash flow plots: {e}", c="red"), False
     @app.callback(
         Output("start-date-picker", "value"),
         Output("end-date-picker", "value"),
@@ -88,6 +127,7 @@ def register_callbacks(app: dash.Dash) -> None:
         Output("a_balance-store", "data"),
         Output("earnings-store", "data"),
         Output("q_income-store", "data"),
+        Output("cashflow-store", "data"),
         Input("load-btn", "n_clicks"),
         State("symbol-input", "value"),
         prevent_initial_call=True
@@ -113,6 +153,8 @@ def register_callbacks(app: dash.Dash) -> None:
             return df.to_dict("records")
 
         earnings = data.get("earnings") if "earnings" in data else None
+        print("debug cash flow data:", df_to_records(data.get("cashflow_statement_quarterly")))
+        # Add cash flow data to the return tuple for cashflow-store
         return (
             data["start_date"],
             data["end_date"],
@@ -124,7 +166,52 @@ def register_callbacks(app: dash.Dash) -> None:
             df_to_records(data["annual_balance_sheet"]),
             df_to_records(earnings),
             df_to_records(data.get("income_statement_quarterly") if "income_statement_quarterly" in data else None),
+            df_to_records(data.get("cashflow_statement_quarterly") if "cashflow_statement_quarterly" in data else None),
         )
+
+    @app.callback(
+        Output("company-base-content", "children"),
+        Output("company-base-loading", "visible"),
+        Input("main-tabs", "value"),
+        Input("company-base-store", "data"),
+        prevent_initial_call=True
+    )
+    def update_company_base(
+        tab: str,
+        company_fundamentals: list[dict] | None
+    ) -> tuple[Component, bool]:
+        """
+        Callback to update the company base info panel with a Plotly table.
+
+        Args:
+            tab (str): The currently selected tab.
+            company_base_data (dict): The company base data from the store.
+
+        Returns:
+            tuple: Updated content and loading state for the company base panel.
+        """
+        if tab != "company-base":
+            return no_update, False
+        if company_fundamentals is None or len(company_fundamentals) == 0:
+            return dmc.Text("No company info loaded.", c="red"), False
+
+        try:
+            company_fundamentals_df = pd.DataFrame(company_fundamentals)
+            company_fundamentals_row = company_fundamentals_df.iloc[[0]]
+            symbol = company_fundamentals_row.iloc[0].get("symbol", "") if not company_fundamentals_row.empty else ""
+            fig = plot_company_fundamentals_table(company_fundamentals_row, symbol)
+            return dcc.Graph(figure=fig, config={"displayModeBar": False}), False
+        except Exception as e:
+            return dmc.Text(f"Error displaying company fundamentals: {e}", c="red"), False
+
+
+    """
+    Register all Dash callbacks for the application.
+
+    Args:
+        app (dash.Dash): The Dash app instance.
+    """
+
 
     @app.callback(
         Output("price-indicator-content", "children"),
@@ -133,16 +220,14 @@ def register_callbacks(app: dash.Dash) -> None:
         Input("start-date-picker", "value"),
         Input("end-date-picker", "value"),
         Input("price-store", "data"),
-        Input("dividends-store", "data"),
         prevent_initial_call=True
     )
-    def update_price_indicator(
+    def price_charts_and_indicators(
         tab: str,
         start_date: str,
         end_date: str,
-        daily_timeseries: list[dict] | None,
-        dividends: list[dict] | None
-    ) -> tuple[Component, bool]:
+        daily_timeseries: list[dict] | None
+    ) -> tuple[Component]:
         """
         Callback to update the price indicator panel with a plot.
 
@@ -162,26 +247,150 @@ def register_callbacks(app: dash.Dash) -> None:
             return dmc.Text("No price data loaded.", c="red"), False
         # Convert to DataFrame if needed
         daily_timeseries_df = pd.DataFrame(daily_timeseries)
-        dividends_df = pd.DataFrame(dividends) if dividends is not None else None
         if not start_date or not end_date:
             start_date, end_date = get_last_6_months_range(daily_timeseries_df)
         date_range = [start_date, end_date]
         mask = (daily_timeseries_df["date"] >= date_range[0]) & (daily_timeseries_df["date"] <= date_range[1])
         selected_timeseries = daily_timeseries_df.loc[mask]
-        if dividends_df is not None and not dividends_df.empty and "ex_dividend_date" in dividends_df.columns:
-            div_mask = (dividends_df["ex_dividend_date"] >= date_range[0]) & (dividends_df["ex_dividend_date"] <= date_range[1])
-            dividends_df = dividends_df.loc[div_mask]
         try:
-            fig = plot_price_with_indicators(
-                price_table=selected_timeseries,
-                include_macd=True,
-                include_rsi=True,
-                include_vwap=True
-            )
+            fig = plot_candlestick_chart(selected_timeseries)
             fig.update_layout(xaxis_range=[start_date, end_date])
-            return dcc.Graph(figure=fig), False
+            fig_ma = add_moving_averages_to_candlestick(selected_timeseries)
+            fig_ma.update_layout(xaxis_range=[start_date, end_date])
+            fig_bb = add_bollinger_bands_to_candlestick(selected_timeseries)
+            fig_bb.update_layout(xaxis_range=[start_date, end_date])
+            fig_vwap = plot_candlestick_with_vwap(selected_timeseries)
+            fig_vwap.update_layout(xaxis_range=[start_date, end_date])
+            fig_rsi = plot_rsi(selected_timeseries)
+            fig_rsi.update_layout(xaxis_range=[start_date, end_date])
+            fig_macd = plot_macd(selected_timeseries)
+            fig_stoch = plot_stochastic(selected_timeseries)
+            fig_obv = plot_obv(selected_timeseries)
+            fig_adx = plot_adx(selected_timeseries)
+            return dmc.Stack([
+                dmc.Divider(label="Candlestick Chart", my=10),
+                dcc.Graph(figure=fig),
+                dmc.Divider(label="Candlestick with Moving Averages", my=10),
+                dcc.Graph(figure=fig_ma),
+                dmc.Divider(label="Candlestick with Bollinger Bands", my=10),
+                dcc.Graph(figure=fig_bb),
+                dmc.Divider(label="Candlestick with VWAP", my=10),
+                dcc.Graph(figure=fig_vwap),
+                dmc.Divider(label="RSI (Relative Strength Index)", my=10),
+                dcc.Graph(figure=fig_rsi),
+                dmc.Divider(label="MACD (Moving Average Convergence Divergence)", my=10),
+                dcc.Graph(figure=fig_macd),
+                dmc.Divider(label="Stochastic Oscillator", my=10),
+                dcc.Graph(figure=fig_stoch),
+                dmc.Divider(label="On-Balance Volume (OBV)", my=10),
+                dcc.Graph(figure=fig_obv),
+                dmc.Divider(label="Average Directional Index (ADX)", my=10),
+                dcc.Graph(figure=fig_adx),
+            ], gap=16), False
         except Exception as e:
             return dmc.Text(f"Error generating plot: {e}", c="red"), False
+
+    @app.callback(
+        Output("earnings-content", "children"),
+        Output("earnings-loading", "visible"),
+        Input("main-tabs", "value"),
+        Input("earnings-store", "data"),
+        prevent_initial_call=True
+    )
+    def update_earnings_panel(tab: str, 
+                              earnings_data: list[dict] | None):
+        if tab != "earnings":
+            return no_update, False
+        if earnings_data is None or len(earnings_data) == 0:
+            return dmc.Text("No earnings data loaded.", c="red"), False
+        try:
+            earnings_df = pd.DataFrame(earnings_data)
+            symbol = earnings_df["symbol"].iloc[0] if "symbol" in earnings_df.columns and len(earnings_df) > 0 else ""
+            fig_eps_vs_est = plot_eps_actual_vs_estimate(symbol, earnings_df)
+            fig_surprise_pct = plot_eps_surprise_percentage(symbol, earnings_df)
+            fig_eps_scatter = plot_eps_actual_vs_estimate_scatter(symbol, earnings_df)
+            return dmc.Stack([
+                dmc.Divider(label="EPS Actual vs Estimate", my=10),
+                dcc.Graph(figure=fig_eps_vs_est),
+                dmc.Divider(label="EPS Surprise Percentage", my=10),
+                dcc.Graph(figure=fig_surprise_pct),
+                dmc.Divider(label="EPS Actual vs Estimate Scatter", my=10),
+                dcc.Graph(figure=fig_eps_scatter),
+            ], gap=16), False
+        except Exception as e:
+            return dmc.Text(f"Error displaying earnings plots: {e}", c="red"), False
+
+    @app.callback(
+        Output("income-statement-content", "children"),
+        Output("income-statement-loading", "visible"),
+        Input("main-tabs", "value"),
+        Input("price-store", "data"),
+        Input("q_income-store", "data"),
+        prevent_initial_call=True
+    )
+    def update_income_statement_tab(
+        tab: str,
+        price_data: list[dict] | None,
+        income_statement_quarterly: list[dict] | None
+    ):
+        """
+        Callback to update the income statement tab with all relevant plots.
+
+        Args:
+            tab (str): The currently selected tab.
+            price_data (list[dict] | None): Daily timeseries price data.
+            income_statement_quarterly (list[dict] | None): Quarterly income statement data.
+
+        Returns:
+            tuple: Updated content and loading state for the income statement panel.
+        """
+        if tab != "income-statement":
+            print("[DEBUG] Not on income-statement tab.")
+            return no_update, False
+        if income_statement_quarterly is None or len(income_statement_quarterly) == 0:
+            print(f"[DEBUG] No income statement data loaded. income_statement_quarterly={income_statement_quarterly}")
+            return dmc.Text("No income statement data loaded.", c="red"), False
+        if price_data is None or len(price_data) == 0:
+            print(f"[DEBUG] No price data loaded. price_data={price_data}")
+            return dmc.Text("No price data loaded.", c="red"), False
+        try:
+            income_df = pd.DataFrame(income_statement_quarterly)
+            price_df = pd.DataFrame(price_data)
+            symbol = income_df["symbol"].iloc[0] if "symbol" in income_df.columns and len(income_df) > 0 else ""
+            fig_dashboard = plot_key_metrics_dashboard(symbol, income_df, price_df)
+            fig_margins = plot_quarterly_profit_margins(symbol, income_df)
+            fig_expenses = plot_expense_breakdown_vs_revenue(symbol, income_df)
+            fig_expense_growth = plot_expense_growth_scatter(symbol, income_df)
+            fig_tax_interest = plot_tax_and_interest_effects(symbol, income_df)
+            fig_op_trends = plot_operating_profit_ebit_ebitda_trends(symbol, income_df)
+            fig_waterfall = plot_income_statement_waterfall(symbol, income_df)
+            fig = plot_quarterly_revenue_net_income_vs_stock_price(symbol, income_df, price_df)
+            # Default metric for the scatter plot (can be made dynamic via UI)
+            default_metric = "net_income" if "net_income" in income_df.columns else income_df.columns[0]
+            fig_metric_vs_return = plot_metric_vs_future_stock_return(symbol, income_df, price_df, default_metric)
+            return dmc.Stack([
+                dmc.Divider(label="Key Metrics Dashboard", my=10),
+                dcc.Graph(figure=fig_dashboard),
+                dmc.Divider(label="Quarterly Profit Margins", my=10),
+                dcc.Graph(figure=fig_margins),
+                dmc.Divider(label="Expense Breakdown vs Revenue", my=10),
+                dcc.Graph(figure=fig_expenses),
+                dmc.Divider(label="Expense Growth vs Revenue (Bubble Chart)", my=10),
+                dcc.Graph(figure=fig_expense_growth),
+                dmc.Divider(label="Tax & Interest Effects on Pre-Tax and Net Income", my=10),
+                dcc.Graph(figure=fig_tax_interest),
+                dmc.Divider(label="Operating Profit, EBIT & EBITDA Trends", my=10),
+                dcc.Graph(figure=fig_op_trends),
+                dmc.Divider(label="Income Statement Waterfall (Most Recent Quarter)", my=10),
+                dcc.Graph(figure=fig_waterfall),
+                dmc.Divider(label="Quarterly Revenue, Net Income & Stock Price", my=10),
+                dcc.Graph(figure=fig),
+                dmc.Divider(label="Metric vs Future Stock Return (Quarterly)", my=10),
+                dcc.Graph(figure=fig_metric_vs_return),
+            ], gap=16), False
+        except Exception as e:
+            print(f"[DEBUG] Exception in update_income_statement_tab: {e}")
+            return dmc.Text(f"Error displaying income statement plots: {e}", c="red"), False
 
     @app.callback(
         Output("balance-sheet-content", "children"),
@@ -333,117 +542,3 @@ def register_callbacks(app: dash.Dash) -> None:
         except Exception as e:
             return dmc.Text(f"Error generating plot: {e}", c="red"), False
         
-    @app.callback(
-        Output("company-base-content", "children"),
-        Output("company-base-loading", "visible"),
-        Input("main-tabs", "value"),
-        Input("company-base-store", "data"),
-        prevent_initial_call=True
-    )
-    def update_company_base(
-        tab: str,
-        company_fundamentals: list[dict] | None
-    ) -> tuple[Component, bool]:
-        """
-        Callback to update the company base info panel with a Plotly table.
-
-        Args:
-            tab (str): The currently selected tab.
-            company_base_data (dict): The company base data from the store.
-
-        Returns:
-            tuple: Updated content and loading state for the company base panel.
-        """
-        if tab != "company-base":
-            return no_update, False
-        if company_fundamentals is None or len(company_fundamentals) == 0:
-            return dmc.Text("No company info loaded.", c="red"), False
-
-        try:
-            company_fundamentals_df = pd.DataFrame(company_fundamentals)
-            company_fundamentals_row = company_fundamentals_df.iloc[[0]]
-            symbol = company_fundamentals_row.iloc[0].get("symbol", "") if not company_fundamentals_row.empty else ""
-            fig = plot_company_fundamentals_table(company_fundamentals_row, symbol)
-            return dcc.Graph(figure=fig, config={"displayModeBar": False}), False
-        except Exception as e:
-            return dmc.Text(f"Error displaying company fundamentals: {e}", c="red"), False
-
-    @app.callback(
-        Output("income-statement-content", "children"),
-        Output("income-statement-loading", "visible"),
-        Input("main-tabs", "value"),
-        Input("company-base-store", "data"),
-        Input("price-store", "data"),
-        Input("q_income-store", "data"),
-        prevent_initial_call=True
-    )
-    def update_income_statement_tab(
-        tab: str,
-        company_fundamentals: list[dict] | None,
-        price_data: list[dict] | None,
-        income_statement_quarterly: list[dict] | None
-    ):
-        """
-        Callback to update the income statement tab with all relevant plots.
-
-        Args:
-            tab (str): The currently selected tab.
-            company_fundamentals (list[dict] | None): Company fundamentals data.
-            price_data (list[dict] | None): Daily timeseries price data.
-            income_statement_quarterly (list[dict] | None): Quarterly income statement data.
-
-        Returns:
-            tuple: Updated content and loading state for the income statement panel.
-        """
-        if tab != "income-statement":
-            print("[DEBUG] Not on income-statement tab.")
-            return no_update, False
-        if income_statement_quarterly is None or len(income_statement_quarterly) == 0:
-            print(f"[DEBUG] No income statement data loaded. income_statement_quarterly={income_statement_quarterly}")
-            return dmc.Text("No income statement data loaded.", c="red"), False
-        if price_data is None or len(price_data) == 0:
-            print(f"[DEBUG] No price data loaded. price_data={price_data}")
-            return dmc.Text("No price data loaded.", c="red"), False
-        try:
-            print("[DEBUG] Creating DataFrames for income and price data.")
-            income_df = pd.DataFrame(income_statement_quarterly)
-            price_df = pd.DataFrame(price_data)
-            print(f"[DEBUG] income_df shape: {income_df.shape}, columns: {income_df.columns.tolist()}")
-            print(f"[DEBUG] price_df shape: {price_df.shape}, columns: {price_df.columns.tolist()}")
-            symbol = income_df["symbol"].iloc[0] if "symbol" in income_df.columns and len(income_df) > 0 else ""
-            print(f"[DEBUG] Using symbol: {symbol}")
-            fig_dashboard = plot_key_metrics_dashboard(symbol, income_df, price_df)
-            fig_margins = plot_quarterly_profit_margins(symbol, income_df)
-            fig_expenses = plot_expense_breakdown_vs_revenue(symbol, income_df)
-            fig_expense_growth = plot_expense_growth_scatter(symbol, income_df)
-            fig_tax_interest = plot_tax_and_interest_effects(symbol, income_df)
-            fig_op_trends = plot_operating_profit_ebit_ebitda_trends(symbol, income_df)
-            fig_waterfall = plot_income_statement_waterfall(symbol, income_df)
-            fig = plot_quarterly_revenue_net_income_vs_stock_price(symbol, income_df, price_df)
-            # Default metric for the scatter plot (can be made dynamic via UI)
-            default_metric = "net_income" if "net_income" in income_df.columns else income_df.columns[0]
-            fig_metric_vs_return = plot_metric_vs_future_stock_return(symbol, income_df, price_df, default_metric)
-            print("[DEBUG] plot_quarterly_revenue_net_income_vs_stock_price returned a figure.")
-            return dmc.Stack([
-                dmc.Divider(label="Key Metrics Dashboard", my=10),
-                dcc.Graph(figure=fig_dashboard),
-                dmc.Divider(label="Quarterly Profit Margins", my=10),
-                dcc.Graph(figure=fig_margins),
-                dmc.Divider(label="Expense Breakdown vs Revenue", my=10),
-                dcc.Graph(figure=fig_expenses),
-                dmc.Divider(label="Expense Growth vs Revenue (Bubble Chart)", my=10),
-                dcc.Graph(figure=fig_expense_growth),
-                dmc.Divider(label="Tax & Interest Effects on Pre-Tax and Net Income", my=10),
-                dcc.Graph(figure=fig_tax_interest),
-                dmc.Divider(label="Operating Profit, EBIT & EBITDA Trends", my=10),
-                dcc.Graph(figure=fig_op_trends),
-                dmc.Divider(label="Income Statement Waterfall (Most Recent Quarter)", my=10),
-                dcc.Graph(figure=fig_waterfall),
-                dmc.Divider(label="Quarterly Revenue, Net Income & Stock Price", my=10),
-                dcc.Graph(figure=fig),
-                dmc.Divider(label="Metric vs Future Stock Return (Quarterly)", my=10),
-                dcc.Graph(figure=fig_metric_vs_return),
-            ], gap=16), False
-        except Exception as e:
-            print(f"[DEBUG] Exception in update_income_statement_tab: {e}")
-            return dmc.Text(f"Error displaying income statement plots: {e}", c="red"), False

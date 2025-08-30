@@ -66,7 +66,10 @@ class Symbol:
         status_message (str): Status message about the data loading process.
     """
 
-    def __init__(self, adapter: CompanyDataManager, symbol: str, auto_load_if_missing: bool = True):
+    def __init__(self, adapter: CompanyDataManager, 
+                       symbol: str, 
+                       auto_load_if_missing: bool = True,
+                       add_price_indicators: bool = True):
         """
         Initialize the DBSymbolStorage.
 
@@ -78,6 +81,7 @@ class Symbol:
         self._adapter = adapter
         self._symbol = symbol
         self.status_message = ""
+        self.add_price_indicators = add_price_indicators
         self._load_tables(auto_load_if_missing)
 
     def _symbol_exists(self) -> bool:
@@ -130,7 +134,7 @@ class Symbol:
         except Exception as e:
             logger.error("Error adjusting prices for splits: %s", str(e))
 
-    def _load_tables(self, auto_load_if_missing: bool, add_price_indicators = False):
+    def _load_tables(self, auto_load_if_missing: bool):
         """
         Load all tables for the given symbol. If the symbol is missing and auto_load_if_missing is True,
         attempt to load the data using the ETL utility.
@@ -173,6 +177,7 @@ class Symbol:
 
         # Proceed to load all tables
         table_names = self._adapter.list_tables()
+        print("Debug: Loading tables:", table_names)
         for table_name in table_names:
             orm_class = table_name_to_class.get(table_name)
             if orm_class is None:
@@ -183,13 +188,15 @@ class Symbol:
             else:
                 rows = self._adapter.load_all(orm_class)
             loaded_df = pd.DataFrame(rows)
+            if table_name == "cashflow_statement_quarterly":
+                print("Debug: Loaded cash flow data:", loaded_df)
             setattr(self, table_name, loaded_df)
             logger.info("Loaded table '%s' with %d rows.", table_name, len(loaded_df))
 
         # Adjust price data for splits after all tables are loaded
         self._update_price_data_with_splits()
 
-        if add_price_indicators:
+        if self.add_price_indicators:
             self.add_all_price_indicators()
 
 
