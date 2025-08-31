@@ -15,6 +15,13 @@ Note:
     available when the module is imported elsewhere.
 """
 
+import logging
+from datetime import date
+import pandas as pd
+import numpy as np
+
+logger = logging.getLogger(__name__)
+
 from .column_maps import (
     COMPANY_FUNDAMENTALS_MAP, DIVIDENDS_MAP, STOCK_SPLIT_MAP, INSIDER_TRANSACTION_MAP,
     ANNUAL_BALANCE_SHEET_MAP, QUARTERLY_BALANCE_SHEET_MAP,
@@ -29,14 +36,6 @@ from infrastructure.databases.company.postgre_manager.postgre_objects import (
     AnnualIncomeStatement, QuarterlyIncomeStatement, InsiderTransactions, StockSplit, Dividends
 )
 
-import pandas as pd
-import numpy as np
-import logging
-import datetime
-from datetime import date
-
-logger = logging.getLogger(__name__)
-
 def standardize_and_clean(
     df,
     column_map=None,
@@ -44,7 +43,6 @@ def standardize_and_clean(
     float_cols=None,
     int_cols=None,
     symbol=None,
-    dropna_col=None,
     always_string_cols=None,
     always_float_cols=None,
     always_date_cols=None,
@@ -67,8 +65,6 @@ def standardize_and_clean(
     df.replace(to_replace=["None", "none", "NaN", "nan", "", "-", "null", "NULL"], value=np.nan, inplace=True)
     df = df.infer_objects(copy=False)
 
-    # --- PATCH: Improved type conversion ---
-    # Use ORM schema if provided, otherwise use explicit lists
     if orm_columns:
         orm_col_objs = orm_columns if hasattr(orm_columns[0], "type") else None
         orm_col_names = [col.name if orm_col_objs else col for col in orm_columns]
@@ -160,11 +156,9 @@ def preprocess_company_fundamentals(df, symbol):
         orm_columns=[col.name for col in orm_columns],
         dummy_row=dummy_row
     )
-    # PATCH: Ensure symbol is present and not null
     df['symbol'] = symbol
     df.dropna(subset=['symbol'], inplace=True)
 
-    # PATCH: Convert dividend_date and ex_dividend_date to date or None
     for col in ['dividend_date', 'ex_dividend_date']:
         if col in df.columns:
             df[col] = pd.to_datetime(df[col], errors='coerce').dt.date

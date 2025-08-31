@@ -175,7 +175,6 @@ class Symbol:
 
         # Proceed to load all tables
         table_names = self._adapter.list_tables()
-        print("Debug: Loading tables:", table_names)
         for table_name in table_names:
             orm_class = table_name_to_class.get(table_name)
             if orm_class is None:

@@ -1,5 +1,8 @@
+import math
 import pandas as pd
+import numpy as np
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 from infrastructure.ui.dash.plot_utils import DEFAULT_PLOTLY_WIDTH, DEFAULT_PLOTLY_HEIGHT, _get_column_descriptions 
 
 
@@ -59,28 +62,20 @@ def plot_quarterly_revenue_net_income_vs_stock_price(symbol: str, income_df: pd.
     ... )
     >>> fig.show()
     """
-    print(f"[DEBUG] plot_quarterly_revenue_net_income_vs_stock_price called with symbol={symbol}")
     if income_df is None or price_df is None or len(income_df) == 0 or len(price_df) == 0:
         print("[DEBUG] Empty income_df or price_df.")
         return go.Figure()
     df_income = income_df.copy()
     df_price = price_df.copy()
-    print(f"[DEBUG] df_income columns: {df_income.columns.tolist()}")
-    print(f"[DEBUG] df_price columns: {df_price.columns.tolist()}")
     if "symbol" in df_income.columns:
         df_income = df_income[df_income["symbol"].str.upper() == symbol.upper()]
-        print(f"[DEBUG] Filtered df_income for symbol={symbol}, shape={df_income.shape}")
     if "symbol" in df_price.columns:
         df_price = df_price[df_price["symbol"].str.upper() == symbol.upper()]
-        print(f"[DEBUG] Filtered df_price for symbol={symbol}, shape={df_price.shape}")
     if df_income.empty or df_price.empty:
-        print("[DEBUG] df_income or df_price is empty after filtering.")
         return go.Figure()
     if "fiscal_date_ending" not in df_income.columns or "total_revenue" not in df_income.columns or "net_income" not in df_income.columns:
-        print("[DEBUG] Required columns missing in df_income.")
         return go.Figure()
     if "date" not in df_price.columns or "close" not in df_price.columns:
-        print("[DEBUG] Required columns missing in df_price.")
         return go.Figure()
     df_income = df_income.sort_values("fiscal_date_ending")
     x = pd.to_datetime(df_income["fiscal_date_ending"])
@@ -94,10 +89,6 @@ def plot_quarterly_revenue_net_income_vs_stock_price(symbol: str, income_df: pd.
             close_prices.append(price_row.iloc[0]["close"])
         else:
             close_prices.append(df_price.iloc[-1]["close"])
-    print(f"[DEBUG] x (fiscal_date_ending): {x.tolist()}")
-    print(f"[DEBUG] revenue: {revenue.tolist()}")
-    print(f"[DEBUG] net_income: {net_income.tolist()}")
-    print(f"[DEBUG] close_prices: {close_prices}")
     descriptions = _get_column_descriptions("income_statement_quarterly")
     fig = go.Figure()
     fig.add_trace(go.Scatter(
@@ -148,7 +139,6 @@ def plot_quarterly_revenue_net_income_vs_stock_price(symbol: str, income_df: pd.
         margin=dict(l=50, r=50, t=80, b=50),
         font=dict(size=14)
     )
-    print("[DEBUG] plot_quarterly_revenue_net_income_vs_stock_price finished.")
     return fig
 
 
@@ -249,8 +239,6 @@ def plot_expense_breakdown_vs_revenue(symbol: str, income_df: pd.DataFrame) -> g
     """
     Creates small multiple bar charts to visualize how major operating expenses compare with total revenue each quarter.
     """
-    import math
-    from plotly.subplots import make_subplots
     # Validate input DataFrame
     if income_df is None or len(income_df) == 0:
         return go.Figure()
@@ -349,7 +337,6 @@ def plot_income_statement_waterfall(symbol: str, income_df: pd.DataFrame) -> go.
     """
     Builds a waterfall chart to illustrate the progression from total revenue to net income in a single quarter.
     """
-    import numpy as np
     # Validate input DataFrame
     if income_df is None or len(income_df) == 0:
         return go.Figure()
@@ -508,7 +495,6 @@ def plot_expense_growth_scatter(symbol: str, income_df: pd.DataFrame) -> go.Figu
     investors identify cost categories that may erode profitability or signal strategic investment and to evaluate
     whether expense growth is sustainable relative to revenue:contentReference[oaicite:13]{index=13}.
     """
-    import numpy as np
     # Validate input DataFrame
     if income_df is None or len(income_df) == 0:
         return go.Figure()
@@ -649,8 +635,6 @@ def plot_tax_and_interest_effects(symbol: str, income_df: pd.DataFrame) -> go.Fi
     operations.  Monitoring these components helps investors anticipate how future income statement items may
     influence earnings and, ultimately, stock price:contentReference[oaicite:14]{index=14}.
     """
-    import numpy as np
-    from plotly.subplots import make_subplots
     # Validate input DataFrame
     if income_df is None or len(income_df) == 0:
         return go.Figure()
@@ -762,7 +746,6 @@ def plot_metric_vs_future_stock_return(symbol: str, income_df: pd.DataFrame, pri
     encourages experimentation across all columns in the Alpha Vantage income statement file, enabling
     comprehensive exploration of how fundamentals influence future stock movements.
     """
-    import numpy as np
     # Validate input DataFrames
     if income_df is None or price_df is None or len(income_df) == 0 or len(price_df) == 0:
         return go.Figure()
@@ -868,7 +851,6 @@ def plot_key_metrics_dashboard(symbol: str, income_df: pd.DataFrame, price_df: p
     By juxtaposing these fundamentals with the stock price, the dashboard helps investors evaluate whether market
     reactions align with changes in the underlying business.
     """
-    import numpy as np
     # Validate input DataFrames
     if income_df is None or price_df is None or len(income_df) == 0 or len(price_df) == 0:
         return go.Figure()

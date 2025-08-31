@@ -15,14 +15,14 @@ Usage:
 
 import logging
 import requests
-import pandas as pd
+import inspect
 import datetime
 import os
-import shutil
 import json
 import time
 import random
 from pathlib import Path
+import pandas as pd
 
 from configs.config import ALPHA_API_KEY
 from infrastructure.databases.company.postgre_manager.postgre_manager import CompanyDataManager
@@ -48,20 +48,6 @@ from infrastructure.alpha_adapter.transform_utils import (
     preprocess_stock_splits,
     preprocess_dividends,
 )
-
-from infrastructure.alpha_adapter.column_maps import (
-    ANNUAL_BALANCE_SHEET_INT_COLUMNS,
-    ANNUAL_BALANCE_SHEET_FLOAT_COLUMNS,
-    QUARTERLY_BALANCE_SHEET_INT_COLUMNS,
-    QUARTERLY_BALANCE_SHEET_FLOAT_COLUMNS,
-    INCOME_STATEMENT_NUMERIC_COLUMNS,
-    COMPANY_FUNDAMENTALS_INT_COLUMNS,
-    COMPANY_FUNDAMENTALS_FLOAT_COLUMNS,
-)
-
-
-# TODO: ADD  ROW FOR EACH DATA HANDLER TO CHECK FOR DATABASE COMPLIANCE AND DATA QUALITY
-# e.g. missing values, and add a logger for these stuff!
 
 DEBUG_DATA_ROOT = os.path.join(os.path.dirname(__file__), "../../../logs/management/debug_data")
 INPUT_DIR = os.path.join(DEBUG_DATA_ROOT, "input")
@@ -111,15 +97,12 @@ class AlphaLoader:
         self.local_store_mode = local_store_mode
         self.verbose_data_logging = verbose_data_logging
         self.base_url = "https://www.alphavantage.co/query?function="
-        # Use env var or default to repo-root dev_data
         repo_root = Path(__file__).resolve().parents[2]
         self.local_store_path = os.getenv("ALPHA_LOCAL_STORE_PATH", str(repo_root / "dev_data" / "jsons"))
         self.logger = logging.getLogger(self.__class__.__name__)
-        # Reuse a single DB adapter per loader instance
         self.adapter = CompanyDataManager() if self.db_mode else None
 
-    # PATCH: log_exception now accepts table_name and uses it for debug file naming
-    def log_exception(self, e, exc_type="Exception", api_response=None, is_warning=False, table_name=None):
+    def log_exception(self, e, api_response=None, is_warning=False, table_name=None):
         """
         Logs error or warning, and stores failing DataFrame and API response if verbosity is enabled.
         Writes out all debug data files for each error/warning (does NOT clean the folder).
@@ -155,8 +138,6 @@ class AlphaLoader:
             self.logger.error("API response for %s: %s", self.symbol, api_response)
 
     def _get_table_name(self, quarterly=False):
-        # Helper to infer table name from context (for file naming)
-        import inspect
         stack = inspect.stack()
         for frame in stack:
             if "self" in frame.frame.f_locals:
@@ -254,9 +235,8 @@ class AlphaLoader:
             r = self._call_api_with_backoff(url)
             r.raise_for_status()
             data = r.json()
-            dump_api_response(self.symbol, "company_fundamentals", data)  # <-- Dump API response
+            dump_api_response(self.symbol, "company_fundamentals", data)  
 
-            # PATCH: Skip processing if API response is empty list or empty dict
             if (isinstance(data, list) and len(data) == 0) or (isinstance(data, dict) and not data):
                 self.logger.warning(f"Skipping {self.symbol}: No company fundamentals data returned by API.")
                 return
@@ -268,8 +248,7 @@ class AlphaLoader:
             data_df = pd.DataFrame([data])
             self.last_df = data_df
             data_df = preprocess_company_fundamentals(data_df, self.symbol)
-            dump_dataframe(self.symbol, "company_fundamentals", data_df)  # <-- Dump DataFrame
-
+            dump_dataframe(self.symbol, "company_fundamentals", data_df)  
             if data_df is None or data_df.empty:
                 self.logger.info(f"Skipped {self.symbol}: No valid company fundamentals data to insert.")
                 return
@@ -357,7 +336,6 @@ class AlphaLoader:
             if quarterly_df is not None and not quarterly_df.empty:
                 dump_dataframe(self.symbol, f"{function.lower()}_quarterly", quarterly_df)
 
-            # PATCH: skip DB/local insert if None or empty
             if annual_df is None or annual_df.empty:
                 self.logger.info(f"Skipped {self.symbol}: No valid annual {function.lower()} data to insert.")
             else:
@@ -368,7 +346,6 @@ class AlphaLoader:
                     annual_df.to_csv(f"{self.local_store_path}/{self.symbol}_{function.lower()}_annual.csv", index=False)
                     self.logger.info("%s annual data saved locally for %s.", function, self.symbol)
 
-            # Insert quarterly
             if quarterly_df is None or quarterly_df.empty:
                 self.logger.info(f"Skipped {self.symbol}: No valid quarterly {function.lower()} data to insert.")
             else:
@@ -395,9 +372,8 @@ class AlphaLoader:
             r = self._call_api_with_backoff(url)
             r.raise_for_status()
             data = r.json()
-            dump_api_response(self.symbol, "insider_transactions", data)  # <-- Dump API response
+            dump_api_response(self.symbol, "insider_transactions", data)
 
-            # PATCH: Skip processing if API response is empty list or empty dict
             if (isinstance(data, list) and len(data) == 0) or (isinstance(data, dict) and not data):
                 self.logger.warning(f"Skipping {self.symbol}: No insider transactions data returned by API.")
                 return
@@ -413,7 +389,7 @@ class AlphaLoader:
                 self.logger.info(f"Skipped {self.symbol}: No valid insider transactions data to insert.")
                 return
 
-            dump_dataframe(self.symbol, "insider_transactions", df)  # <-- Dump DataFrame
+            dump_dataframe(self.symbol, "insider_transactions", df)
 
             if self.db_mode and self.adapter:
                 self.adapter.insert_new_data(table=InsiderTransactions, rows=df.to_dict(orient="records"))
@@ -479,7 +455,7 @@ class AlphaLoader:
             r = self._call_api_with_backoff(url)
             r.raise_for_status()
             data = r.json()
-            dump_api_response(self.symbol, "dividends", data)  # <-- Dump API response
+            dump_api_response(self.symbol, "dividends", data)
 
             if isinstance(data, dict) and "data" in data:
                 data = data["data"]
@@ -490,7 +466,7 @@ class AlphaLoader:
             if df is None or df.empty:
                 self.logger.info(f"Skipped {self.symbol}: No valid dividends data to insert.")
                 return
-            dump_dataframe(self.symbol, "dividends", df)  # <-- Dump DataFrame
+            dump_dataframe(self.symbol, "dividends", df)
 
             if self.db_mode and self.adapter:
                 self.adapter.insert_new_data(table=Dividends, rows=df.to_dict(orient="records"))
@@ -507,21 +483,3 @@ class AlphaLoader:
             self.logger.error("Request failed for %s: %s", self.symbol, e)
         except Exception as e:
             self.log_exception(e, api_response=data, table_name="dividends")
-
-
-# TODO: there is intraday data in the alphavantage
-
-# def get_time_series_intraday(month: str, symbol: str = SYMBOL, interval: str='1min'):
-#     """
-#         month is in YYYY-MM format
-#     """
-
-#     url = f'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={symbol}&interval={interval}&month={month}&outputsize=full&apikey={ALPHA_API_KEY}'
-#     r = requests.get(url)
-#     data = r.json()
-#     data_df = pd.DataFrame.from_dict(data=data["Time Series (1min)"], orient='index')
-#     data_df.columns = ['open', 'high', 'low', 'close', 'volume']
-#     data_df.index = pd.to_datetime(data_df.index)
-#     data_df.sort_index(ascending=True, axis=0, inplace=True)
-#     data_df.to_csv(f"/home/bandee/projects/stockAnalyzer/dev_data/{symbol}_intraday_{month}.csv", index=True)
-#     print(f"{symbol} for {month} was successfully written out to trash_data!")
