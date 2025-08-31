@@ -1,58 +1,58 @@
-2025-08-30 12:06:47,477 - db_drop_and_build_runner - INFO - drop_and_build_db.py:25 - Connected to the database successfully.
-2025-08-30 12:06:47,477 - db_drop_and_build_runner - WARNING - drop_and_build_db.py:40 - 
+2025-08-31 12:33:09,992 - db_drop_and_build_runner - INFO - drop_and_build_db.py:25 - Connected to the database successfully.
+2025-08-31 12:33:09,992 - db_drop_and_build_runner - WARNING - drop_and_build_db.py:40 - 
 ⚠️  WARNING: You are about to DELETE and RECREATE 13 tables:
-2025-08-30 12:06:47,478 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: balance_sheet_annual
-2025-08-30 12:06:47,504 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table balance_sheet_annual dropped
-2025-08-30 12:06:47,504 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: cash_flow_annual
-2025-08-30 12:06:47,510 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table cash_flow_annual dropped
-2025-08-30 12:06:47,511 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: earnings_annual
-2025-08-30 12:06:47,517 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table earnings_annual dropped
-2025-08-30 12:06:47,517 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: income_statement_annual
-2025-08-30 12:06:47,523 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table income_statement_annual dropped
-2025-08-30 12:06:47,523 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: company_fundamentals
-2025-08-30 12:06:47,529 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table company_fundamentals dropped
-2025-08-30 12:06:47,529 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: daily_timeseries
-2025-08-30 12:06:47,536 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table daily_timeseries dropped
-2025-08-30 12:06:47,536 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: dividends
-2025-08-30 12:06:47,540 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table dividends dropped
-2025-08-30 12:06:47,540 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: insider_transactions
-2025-08-30 12:06:47,546 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table insider_transactions dropped
-2025-08-30 12:06:47,546 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: balance_sheet_quarterly
-2025-08-30 12:06:47,550 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table balance_sheet_quarterly dropped
-2025-08-30 12:06:47,550 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: cash_flow_quarterly
-2025-08-30 12:06:47,554 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table cash_flow_quarterly dropped
-2025-08-30 12:06:47,554 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: earnings_quarterly
-2025-08-30 12:06:47,559 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table earnings_quarterly dropped
-2025-08-30 12:06:47,559 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: income_statement_quarterly
-2025-08-30 12:06:47,563 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table income_statement_quarterly dropped
-2025-08-30 12:06:47,563 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: stock_splits
-2025-08-30 12:06:47,568 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table stock_splits dropped
-2025-08-30 12:06:47,568 - db_drop_and_build_runner - INFO - drop_and_build_db.py:56 - Dropped 13 tables
-2025-08-30 12:06:47,568 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: AnnualBalanceSheet
-2025-08-30 12:06:47,581 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table balance_sheet_annual created
-2025-08-30 12:06:47,581 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: AnnualCashFlow
-2025-08-30 12:06:47,595 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table cash_flow_annual created
-2025-08-30 12:06:47,595 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: AnnualEarnings
-2025-08-30 12:06:47,607 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table earnings_annual created
-2025-08-30 12:06:47,607 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: AnnualIncomeStatement
-2025-08-30 12:06:47,621 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table income_statement_annual created
-2025-08-30 12:06:47,621 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: CompanyFundamentals
-2025-08-30 12:06:47,638 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table company_fundamentals created
-2025-08-30 12:06:47,638 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: DailyTimeSeries
-2025-08-30 12:06:47,650 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table daily_timeseries created
-2025-08-30 12:06:47,651 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: Dividends
-2025-08-30 12:06:47,662 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table dividends created
-2025-08-30 12:06:47,662 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: InsiderTransactions
-2025-08-30 12:06:47,675 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table insider_transactions created
-2025-08-30 12:06:47,675 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: QuarterlyBalanceSheet
-2025-08-30 12:06:47,688 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table balance_sheet_quarterly created
-2025-08-30 12:06:47,688 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: QuarterlyCashFlow
-2025-08-30 12:06:47,701 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table cash_flow_quarterly created
-2025-08-30 12:06:47,701 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: QuarterlyEarnings
-2025-08-30 12:06:47,712 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table earnings_quarterly created
-2025-08-30 12:06:47,712 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: QuarterlyIncomeStatement
-2025-08-30 12:06:47,724 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table income_statement_quarterly created
-2025-08-30 12:06:47,724 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: StockSplit
-2025-08-30 12:06:47,735 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table stock_splits created
-2025-08-30 12:06:47,735 - db_drop_and_build_runner - INFO - drop_and_build_db.py:63 - Created 13 tables
-2025-08-30 12:06:47,738 - db_drop_and_build_runner - INFO - drop_and_build_db.py:66 - Tables currently in the database: ['balance_sheet_annual', 'cash_flow_annual', 'earnings_annual', 'income_statement_annual', 'company_fundamentals', 'daily_timeseries', 'dividends', 'insider_transactions', 'balance_sheet_quarterly', 'cash_flow_quarterly', 'earnings_quarterly', 'income_statement_quarterly', 'stock_splits', 'cash_flow_statement_quarterly']
+2025-08-31 12:33:09,992 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: balance_sheet_annual
+2025-08-31 12:33:10,052 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table balance_sheet_annual dropped
+2025-08-31 12:33:10,052 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: cash_flow_annual
+2025-08-31 12:33:10,058 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table cash_flow_annual dropped
+2025-08-31 12:33:10,058 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: earnings_annual
+2025-08-31 12:33:10,067 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table earnings_annual dropped
+2025-08-31 12:33:10,067 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: income_statement_annual
+2025-08-31 12:33:10,075 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table income_statement_annual dropped
+2025-08-31 12:33:10,075 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: company_fundamentals
+2025-08-31 12:33:10,082 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table company_fundamentals dropped
+2025-08-31 12:33:10,082 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: daily_timeseries
+2025-08-31 12:33:10,092 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table daily_timeseries dropped
+2025-08-31 12:33:10,092 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: dividends
+2025-08-31 12:33:10,099 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table dividends dropped
+2025-08-31 12:33:10,099 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: insider_transactions
+2025-08-31 12:33:10,107 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table insider_transactions dropped
+2025-08-31 12:33:10,108 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: balance_sheet_quarterly
+2025-08-31 12:33:10,114 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table balance_sheet_quarterly dropped
+2025-08-31 12:33:10,115 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: cash_flow_quarterly
+2025-08-31 12:33:10,119 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table cash_flow_quarterly dropped
+2025-08-31 12:33:10,120 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: earnings_quarterly
+2025-08-31 12:33:10,124 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table earnings_quarterly dropped
+2025-08-31 12:33:10,124 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: income_statement_quarterly
+2025-08-31 12:33:10,128 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table income_statement_quarterly dropped
+2025-08-31 12:33:10,128 - db_drop_and_build_runner - INFO - drop_and_build_db.py:53 - Dropping table: stock_splits
+2025-08-31 12:33:10,133 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:209 - Table stock_splits dropped
+2025-08-31 12:33:10,134 - db_drop_and_build_runner - INFO - drop_and_build_db.py:56 - Dropped 13 tables
+2025-08-31 12:33:10,134 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: AnnualBalanceSheet
+2025-08-31 12:33:10,156 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table balance_sheet_annual created
+2025-08-31 12:33:10,156 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: AnnualCashFlow
+2025-08-31 12:33:10,168 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table cash_flow_annual created
+2025-08-31 12:33:10,168 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: AnnualEarnings
+2025-08-31 12:33:10,180 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table earnings_annual created
+2025-08-31 12:33:10,180 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: AnnualIncomeStatement
+2025-08-31 12:33:10,192 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table income_statement_annual created
+2025-08-31 12:33:10,193 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: CompanyFundamentals
+2025-08-31 12:33:10,207 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table company_fundamentals created
+2025-08-31 12:33:10,207 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: DailyTimeSeries
+2025-08-31 12:33:10,220 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table daily_timeseries created
+2025-08-31 12:33:10,220 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: Dividends
+2025-08-31 12:33:10,232 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table dividends created
+2025-08-31 12:33:10,232 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: InsiderTransactions
+2025-08-31 12:33:10,244 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table insider_transactions created
+2025-08-31 12:33:10,244 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: QuarterlyBalanceSheet
+2025-08-31 12:33:10,257 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table balance_sheet_quarterly created
+2025-08-31 12:33:10,257 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: QuarterlyCashFlow
+2025-08-31 12:33:10,269 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table cash_flow_quarterly created
+2025-08-31 12:33:10,270 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: QuarterlyEarnings
+2025-08-31 12:33:10,281 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table earnings_quarterly created
+2025-08-31 12:33:10,281 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: QuarterlyIncomeStatement
+2025-08-31 12:33:10,293 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table income_statement_quarterly created
+2025-08-31 12:33:10,293 - db_drop_and_build_runner - INFO - drop_and_build_db.py:60 - Creating table for: StockSplit
+2025-08-31 12:33:10,305 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:198 - Table stock_splits created
+2025-08-31 12:33:10,305 - db_drop_and_build_runner - INFO - drop_and_build_db.py:63 - Created 13 tables
+2025-08-31 12:33:10,308 - db_drop_and_build_runner - INFO - drop_and_build_db.py:66 - Tables currently in the database: ['balance_sheet_annual', 'cash_flow_annual', 'earnings_annual', 'income_statement_annual', 'company_fundamentals', 'daily_timeseries', 'dividends', 'insider_transactions', 'balance_sheet_quarterly', 'cash_flow_statement_quarterly', 'cash_flow_quarterly', 'earnings_quarterly', 'income_statement_quarterly', 'stock_splits']

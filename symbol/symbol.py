@@ -33,7 +33,7 @@ Example:
 import pandas as pd
 from infrastructure.databases.company.postgre_manager.postgre_manager import CompanyDataManager
 from infrastructure.databases.company.postgre_manager.postgre_objects import table_name_to_class
-from data_manager.src_postgre_db.db_etl_jobs.db_initial_load_runner import download_stock_data
+from infrastructure.databases.company.initial_load import download_stock_data
 
 from analyst.quantitative_analyst.add_indicators_to_price_data import (
     calculate_sma,
@@ -48,8 +48,6 @@ from analyst.quantitative_analyst.add_indicators_to_price_data import (
 )
 
 from utils.logger import get_logger  # <-- Import your project logger
-
-#from analyst.analyst import Analyst, FinancialAnalyst, NewsAnalyst, QuantitativeAnalyst, LLMAnalyst
 
 # Set up project-standard logger
 logger = get_logger("db_load_from_db_runner")
@@ -188,8 +186,6 @@ class Symbol:
             else:
                 rows = self._adapter.load_all(orm_class)
             loaded_df = pd.DataFrame(rows)
-            if table_name == "cashflow_statement_quarterly":
-                print("Debug: Loaded cash flow data:", loaded_df)
             setattr(self, table_name, loaded_df)
             logger.info("Loaded table '%s' with %d rows.", table_name, len(loaded_df))
 
