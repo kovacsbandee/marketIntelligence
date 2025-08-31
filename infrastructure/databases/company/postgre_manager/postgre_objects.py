@@ -458,8 +458,7 @@ class QuarterlyCashFlow(Base):
     dividend_payout_common_stock = Column(Float, nullable=True)
     dividend_payout_preferred_stock = Column(Float, nullable=True)
     proceeds_from_issuance_of_common_stock = Column(Float, nullable=True)
-    proceeds_from_issuance_of_long_term_debt_and_capital_securities_net = Column(
-        Float, nullable=True)
+    proceeds_from_issuance_of_long_term_debt_and_capital_securities_net = Column(Float, nullable=True)
     proceeds_from_issuance_of_preferred_stock = Column(Float, nullable=True)
     proceeds_from_repurchase_of_equity = Column(Float, nullable=True)
     proceeds_from_sale_of_treasury_stock = Column(Float, nullable=True)
