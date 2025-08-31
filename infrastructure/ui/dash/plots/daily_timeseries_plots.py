@@ -1,70 +1,26 @@
 
-def add_bollinger_bands_to_candlestick(data):
-    """
-    Plots a candlestick chart with overlaid Bollinger Bands (upper, middle, lower) using existing columns.
-    """
-    if not isinstance(data, pd.DataFrame):
-        data = pd.DataFrame(data)
-    df = data.copy()
-    # Try to find columns for Bollinger Bands
-    bb_middle = [col for col in df.columns if 'bb_middle' in col][0] if any('bb_middle' in col for col in df.columns) else None
-    bb_upper = [col for col in df.columns if 'bb_upper' in col][0] if any('bb_upper' in col for col in df.columns) else None
-    bb_lower = [col for col in df.columns if 'bb_lower' in col][0] if any('bb_lower' in col for col in df.columns) else None
-    if not (bb_middle and bb_upper and bb_lower):
-        return plot_candlestick_chart(df)
-    fig = plot_candlestick_chart(df)
-    x = df["date"] if "date" in df.columns else df.index
-    fig.add_trace(
-        go.Scatter(
-            x=x,
-            y=df[bb_upper],
-            mode="lines",
-            name="BB Upper",
-            line=dict(color="#636EFA", width=1, dash="dot"),
-            hovertemplate=f"<b>BB Upper</b><br>Date: %{{x|%Y-%m-%d}}<br>Value: %{{y:.2f}}<extra></extra>"
-        ),
-        row=1, col=1
-    )
-    fig.add_trace(
-        go.Scatter(
-            x=x,
-            y=df[bb_middle],
-            mode="lines",
-            name="BB Middle",
-            line=dict(color="#00CC96", width=1, dash="dash"),
-            hovertemplate=f"<b>BB Middle</b><br>Date: %{{x|%Y-%m-%d}}<br>Value: %{{y:.2f}}<extra></extra>"
-        ),
-        row=1, col=1
-    )
-    fig.add_trace(
-        go.Scatter(
-            x=x,
-            y=df[bb_lower],
-            mode="lines",
-            name="BB Lower",
-            line=dict(color="#EF553B", width=1, dash="dot"),
-            hovertemplate=f"<b>BB Lower</b><br>Date: %{{x|%Y-%m-%d}}<br>Value: %{{y:.2f}}<extra></extra>"
-        ),
-        row=1, col=1
-    )
-    fig.update_layout(
-        title={
-            "text": f"Candlestick Chart with Bollinger Bands",
-            "x": 0.5,
-            "xanchor": "center",
-            "yanchor": "top",
-            "font": {"size": 20}
-        }
-    )
-    return fig
+
+"""
+daily_timeseries_plots.py
+
+This module provides functions to plot various financial technical indicators and overlays on candlestick charts using Plotly.
+It includes:
+    - Candlestick charts with overlays (SMA, Bollinger Bands, VWAP)
+    - Technical indicator plots (RSI, MACD, Stochastic, OBV, ADX)
+    - Utility for adding overlays to price charts
+
+All functions expect pandas DataFrames as input and return Plotly Figure objects.
+"""
 
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from plotly.colors import qualitative
-from infrastructure.ui.dash.add_price_indicators import AddPriceIndicators
-from infrastructure.ui.dash.plot_utils import DEFAULT_PLOTLY_WIDTH, DEFAULT_PLOTLY_HEIGHT, _get_column_descriptions
-
+from infrastructure.ui.dash.plot_utils import (
+    DEFAULT_PLOTLY_WIDTH,
+    DEFAULT_PLOTLY_HEIGHT,
+    _get_column_descriptions,
+)
 
 def plot_candlestick_chart(data):
     """
@@ -190,7 +146,6 @@ def plot_candlestick_chart(data):
     # For overlays: future indicators can be added as additional traces to row=1, col=1
     return fig
 
-
 def add_moving_averages_to_candlestick(data):
     """
     Plots a candlestick chart with overlaid moving average lines (e.g. 50-day and 200-day SMA).
@@ -250,34 +205,73 @@ def add_moving_averages_to_candlestick(data):
     )
     return fig
 
-
-def plot_candlestick_with_bollinger_bands(data, window=20, num_std=2):
+def add_bollinger_bands_to_candlestick(data):
     """
-    Plots a candlestick chart with Bollinger Bands overlaid.
-
-    Bollinger Bands consist of a middle band (a moving average of the price, typically a 20-period SMA)
-    and an upper and lower band offset by a certain number of standard deviations (usually 2) above and below that middle band:contentReference[oaicite:2]{index=2}.
-    These bands expand and contract with market volatility and help identify potential overbought or oversold conditions:
-    for example, when price touches or exceeds the upper band, it may be considered relatively high (overbought), and when it touches or falls below the lower band,
-    it may be relatively low (oversold):contentReference[oaicite:3]{index=3}.
-
-    This function uses the `calculate_bollinger_bands` helper to compute the middle, upper, and lower band values from the price data.
-    It then plots the candlestick chart with the Bollinger Bands lines to visualize volatility and price extremes.
-
-    Parameters:
-        data (pd.DataFrame): DataFrame with OHLC price data (columns "Open", "High", "Low", "Close").
-        window (int): Look-back period for the moving average (middle band) and standard deviation (default 20).
-        num_std (int or float): Number of standard deviations for the band offset (default 2).
-
-    Returns:
-        Plotly.Figure: The Figure object containing the candlestick chart with upper and lower Bollinger Bands.
-
-    Example:
-        >>> fig = plot_candlestick_with_bollinger_bands(df, window=20, num_std=2)
-        >>> fig.show()
+    Plots a candlestick chart with overlaid Bollinger Bands (upper, middle, lower) using existing columns.
     """
-    pass
-
+    if not isinstance(data, pd.DataFrame):
+        data = pd.DataFrame(data)
+    df = data.copy()
+    # Try to find columns for Bollinger Bands
+    bb_middle = (
+        [col for col in df.columns if 'bb_middle' in col][0]
+        if any('bb_middle' in col for col in df.columns) else None
+    )
+    bb_upper = (
+        [col for col in df.columns if 'bb_upper' in col][0]
+        if any('bb_upper' in col for col in df.columns) else None
+    )
+    bb_lower = (
+        [col for col in df.columns if 'bb_lower' in col][0]
+        if any('bb_lower' in col for col in df.columns) else None
+    )
+    if not (bb_middle and bb_upper and bb_lower):
+        return plot_candlestick_chart(df)
+    fig = plot_candlestick_chart(df)
+    x = df["date"] if "date" in df.columns else df.index
+    fig.add_trace(
+        go.Scatter(
+            x=x,
+            y=df[bb_upper],
+            mode="lines",
+            name="BB Upper",
+            line=dict(color="#636EFA", width=1, dash="dot"),
+            hovertemplate="<b>BB Upper</b><br>Date: %{x|%Y-%m-%d}<br>Value: %{y:.2f}<extra></extra>"
+        ),
+        row=1, col=1
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=x,
+            y=df[bb_middle],
+            mode="lines",
+            name="BB Middle",
+            line=dict(color="#00CC96", width=1, dash="dash"),
+            hovertemplate="<b>BB Middle</b><br>Date: %{x|%Y-%m-%d}<br>Value: %{y:.2f}<extra></extra>"
+        ),
+        row=1, col=1
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=x,
+            y=df[bb_lower],
+            mode="lines",
+            name="BB Lower",
+            line=dict(color="#EF553B", width=1, dash="dot"),
+            hovertemplate="<b>BB Lower</b><br>Date: %{x|%Y-%m-%d}<br>Value: %{y:.2f}<extra></extra>"
+        ),
+        row=1, col=1
+    )
+    fig.update_layout(
+        title={
+            "text": "Candlestick Chart with Bollinger Bands",
+            "x": 0.5,
+            "xanchor": "center",
+            "yanchor": "top",
+            "font": {"size": 20}
+        }
+    )
+    return fig
 
 def plot_candlestick_with_vwap(data):
     """
@@ -338,26 +332,6 @@ def plot_rsi(data, window=14):
         >>> fig = plot_rsi(df, window=14)
         >>> fig.show()
     """
-    """
-    Plots the Relative Strength Index (RSI) as a line chart.
-
-    The Relative Strength Index is a momentum oscillator that measures the magnitude of recent price gains versus losses to assess the speed of price movements. It oscillates between 0 and 100. In general, an RSI value above 70 suggests the asset may be overbought (price has risen quickly in the period, potentially due for a pullback), while an RSI below 30 suggests it may be oversold (price has fallen quickly, potentially due for a rebound).
-
-    This function uses the `calculate_rsi` helper to compute the RSI values (typically using a 14-period window by default) from the input price data (usually closing prices). It then plots the RSI line, often including horizontal reference lines at 30 and 70 to denote the common oversold/overbought thresholds.
-
-    Parameters:
-        data (pd.DataFrame or pd.Series): Price data to compute RSI from (if DataFrame, the "Close" column is used).
-        window (int): The number of periods for RSI calculation (default 14).
-
-    Returns:
-        Plotly.Figure: The Figure object containing the RSI chart, which can be shown below a price chart for context.
-
-    Example:
-        >>> fig = plot_rsi(df, window=14)
-        >>> fig.show()
-    """
-    import plotly.graph_objects as go
-    import pandas as pd
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
@@ -465,8 +439,6 @@ def plot_macd(data, fast=12, slow=26, signal=9):
 
     The function uses `calculate_macd` to compute the MACD line, signal line, and histogram from the input price series (typically closing prices). It then plots these components (MACD and signal as lines, and the histogram as bars) in a separate panel, often with a horizontal zero reference line for context.
     """
-    import plotly.graph_objects as go
-    import pandas as pd
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
@@ -562,8 +534,6 @@ def plot_stochastic(data, k_window=14, d_window=3):
     """
     Plots the Stochastic Oscillator (%K and %D lines).
     """
-    import plotly.graph_objects as go
-    import pandas as pd
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
@@ -658,8 +628,6 @@ def plot_obv(data):
     """
     Plots the On-Balance Volume (OBV) indicator as a line chart.
     """
-    import plotly.graph_objects as go
-    import pandas as pd
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
@@ -720,8 +688,6 @@ def plot_adx(data, window=14):
     """
     Plots the Average Directional Index (ADX) and its +DI / -DI lines.
     """
-    import plotly.graph_objects as go
-    import pandas as pd
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
@@ -802,185 +768,4 @@ def plot_adx(data, window=14):
         font=dict(size=14),
         showlegend=True
     )
-    return fig
-
-
-
-def add_macd_subplot(price_table: pd.DataFrame,
-                     figure: go.Figure) -> go.Figure:
-
-    price_table = AddPriceIndicators(table=price_table).macd()
-
-    figure.add_trace(
-        go.Scatter(
-            x=price_table['date'],
-            y=price_table['MACD_line'],
-            mode='lines',
-            name='MACD Line'), row=2, col=1)
-    figure.add_trace(
-        go.Scatter(
-            x=price_table['date'],
-            y=price_table['signal_line'],
-            mode='lines',
-            name='Signal Line'), row=2, col=1)
-    figure.add_trace(
-        go.Bar(
-            x=price_table['date'],
-            y=price_table['MACD_histogram'],
-            name='MACD Histogram'), row=2, col=1)
-
-    return figure
-
-
-def add_rsi_subplot(price_table: pd.DataFrame,
-                    figure: go.Figure,
-                    include_macd: bool) -> go.Figure:
-
-    price_table = AddPriceIndicators(table=price_table).rsi()
-
-    figure.add_trace(
-        go.Scatter(
-            x=price_table['date'],
-            y=price_table['RSI'],
-            mode='lines',
-            name='RSI'), row=3 if include_macd else 2, col=1)
-    figure.add_trace(
-        go.Scatter(
-            x=price_table['date'],
-            y=[70] * len(price_table),  # Overbought level
-            mode='lines',
-            line=dict(dash='dash', color='red'),
-            name='Overbought (70)'), row=3 if include_macd else 2, col=1)
-    figure.add_trace(
-        go.Scatter(
-            x=price_table['date'],
-            y=[30] * len(price_table),  # Oversold level
-            mode='lines',
-            line=dict(dash='dash', color='green'),
-            name='Oversold (30)'), row=3 if include_macd else 2, col=1)
-
-    return figure
-
-def add_vwap_subplot(price_table: pd.DataFrame,
-                      figure: go.Figure) -> go.Figure:
-    """
-    Adds a VWAP (Volume Weighted Average Price) subplot to the figure.
-
-    Parameters:
-        price_table (pd.DataFrame): DataFrame containing price data with 'date', 'close', and 'volume' columns.
-        figure (go.Figure): The Plotly figure to which the VWAP subplot will be added.
-
-    Returns:
-        go.Figure: The updated figure with the VWAP subplot added.
-    """
-    # Calculate VWAP using AddPriceIndicators
-    price_table = AddPriceIndicators(table=price_table).vwap()
-
-    # Add VWAP line to the subplot
-    figure.add_trace(
-        go.Scatter(
-            x=price_table['date'],
-            y=price_table['VWAP'],
-            mode='lines',
-            name='VWAP',
-            line=dict(color='purple')
-        ),
-        row=4, col=1
-    )
-
-    return figure
-
-def plot_price_with_indicators(price_table,
-                               include_macd: bool = False,
-                               include_rsi: bool = False,
-                               include_vwap: bool = False):
-    """
-    Plots price data with optional MACD, RSI, VWAP, and dividends using Plotly's make_subplots.
-
-    Parameters:
-    price_table (pd.DataFrame): DataFrame containing price data (['date', 'open', 'high', 'low', 'close']).
-    include_macd (bool): Whether to add MACD visualization if columns exist.
-    include_rsi (bool): Whether to add RSI visualization if columns exist.
-    include_vwap (bool): Whether to add VWAP visualization if columns exist.
-
-    Returns:
-    Plotly figure object.
-    """
-    # Initialize subplots
-    rows = 1 + int(include_macd) + int(include_rsi) + int(include_vwap)
-    fig = make_subplots(
-        rows=rows,
-        cols=1,
-        shared_xaxes=True,
-        vertical_spacing=0.05,
-        row_heights=[0.5] + [0.25] * (rows - 1),
-        subplot_titles=["Price Data"] +
-        (["MACD"] if include_macd else []) +
-        (["RSI"] if include_rsi else []) +
-        (["VWAP"] if include_vwap else [])
-    )
-
-    # Plot base candlestick chart
-    fig.add_trace(
-        go.Candlestick(
-            x=price_table['date'],
-            open=price_table['open'],
-            high=price_table['high'],
-            low=price_table['low'],
-            close=price_table['close'],
-            name="Price",
-        ),
-        row=1, col=1
-    )
-
-    # Add MACD visualization if requested
-    if include_macd:
-        try:
-            fig = add_macd_subplot(price_table=price_table, figure=fig)
-        except KeyError as e:
-            print(
-                f"Error: MACD values not found in the price table. Missing column: {e}")
-
-    # Add RSI visualization if requested
-    if include_rsi:
-        try:
-            add_rsi_subplot(price_table=price_table,
-                            figure=fig,
-                            include_macd=include_macd)
-        except KeyError as e:
-            print(
-                f"Error: RSI values not found in the price table. Missing column: {e}")
-
-    # Add VWAP visualization if requested
-    if include_vwap:
-        try:
-            fig = add_vwap_subplot(price_table=price_table, figure=fig)
-        except KeyError as e:
-            print(
-                f"Error: VWAP values not found in the price table. Missing column: {e}")
-
-    # Update layout to add date labels to each x-axis
-    fig.update_layout(
-        title={
-            "text": "Price Data with Indicators",
-            "x": 0.5,  
-            "xanchor": "center",
-            "yanchor": "top",
-            "font": {"size": 20} 
-        },
-        xaxis_title="Date",
-        yaxis_title="Price",
-        xaxis_rangeslider_visible=False,
-        template="plotly_white",
-        showlegend=True,
-        width=DEFAULT_PLOTLY_WIDTH,
-        height=DEFAULT_PLOTLY_WIDTH,  # This plot is intentionally square (1800x1800)
-        margin=dict(l=50, r=50, t=80, b=50),
-        font=dict(size=14)
-    )
-
-    # Add date labels to each x-axis
-    for i in range(1, rows + 1):
-        fig.update_xaxes(title_text="Date", row=i, col=1)
-
     return fig

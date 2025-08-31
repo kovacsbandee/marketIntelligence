@@ -5,13 +5,9 @@ import pandas as pd
 import plotly.graph_objects as go
 from dash.development.base_component import Component
 
-from infrastructure.ui.dash.plots.insider_transactions_plots import (
-    prepare_insider_data,
-    plot_insider_price_chart,
-    plot_insider_transactions_over_time
-)
-
 from infrastructure.ui.dash.data_service import load_symbol_data
+
+from infrastructure.ui.dash.plots.company_fundamentals_plots import plot_company_fundamentals_table
 
 from infrastructure.ui.dash.plots.daily_timeseries_plots import (
     plot_candlestick_chart,
@@ -24,8 +20,6 @@ from infrastructure.ui.dash.plots.daily_timeseries_plots import (
     plot_obv,
     plot_adx
 )
-
-from infrastructure.ui.dash.plots.company_fundamentals_plots import plot_company_fundamentals_table
 
 from infrastructure.ui.dash.plots.balance_sheet_plots import (
     plot_balance_sheet_time_series,
@@ -53,75 +47,16 @@ from infrastructure.ui.dash.plots.earnings_plots import (
     plot_eps_actual_vs_estimate_scatter
 )
 
+from infrastructure.ui.dash.plots.insider_transactions_plots import (
+    prepare_insider_data,
+    plot_insider_price_chart,
+    plot_insider_transactions_over_time
+)
 
 from infrastructure.ui.dash.app_util import get_last_6_months_range
 
-
 def register_callbacks(app: dash.Dash) -> None:
 
-    @app.callback(
-        Output("cash-flow-content", "children"),
-        Output("cash-flow-loading", "visible"),
-        Input("main-tabs", "value"),
-        Input("start-date-picker", "value"),
-        Input("end-date-picker", "value"),
-        Input("cashflow-store", "data"),
-        prevent_initial_call=True
-    )
-    def update_cash_flow(
-        tab: str,
-        start_date: str,
-        end_date: str,
-        cashflow_data: list[dict] | None
-    ) -> tuple[Component, bool]:
-        """
-        Callback to update the cash flow panel with all relevant plots.
-
-        Args:
-            tab (str): The currently selected tab.
-            start_date (str): Selected start date.
-            end_date (str): Selected end date.
-            cashflow_data (list[dict]): Cash flow data from the store.
-
-        Returns:
-            tuple: Updated content and loading state for the cash flow panel.
-        """
-        print(f"Debug: {tab}, {start_date}, {end_date}, {cashflow_data}")
-        if tab != "cash-flow":
-            return no_update, False
-        if cashflow_data is None or len(cashflow_data) == 0:
-            return dmc.Text("No cash flow data loaded.", c="red"), False
-        cashflow_df = pd.DataFrame(cashflow_data)
-        print(f"Debug: {tab}, {start_date}, {end_date}, {cashflow_df}")
-        if cashflow_df.empty:
-            return dmc.Text("No cash flow data loaded.", c="red"), False
-        # Filter by date if possible
-        date_col = next((col for col in cashflow_df.columns if 'fiscal_date' in col.lower() or 'date' in col.lower()), None)
-        if date_col and start_date and end_date:
-            cashflow_df[date_col] = pd.to_datetime(cashflow_df[date_col])
-            mask = (cashflow_df[date_col] >= pd.to_datetime(start_date)) & (cashflow_df[date_col] <= pd.to_datetime(end_date))
-            selected_cashflow = cashflow_df.loc[mask]
-        else:
-            selected_cashflow = cashflow_df
-        try:
-            from infrastructure.ui.dash.plots.cashflow_plots import (
-                plot_cash_flow_categories,
-                plot_operating_vs_net_income,
-                plot_free_cash_flow
-            )
-            fig_categories = plot_cash_flow_categories(selected_cashflow)
-            fig_ocf_vs_ni = plot_operating_vs_net_income(selected_cashflow)
-            fig_fcf = plot_free_cash_flow(selected_cashflow)
-            return dmc.Stack([
-                dmc.Divider(label="Cash Flow Categories (Operating, Investing, Financing)", my=10),
-                dcc.Graph(figure=fig_categories),
-                dmc.Divider(label="Operating Cash Flow vs Net Income", my=10),
-                dcc.Graph(figure=fig_ocf_vs_ni),
-                dmc.Divider(label="Free Cash Flow per Period", my=10),
-                dcc.Graph(figure=fig_fcf),
-            ], gap=16), False
-        except Exception as e:
-            return dmc.Text(f"Error generating cash flow plots: {e}", c="red"), False
     @app.callback(
         Output("start-date-picker", "value"),
         Output("end-date-picker", "value"),
@@ -134,6 +69,7 @@ def register_callbacks(app: dash.Dash) -> None:
         Output("earnings-store", "data"),
         Output("q_income-store", "data"),
         Output("cashflow-store", "data"),
+        Output("insider-transactions-store", "data"),
         Input("load-btn", "n_clicks"),
         State("symbol-input", "value"),
         prevent_initial_call=True
@@ -173,6 +109,7 @@ def register_callbacks(app: dash.Dash) -> None:
             df_to_records(earnings),
             df_to_records(data.get("income_statement_quarterly") if "income_statement_quarterly" in data else None),
             df_to_records(data.get("cashflow_statement_quarterly") if "cashflow_statement_quarterly" in data else None),
+            df_to_records(data.get("insider_transactions") if "insider_transactions" in data else None)
         )
 
     @app.callback(
@@ -209,15 +146,6 @@ def register_callbacks(app: dash.Dash) -> None:
             return dcc.Graph(figure=fig, config={"displayModeBar": False}), False
         except Exception as e:
             return dmc.Text(f"Error displaying company fundamentals: {e}", c="red"), False
-
-
-    """
-    Register all Dash callbacks for the application.
-
-    Args:
-        app (dash.Dash): The Dash app instance.
-    """
-
 
     @app.callback(
         Output("price-indicator-content", "children"),
@@ -548,6 +476,69 @@ def register_callbacks(app: dash.Dash) -> None:
         except Exception as e:
             return dmc.Text(f"Error generating plot: {e}", c="red"), False
         
+    @app.callback(
+        Output("cash-flow-content", "children"),
+        Output("cash-flow-loading", "visible"),
+        Input("main-tabs", "value"),
+        Input("start-date-picker", "value"),
+        Input("end-date-picker", "value"),
+        Input("cashflow-store", "data"),
+        prevent_initial_call=True
+    )
+    def update_cash_flow(
+        tab: str,
+        start_date: str,
+        end_date: str,
+        cashflow_data: list[dict] | None
+    ) -> tuple[Component, bool]:
+        """
+        Callback to update the cash flow panel with all relevant plots.
+
+        Args:
+            tab (str): The currently selected tab.
+            start_date (str): Selected start date.
+            end_date (str): Selected end date.
+            cashflow_data (list[dict]): Cash flow data from the store.
+
+        Returns:
+            tuple: Updated content and loading state for the cash flow panel.
+        """
+        print(f"Debug: {tab}, {start_date}, {end_date}, {cashflow_data}")
+        if tab != "cash-flow":
+            return no_update, False
+        if cashflow_data is None or len(cashflow_data) == 0:
+            return dmc.Text("No cash flow data loaded.", c="red"), False
+        cashflow_df = pd.DataFrame(cashflow_data)
+        print(f"Debug: {tab}, {start_date}, {end_date}, {cashflow_df}")
+        if cashflow_df.empty:
+            return dmc.Text("No cash flow data loaded.", c="red"), False
+        # Filter by date if possible
+        date_col = next((col for col in cashflow_df.columns if 'fiscal_date' in col.lower() or 'date' in col.lower()), None)
+        if date_col and start_date and end_date:
+            cashflow_df[date_col] = pd.to_datetime(cashflow_df[date_col])
+            mask = (cashflow_df[date_col] >= pd.to_datetime(start_date)) & (cashflow_df[date_col] <= pd.to_datetime(end_date))
+            selected_cashflow = cashflow_df.loc[mask]
+        else:
+            selected_cashflow = cashflow_df
+        try:
+            from infrastructure.ui.dash.plots.cashflow_plots import (
+                plot_cash_flow_categories,
+                plot_operating_vs_net_income,
+                plot_free_cash_flow
+            )
+            fig_categories = plot_cash_flow_categories(selected_cashflow)
+            fig_ocf_vs_ni = plot_operating_vs_net_income(selected_cashflow)
+            fig_fcf = plot_free_cash_flow(selected_cashflow)
+            return dmc.Stack([
+                dmc.Divider(label="Cash Flow Categories (Operating, Investing, Financing)", my=10),
+                dcc.Graph(figure=fig_categories),
+                dmc.Divider(label="Operating Cash Flow vs Net Income", my=10),
+                dcc.Graph(figure=fig_ocf_vs_ni),
+                dmc.Divider(label="Free Cash Flow per Period", my=10),
+                dcc.Graph(figure=fig_fcf),
+            ], gap=16), False
+        except Exception as e:
+            return dmc.Text(f"Error generating cash flow plots: {e}", c="red"), False        
 
     @app.callback(
         Output("insider-transactions-content", "children"),
@@ -589,10 +580,13 @@ def register_callbacks(app: dash.Dash) -> None:
 
         insider_df = pd.DataFrame(insider_transactions)
         price_df = pd.DataFrame(price_data)
-        if insider_df.empty or price_df.empty:
-            return dmc.Text("No data to display for insider transactions.", c="dimmed"), False
+        if insider_df.empty:
+            return dmc.Text("No insider transactions available for this symbol.", c="dimmed"), False
+        if price_df.empty:
+            return dmc.Text("No price data available for this symbol.", c="dimmed"), False
 
         # Filter by date if possible
+
         if start_date and end_date:
             if "transaction_date" in insider_df.columns:
                 insider_df["transaction_date"] = pd.to_datetime(insider_df["transaction_date"])
