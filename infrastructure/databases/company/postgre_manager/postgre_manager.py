@@ -121,7 +121,6 @@ class CompanyTableManager(PostgresManager):
         Initialize the CompanyDataHandler with database connection parameters.
         """
         super().__init__(db_host, db_name, db_user, db_password, db_port)
-        # Downgrade noisy init log to avoid duplicate INFO lines
         self.logger.debug("CompanyTableManager ready.")
 
     def table_exists(self, table_name: str) -> bool:
@@ -221,7 +220,6 @@ class CompanyDataManager(CompanyTableManager):
         Initialize the CompanyDataHandler with database connection parameters.
         """
         super().__init__(db_host, db_name, db_user, db_password, db_port)
-        # Downgrade noisy init log to avoid duplicate INFO lines
         self.logger.debug("CompanyDataManager ready.")
 
     def _row_to_dict(self, row):

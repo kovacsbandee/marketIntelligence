@@ -313,13 +313,13 @@ def plot_candlestick_with_vwap(data):
     return fig
 
 
-def plot_rsi(data, window=14):
+def plot_rsi(data):
     """
     Plots the Relative Strength Index (RSI) as a line chart.
 
-    The Relative Strength Index is a momentum oscillator that measures the magnitude of recent price gains versus losses to assess the speed of price movements:contentReference[oaicite:5]{index=5}. It oscillates between 0 and 100. In general, an RSI value above 70 suggests the asset may be overbought (price has risen quickly in the period, potentially due for a pullback), while an RSI below 30 suggests it may be oversold (price has fallen quickly, potentially due for a rebound):contentReference[oaicite:6]{index=6}.
+    The Relative Strength Index is a momentum oscillator that measures the magnitude of recent price gains versus losses to assess the speed of price movements. It oscillates between 0 and 100. In general, an RSI value above 70 suggests the asset may be overbought (price has risen quickly in the period, potentially due for a pullback), while an RSI below 30 suggests it may be oversold (price has fallen quickly, potentially due for a rebound).
 
-    This function uses the `calculate_rsi` helper to compute the RSI values (typically using a 14-period window by default) from the input price data (usually closing prices). It then plots the RSI line, often including horizontal reference lines at 30 and 70 to denote the common oversold/overbought thresholds.
+    This function expects an RSI column to be present in the input data.
 
     Parameters:
         data (pd.DataFrame or pd.Series): Price data to compute RSI from (if DataFrame, the "Close" column is used).
@@ -327,6 +327,9 @@ def plot_rsi(data, window=14):
 
     Returns:
         Plotly.Figure: The Figure object containing the RSI chart, which can be shown below a price chart for context.
+
+    Raises:
+        ValueError: If no RSI column is found in the input data.
 
     Example:
         >>> fig = plot_rsi(df, window=14)
@@ -338,23 +341,8 @@ def plot_rsi(data, window=14):
     # Try to find RSI column (case-insensitive)
     rsi_cols = [col for col in df.columns if 'rsi' in col.lower()]
     if not rsi_cols:
-        # If not present, try to calculate RSI from close prices
-        if 'close' in df.columns:
-            close = df['close']
-            delta = close.diff()
-            gain = delta.where(delta > 0, 0.0)
-            loss = -delta.where(delta < 0, 0.0)
-            avg_gain = gain.rolling(window=window, min_periods=window).mean()
-            avg_loss = loss.rolling(window=window, min_periods=window).mean()
-            rs = avg_gain / avg_loss
-            rsi = 100 - (100 / (1 + rs))
-            df['RSI'] = rsi
-            rsi_col = 'RSI'
-        else:
-            # No close price, return empty figure
-            return go.Figure()
-    else:
-        rsi_col = rsi_cols[0]
+        raise ValueError("No RSI column found in input data. Please compute RSI before plotting.")
+    rsi_col = rsi_cols[0]
     x = df['date'] if 'date' in df.columns else df.index
     fig = go.Figure()
     fig.add_trace(
@@ -411,7 +399,7 @@ def plot_rsi(data, window=14):
     return fig
 
 
-def plot_macd(data, fast=12, slow=26, signal=9):
+def plot_macd(data):
     """
     Plots the Moving Average Convergence Divergence (MACD) indicator.
 
@@ -432,17 +420,10 @@ def plot_macd(data, fast=12, slow=26, signal=9):
         >>> fig = plot_macd(df)
         >>> fig.show()
     """
-    """
-    Plots the Moving Average Convergence Divergence (MACD) indicator.
-
-    MACD is calculated as the difference between a fast (short-term) EMA and a slow (long-term) EMA of the price, and it is usually accompanied by a signal line (an EMA of the MACD line) and a histogram showing the difference between MACD and the signal. On the chart, MACD oscillates above and below a zero line; values above zero indicate the short-term average is above the long-term average (upward bias), while values below zero indicate the opposite (downward bias). When the MACD line crosses below the signal line, it indicates weakening momentum to the upside (a bearish signal), and when the MACD line crosses above the signal line, it indicates strengthening upward momentum (a bullish signal).
-
-    The function uses `calculate_macd` to compute the MACD line, signal line, and histogram from the input price series (typically closing prices). It then plots these components (MACD and signal as lines, and the histogram as bars) in a separate panel, often with a horizontal zero reference line for context.
-    """
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
-    # Only use precomputed columns
+
     macd_line_col = next((col for col in df.columns if 'macd' in col.lower() and 'hist' not in col.lower() and 'signal' not in col.lower()), None)
     signal_line_col = next((col for col in df.columns if 'macd_signal' in col.lower() or 'signal' in col.lower()), None)
     hist_col = next((col for col in df.columns if 'macd_hist' in col.lower() or 'hist' in col.lower()), None)
@@ -511,7 +492,7 @@ def plot_macd(data, fast=12, slow=26, signal=9):
     return fig
 
 
-def plot_stochastic(data, k_window=14, d_window=3):
+def plot_stochastic(data):
     """
     Plots the Stochastic Oscillator (%K and %D lines).
 
@@ -530,9 +511,6 @@ def plot_stochastic(data, k_window=14, d_window=3):
     Example:
         >>> fig = plot_stochastic(df, k_window=14, d_window=3)
         >>> fig.show()
-    """
-    """
-    Plots the Stochastic Oscillator (%K and %D lines).
     """
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
@@ -625,9 +603,6 @@ def plot_obv(data):
         >>> fig = plot_obv(df)
         >>> fig.show()
     """
-    """
-    Plots the On-Balance Volume (OBV) indicator as a line chart.
-    """
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
@@ -666,7 +641,7 @@ def plot_obv(data):
     return fig
 
 
-def plot_adx(data, window=14):
+def plot_adx(data):
     """
     Plots the Average Directional Index (ADX) and its +DI / -DI lines.
 
@@ -682,7 +657,7 @@ def plot_adx(data, window=14):
         Plotly.Figure: The Figure object containing the ADX plot (with ADX, +DI, and -DI lines).
 
     Example:
-        >>> fig = plot_adx(df, window=14)
+        >>> fig = plot_adx(df)
         >>> fig.show()
     """
     """

@@ -47,25 +47,7 @@ class FinancialAnalyst(Analyst):
         raise NotImplementedError("Financial analysis logic is not yet implemented")
     def __repr__(self):
         return f"FinancialAnalyst(name={self.name}, description={self.description})"    
-    
-
-class NewsAnalyst(Analyst):
-    def __init__(self, name: str, description: str):
-        super().__init__(name, description)
-        # Additional attributes specific to news analysts can be added here
-    def analyze(self, data):
-        """
-        Perform news analysis on the provided data.
-        This method should be implemented by subclasses to perform specific news analyses.
-        Args:
-            data (dict): The news data to analyze.
-        Returns:
-            dict: The results of the analysis.
-        """
-        raise NotImplementedError("News analysis logic is not yet implemented") 
-    def __repr__(self):
-        return f"NewsAnalyst(name={self.name}, description={self.description})"
-    
+        
 
 class QuantitativeAnalyst(Analyst):
     def __init__(self, name: str, description: str):
@@ -84,6 +66,23 @@ class QuantitativeAnalyst(Analyst):
     def __repr__(self):
         return f"QuantitativeAnalyst(name={self.name}, description={self.description})" 
     
+class NewsAnalyst(Analyst):
+    def __init__(self, name: str, description: str):
+        super().__init__(name, description)
+        # Additional attributes specific to news analysts can be added here
+    def analyze(self, data):
+        """
+        Perform news analysis on the provided data.
+        This method should be implemented by subclasses to perform specific news analyses.
+        Args:
+            data (dict): The news data to analyze.
+        Returns:
+            dict: The results of the analysis.
+        """
+        raise NotImplementedError("News analysis logic is not yet implemented") 
+    def __repr__(self):
+        return f"NewsAnalyst(name={self.name}, description={self.description})"
+
 
 class LLMAnalyst(Analyst):
     def __init__(self, name: str, description: str):

@@ -1,4 +1,6 @@
+
 import plotly.graph_objects as go
+from infrastructure.ui.dash.plot_utils import _auto_load_table_descriptions
 
 def plot_cash_flow_categories(df):
     """
@@ -35,6 +37,7 @@ def plot_cash_flow_categories(df):
     """
     if df is None or df.empty:
         return go.Figure()
+    descriptions = _auto_load_table_descriptions(df)
     x_col = next((col for col in df.columns if 'fiscal_date' in col.lower() or 'date' in col.lower()), None)
     if not x_col:
         return go.Figure()
@@ -45,9 +48,9 @@ def plot_cash_flow_categories(df):
         fig.add_trace(go.Bar(
             x=x,
             y=df['operating_cashflow'],
-            name='Operating Cash Flow',
+            name=descriptions.get('operating_cashflow', 'Operating Cash Flow'),
             marker_color='green',
-            hovertemplate=f"<b>Operating Cash Flow</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+            hovertemplate=f"<b>{descriptions.get('operating_cashflow', 'Operating Cash Flow')}</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
         ))
     else:
         print("Note: 'operating_cashflow' column missing or empty.")
@@ -56,9 +59,9 @@ def plot_cash_flow_categories(df):
         fig.add_trace(go.Bar(
             x=x,
             y=df['cashflow_from_investment'],
-            name='Investing Cash Flow',
+            name=descriptions.get('cashflow_from_investment', 'Investing Cash Flow'),
             marker_color='red',
-            hovertemplate=f"<b>Investing Cash Flow</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+            hovertemplate=f"<b>{descriptions.get('cashflow_from_investment', 'Investing Cash Flow')}</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
         ))
     else:
         print("Note: 'cashflow_from_investment' column missing or empty.")
@@ -67,9 +70,9 @@ def plot_cash_flow_categories(df):
         fig.add_trace(go.Bar(
             x=x,
             y=df['cashflow_from_financing'],
-            name='Financing Cash Flow',
+            name=descriptions.get('cashflow_from_financing', 'Financing Cash Flow'),
             marker_color='blue',
-            hovertemplate=f"<b>Financing Cash Flow</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+            hovertemplate=f"<b>{descriptions.get('cashflow_from_financing', 'Financing Cash Flow')}</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
         ))
     else:
         print("Note: 'cashflow_from_financing' column missing or empty.")
@@ -131,6 +134,7 @@ def plot_operating_vs_net_income(df):
     """
     if df is None or df.empty:
         return go.Figure()
+    descriptions = _auto_load_table_descriptions(df)
     x_col = next((col for col in df.columns if 'fiscal_date' in col.lower() or 'date' in col.lower()), None)
     if not x_col:
         return go.Figure()
@@ -142,9 +146,9 @@ def plot_operating_vs_net_income(df):
             x=x,
             y=df['operating_cashflow'],
             mode='lines+markers',
-            name='Operating Cash Flow',
+            name=descriptions.get('operating_cashflow', 'Operating Cash Flow'),
             line=dict(color='green', width=2),
-            hovertemplate=f"<b>Operating Cash Flow</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+            hovertemplate=f"<b>{descriptions.get('operating_cashflow', 'Operating Cash Flow')}</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
         ))
     else:
         print("Note: 'operating_cashflow' column missing or empty.")
@@ -154,9 +158,9 @@ def plot_operating_vs_net_income(df):
             x=x,
             y=df['net_income'],
             mode='lines+markers',
-            name='Net Income',
+            name=descriptions.get('net_income', 'Net Income'),
             line=dict(color='orange', width=2, dash='dash'),
-            hovertemplate=f"<b>Net Income</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+            hovertemplate=f"<b>{descriptions.get('net_income', 'Net Income')}</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
         ))
     else:
         print("Note: 'net_income' column missing or empty.")

@@ -7,7 +7,7 @@ A status message is shown to inform the user about the data loading process.
 """
 
 import dash
-from dash import dcc, html
+from dash import dcc
 import dash_mantine_components as dmc
 from infrastructure.ui.dash.app_callbacks import register_callbacks
 

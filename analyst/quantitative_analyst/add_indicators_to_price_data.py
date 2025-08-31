@@ -94,7 +94,7 @@ def calculate_macd(data, fast=12, slow=26, signal=9):
     macd_hist = macd - macd_signal
     df[f'macd_f_{fast}_s_{slow}'] = macd
     df[f'macd_signal_{signal}'] = macd_signal
-    df['macd_hist'] = macd_hist
+    df[f'macd_hist_{signal}'] = macd_hist
     return df
 
 

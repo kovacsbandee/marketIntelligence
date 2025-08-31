@@ -393,19 +393,11 @@ def register_callbacks(app: dash.Dash) -> None:
         try:
             latest_date = str(selected_balance_sheet["fiscal_date_ending"].max().date())
 
-            # Time Series Plot
+
             time_series_fig = plot_balance_sheet_time_series(selected_balance_sheet)
-
-            # Stacked Area Plot
             stacked_area_fig = plot_balance_sheet_stacked_area(selected_balance_sheet)
-
-            # Bar Chart
             bar_fig = plot_balance_sheet_bar(selected_balance_sheet)
-
-            # Pie Chart
             pie_fig = plot_balance_sheet_pie(selected_balance_sheet, latest_date)
-
-            # Metric Cards
             cards = render_balance_sheet_metric_cards(selected_balance_sheet, latest_date)
 
             return dmc.Stack([

@@ -55,7 +55,7 @@ def main():
         return
 
     # List tables to be dropped
-    warning_msg = f"\n⚠️  WARNING: You are about to delete {len(defined_classes)} tables:"
+    warning_msg = f"\n WARNING: You are about to delete {len(defined_classes)} tables:"
     print(warning_msg)
     logger.warning(warning_msg)
     for table_class in defined_classes:
