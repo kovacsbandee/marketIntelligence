@@ -8,7 +8,7 @@ from infrastructure.ui.dash.plot_utils import _find_row_by_date, _flatten_group,
 
 def plot_balance_sheet_time_series(
     balance_df: pd.DataFrame,
-    columns: list,
+    columns: list = None,
     descriptions: dict = None
 ) -> go.Figure:
     """
@@ -23,6 +23,17 @@ def plot_balance_sheet_time_series(
     Returns:
     - go.Figure: Plotly figure object with time series lines for each selected metric.
     """
+    # Set default columns if not provided
+    if columns is None:
+        columns = [
+            "total_assets",
+            "total_liabilities",
+            "total_shareholder_equity",
+            "total_current_assets",
+            "total_current_liabilities",
+            "cash_and_cash_equivalents",
+            "property_plant_equipment"
+        ]
     # Auto-load descriptions if not provided
     if descriptions is None:
         descriptions = _auto_load_table_descriptions(balance_df)
@@ -63,11 +74,33 @@ def plot_balance_sheet_time_series(
     return fig
 
 
-def plot_balance_sheet_stacked_area(balance_df: pd.DataFrame, stack_groups: dict, descriptions: dict = None) -> go.Figure:
+def plot_balance_sheet_stacked_area(balance_df: pd.DataFrame, stack_groups: dict = None, descriptions: dict = None) -> go.Figure:
     """
     Plot stacked area chart to visualize the composition of assets or liabilities over time.
     Supports nested grouping.
     """
+    if stack_groups is None:
+        stack_groups = {
+            "Assets": {
+                "Current Assets": [
+                    "cash_and_cash_equivalents",
+                    "inventory",
+                    "current_net_receivables"
+                ],
+                "Non-Current Assets": [
+                    "property_plant_equipment",
+                    "goodwill"
+                ]
+            },
+            "Liabilities": {
+                "Current Liabilities": [
+                    "total_current_liabilities"
+                ],
+                "Non-Current Liabilities": [
+                    "long_term_debt"
+                ]
+            }
+        }
     if descriptions is None:
         descriptions = _auto_load_table_descriptions(balance_df)
     if "fiscal_date_ending" not in balance_df.columns:
@@ -112,11 +145,29 @@ def plot_balance_sheet_stacked_area(balance_df: pd.DataFrame, stack_groups: dict
     return fig
 
 
-def plot_balance_sheet_bar(balance_df: pd.DataFrame, group_columns: dict, descriptions: dict = None) -> go.Figure:
+def plot_balance_sheet_bar(balance_df: pd.DataFrame, group_columns: dict = None, descriptions: dict = None) -> go.Figure:
     """
     Plot grouped or stacked bar chart comparing current vs. non-current assets and liabilities.
     Supports nested grouping.
     """
+    if group_columns is None:
+        group_columns = {
+            "Current Assets": [
+                "cash_and_cash_equivalents",
+                "inventory",
+                "current_net_receivables"
+            ],
+            "Non-Current Assets": [
+                "property_plant_equipment",
+                "goodwill"
+            ],
+            "Current Liabilities": [
+                "total_current_liabilities"
+            ],
+            "Shareholder Equity": [
+                "total_shareholder_equity"
+            ]
+        }
     if descriptions is None:
         descriptions = _auto_load_table_descriptions(balance_df)
     if "fiscal_date_ending" not in balance_df.columns:
@@ -154,7 +205,7 @@ def plot_balance_sheet_bar(balance_df: pd.DataFrame, group_columns: dict, descri
     return fig
 
 
-def plot_balance_sheet_pie(balance_df: pd.DataFrame, date: str, columns: list, descriptions: dict = None) -> go.Figure:
+def plot_balance_sheet_pie(balance_df: pd.DataFrame, date: str, columns: list = None, descriptions: dict = None) -> go.Figure:
     """
     Generates a pie chart visualization of a balance sheet breakdown for a specific date.
 
@@ -183,6 +234,14 @@ def plot_balance_sheet_pie(balance_df: pd.DataFrame, date: str, columns: list, d
         fig = plot_balance_sheet_pie(balance_df, "2023-01-01", ["assets", "liabilities"], {"assets": "Assets", "liabilities": "Liabilities"})
         fig.show()
     """
+    if columns is None:
+        columns = [
+            "cash_and_cash_equivalents",
+            "inventory",
+            "current_net_receivables",
+            "property_plant_equipment",
+            "goodwill"
+        ]
     if descriptions is None:
         descriptions = _auto_load_table_descriptions(balance_df)
     if "fiscal_date_ending" not in balance_df.columns:
@@ -207,7 +266,7 @@ def plot_balance_sheet_pie(balance_df: pd.DataFrame, date: str, columns: list, d
     return fig
 
 
-def render_balance_sheet_metric_cards(balance_df: pd.DataFrame, date: str, metrics: list, descriptions: dict = None):
+def render_balance_sheet_metric_cards(balance_df: pd.DataFrame, date: str, metrics: list = None, descriptions: dict = None):
     """
     Renders a list of metric cards for a balance sheet.
 
@@ -230,6 +289,16 @@ def render_balance_sheet_metric_cards(balance_df: pd.DataFrame, date: str, metri
         - If a metric value is missing or NaN, "N/A" is displayed instead.
         - Cards are styled with a fixed width, shadow, and margin for inline display.
     """
+    if metrics is None:
+        metrics = [
+            "total_assets",
+            "total_liabilities",
+            "total_shareholder_equity",
+            "total_current_assets",
+            "total_current_liabilities",
+            "cash_and_cash_equivalents",
+            "property_plant_equipment"
+        ]
     if descriptions is None:
         descriptions = _auto_load_table_descriptions(balance_df)
     if "fiscal_date_ending" not in balance_df.columns:

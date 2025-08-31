@@ -1,3 +1,12 @@
+"""
+Dash app callback registrations for the Market Intelligence dashboard UI.
+
+This module defines all Dash callback functions for updating UI components
+in response to user interactions, including data loading, chart updates,
+and tab content rendering. It connects the UI to the data service and
+plotting utilities, and manages the state and interactivity of the dashboard.
+"""
+
 import dash
 from dash import dcc, Output, Input, State, no_update
 import dash_mantine_components as dmc
@@ -47,6 +56,12 @@ from infrastructure.ui.dash.plots.earnings_plots import (
     plot_eps_actual_vs_estimate_scatter
 )
 
+from infrastructure.ui.dash.plots.cashflow_plots import (
+    plot_cash_flow_categories,
+    plot_operating_vs_net_income,
+    plot_free_cash_flow
+)
+
 from infrastructure.ui.dash.plots.insider_transactions_plots import (
     prepare_insider_data,
     plot_insider_price_chart,
@@ -94,9 +109,6 @@ def register_callbacks(app: dash.Dash) -> None:
                 return None
             return df.to_dict("records")
 
-        earnings = data.get("earnings") if "earnings" in data else None
-        print("debug cash flow data:", df_to_records(data.get("cashflow_statement_quarterly")))
-        # Add cash flow data to the return tuple for cashflow-store
         return (
             data["start_date"],
             data["end_date"],
@@ -106,7 +118,7 @@ def register_callbacks(app: dash.Dash) -> None:
             df_to_records(data["company_fundamentals"]),
             df_to_records(data["balance_sheet_quarterly"]),
             df_to_records(data["annual_balance_sheet"]),
-            df_to_records(earnings),
+            df_to_records(data.get("earnings") if "earnings" in data else None),
             df_to_records(data.get("income_statement_quarterly") if "income_statement_quarterly" in data else None),
             df_to_records(data.get("cashflow_statement_quarterly") if "cashflow_statement_quarterly" in data else None),
             df_to_records(data.get("insider_transactions") if "insider_transactions" in data else None)
@@ -279,13 +291,10 @@ def register_callbacks(app: dash.Dash) -> None:
             tuple: Updated content and loading state for the income statement panel.
         """
         if tab != "income-statement":
-            print("[DEBUG] Not on income-statement tab.")
             return no_update, False
         if income_statement_quarterly is None or len(income_statement_quarterly) == 0:
-            print(f"[DEBUG] No income statement data loaded. income_statement_quarterly={income_statement_quarterly}")
             return dmc.Text("No income statement data loaded.", c="red"), False
         if price_data is None or len(price_data) == 0:
-            print(f"[DEBUG] No price data loaded. price_data={price_data}")
             return dmc.Text("No price data loaded.", c="red"), False
         try:
             income_df = pd.DataFrame(income_statement_quarterly)
@@ -299,7 +308,6 @@ def register_callbacks(app: dash.Dash) -> None:
             fig_op_trends = plot_operating_profit_ebit_ebitda_trends(symbol, income_df)
             fig_waterfall = plot_income_statement_waterfall(symbol, income_df)
             fig = plot_quarterly_revenue_net_income_vs_stock_price(symbol, income_df, price_df)
-            # Default metric for the scatter plot (can be made dynamic via UI)
             default_metric = "net_income" if "net_income" in income_df.columns else income_df.columns[0]
             fig_metric_vs_return = plot_metric_vs_future_stock_return(symbol, income_df, price_df, default_metric)
             return dmc.Stack([
@@ -373,16 +381,6 @@ def register_callbacks(app: dash.Dash) -> None:
         else:
             selected_balance_sheet = balance_sheet_quarterly_df
 
-        metrics = [
-            "total_assets",
-            "total_liabilities",
-            "total_shareholder_equity",
-            "total_current_assets",
-            "total_current_liabilities",
-            "cash_and_cash_equivalents",
-            "property_plant_equipment"
-        ]
-
         if selected_balance_sheet.empty:
             fig = go.Figure()
             fig.update_layout(
@@ -393,70 +391,22 @@ def register_callbacks(app: dash.Dash) -> None:
             return dcc.Graph(figure=fig), False
 
         try:
-            stack_groups = {
-                "Assets": {
-                    "Current Assets": [
-                        "cash_and_cash_equivalents",
-                        "inventory",
-                        "current_net_receivables"
-                    ],
-                    "Non-Current Assets": [
-                        "property_plant_equipment",
-                        "goodwill"
-                    ]
-                },
-                "Liabilities": {
-                    "Current Liabilities": [
-                        "total_current_liabilities"
-                    ],
-                    "Non-Current Liabilities": [
-                        "long_term_debt"
-                    ]
-                }
-            }
-
-            bar_groups = {
-                "Current Assets": [
-                    "cash_and_cash_equivalents",
-                    "inventory",
-                    "current_net_receivables"
-                ],
-                "Non-Current Assets": [
-                    "property_plant_equipment",
-                    "goodwill"
-                ],
-                "Current Liabilities": [
-                    "total_current_liabilities"
-                ],
-                "Shareholder Equity": [
-                    "total_shareholder_equity"
-                ]
-            }
-
-            pie_columns = [
-                "cash_and_cash_equivalents",
-                "inventory",
-                "current_net_receivables",
-                "property_plant_equipment",
-                "goodwill"
-            ]
-
-            metrics = [
-                "total_assets",
-                "total_liabilities",
-                "total_shareholder_equity",
-                "total_current_assets",
-                "total_current_liabilities",
-                "cash_and_cash_equivalents",
-                "property_plant_equipment"
-            ]
             latest_date = str(selected_balance_sheet["fiscal_date_ending"].max().date())
 
-            time_series_fig = plot_balance_sheet_time_series(selected_balance_sheet, columns=metrics)
-            stacked_area_fig = plot_balance_sheet_stacked_area(selected_balance_sheet, stack_groups)
-            bar_fig = plot_balance_sheet_bar(selected_balance_sheet, bar_groups)
-            pie_fig = plot_balance_sheet_pie(selected_balance_sheet, latest_date, pie_columns)
-            cards = render_balance_sheet_metric_cards(selected_balance_sheet, latest_date, metrics)
+            # Time Series Plot
+            time_series_fig = plot_balance_sheet_time_series(selected_balance_sheet)
+
+            # Stacked Area Plot
+            stacked_area_fig = plot_balance_sheet_stacked_area(selected_balance_sheet)
+
+            # Bar Chart
+            bar_fig = plot_balance_sheet_bar(selected_balance_sheet)
+
+            # Pie Chart
+            pie_fig = plot_balance_sheet_pie(selected_balance_sheet, latest_date)
+
+            # Metric Cards
+            cards = render_balance_sheet_metric_cards(selected_balance_sheet, latest_date)
 
             return dmc.Stack([
                 dmc.Group(cards, justify="flex-start", gap="xs"),
@@ -503,13 +453,11 @@ def register_callbacks(app: dash.Dash) -> None:
         Returns:
             tuple: Updated content and loading state for the cash flow panel.
         """
-        print(f"Debug: {tab}, {start_date}, {end_date}, {cashflow_data}")
         if tab != "cash-flow":
             return no_update, False
         if cashflow_data is None or len(cashflow_data) == 0:
             return dmc.Text("No cash flow data loaded.", c="red"), False
         cashflow_df = pd.DataFrame(cashflow_data)
-        print(f"Debug: {tab}, {start_date}, {end_date}, {cashflow_df}")
         if cashflow_df.empty:
             return dmc.Text("No cash flow data loaded.", c="red"), False
         # Filter by date if possible
@@ -521,11 +469,6 @@ def register_callbacks(app: dash.Dash) -> None:
         else:
             selected_cashflow = cashflow_df
         try:
-            from infrastructure.ui.dash.plots.cashflow_plots import (
-                plot_cash_flow_categories,
-                plot_operating_vs_net_income,
-                plot_free_cash_flow
-            )
             fig_categories = plot_cash_flow_categories(selected_cashflow)
             fig_ocf_vs_ni = plot_operating_vs_net_income(selected_cashflow)
             fig_fcf = plot_free_cash_flow(selected_cashflow)
@@ -586,7 +529,6 @@ def register_callbacks(app: dash.Dash) -> None:
             return dmc.Text("No price data available for this symbol.", c="dimmed"), False
 
         # Filter by date if possible
-
         if start_date and end_date:
             if "transaction_date" in insider_df.columns:
                 insider_df["transaction_date"] = pd.to_datetime(insider_df["transaction_date"])
