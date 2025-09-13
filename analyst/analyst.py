@@ -5,7 +5,23 @@ class Analyst:
         self.name = name
         self.description = description
         self.symbol = None  # This can be set later if needed
+        self.llm_to_be_used = "gpt-41"  # Default LLM, can be changed as needed
 
+    def connect_to_LLM_provider(self, llm_provider: str):
+        """
+        This method connects the analyst to a specified LLM provider.
+        In the future I'm planning to add OpenAI, and Claude as options.
+        This method does the setting, load the API keys from environment variables, and tests the connection.
+        The output is a self.llm attribute that is used in the analyze method.
+        Capable of receiving prompts, knowledge bases, data from the alphavantage and plots from the infrastructure/ui/dash/plots directory.
+        """
+        # Placeholder for actual connection logic
+        
+            self.llm_to_be_used = llm_provider
+            return True
+        else:
+            raise ValueError(f"Unsupported LLM provider: {llm_provider}")
+        
     def get_alphavantage_analysis(self, symbol: str):
         """
         Retrieve analysis data from Symbol company_fundamentals.
