@@ -1,6 +1,6 @@
 import pandas as pd
 from symbol.symbol import Symbol
-from infrastructure.databases.company.postgre_manager.postgre_manager import CompanyDataManager
+from infrastructure.databases.company.postgre_manager.company_data_manager import CompanyDataManager
 from infrastructure.ui.dash.app_util import get_last_6_months_range
 
 def load_symbol_data(symbol: str):

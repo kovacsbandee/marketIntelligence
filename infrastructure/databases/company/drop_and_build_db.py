@@ -9,8 +9,8 @@ WARNING:
 """
 
 import inspect
-from infrastructure.databases.company.postgre_manager.postgre_manager import CompanyTableManager
-from infrastructure.databases.company.postgre_manager import postgre_objects
+from infrastructure.databases.company.postgre_manager.company_data_manager import CompanyTableManager
+from infrastructure.databases.company.postgre_manager import company_table_objects
 from utils.logger import get_logger
 
 def drop_and_build():
@@ -25,9 +25,9 @@ def drop_and_build():
     logger.info("Connected to the database successfully.")
 
     # Discover ORM classes defined in postgre_objects
-    classes = inspect.getmembers(postgre_objects, inspect.isclass)
+    classes = inspect.getmembers(company_table_objects, inspect.isclass)
     defined_classes = [
-        cls[1] for cls in classes if cls[1].__module__ == postgre_objects.__name__
+        cls[1] for cls in classes if cls[1].__module__ == company_table_objects.__name__
     ]
 
     if not defined_classes:

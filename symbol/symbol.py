@@ -31,8 +31,8 @@ Example:
 """
 
 import pandas as pd
-from infrastructure.databases.company.postgre_manager.postgre_manager import CompanyDataManager
-from infrastructure.databases.company.postgre_manager.postgre_objects import table_name_to_class
+from infrastructure.databases.company.postgre_manager.company_data_manager import CompanyDataManager
+from infrastructure.databases.company.postgre_manager.company_table_objects import table_name_to_class
 from infrastructure.databases.company.initial_load import download_stock_data
 
 from analyst.quantitative_analyst.add_indicators_to_price_data import (

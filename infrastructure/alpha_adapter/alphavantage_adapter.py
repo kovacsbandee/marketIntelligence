@@ -25,8 +25,8 @@ from pathlib import Path
 import pandas as pd
 
 from configs.config import ALPHA_API_KEY
-from infrastructure.databases.company.postgre_manager.postgre_manager import CompanyDataManager
-from infrastructure.databases.company.postgre_manager.postgre_objects import (
+from infrastructure.databases.company.postgre_manager.company_data_manager import CompanyDataManager
+from infrastructure.databases.company.postgre_manager.company_table_objects import (
     DailyTimeSeries, CompanyFundamentals, AnnualIncomeStatement,
     QuarterlyIncomeStatement, AnnualBalanceSheet, QuarterlyBalanceSheet,
     AnnualCashFlow, QuarterlyCashFlow, AnnualEarnings, QuarterlyEarnings,

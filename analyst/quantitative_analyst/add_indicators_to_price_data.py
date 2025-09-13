@@ -124,9 +124,9 @@ def calculate_bollinger_bands(data, window=20, num_std=2):
     std = prices.rolling(window=window, min_periods=window).std()
     upper = middle + num_std * std
     lower = middle - num_std * std
-    df[f'bb_middle_win_{window}_std_{num_std}'] = middle
-    df['bb_upper'] = upper
-    df['bb_lower'] = lower
+    df[f'bollinger_bands_middle_win_{window}_std_{num_std}'] = middle
+    df[f'bollinger_bands_upper_win_{window}_std_{num_std}'] = upper
+    df[f'bollinger_bands_lower_win_{window}_std_{num_std}'] = lower
     return df
 
 
@@ -188,8 +188,8 @@ def calculate_stochastic(data, k_window=14, d_window=3):
     highest_high = high.rolling(window=k_window, min_periods=k_window).max()
     percent_k = 100 * (close - lowest_low) / (highest_high - lowest_low)
     percent_d = percent_k.rolling(window=d_window, min_periods=d_window).mean()
-    df[f'%K_kwin_{k_window}'] = percent_k
-    df[f'%D_dwin_{d_window}'] = percent_d
+    df[f'stochastic_oscillator_%K_kwin_{k_window}'] = percent_k
+    df[f'stochastic_oscillator_%D_dwin_{d_window}'] = percent_d
     return df
 
 

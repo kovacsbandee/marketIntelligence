@@ -16,8 +16,8 @@ class Analyst:
         Capable of receiving prompts, knowledge bases, data from the alphavantage and plots from the infrastructure/ui/dash/plots directory.
         """
         # Placeholder for actual connection logic
-        
-            self.llm_to_be_used = llm_provider
+
+        if self.llm_to_be_used == llm_provider:
             return True
         else:
             raise ValueError(f"Unsupported LLM provider: {llm_provider}")
