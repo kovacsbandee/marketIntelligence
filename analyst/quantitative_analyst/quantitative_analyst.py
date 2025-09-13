@@ -58,8 +58,10 @@ import openai
 from PyPDF2 import PdfReader
 from dotenv import load_dotenv
 
-load_dotenv()
+from infrastructure.databases.analysis.postgre_manager.analyst_data_manager import get_analyst_data_handler
+from infrastructure.databases.analysis.postgre_manager.analyst_table_objects import AnalystQuantitativeBase, AnalystQuantitativeScore, AnalystQuantitativeExplanation
 
+load_dotenv()
 
 PDF_PATH = "./infrastructure/databases/rag_knowledge_base/quantitative_analyst/"
 
@@ -145,7 +147,7 @@ class QuantitativeAnalyst:
 
     def __init__(
         self,
-        symbol: "Symbol",
+        symbol: str = None,
         article_paths: Dict[str, str] = ARTICLE_PATHS,
         openai_key: Optional[str] = None,
         rate_limit_per_minute: int = 60,
@@ -154,6 +156,7 @@ class QuantitativeAnalyst:
         self.symbol = symbol
         self.article_paths = article_paths
         self.logger = logger or logging.getLogger(__name__)
+        self.store_in_db = True
         self.rate_limiter = RateLimiter(max_calls_per_minute=rate_limit_per_minute, logger=self.logger)
         # Configure OpenAI API key: prefer argument, else from environment (.env)
         if openai_key:
@@ -336,36 +339,136 @@ class QuantitativeAnalyst:
         article = self._article_texts.get(indicator, "")
         return self._call_language_model(indicator, values_list, article)
 
-    def run_analysis(self) -> Tuple[Dict[str, Optional[float]], Optional[float], Dict[str, str]]:
-        """Run the analysis for all configured indicators.
-
-        Returns
-        -------
-        indicator_scores : dict[str, float or None]
-            Per‑indicator continuous score in ``[-1, 1]``.  If an indicator
-            could not be scored due to missing data or API failure, its
-            value will be ``None``.
-        aggregate_score : float or None
-            The average of all numeric indicator scores.  ``None`` if no
-            indicator produced a numeric score.
-        explanations : dict[str, str]
-            Full language‑model responses (reasoning) keyed by indicator.
+    def run_analysis(self, store_in_db: bool = False, db_manager=None):
         """
-        # Ensure articles are loaded; embeddings are optional but may
-        # improve prompt quality in future iterations
+        Run the analysis for all configured indicators and return extended metadata.
+        If store_in_db is True, store the result in the analyst database using ORM objects.
+        Args:
+            store_in_db (bool): If True, store the result in the database.
+            db_manager: Optional AnalystDataManager instance. If None and store_in_db is True, a new one will be created.
+        Returns:
+            dict: The analysis result as before.
+        """
+        import datetime
+        # Ensure articles are loaded; embeddings are optional but may improve prompt quality in future iterations
         if not self._article_texts:
             self.load_articles()
         scores: Dict[str, Optional[float]] = {}
         explanations: Dict[str, str] = {}
+        warnings: List[str] = []
+        errors: List[str] = []
+        indicators_evaluated: List[str] = []
+        # Get the last year data and epoch
+        try:
+            df = self._get_last_year_data()
+            num_data_points = len(df)
+            if "date" in df.columns:
+                last_date = df["date"].max()
+                if hasattr(last_date, 'to_pydatetime'):
+                    last_date = last_date.to_pydatetime()
+                last_epoch = int(last_date.timestamp())
+                last_date_str = last_date.strftime("%Y-%m-%d %H:%M:%S")
+            else:
+                last_epoch = None
+                last_date_str = None
+        except Exception as exc:
+            df = None
+            num_data_points = 0
+            last_epoch = None
+            last_date_str = None
+            errors.append(f"Error getting last year data: {exc}")
         for indicator in self.article_paths.keys():
-            score, explanation = self.evaluate_indicator(indicator)
-            scores[indicator] = score
-            explanations[indicator] = explanation
+            try:
+                score, explanation = self.evaluate_indicator(indicator)
+                scores[indicator] = score
+                explanations[indicator] = explanation
+                indicators_evaluated.append(indicator)
+                if explanation == "No data available":
+                    warnings.append(f"No data for indicator: {indicator}")
+                if score is None and explanation != "No data available":
+                    warnings.append(f"No score for indicator: {indicator}")
+            except Exception as exc:
+                errors.append(f"Error evaluating {indicator}: {exc}")
         # Compute aggregate as mean of valid numeric scores
         numeric_scores = [s for s in scores.values() if isinstance(s, (int, float))]
         aggregate: Optional[float] = None
         if numeric_scores:
             aggregate = sum(numeric_scores) / len(numeric_scores)
-            # Again clip to [-1, 1]
             aggregate = max(min(aggregate, 1.0), -1.0)
-        return scores, aggregate, explanations
+        # Compose result
+        # Try to get the symbol string from the Symbol instance
+        symbol_str = getattr(self.symbol, "symbol", None)
+        if symbol_str is None:
+            symbol_str = getattr(self.symbol, "_symbol", None)
+        if symbol_str is None and hasattr(self.symbol, "ticker"):
+            symbol_str = getattr(self.symbol, "ticker", None)
+        analysis_run_dt = datetime.datetime.now()
+        result = {
+            "symbol": symbol_str,
+            "epoch": last_epoch,
+            "last_date": last_date_str,
+            "num_data_points": num_data_points,
+            "indicators_evaluated": indicators_evaluated,
+            "analysis_run_timestamp": int(analysis_run_dt.timestamp()),
+            "analysis_run_datetime": analysis_run_dt.strftime("%Y-%m-%d %H:%M:%S"),
+            "warnings": warnings,
+            "errors": errors,
+            "indicator_scores": scores,
+            "aggregate_score": aggregate,
+            "explanations": explanations,
+        }
+        # Optionally store in DB
+        if self.store_in_db:
+            try:
+                manager = db_manager or get_analyst_data_handler()
+                base_row = {
+                    "symbol": symbol_str,
+                    "epoch": last_epoch,
+                    "last_date": pd.to_datetime(last_date_str) if last_date_str else None,
+                    "num_data_points": num_data_points,
+                    "obv_used": int("obv" in indicators_evaluated),
+                    "vwap_used": int("vwap" in indicators_evaluated),
+                    "macd_used": int("macd" in indicators_evaluated),
+                    "rsi_used": int("rsi" in indicators_evaluated),
+                    "stochastic_oscillator_used": int("stochastic_oscillator" in indicators_evaluated),
+                    "bollinger_bands_used": int("bollinger_bands" in indicators_evaluated),
+                    "sma_used": int("sma" in indicators_evaluated),
+                    "ema_used": int("ema" in indicators_evaluated),
+                    "analysis_run_timestamp": int(analysis_run_dt.timestamp()),
+                    "analysis_run_datetime": analysis_run_dt,
+                    "warnings": ",".join(warnings) if warnings else None,
+                    "errors": ",".join(errors) if errors else None,
+                    "aggregate_score": aggregate,
+                }
+                score_row = {
+                    "symbol": symbol_str,
+                    "epoch": last_epoch,
+                    "aggregate_score": aggregate,
+                    "obv": scores.get("obv"),
+                    "vwap": scores.get("vwap"),
+                    "macd": scores.get("macd"),
+                    "rsi": scores.get("rsi"),
+                    "stochastic_oscillator": scores.get("stochastic_oscillator"),
+                    "bollinger_bands": scores.get("bollinger_bands"),
+                    "sma": scores.get("sma"),
+                    "ema": scores.get("ema"),
+                }
+                explanation_row = {
+                    "symbol": symbol_str,
+                    "epoch": last_epoch,
+                    "obv": explanations.get("obv"),
+                    "vwap": explanations.get("vwap"),
+                    "macd": explanations.get("macd"),
+                    "rsi": explanations.get("rsi"),
+                    "stochastic_oscillator": explanations.get("stochastic_oscillator"),
+                    "bollinger_bands": explanations.get("bollinger_bands"),
+                    "sma": explanations.get("sma"),
+                    "ema": explanations.get("ema"),
+                }
+                manager.insert_new_data(table=AnalystQuantitativeBase, rows=[base_row])
+                manager.insert_new_data(table=AnalystQuantitativeScore, rows=[score_row])
+                manager.insert_new_data(table=AnalystQuantitativeExplanation, rows=[explanation_row])
+                self.logger.info("Analysis results stored in analyst database for symbol %s, epoch %s", symbol_str, last_epoch)
+            except Exception as exc:
+                self.logger.error("Failed to store analysis in DB: %s", exc, exc_info=True)
+        return result

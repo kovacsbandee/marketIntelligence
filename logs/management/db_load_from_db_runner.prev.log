@@ -1,2 +1,55 @@
-2025-09-13 13:54:15,905 - dash.dash - INFO - dash.py:2340 - Dash is running on http://127.0.0.1:8050/
-
+2025-09-13 15:27:03,850 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 1 filtered rows from company_fundamentals
+2025-09-13 15:27:03,856 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 20 filtered rows from balance_sheet_annual
+2025-09-13 15:27:03,857 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'balance_sheet_annual' with 20 rows.
+2025-09-13 15:27:03,860 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 20 filtered rows from cash_flow_annual
+2025-09-13 15:27:03,861 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'cash_flow_annual' with 20 rows.
+2025-09-13 15:27:03,862 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 30 filtered rows from earnings_annual
+2025-09-13 15:27:03,863 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'earnings_annual' with 30 rows.
+2025-09-13 15:27:03,866 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 20 filtered rows from income_statement_annual
+2025-09-13 15:27:03,867 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'income_statement_annual' with 20 rows.
+2025-09-13 15:27:03,868 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 1 filtered rows from company_fundamentals
+2025-09-13 15:27:03,869 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'company_fundamentals' with 1 rows.
+2025-09-13 15:27:03,896 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 6497 filtered rows from daily_timeseries
+2025-09-13 15:27:03,921 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'daily_timeseries' with 6497 rows.
+2025-09-13 15:27:03,923 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 87 filtered rows from dividends
+2025-09-13 15:27:03,925 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'dividends' with 87 rows.
+2025-09-13 15:27:03,927 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 299 filtered rows from insider_transactions
+2025-09-13 15:27:03,929 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'insider_transactions' with 299 rows.
+2025-09-13 15:27:03,931 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 81 filtered rows from balance_sheet_quarterly
+2025-09-13 15:27:03,933 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'balance_sheet_quarterly' with 81 rows.
+2025-09-13 15:27:03,936 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 81 filtered rows from cash_flow_quarterly
+2025-09-13 15:27:03,937 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'cash_flow_quarterly' with 81 rows.
+2025-09-13 15:27:03,939 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 118 filtered rows from earnings_quarterly
+2025-09-13 15:27:03,940 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'earnings_quarterly' with 118 rows.
+2025-09-13 15:27:03,942 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 81 filtered rows from income_statement_quarterly
+2025-09-13 15:27:03,944 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'income_statement_quarterly' with 81 rows.
+2025-09-13 15:27:03,945 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 2 filtered rows from stock_splits
+2025-09-13 15:27:03,946 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'stock_splits' with 2 rows.
+2025-09-13 15:27:03,951 - db_load_from_db_runner - INFO - symbol.py:130 - Adjusted daily_timeseries for splits.
+2025-09-13 15:27:04,005 - db_load_from_db_runner - INFO - symbol.py:241 - All price indicators added to daily_timeseries.
+2025-09-13 15:27:07,707 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:27:10,992 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:27:13,169 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:27:16,211 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:27:18,774 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:27:21,331 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:27:24,466 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:27:26,250 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:27:26,251 - infrastructure.databases.analysis.postgre_manager.analyst_data_manager - INFO - analyst_data_manager.py:28 - AnalystDataManager initialized with database connection.
+2025-09-13 15:27:26,254 - infrastructure.databases.analysis.postgre_manager.analyst_data_manager - ERROR - analyst_data_manager.py:105 - Transaction failed
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/analysis/postgre_manager/analyst_data_manager.py", line 100, in session_scope
+    yield session
+  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/analysis/postgre_manager/analyst_data_manager.py", line 376, in insert_new_data
+    tuple(getattr(table, pk) for pk in pk_cols).in_(pk_tuples)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'tuple' object has no attribute 'in_'
+2025-09-13 15:27:26,255 - analyst.quantitative_analyst.quantitative_analyst - ERROR - quantitative_analyst.py:473 - Failed to store analysis in DB: 'tuple' object has no attribute 'in_'
+Traceback (most recent call last):
+  File "/home/bandee/projects/marketIntelligence/analyst/quantitative_analyst/quantitative_analyst.py", line 468, in run_analysis
+    manager.insert_new_data(AnalystQuantitativeBase, [base_row])
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bandee/projects/marketIntelligence/infrastructure/databases/analysis/postgre_manager/analyst_data_manager.py", line 376, in insert_new_data
+    tuple(getattr(table, pk) for pk in pk_cols).in_(pk_tuples)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'tuple' object has no attribute 'in_'

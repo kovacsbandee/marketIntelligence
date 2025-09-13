@@ -18,8 +18,8 @@ Dependencies:
 """
 
 import inspect
-from infrastructure.databases.company.postgre_manager.postgre_manager import CompanyTableManager
-from infrastructure.databases.company.postgre_manager import postgre_objects
+from infrastructure.databases.company.postgre_manager.company_data_manager import CompanyTableManager
+from infrastructure.databases.company.postgre_manager import company_table_objects
 from utils.logger import get_logger
 
 
@@ -41,9 +41,9 @@ def main(force_recreate=True):
     logger.info("Successfully connected to the PostgreSQL database.")
 
     # Introspect postgre_objects to get only locally defined ORM table classes
-    classes = inspect.getmembers(postgre_objects, inspect.isclass)
+    classes = inspect.getmembers(company_table_objects, inspect.isclass)
     defined_classes = [
-        cls[1] for cls in classes if cls[1].__module__ == postgre_objects.__name__
+        cls[1] for cls in classes if cls[1].__module__ == company_table_objects.__name__
     ]
 
     logger.info("Found %d table classes to create.", len(defined_classes))

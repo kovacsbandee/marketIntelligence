@@ -1,87 +1,83 @@
-2025-09-13 13:54:33,018 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 1 filtered rows from company_fundamentals
-2025-09-13 13:54:33,031 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 20 filtered rows from balance_sheet_annual
-2025-09-13 13:54:33,041 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'balance_sheet_annual' with 20 rows.
-2025-09-13 13:54:33,044 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 20 filtered rows from cash_flow_annual
-2025-09-13 13:54:33,045 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'cash_flow_annual' with 20 rows.
-2025-09-13 13:54:33,046 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 30 filtered rows from earnings_annual
-2025-09-13 13:54:33,047 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'earnings_annual' with 30 rows.
-2025-09-13 13:54:33,048 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 20 filtered rows from income_statement_annual
-2025-09-13 13:54:33,049 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'income_statement_annual' with 20 rows.
-2025-09-13 13:54:33,050 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 1 filtered rows from company_fundamentals
-2025-09-13 13:54:33,053 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'company_fundamentals' with 1 rows.
-2025-09-13 13:54:33,090 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 6497 filtered rows from daily_timeseries
-2025-09-13 13:54:33,132 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'daily_timeseries' with 6497 rows.
-2025-09-13 13:54:33,136 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 87 filtered rows from dividends
-2025-09-13 13:54:33,138 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'dividends' with 87 rows.
-2025-09-13 13:54:33,143 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 299 filtered rows from insider_transactions
-2025-09-13 13:54:33,146 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'insider_transactions' with 299 rows.
-2025-09-13 13:54:33,151 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 81 filtered rows from balance_sheet_quarterly
-2025-09-13 13:54:33,153 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'balance_sheet_quarterly' with 81 rows.
-2025-09-13 13:54:33,157 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 81 filtered rows from cash_flow_quarterly
-2025-09-13 13:54:33,159 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'cash_flow_quarterly' with 81 rows.
-2025-09-13 13:54:33,162 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 118 filtered rows from earnings_quarterly
-2025-09-13 13:54:33,164 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'earnings_quarterly' with 118 rows.
-2025-09-13 13:54:33,169 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 81 filtered rows from income_statement_quarterly
-2025-09-13 13:54:33,171 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'income_statement_quarterly' with 81 rows.
-2025-09-13 13:54:33,175 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 2 filtered rows from stock_splits
-2025-09-13 13:54:33,176 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'stock_splits' with 2 rows.
-2025-09-13 13:54:33,206 - db_load_from_db_runner - INFO - symbol.py:130 - Adjusted daily_timeseries for splits.
-2025-09-13 13:54:33,287 - db_load_from_db_runner - INFO - symbol.py:241 - All price indicators added to daily_timeseries.
-2025-09-13 13:56:31,326 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 1 filtered rows from company_fundamentals
-2025-09-13 13:56:31,334 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 20 filtered rows from balance_sheet_annual
-2025-09-13 13:56:31,343 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'balance_sheet_annual' with 20 rows.
-2025-09-13 13:56:31,346 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 20 filtered rows from cash_flow_annual
-2025-09-13 13:56:31,348 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'cash_flow_annual' with 20 rows.
-2025-09-13 13:56:31,350 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 27 filtered rows from earnings_annual
-2025-09-13 13:56:31,351 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'earnings_annual' with 27 rows.
-2025-09-13 13:56:31,353 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 20 filtered rows from income_statement_annual
-2025-09-13 13:56:31,355 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'income_statement_annual' with 20 rows.
-2025-09-13 13:56:31,356 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 1 filtered rows from company_fundamentals
-2025-09-13 13:56:31,358 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'company_fundamentals' with 1 rows.
-2025-09-13 13:56:31,386 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 6497 filtered rows from daily_timeseries
-2025-09-13 13:56:31,411 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'daily_timeseries' with 6497 rows.
-2025-09-13 13:56:31,413 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 53 filtered rows from dividends
-2025-09-13 13:56:31,416 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'dividends' with 53 rows.
-2025-09-13 13:56:31,426 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 1454 filtered rows from insider_transactions
-2025-09-13 13:56:31,437 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'insider_transactions' with 1454 rows.
-2025-09-13 13:56:31,440 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 81 filtered rows from balance_sheet_quarterly
-2025-09-13 13:56:31,442 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'balance_sheet_quarterly' with 81 rows.
-2025-09-13 13:56:31,445 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 81 filtered rows from cash_flow_quarterly
-2025-09-13 13:56:31,447 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'cash_flow_quarterly' with 81 rows.
-2025-09-13 13:56:31,451 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 106 filtered rows from earnings_quarterly
-2025-09-13 13:56:31,453 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'earnings_quarterly' with 106 rows.
-2025-09-13 13:56:31,459 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 81 filtered rows from income_statement_quarterly
-2025-09-13 13:56:31,461 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'income_statement_quarterly' with 81 rows.
-2025-09-13 13:56:31,464 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 6 filtered rows from stock_splits
-2025-09-13 13:56:31,465 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'stock_splits' with 6 rows.
-2025-09-13 13:56:31,493 - db_load_from_db_runner - INFO - symbol.py:130 - Adjusted daily_timeseries for splits.
-2025-09-13 13:56:31,558 - db_load_from_db_runner - INFO - symbol.py:241 - All price indicators added to daily_timeseries.
-2025-09-13 13:56:42,736 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 1 filtered rows from company_fundamentals
-2025-09-13 13:56:42,744 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 20 filtered rows from balance_sheet_annual
-2025-09-13 13:56:42,745 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'balance_sheet_annual' with 20 rows.
-2025-09-13 13:56:42,747 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 20 filtered rows from cash_flow_annual
-2025-09-13 13:56:42,748 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'cash_flow_annual' with 20 rows.
-2025-09-13 13:56:42,749 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 27 filtered rows from earnings_annual
-2025-09-13 13:56:42,750 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'earnings_annual' with 27 rows.
-2025-09-13 13:56:42,751 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 20 filtered rows from income_statement_annual
-2025-09-13 13:56:42,752 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'income_statement_annual' with 20 rows.
-2025-09-13 13:56:42,753 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 1 filtered rows from company_fundamentals
-2025-09-13 13:56:42,753 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'company_fundamentals' with 1 rows.
-2025-09-13 13:56:42,903 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 6497 filtered rows from daily_timeseries
-2025-09-13 13:56:42,933 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'daily_timeseries' with 6497 rows.
-2025-09-13 13:56:42,935 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 53 filtered rows from dividends
-2025-09-13 13:56:42,937 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'dividends' with 53 rows.
-2025-09-13 13:56:42,945 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 1454 filtered rows from insider_transactions
-2025-09-13 13:56:42,950 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'insider_transactions' with 1454 rows.
-2025-09-13 13:56:42,953 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 81 filtered rows from balance_sheet_quarterly
-2025-09-13 13:56:42,955 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'balance_sheet_quarterly' with 81 rows.
-2025-09-13 13:56:42,959 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 81 filtered rows from cash_flow_quarterly
-2025-09-13 13:56:42,960 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'cash_flow_quarterly' with 81 rows.
-2025-09-13 13:56:42,962 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 106 filtered rows from earnings_quarterly
-2025-09-13 13:56:42,963 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'earnings_quarterly' with 106 rows.
-2025-09-13 13:56:42,965 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 81 filtered rows from income_statement_quarterly
-2025-09-13 13:56:42,966 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'income_statement_quarterly' with 81 rows.
-2025-09-13 13:56:42,967 - infrastructure.databases.company.postgre_manager.postgre_manager - INFO - postgre_manager.py:459 - Loaded 6 filtered rows from stock_splits
-2025-09-13 13:56:42,968 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'stock_splits' with 6 rows.
-2025-09-13 13:56:42,980 - db_load_from_db_runner - INFO - symbol.py:130 - Adjusted daily_timeseries for splits.
-2025-09-13 13:56:43,075 - db_load_from_db_runner - INFO - symbol.py:241 - All price indicators added to daily_timeseries.
+2025-09-13 15:30:08,988 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 1 filtered rows from company_fundamentals
+2025-09-13 15:30:08,994 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 20 filtered rows from balance_sheet_annual
+2025-09-13 15:30:08,995 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'balance_sheet_annual' with 20 rows.
+2025-09-13 15:30:08,999 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 20 filtered rows from cash_flow_annual
+2025-09-13 15:30:09,000 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'cash_flow_annual' with 20 rows.
+2025-09-13 15:30:09,003 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 30 filtered rows from earnings_annual
+2025-09-13 15:30:09,004 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'earnings_annual' with 30 rows.
+2025-09-13 15:30:09,008 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 20 filtered rows from income_statement_annual
+2025-09-13 15:30:09,009 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'income_statement_annual' with 20 rows.
+2025-09-13 15:30:09,011 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 1 filtered rows from company_fundamentals
+2025-09-13 15:30:09,012 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'company_fundamentals' with 1 rows.
+2025-09-13 15:30:09,048 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 6497 filtered rows from daily_timeseries
+2025-09-13 15:30:09,077 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'daily_timeseries' with 6497 rows.
+2025-09-13 15:30:09,079 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 87 filtered rows from dividends
+2025-09-13 15:30:09,081 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'dividends' with 87 rows.
+2025-09-13 15:30:09,085 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 299 filtered rows from insider_transactions
+2025-09-13 15:30:09,088 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'insider_transactions' with 299 rows.
+2025-09-13 15:30:09,091 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 81 filtered rows from balance_sheet_quarterly
+2025-09-13 15:30:09,093 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'balance_sheet_quarterly' with 81 rows.
+2025-09-13 15:30:09,096 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 81 filtered rows from cash_flow_quarterly
+2025-09-13 15:30:09,097 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'cash_flow_quarterly' with 81 rows.
+2025-09-13 15:30:09,099 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 118 filtered rows from earnings_quarterly
+2025-09-13 15:30:09,101 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'earnings_quarterly' with 118 rows.
+2025-09-13 15:30:09,105 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 81 filtered rows from income_statement_quarterly
+2025-09-13 15:30:09,106 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'income_statement_quarterly' with 81 rows.
+2025-09-13 15:30:09,108 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 2 filtered rows from stock_splits
+2025-09-13 15:30:09,108 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'stock_splits' with 2 rows.
+2025-09-13 15:30:09,116 - db_load_from_db_runner - INFO - symbol.py:130 - Adjusted daily_timeseries for splits.
+2025-09-13 15:30:09,171 - db_load_from_db_runner - INFO - symbol.py:241 - All price indicators added to daily_timeseries.
+2025-09-13 15:30:13,574 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:30:17,771 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:30:20,314 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:30:21,979 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:30:24,260 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:30:26,700 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:30:28,987 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:30:30,841 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:30:30,846 - infrastructure.databases.analysis.postgre_manager.analyst_data_manager - INFO - analyst_data_manager.py:28 - AnalystDataManager initialized with database connection.
+2025-09-13 15:30:30,858 - infrastructure.databases.analysis.postgre_manager.analyst_data_manager - INFO - analyst_data_manager.py:387 - Inserted 1 new rows into analyst_quantitative_base
+2025-09-13 15:30:30,870 - infrastructure.databases.analysis.postgre_manager.analyst_data_manager - INFO - analyst_data_manager.py:387 - Inserted 1 new rows into analyst_quantitative_score
+2025-09-13 15:30:30,875 - infrastructure.databases.analysis.postgre_manager.analyst_data_manager - INFO - analyst_data_manager.py:387 - Inserted 1 new rows into analyst_quantitative_explanation
+2025-09-13 15:30:30,878 - analyst.quantitative_analyst.quantitative_analyst - INFO - quantitative_analyst.py:471 - Analysis results stored in analyst database for symbol MSFT, epoch 1756418400
+2025-09-13 15:33:03,149 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 1 filtered rows from company_fundamentals
+2025-09-13 15:33:03,157 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 20 filtered rows from balance_sheet_annual
+2025-09-13 15:33:03,159 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'balance_sheet_annual' with 20 rows.
+2025-09-13 15:33:03,162 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 20 filtered rows from cash_flow_annual
+2025-09-13 15:33:03,163 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'cash_flow_annual' with 20 rows.
+2025-09-13 15:33:03,166 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 30 filtered rows from earnings_annual
+2025-09-13 15:33:03,167 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'earnings_annual' with 30 rows.
+2025-09-13 15:33:03,170 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 20 filtered rows from income_statement_annual
+2025-09-13 15:33:03,171 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'income_statement_annual' with 20 rows.
+2025-09-13 15:33:03,172 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 1 filtered rows from company_fundamentals
+2025-09-13 15:33:03,174 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'company_fundamentals' with 1 rows.
+2025-09-13 15:33:03,200 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 6497 filtered rows from daily_timeseries
+2025-09-13 15:33:03,232 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'daily_timeseries' with 6497 rows.
+2025-09-13 15:33:03,235 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 87 filtered rows from dividends
+2025-09-13 15:33:03,238 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'dividends' with 87 rows.
+2025-09-13 15:33:03,243 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 299 filtered rows from insider_transactions
+2025-09-13 15:33:03,245 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'insider_transactions' with 299 rows.
+2025-09-13 15:33:03,248 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 81 filtered rows from balance_sheet_quarterly
+2025-09-13 15:33:03,251 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'balance_sheet_quarterly' with 81 rows.
+2025-09-13 15:33:03,255 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 81 filtered rows from cash_flow_quarterly
+2025-09-13 15:33:03,257 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'cash_flow_quarterly' with 81 rows.
+2025-09-13 15:33:03,259 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 118 filtered rows from earnings_quarterly
+2025-09-13 15:33:03,261 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'earnings_quarterly' with 118 rows.
+2025-09-13 15:33:03,263 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 81 filtered rows from income_statement_quarterly
+2025-09-13 15:33:03,265 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'income_statement_quarterly' with 81 rows.
+2025-09-13 15:33:03,267 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 2 filtered rows from stock_splits
+2025-09-13 15:33:03,268 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'stock_splits' with 2 rows.
+2025-09-13 15:33:03,274 - db_load_from_db_runner - INFO - symbol.py:130 - Adjusted daily_timeseries for splits.
+2025-09-13 15:33:03,329 - db_load_from_db_runner - INFO - symbol.py:241 - All price indicators added to daily_timeseries.
+2025-09-13 15:33:08,166 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:33:11,238 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:33:14,208 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:33:15,847 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:33:18,304 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:33:20,659 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:33:22,810 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:33:24,858 - httpx - INFO - _client.py:1025 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-13 15:33:24,862 - infrastructure.databases.analysis.postgre_manager.analyst_data_manager - INFO - analyst_data_manager.py:383 - No new data to insert into analyst_quantitative_base.
+2025-09-13 15:33:24,864 - infrastructure.databases.analysis.postgre_manager.analyst_data_manager - INFO - analyst_data_manager.py:383 - No new data to insert into analyst_quantitative_score.
+2025-09-13 15:33:24,866 - infrastructure.databases.analysis.postgre_manager.analyst_data_manager - INFO - analyst_data_manager.py:383 - No new data to insert into analyst_quantitative_explanation.
+2025-09-13 15:33:24,867 - analyst.quantitative_analyst.quantitative_analyst - INFO - quantitative_analyst.py:471 - Analysis results stored in analyst database for symbol MSFT, epoch 1756418400

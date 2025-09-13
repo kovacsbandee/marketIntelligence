@@ -30,7 +30,7 @@ from .column_maps import (
     ANNUAL_INCOME_STATEMENT_MAP, QUARTERLY_INCOME_STATEMENT_MAP, DAILY_TIMESERIES_MAP
 )
 
-from infrastructure.databases.company.postgre_manager.postgre_objects import (
+from infrastructure.databases.company.postgre_manager.company_table_objects import (
     CompanyFundamentals, DailyTimeSeries, AnnualBalanceSheet, QuarterlyBalanceSheet,
     AnnualCashFlow, QuarterlyCashFlow, AnnualEarnings, QuarterlyEarnings,
     AnnualIncomeStatement, QuarterlyIncomeStatement, InsiderTransactions, StockSplit, Dividends
