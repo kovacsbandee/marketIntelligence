@@ -70,13 +70,16 @@ import pandas as pd
 import openai
 from PyPDF2 import PdfReader
 
+from symbol.symbol import Symbol
+
 PDF_PATH = "./infrastructure/databases/rag_knowledge_base/financial_analyst/"
 
 # Example ARTICLE_PATHS for financial metrics (update with actual PDF names as needed)
+
 ARTICLE_PATHS = {
-    'total_revenue': PDF_PATH + 'total_revenue.pdf',
-    'net_income': PDF_PATH + 'net_income.pdf',
-    # ... add more metric PDFs here as needed ...
+    'balance_sheet': PDF_PATH + 'Breaking Down the Balance Sheet.pdf',
+    'income_statement': PDF_PATH + 'Income Statement_ How to Read and Use It.pdf',
+    'cash_flow': PDF_PATH + 'Cash Flow Statements_ How to Prepare and Read One.pdf',
 }
 
 @dataclass
@@ -153,15 +156,14 @@ class FinancialAnalyst:
 
     def __init__(
         self,
-        symbol: "symbol",
-        article_paths: Dict[str, str],
+        symbol: Symbol = None,
         openai_key: Optional[str] = None,
         rate_limit_per_minute: int = 60,
         num_quarters: Optional[int] = 8,
         logger: Optional[logging.Logger] = None,
     ) -> None:
         self.symbol = symbol
-        self.article_paths = article_paths
+        self.article_paths = ARTICLE_PATHS
         self.num_quarters = num_quarters
         self.logger = logger or logging.getLogger(__name__)
         self.rate_limiter = RateLimiter(max_calls_per_minute=rate_limit_per_minute, logger=self.logger)
@@ -325,7 +327,10 @@ class FinancialAnalyst:
     # Metric evaluation
     # ------------------------------------------------------------------
     def _call_language_model(
-        self, metric: str, values: List[float], article: str
+        self, 
+        metric: str, 
+        values: List[float], 
+        article: str
     ) -> Tuple[Optional[float], str]:
         """Invoke the OpenAI chat model to score a metric.
 
@@ -355,7 +360,7 @@ class FinancialAnalyst:
         self.rate_limiter.record_call()
         try:
             response = openai.ChatCompletion.create(
-                model="gpt-4-turbo",
+                model="gpt-4-nano",
                 messages=[
                     {"role": "system", "content": "You are a helpful financial analyst."},
                     {"role": "user", "content": prompt},

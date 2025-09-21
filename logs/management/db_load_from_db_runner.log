@@ -1,29 +1,38 @@
-2025-09-13 19:36:02,949 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 1 filtered rows from company_fundamentals
-2025-09-13 19:36:02,954 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 20 filtered rows from balance_sheet_annual
-2025-09-13 19:36:02,956 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'balance_sheet_annual' with 20 rows.
-2025-09-13 19:36:02,959 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 20 filtered rows from cash_flow_annual
-2025-09-13 19:36:02,960 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'cash_flow_annual' with 20 rows.
-2025-09-13 19:36:02,961 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 30 filtered rows from earnings_annual
-2025-09-13 19:36:02,962 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'earnings_annual' with 30 rows.
-2025-09-13 19:36:02,964 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 20 filtered rows from income_statement_annual
-2025-09-13 19:36:02,965 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'income_statement_annual' with 20 rows.
-2025-09-13 19:36:02,966 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 1 filtered rows from company_fundamentals
-2025-09-13 19:36:02,972 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'company_fundamentals' with 1 rows.
-2025-09-13 19:36:03,002 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 6497 filtered rows from daily_timeseries
-2025-09-13 19:36:03,028 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'daily_timeseries' with 6497 rows.
-2025-09-13 19:36:03,031 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 87 filtered rows from dividends
-2025-09-13 19:36:03,032 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'dividends' with 87 rows.
-2025-09-13 19:36:03,035 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 299 filtered rows from insider_transactions
-2025-09-13 19:36:03,037 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'insider_transactions' with 299 rows.
-2025-09-13 19:36:03,040 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 81 filtered rows from balance_sheet_quarterly
-2025-09-13 19:36:03,041 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'balance_sheet_quarterly' with 81 rows.
-2025-09-13 19:36:03,044 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 81 filtered rows from cash_flow_quarterly
-2025-09-13 19:36:03,046 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'cash_flow_quarterly' with 81 rows.
-2025-09-13 19:36:03,048 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 118 filtered rows from earnings_quarterly
-2025-09-13 19:36:03,049 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'earnings_quarterly' with 118 rows.
-2025-09-13 19:36:03,051 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 81 filtered rows from income_statement_quarterly
-2025-09-13 19:36:03,053 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'income_statement_quarterly' with 81 rows.
-2025-09-13 19:36:03,055 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 2 filtered rows from stock_splits
-2025-09-13 19:36:03,056 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'stock_splits' with 2 rows.
-2025-09-13 19:36:03,068 - db_load_from_db_runner - INFO - symbol.py:130 - Adjusted daily_timeseries for splits.
-2025-09-13 19:36:03,126 - db_load_from_db_runner - INFO - symbol.py:241 - All price indicators added to daily_timeseries.
+2025-09-21 14:39:31,523 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 1 filtered rows from company_fundamentals
+2025-09-21 14:39:31,539 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 20 filtered rows from balance_sheet_annual
+2025-09-21 14:39:31,544 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'balance_sheet_annual' with 20 rows.
+2025-09-21 14:39:31,556 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 20 filtered rows from cash_flow_annual
+2025-09-21 14:39:31,560 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'cash_flow_annual' with 20 rows.
+2025-09-21 14:39:31,566 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 27 filtered rows from earnings_annual
+2025-09-21 14:39:31,569 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'earnings_annual' with 27 rows.
+2025-09-21 14:39:31,580 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 20 filtered rows from income_statement_annual
+2025-09-21 14:39:31,584 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'income_statement_annual' with 20 rows.
+2025-09-21 14:39:31,587 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 1 filtered rows from company_fundamentals
+2025-09-21 14:39:31,592 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'company_fundamentals' with 1 rows.
+2025-09-21 14:39:31,673 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 6497 filtered rows from daily_timeseries
+2025-09-21 14:39:31,765 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'daily_timeseries' with 6497 rows.
+2025-09-21 14:39:31,773 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 53 filtered rows from dividends
+2025-09-21 14:39:31,780 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'dividends' with 53 rows.
+2025-09-21 14:39:31,804 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 1454 filtered rows from insider_transactions
+2025-09-21 14:39:31,821 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'insider_transactions' with 1454 rows.
+2025-09-21 14:39:31,835 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 81 filtered rows from balance_sheet_quarterly
+2025-09-21 14:39:31,840 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'balance_sheet_quarterly' with 81 rows.
+2025-09-21 14:39:31,850 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 81 filtered rows from cash_flow_quarterly
+2025-09-21 14:39:31,856 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'cash_flow_quarterly' with 81 rows.
+2025-09-21 14:39:31,865 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 106 filtered rows from earnings_quarterly
+2025-09-21 14:39:31,870 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'earnings_quarterly' with 106 rows.
+2025-09-21 14:39:31,880 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 81 filtered rows from income_statement_quarterly
+2025-09-21 14:39:31,885 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'income_statement_quarterly' with 81 rows.
+2025-09-21 14:39:31,890 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:459 - Loaded 6 filtered rows from stock_splits
+2025-09-21 14:39:31,893 - db_load_from_db_runner - INFO - symbol.py:189 - Loaded table 'stock_splits' with 6 rows.
+2025-09-21 14:39:31,913 - db_load_from_db_runner - INFO - symbol.py:130 - Adjusted daily_timeseries for splits.
+2025-09-21 14:39:32,096 - db_load_from_db_runner - INFO - symbol.py:241 - All price indicators added to daily_timeseries.
+2025-09-21 14:39:32,109 - analyst.financial_analyst.financial_analyst - ERROR - financial_analyst.py:190 - Failed to read PDF /home/bandee/projects/marketIntelligence/infrastructure/databases/rag_knowledge_base/financial_analyst/Breaking Down the Balance Sheet.pdf: [Errno 2] No such file or directory: '/home/bandee/projects/marketIntelligence/infrastructure/databases/rag_knowledge_base/financial_analyst/Breaking Down the Balance Sheet.pdf'
+2025-09-21 14:39:32,110 - analyst.financial_analyst.financial_analyst - WARNING - financial_analyst.py:204 - No text extracted from ./infrastructure/databases/rag_knowledge_base/financial_analyst/Breaking Down the Balance Sheet.pdf for metric balance_sheet
+2025-09-21 14:39:32,111 - analyst.financial_analyst.financial_analyst - ERROR - financial_analyst.py:190 - Failed to read PDF /home/bandee/projects/marketIntelligence/infrastructure/databases/rag_knowledge_base/financial_analyst/Income Statement_ How to Read and Use It.pdf: [Errno 2] No such file or directory: '/home/bandee/projects/marketIntelligence/infrastructure/databases/rag_knowledge_base/financial_analyst/Income Statement_ How to Read and Use It.pdf'
+2025-09-21 14:39:32,112 - analyst.financial_analyst.financial_analyst - WARNING - financial_analyst.py:204 - No text extracted from ./infrastructure/databases/rag_knowledge_base/financial_analyst/Income Statement_ How to Read and Use It.pdf for metric income_statement
+2025-09-21 14:39:32,113 - analyst.financial_analyst.financial_analyst - ERROR - financial_analyst.py:190 - Failed to read PDF /home/bandee/projects/marketIntelligence/infrastructure/databases/rag_knowledge_base/financial_analyst/Cash Flow Statements_ How to Prepare and Read One.pdf: [Errno 2] No such file or directory: '/home/bandee/projects/marketIntelligence/infrastructure/databases/rag_knowledge_base/financial_analyst/Cash Flow Statements_ How to Prepare and Read One.pdf'
+2025-09-21 14:39:32,114 - analyst.financial_analyst.financial_analyst - WARNING - financial_analyst.py:204 - No text extracted from ./infrastructure/databases/rag_knowledge_base/financial_analyst/Cash Flow Statements_ How to Prepare and Read One.pdf for metric cash_flow
+2025-09-21 14:39:32,115 - analyst.financial_analyst.financial_analyst - WARNING - financial_analyst.py:321 - Metric 'balance_sheet' not found in quarterly tables
+2025-09-21 14:39:32,116 - analyst.financial_analyst.financial_analyst - WARNING - financial_analyst.py:321 - Metric 'income_statement' not found in quarterly tables
+2025-09-21 14:39:32,117 - analyst.financial_analyst.financial_analyst - WARNING - financial_analyst.py:321 - Metric 'cash_flow' not found in quarterly tables
