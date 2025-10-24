@@ -303,7 +303,7 @@ class QuantitativeAnalyst:
             chat_completion = self._client.chat.completions.create(
                 model="gpt-4.1-nano",
                 messages=[
-                    {"role": "system", "content": "You are a helpful financial analyst."},
+                    {"role": "system", "content": "You are a senior financial analyst, responsible for evaluating stock price indicators."},
                     {"role": "user", "content": prompt},
                 ],
                 temperature=0.3,
