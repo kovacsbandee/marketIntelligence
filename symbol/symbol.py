@@ -266,16 +266,16 @@ def print_loaded_tables(storage: Symbol):
         logger.info("%s: %d rows", name, df.shape[0])
         print(f"{name}: {df.shape} rows")
 
-if __name__ == "__main__":
-    """
-    Main entry point for loading and displaying tables for a given symbol.
-    """
-    symbol = "MSFT"  # Replace with user input as needed
-    logger.info("Starting DB load for symbol: %s", symbol)
-    adapter = CompanyDataManager()
-    storage = Symbol(adapter, symbol)
+# if __name__ == "__main__":
+#     """
+#     Main entry point for loading and displaying tables for a given symbol.
+#     """
+#     symbol = "MSFT"  # Replace with user input as needed
+#     logger.info("Starting DB load for symbol: %s", symbol)
+#     adapter = CompanyDataManager()
+#     storage = Symbol(adapter, symbol)
 
-    if storage.status_message.startswith("Failed"):
-        print(storage.status_message)
-    else:
-        print_loaded_tables(storage)
+#     if storage.status_message.startswith("Failed"):
+#         print(storage.status_message)
+#     else:
+#         print_loaded_tables(storage)

@@ -58,6 +58,7 @@ import openai
 from PyPDF2 import PdfReader
 from dotenv import load_dotenv
 
+from symbol.symbol import Symbol
 from infrastructure.databases.analysis.postgre_manager.analyst_data_manager import get_analyst_data_handler
 from infrastructure.databases.analysis.postgre_manager.analyst_table_objects import AnalystQuantitativeBase, AnalystQuantitativeScore, AnalystQuantitativeExplanation
 
@@ -147,7 +148,7 @@ class QuantitativeAnalyst:
 
     def __init__(
         self,
-        symbol: str = None,
+        symbol: Symbol = None,
         article_paths: Dict[str, str] = ARTICLE_PATHS,
         openai_key: Optional[str] = None,
         rate_limit_per_minute: int = 60,
@@ -302,7 +303,7 @@ class QuantitativeAnalyst:
             chat_completion = self._client.chat.completions.create(
                 model="gpt-4.1-nano",
                 messages=[
-                    {"role": "system", "content": "You are a helpful financial analyst."},
+                    {"role": "system", "content": "You are a senior financial analyst, responsible for evaluating stock price indicators."},
                     {"role": "user", "content": prompt},
                 ],
                 temperature=0.3,
