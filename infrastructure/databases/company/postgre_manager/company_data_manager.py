@@ -231,9 +231,9 @@ class CompanyDataManager(CompanyTableManager):
             for column in inspect(row).mapper.column_attrs
         }
 
-    def get_existing_times(self, table: Type) -> set:
+    def get_existing_dates(self, table: Type) -> set:
         """
-        Fetch existing `time` values from the table.
+        Fetch existing `date` values from the table.
 
         Args:
             table (Type): The SQLAlchemy ORM-mapped class representing the table.
@@ -241,13 +241,13 @@ class CompanyDataManager(CompanyTableManager):
         Returns:
             set: A set of existing `time` values in the table.
         """
-        self.logger.debug("Fetching existing times from %s", table.__tablename__)
+        self.logger.debug("Fetching existing dates from %s", table.__tablename__)
         with self.session_scope() as session:
-            times = {row.time for row in session.query(table.time).all()}
+            dates = {row.date for row in session.query(table.date).all()}
         self.logger.debug(
-            "Fetched %d existing times from %s", len(times), table.__tablename__
+            "Fetched %d existing dates from %s", len(dates), table.__tablename__
         )
-        return times
+        return dates
 
     def get_time_range(self, table: Type) -> tuple[pd.Timestamp, pd.Timestamp]:
         """
@@ -353,7 +353,7 @@ class CompanyDataManager(CompanyTableManager):
         self.logger.debug("Inserting %d rows into %s", len(rows), table.__tablename__)
         if not rows:
             self.logger.info(
-                f"No data provided for insertion into %table.__tablename__."
+                f"No data provided for insertion into {table.__tablename__}."
             )
             return
 
@@ -364,9 +364,20 @@ class CompanyDataManager(CompanyTableManager):
                     for col in int_cols:
                         if col in row and (row[col] in ["-", "", "None", None] or pd.isna(row[col])):
                             row[col] = None
-                session.bulk_insert_mappings(table, rows)
+                pk_cols = [c.name for c in inspect(table).primary_key]
+                insert_stmt = insert(table).values(rows)
+                update_dict = {
+                    c.name: insert_stmt.excluded.get(c.name)
+                    for c in inspect(table).c
+                    if c.name not in pk_cols
+                }
+                upsert_stmt = insert_stmt.on_conflict_do_update(
+                    index_elements=pk_cols,
+                    set_=update_dict,
+                )
+                session.execute(upsert_stmt)
                 self.logger.info(
-                    "Inserted %d new rows into %s",
+                    "Upserted %d rows into %s",
                     len(rows),
                     table.__tablename__,
                 )

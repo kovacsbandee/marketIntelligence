@@ -1,7 +1,7 @@
 import pandas as pd
 from symbol.symbol import Symbol
 from infrastructure.databases.company.postgre_manager.company_data_manager import CompanyDataManager
-from infrastructure.ui.dash.app_util import get_last_6_months_range
+from infrastructure.ui.dash.app_util import get_last_6_months_range, df_to_records
 
 def load_symbol_data(symbol: str):
     """
@@ -37,6 +37,12 @@ def load_symbol_data(symbol: str):
             "company_fundamentals": None,
             "annual_balance_sheet": None,
             "balance_sheet_quarterly": None,
+            "earnings": None,
+            "income_statement_quarterly": None,
+            "cashflow_statement_quarterly": None,
+            "insider_transactions": None,
+            "start_date": None,
+            "end_date": None,
         }
     dividends = storage.get_table("dividends")
     company_fundamentals = storage.get_table("company_fundamentals")
@@ -49,15 +55,16 @@ def load_symbol_data(symbol: str):
     start_date, end_date = get_last_6_months_range(daily_timeseries)
     return {
         "status_message": storage.status_message,
-        "daily_timeseries": daily_timeseries,
-        "dividends": dividends,
-        "company_fundamentals": company_fundamentals,
-        "annual_balance_sheet": balance_sheet_annual,
-        "balance_sheet_quarterly": balance_sheet_quarterly,
-        "earnings": earnings,
-        "income_statement_quarterly": income_statement_quarterly,
-        "cashflow_statement_quarterly": cashflow_statement_quarterly,
-        "insider_transactions": insider_transactions,
+        # Tables converted to JSON-safe records for Dash stores
+        "daily_timeseries": df_to_records(daily_timeseries),
+        "dividends": df_to_records(dividends),
+        "company_fundamentals": df_to_records(company_fundamentals),
+        "annual_balance_sheet": df_to_records(balance_sheet_annual),
+        "balance_sheet_quarterly": df_to_records(balance_sheet_quarterly),
+        "earnings": df_to_records(earnings),
+        "income_statement_quarterly": df_to_records(income_statement_quarterly),
+        "cashflow_statement_quarterly": df_to_records(cashflow_statement_quarterly),
+        "insider_transactions": df_to_records(insider_transactions),
         "start_date": start_date,
         "end_date": end_date,
     }
