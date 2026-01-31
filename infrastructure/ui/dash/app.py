@@ -9,7 +9,10 @@ A status message is shown to inform the user about the data loading process.
 import dash
 from dash import dcc
 import dash_mantine_components as dmc
+
 from infrastructure.ui.dash.app_callbacks import register_callbacks
+from infrastructure.ui.dash.ids import Ids, Tabs
+from infrastructure.ui.dash.components import tab_panel
 
 app = dash.Dash(
     __name__,
@@ -32,127 +35,99 @@ app.layout = dmc.MantineProvider(
             dmc.Group([
                 dmc.Stack([
                     dmc.TextInput(
-                        id="symbol-input",
+                        id=Ids.SYMBOL_INPUT,
                         placeholder="Enter symbol (e.g. MSFT)",
                         debounce=True,
-                        style={"width": 300}
+                        style={"width": 300},
+                        withAsterisk=True,
+                        inputProps={"autoFocus": True},
                     ),
                     dmc.Button(
                         "Load",
-                        id="load-btn",
+                        id=Ids.LOAD_BUTTON,
                         n_clicks=0,
-                        style={"width": 100, "marginTop": 8}
+                        style={"width": 120, "marginTop": 8},
+                        loading=False,
                     ),
                 ], gap=8),
                 dmc.Stack([
                     dmc.Text("Start date", size="sm", mb=2, fw=700),
-                    dmc.DatePicker(id="start-date-picker", style={"width": 140, "marginTop": 0}, allowDeselect=True),
-                ], gap=4, style={"marginRight": 80}),
+                    dmc.DatePicker(id=Ids.START_DATE_PICKER, style={"width": 160, "marginTop": 0}, allowDeselect=True),
+                ], gap=4, style={"marginRight": 60}),
                 dmc.Stack([
                     dmc.Text("End date", size="sm", mb=2, fw=700),
-                    dmc.DatePicker(id="end-date-picker", style={"width": 140, "marginTop": 0}, allowDeselect=True),
+                    dmc.DatePicker(id=Ids.END_DATE_PICKER, style={"width": 160, "marginTop": 0}, allowDeselect=True),
                 ], gap=4),
-            ], gap=40, align="flex-start"),
-            dmc.Notification(id="status-div", message="", color="blue", style={"margin": "10px 0"}, withCloseButton=False, action=None),
+                dmc.Stack([
+                    dmc.Text("Quick ranges", size="sm", mb=2, fw=700),
+                    dmc.SegmentedControl(
+                        id=Ids.RANGE_PRESET,
+                        data=[
+                            {"label": "6M", "value": "6m"},
+                            {"label": "1Y", "value": "1y"},
+                            {"label": "YTD", "value": "ytd"},
+                            {"label": "Max", "value": "max"},
+                        ],
+                        value=None,
+                        size="sm",
+                        radius="sm",
+                    ),
+                ], gap=4),
+            ], gap=30, align="flex-start", wrap="wrap"),
+            dmc.Notification(id=Ids.STATUS_DIV, message="", color="blue", style={"margin": "10px 0"}, withCloseButton=False, action=None),
             # Tabs on the left
             dmc.Group([
                 dmc.Paper(
                     dmc.Tabs(
-                        id="main-tabs",
-                        value="company-base",
+                        id=Ids.MAIN_TABS,
+                        value=Tabs.COMPANY_BASE,
                         orientation="vertical",
                         children=[
                             dmc.TabsList([
-                                dmc.TabsTab("Company Base", value="company-base"),
-                                dmc.TabsTab("Price Indicator", value="price-indicator"),
-                                dmc.TabsTab("Earnings", value="earnings"),
-                                dmc.TabsTab("Income Statement", value="income-statement"),
-                                dmc.TabsTab("Balance Sheet", value="balance-sheet"),
-                                dmc.TabsTab("Cash Flow", value="cash-flow"),
-                                dmc.TabsTab("Insider Transactions", value="insider-transactions"),
+                                *(dmc.TabsTab(label, value=value) for label, value in Tabs.ITEMS)
                             ]),
-                            dmc.TabsPanel(value="company-base", children=[
-                                dmc.Box([
-                                    dmc.Paper(
-                                        id="company-base-content",
-                                        p=10,
-                                        style={"width": "100%", "minWidth": 1200, "maxWidth": 1800},
-                                        children=[
-                                            dmc.Text("Company base info will appear here.", c="dimmed")
-                                        ]
-                                    ),
-                                    dmc.LoadingOverlay(
-                                        id="company-base-loading",
-                                        visible=False,
-                                    ),
-                                ])
-                            ]),
-                            dmc.TabsPanel(value="price-indicator", children=[
-                                dmc.Box([
-                                    dmc.Paper(id="price-indicator-content", p=10),
-                                    dmc.LoadingOverlay(
-                                        id="price-indicator-loading",
-                                        visible=False,
-                                    ),
-                                ])
-                            ]),
-                            dmc.TabsPanel(value="earnings", children=[
-                                dmc.Box([
-                                    dmc.Paper(id="earnings-content", p=10, children=[
-                                        dmc.Text("Earnings info will appear here.", c="dimmed")
-                                    ]),
-                                    dmc.LoadingOverlay(
-                                        id="earnings-loading",
-                                        visible=False,
-                                    ),
-                                ])
-                            ]),
-                            dmc.TabsPanel(value="income-statement", children=[
-                                dmc.Box([
-                                    dmc.Paper(id="income-statement-content", p=10, children=[
-                                        dmc.Text("Income statement info will appear here.", c="dimmed")
-                                    ]),
-                                    dmc.LoadingOverlay(
-                                        id="income-statement-loading",
-                                        visible=False,
-                                    ),
-                                ])
-                            ]),
-                            dmc.TabsPanel(value="balance-sheet", children=[
-                                dmc.Box([
-                                    dmc.Paper(
-                                        id="balance-sheet-content", 
-                                        p=10, 
-                                        style={"width": "100%", "minWidth": 1200, "maxWidth": 1800},
-                                    ),
-                                    dmc.LoadingOverlay(
-                                        id="balance-sheet-loading",
-                                        visible=False,
-                                    ),
-                                ])
-                            ]),
-                            dmc.TabsPanel(value="cash-flow", children=[
-                                dmc.Box([
-                                    dmc.Paper(id="cash-flow-content", p=10, children=[
-                                        dmc.Text("Cash flow info will appear here.", c="dimmed")
-                                    ]),
-                                    dmc.LoadingOverlay(
-                                        id="cash-flow-loading",
-                                        visible=False,
-                                    ),
-                                ])
-                            ]),
-                            dmc.TabsPanel(value="insider-transactions", children=[
-                                dmc.Box([
-                                    dmc.Paper(id="insider-transactions-content", p=10, children=[
-                                        dmc.Text("Insider transactions info will appear here.", c="dimmed")
-                                    ]),
-                                    dmc.LoadingOverlay(
-                                        id="insider-transactions-loading",
-                                        visible=False,
-                                    ),
-                                ])
-                            ]),
+                            tab_panel(
+                                value=Tabs.COMPANY_BASE,
+                                content_id=Ids.COMPANY_BASE_CONTENT,
+                                loading_id=Ids.COMPANY_BASE_LOADING,
+                                placeholder="Company base info will appear here.",
+                                paper_style={"width": "100%", "minWidth": 1200, "maxWidth": 1800},
+                            ),
+                            tab_panel(
+                                value=Tabs.PRICE_INDICATOR,
+                                content_id=Ids.PRICE_INDICATOR_CONTENT,
+                                loading_id=Ids.PRICE_INDICATOR_LOADING,
+                            ),
+                            tab_panel(
+                                value=Tabs.EARNINGS,
+                                content_id=Ids.EARNINGS_CONTENT,
+                                loading_id=Ids.EARNINGS_LOADING,
+                                placeholder="Earnings info will appear here.",
+                            ),
+                            tab_panel(
+                                value=Tabs.INCOME_STATEMENT,
+                                content_id=Ids.INCOME_STATEMENT_CONTENT,
+                                loading_id=Ids.INCOME_STATEMENT_LOADING,
+                                placeholder="Income statement info will appear here.",
+                            ),
+                            tab_panel(
+                                value=Tabs.BALANCE_SHEET,
+                                content_id=Ids.BALANCE_SHEET_CONTENT,
+                                loading_id=Ids.BALANCE_SHEET_LOADING,
+                                paper_style={"width": "100%", "minWidth": 1200, "maxWidth": 1800},
+                            ),
+                            tab_panel(
+                                value=Tabs.CASH_FLOW,
+                                content_id=Ids.CASH_FLOW_CONTENT,
+                                loading_id=Ids.CASH_FLOW_LOADING,
+                                placeholder="Cash flow info will appear here.",
+                            ),
+                            tab_panel(
+                                value=Tabs.INSIDER_TRANSACTIONS,
+                                content_id=Ids.INSIDER_CONTENT,
+                                loading_id=Ids.INSIDER_LOADING,
+                                placeholder="Insider transactions info will appear here.",
+                            ),
                         ],
                         style={"minWidth": 300, "height": 600}
                     ),
@@ -162,15 +137,15 @@ app.layout = dmc.MantineProvider(
                 ),
             ], style={"marginTop": 30, "justifyContent": "flex-start", "width": "100%"}),
         ]),
-    dcc.Store(id="price-store"),
-    dcc.Store(id="dividends-store"),
-    dcc.Store(id="company-base-store"),
-    dcc.Store(id="q_balance-store"),
-    dcc.Store(id="a_balance-store"),
-    dcc.Store(id="earnings-store"),
-    dcc.Store(id="q_income-store"),
-    dcc.Store(id="cashflow-store"),
-    dcc.Store(id="insider-transactions-store")
+    dcc.Store(id=Ids.PRICE_STORE),
+    dcc.Store(id=Ids.DIVIDENDS_STORE),
+    dcc.Store(id=Ids.COMPANY_BASE_STORE),
+    dcc.Store(id=Ids.Q_BALANCE_STORE),
+    dcc.Store(id=Ids.A_BALANCE_STORE),
+    dcc.Store(id=Ids.EARNINGS_STORE),
+    dcc.Store(id=Ids.Q_INCOME_STORE),
+    dcc.Store(id=Ids.CASHFLOW_STORE),
+    dcc.Store(id=Ids.INSIDER_STORE)
     ]
 )
 

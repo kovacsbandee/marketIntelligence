@@ -30,6 +30,7 @@ Example:
     ```
 """
 
+import threading
 import pandas as pd
 from infrastructure.databases.company.postgre_manager.company_data_manager import CompanyDataManager
 from infrastructure.databases.company.postgre_manager.company_table_objects import table_name_to_class
@@ -64,6 +65,10 @@ class Symbol:
         status_message (str): Status message about the data loading process.
     """
 
+    # per-symbol refresh guard (in-memory) to avoid hammering the API
+    _refresh_registry = {}
+    _refresh_registry_lock = threading.Lock()
+
     def __init__(self, adapter: CompanyDataManager, 
                        symbol: str, 
                        auto_load_if_missing: bool = True,
@@ -79,6 +84,9 @@ class Symbol:
         self._adapter = adapter
         self._symbol = symbol
         self.status_message = ""
+        self.refreshing = False
+        self.last_refresh_completed_at = None
+        self._refresh_thread = None
         self.add_price_indicators = add_price_indicators
         self._load_tables(auto_load_if_missing)
 
@@ -92,6 +100,77 @@ class Symbol:
         orm_company_fundamentals = table_name_to_class["company_fundamentals"]
         rows = self._adapter.load_filtered_with_matching_values(orm_company_fundamentals, {"symbol": self._symbol})
         return bool(rows)
+    
+    def _check_for_latest_date(self) -> tuple[bool, dict | None]:
+        """
+        Check if the latest date in the daily_timeseries table for the symbol is up to date.
+
+        Returns:
+            bool: True if the latest date is the last workday's date, False otherwise.
+        """
+        date_filter_values = None
+        try:
+            daily_timeseries_df = getattr(self, "daily_timeseries", None)
+            if daily_timeseries_df is None or daily_timeseries_df.empty:
+                logger.warning("No daily_timeseries data loaded; cannot check latest date.")
+                return False, None
+
+            latest_date_in_db = pd.to_datetime(daily_timeseries_df['date']).max()
+            today = pd.Timestamp.today().normalize()
+            last_workday = today - pd.offsets.BDay(1)
+            date_filter_values = dict()
+            date_filter_values["latest_date_in_db"] = latest_date_in_db
+            date_filter_values["last_workday"] = last_workday
+            logger.info("Latest date in DB: %s, Last workday: %s", latest_date_in_db, last_workday)
+            if latest_date_in_db >= last_workday:
+                return True, date_filter_values
+            else:
+                logger.info("Latest date in DB (%s) is not up to date (last workday: %s).", latest_date_in_db, last_workday)
+                return False, date_filter_values
+
+        except Exception as e:
+            logger.error("Error checking for latest date: %s", str(e))
+            return False, date_filter_values
+
+    def _mark_refresh_attempt(self):
+        with self._refresh_registry_lock:
+            self._refresh_registry[self._symbol] = pd.Timestamp.utcnow()
+
+    def _should_skip_refresh(self) -> bool:
+        with self._refresh_registry_lock:
+            ts = self._refresh_registry.get(self._symbol)
+        if ts is None:
+            return False
+        return (pd.Timestamp.utcnow() - ts) < pd.Timedelta(hours=6)
+
+    def _refresh_in_background(self):
+        """Run full Alpha loader in a background thread, then reload tables into memory."""
+        try:
+            self.refreshing = True
+            self.status_message = (
+                f"Refreshing data for symbol '{self._symbol}' in background..."
+            )
+            logger.info(self.status_message)
+            self._mark_refresh_attempt()
+
+            # Run full pipeline (reuses existing implementation)
+            download_stock_data([self._symbol])
+            logger.info("Background refresh completed Alpha load for %s", self._symbol)
+
+            # Reload tables from DB into this instance
+            self._load_all_tables_from_db()
+
+            self.status_message = (
+                f"Data refreshed for symbol '{self._symbol}' (background)."
+            )
+            self.last_refresh_completed_at = pd.Timestamp.utcnow()
+            logger.info(self.status_message)
+        except Exception as e:
+            logger.error("Background refresh failed for %s: %s", self._symbol, e)
+            self.status_message = f"Background refresh failed for '{self._symbol}'."
+        finally:
+            self.refreshing = False
+            self._refresh_thread = None
 
     def _update_price_data_with_splits(self):
         """
@@ -132,6 +211,28 @@ class Symbol:
         except Exception as e:
             logger.error("Error adjusting prices for splits: %s", str(e))
 
+    def _load_all_tables_from_db(self):
+        """Load all tables for the symbol from DB into DataFrame attributes."""
+        table_names = self._adapter.list_tables()
+        for table_name in table_names:
+            orm_class = table_name_to_class.get(table_name)
+            if orm_class is None:
+                logger.warning("ORM class for table '%s' not found. Skipping.", table_name)
+                continue
+            if hasattr(orm_class, "symbol"):
+                rows = self._adapter.load_filtered_with_matching_values(orm_class, {"symbol": self._symbol})
+            else:
+                rows = self._adapter.load_all(orm_class)
+            loaded_df = pd.DataFrame(rows)
+            setattr(self, table_name, loaded_df)
+            logger.info("Loaded table '%s' with %d rows.", table_name, len(loaded_df))
+
+        # Adjust price data for splits after all tables are loaded
+        self._update_price_data_with_splits()
+
+        if self.add_price_indicators:
+            self.add_all_price_indicators()
+
     def _load_tables(self, auto_load_if_missing: bool):
         """
         Load all tables for the given symbol. If the symbol is missing and auto_load_if_missing is True,
@@ -148,7 +249,7 @@ class Symbol:
          that if the symbol exists in the db, the _load_tables() checks if the last entry for the symbol is the
          latest possible, it needs to fit to the last workday's date.
         """
-        # Check if symbol exists in company_fundamentals
+        # 1) Ensure symbol exists (load if missing)
         if not self._symbol_exists():
             self.status_message = (
                 f"Symbol '{self._symbol}' not found in database. Attempting to load..."
@@ -170,29 +271,34 @@ class Symbol:
                     )
             else:
                 return
-        else:
+
+        # 2) Load current tables from DB
+        self._load_all_tables_from_db()
+
+        # 3) Freshness check on daily_timeseries
+        up_to_date, dates = self._check_for_latest_date()
+        if up_to_date:
             self.status_message = f"Data loaded for symbol '{self._symbol}'."
+            logger.info(self.status_message)
+            return
 
-        # Proceed to load all tables
-        table_names = self._adapter.list_tables()
-        for table_name in table_names:
-            orm_class = table_name_to_class.get(table_name)
-            if orm_class is None:
-                logger.warning("ORM class for table '%s' not found. Skipping.", table_name)
-                continue
-            if hasattr(orm_class, "symbol"):
-                rows = self._adapter.load_filtered_with_matching_values(orm_class, {"symbol": self._symbol})
-            else:
-                rows = self._adapter.load_all(orm_class)
-            loaded_df = pd.DataFrame(rows)
-            setattr(self, table_name, loaded_df)
-            logger.info("Loaded table '%s' with %d rows.", table_name, len(loaded_df))
+        # 4) If stale, decide whether to refresh (with 6h guard)
+        if self._should_skip_refresh():
+            self.status_message = (
+                f"Data for '{self._symbol}' may be stale; recent refresh attempt within 6h."
+            )
+            logger.info(self.status_message)
+            return
 
-        # Adjust price data for splits after all tables are loaded
-        self._update_price_data_with_splits()
+        self.status_message = (
+            f"Data for symbol '{self._symbol}' is outdated (latest: {dates.get('latest_date_in_db') if dates else 'unknown'}). "
+            "Refreshing in background..."
+        )
+        logger.info(self.status_message)
 
-        if self.add_price_indicators:
-            self.add_all_price_indicators()
+        # Kick off background refresh
+        self._refresh_thread = threading.Thread(target=self._refresh_in_background, daemon=True)
+        self._refresh_thread.start()
 
 
     def get_table(self, table_name: str) -> pd.DataFrame:
