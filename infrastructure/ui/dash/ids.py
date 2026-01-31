@@ -7,7 +7,6 @@ layout and callbacks.
 class Ids:
     # Inputs / controls
     SYMBOL_INPUT = "symbol-input"
-    SYMBOL_FORM = "symbol-form"
     LOAD_BUTTON = "load-btn"
     START_DATE_PICKER = "start-date-picker"
     END_DATE_PICKER = "end-date-picker"

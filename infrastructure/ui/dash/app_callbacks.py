@@ -12,6 +12,7 @@ Notes on guards & filtering:
 """
 
 import dash
+import pandas as pd
 from dash import Output, Input, State, no_update
 import dash_mantine_components as dmc
 from dash.development.base_component import Component
@@ -46,13 +47,13 @@ def register_callbacks(app: dash.Dash) -> None:
         Output(Ids.CASHFLOW_STORE, "data"),
         Output(Ids.INSIDER_STORE, "data"),
         Input(Ids.LOAD_BUTTON, "n_clicks"),
-        Input(Ids.SYMBOL_FORM, "n_submit"),
+        Input(Ids.SYMBOL_INPUT, "n_submit"),
         State(Ids.SYMBOL_INPUT, "value"),
         prevent_initial_call=True
     )
     def load_symbol(
         n_clicks: int,
-        form_submit: int,
+        n_submit: int,
         symbol: str
     ) -> tuple:
         """
@@ -276,10 +277,37 @@ def register_callbacks(app: dash.Dash) -> None:
         Input(Ids.PRICE_STORE, "data"),
         prevent_initial_call=True
     )
+    def update_insider_transactions(
+        tab: str,
+        start_date: str,
+        end_date: str,
+    insider_transactions: Records,
+    price_data: Records
+    ) -> tuple[Component, bool]:
+        """
+        Callback to update the insider transactions tab with relevant plots.
+
+        Args:
+            tab (str): The currently selected tab.
+            start_date (str): Selected start date.
+            end_date (str): Selected end date.
+            insider_transactions (list[dict] | None): Insider transactions data from the store.
+            price_data (list[dict] | None): Daily price data from the store.
+
+        Returns:
+            tuple: Updated content and loading state for the insider transactions panel.
+        """
+
+        if tab != Tabs.INSIDER_TRANSACTIONS:
+            return no_update, False
+        try:
+            return build_insider_panel(insider_transactions, price_data, start_date, end_date)
+        except Exception as e:
+            return dmc.Text(f"Error displaying insider transactions: {e}", c="red"), False
 
     @app.callback(
-        Output(Ids.START_DATE_PICKER, "value"),
-        Output(Ids.END_DATE_PICKER, "value"),
+        Output(Ids.START_DATE_PICKER, "value", allow_duplicate=True),
+        Output(Ids.END_DATE_PICKER, "value", allow_duplicate=True),
         Input(Ids.RANGE_PRESET, "value"),
         State(Ids.PRICE_STORE, "data"),
         prevent_initial_call=True,
@@ -318,30 +346,3 @@ def register_callbacks(app: dash.Dash) -> None:
         Output(Ids.LOAD_BUTTON, "loading"),
         Input(Ids.LOAD_BUTTON, "loading_state"),
     )
-    def update_insider_transactions(
-        tab: str,
-        start_date: str,
-        end_date: str,
-    insider_transactions: Records,
-    price_data: Records
-    ) -> tuple[Component, bool]:
-        """
-        Callback to update the insider transactions tab with relevant plots.
-
-        Args:
-            tab (str): The currently selected tab.
-            start_date (str): Selected start date.
-            end_date (str): Selected end date.
-            insider_transactions (list[dict] | None): Insider transactions data from the store.
-            price_data (list[dict] | None): Daily price data from the store.
-
-        Returns:
-            tuple: Updated content and loading state for the insider transactions panel.
-        """
-
-        if tab != Tabs.INSIDER_TRANSACTIONS:
-            return no_update, False
-        try:
-            return build_insider_panel(insider_transactions, price_data, start_date, end_date)
-        except Exception as e:
-            return dmc.Text(f"Error displaying insider transactions: {e}", c="red"), False

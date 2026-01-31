@@ -7,7 +7,7 @@ A status message is shown to inform the user about the data loading process.
 """
 
 import dash
-from dash import dcc, html
+from dash import dcc
 import dash_mantine_components as dmc
 
 from infrastructure.ui.dash.app_callbacks import register_callbacks
@@ -33,26 +33,23 @@ app.layout = dmc.MantineProvider(
             dmc.Text("Market Intelligence Dashboard", size="xl", fw=700, mb=20),
             # Global Controls
             dmc.Group([
-                html.Form([
-                    dmc.Stack([
-                        dmc.TextInput(
-                            id=Ids.SYMBOL_INPUT,
-                            placeholder="Enter symbol (e.g. MSFT)",
-                            debounce=True,
-                            style={"width": 300},
-                            withAsterisk=True,
-                            autoFocus=True,
-                        ),
-                        dmc.Button(
-                            "Load",
-                            id=Ids.LOAD_BUTTON,
-                            n_clicks=0,
-                            type="submit",
-                            style={"width": 120, "marginTop": 8},
-                            loading=False,
-                        ),
-                    ], gap=8),
-                ], id=Ids.SYMBOL_FORM, style={"margin": 0}),
+                dmc.Stack([
+                    dmc.TextInput(
+                        id=Ids.SYMBOL_INPUT,
+                        placeholder="Enter symbol (e.g. MSFT)",
+                        debounce=True,
+                        style={"width": 300},
+                        withAsterisk=True,
+                        inputProps={"autoFocus": True},
+                    ),
+                    dmc.Button(
+                        "Load",
+                        id=Ids.LOAD_BUTTON,
+                        n_clicks=0,
+                        style={"width": 120, "marginTop": 8},
+                        loading=False,
+                    ),
+                ], gap=8),
                 dmc.Stack([
                     dmc.Text("Start date", size="sm", mb=2, fw=700),
                     dmc.DatePicker(id=Ids.START_DATE_PICKER, style={"width": 160, "marginTop": 0}, allowDeselect=True),
