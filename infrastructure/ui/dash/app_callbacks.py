@@ -20,7 +20,7 @@ from dash.development.base_component import Component
 
 from infrastructure.ui.dash.data_service import load_symbol_data
 
-from infrastructure.ui.dash.app_util import empty_load, Records, records_to_df, get_last_6_months_range, filter_by_date
+from infrastructure.ui.dash.app_util import empty_load, Records, records_to_df, get_last_2_years_range, filter_by_date
 from infrastructure.ui.dash.ids import Ids, Tabs
 from infrastructure.ui.dash.panel_builders import (
     build_balance_sheet_panel,
@@ -176,7 +176,7 @@ def register_callbacks(app: dash.Dash) -> None:
             return {"data": [], "layout": {"title": "No price data loaded."}}
 
         if not start_date or not end_date:
-            start_date, end_date = get_last_6_months_range(df)
+            start_date, end_date = get_last_2_years_range(df)
 
         start_dt = pd.to_datetime(start_date)
         end_dt = pd.to_datetime(end_date)
@@ -200,19 +200,23 @@ def register_callbacks(app: dash.Dash) -> None:
         Output(Ids.EARNINGS_CONTENT, "children"),
         Output(Ids.EARNINGS_LOADING, "visible"),
         Input(Ids.MAIN_TABS, "value"),
+        Input(Ids.START_DATE_PICKER, "value"),
+        Input(Ids.END_DATE_PICKER, "value"),
         Input(Ids.EARNINGS_STORE, "data"),
         State(Ids.SYMBOL_INPUT, "value"),
         prevent_initial_call=True
     )
     def update_earnings_panel(
         tab: str,
-    earnings_data: Records,
+        start_date: str,
+        end_date: str,
+        earnings_data: Records,
         symbol_input: str | None
     ):
         if tab != Tabs.EARNINGS:
             return no_update, False
         try:
-            return build_earnings_panel(earnings_data, symbol_input)
+            return build_earnings_panel(earnings_data, start_date, end_date, symbol_input)
         except Exception as e:
             return dmc.Text(f"Error displaying earnings plots: {e}", c="red"), False
 
@@ -220,6 +224,8 @@ def register_callbacks(app: dash.Dash) -> None:
         Output(Ids.INCOME_STATEMENT_CONTENT, "children"),
         Output(Ids.INCOME_STATEMENT_LOADING, "visible"),
         Input(Ids.MAIN_TABS, "value"),
+        Input(Ids.START_DATE_PICKER, "value"),
+        Input(Ids.END_DATE_PICKER, "value"),
         Input(Ids.PRICE_STORE, "data"),
         Input(Ids.Q_INCOME_STORE, "data"),
         State(Ids.SYMBOL_INPUT, "value"),
@@ -227,8 +233,10 @@ def register_callbacks(app: dash.Dash) -> None:
     )
     def update_income_statement_tab(
         tab: str,
-    price_data: Records,
-    income_statement_quarterly: Records,
+        start_date: str,
+        end_date: str,
+        price_data: Records,
+        income_statement_quarterly: Records,
         symbol_input: str | None
     ):
         """
@@ -245,7 +253,7 @@ def register_callbacks(app: dash.Dash) -> None:
         if tab != Tabs.INCOME_STATEMENT:
             return no_update, False
         try:
-            return build_income_statement_panel(price_data, income_statement_quarterly, symbol_input)
+            return build_income_statement_panel(price_data, income_statement_quarterly, start_date, end_date, symbol_input)
         except Exception as e:
             print(f"[DEBUG] Exception in update_income_statement_tab: {e}")
             return dmc.Text(f"Error displaying income statement plots: {e}", c="red"), False
@@ -379,6 +387,9 @@ def register_callbacks(app: dash.Dash) -> None:
             end = latest.strftime("%Y-%m-%d")
         elif preset == "1y":
             start = (latest - pd.Timedelta(days=365)).strftime("%Y-%m-%d")
+            end = latest.strftime("%Y-%m-%d")
+        elif preset == "2y":
+            start = (latest - pd.DateOffset(years=2)).strftime("%Y-%m-%d")
             end = latest.strftime("%Y-%m-%d")
         elif preset == "ytd":
             start = pd.Timestamp(year=latest.year, month=1, day=1).strftime("%Y-%m-%d")

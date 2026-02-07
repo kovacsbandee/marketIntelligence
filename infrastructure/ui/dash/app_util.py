@@ -19,25 +19,45 @@ _DATE_COLUMNS_BY_TABLE: dict[str, list[str]] = {
 }
 
 
-def get_last_6_months_range(price_df: pd.DataFrame):
-    """
-    Compute a default 6-month date window from a price DataFrame.
+DEFAULT_DATE_RANGE_YEARS = 2
 
-    The function assumes the input frame contains a ``date`` column (datetime-like).
-    It finds the latest available date, subtracts 182 days (roughly 6 months), and
-    returns both endpoints formatted as ``YYYY-MM-DD`` strings for use in Dash pickers.
+
+def get_default_date_range(
+    df: pd.DataFrame,
+    date_col: str,
+    *,
+    years: int = DEFAULT_DATE_RANGE_YEARS,
+) -> tuple[str | None, str | None]:
+    """
+    Compute a default date window from a DataFrame using a date column.
+
+    The function assumes the input frame contains ``date_col``. It finds the latest
+    available date, subtracts ``years`` (default 2 years), and returns both endpoints
+    formatted as ``YYYY-MM-DD`` strings for use in Dash pickers.
 
     Args:
-        price_df (pd.DataFrame): DataFrame containing at least a ``date`` column.
+        df (pd.DataFrame): DataFrame containing the date column.
+        date_col (str): Column name to use for date range calculations.
+        years (int): Number of years to look back for the default range.
 
     Returns:
-        tuple[str, str]: ``(start_date, end_date)`` as ISO date strings.
+        tuple[str | None, str | None]: ``(start_date, end_date)`` as ISO date strings.
     """
-    end_date_val = price_df["date"].max()
-    start_date_val = end_date_val - pd.Timedelta(days=182)
+    if df is None or df.empty or date_col not in df.columns:
+        return None, None
+    date_series = pd.to_datetime(df[date_col])
+    end_date_val = date_series.max()
+    if pd.isna(end_date_val):
+        return None, None
+    start_date_val = end_date_val - pd.DateOffset(years=years)
     start_date = start_date_val.strftime("%Y-%m-%d")
     end_date = end_date_val.strftime("%Y-%m-%d")
     return start_date, end_date
+
+
+def get_last_2_years_range(price_df: pd.DataFrame) -> tuple[str | None, str | None]:
+    """Convenience wrapper for daily price data (uses the ``date`` column)."""
+    return get_default_date_range(price_df, "date", years=DEFAULT_DATE_RANGE_YEARS)
 
 
 def df_to_records(df):

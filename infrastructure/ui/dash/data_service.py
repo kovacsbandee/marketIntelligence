@@ -1,7 +1,7 @@
 import pandas as pd
 from symbol.symbol import Symbol
 from infrastructure.databases.company.postgre_manager.company_data_manager import CompanyDataManager
-from infrastructure.ui.dash.app_util import get_last_6_months_range, df_to_records
+from infrastructure.ui.dash.app_util import get_last_2_years_range, df_to_records
 
 def load_symbol_data(symbol: str):
     """
@@ -10,7 +10,7 @@ def load_symbol_data(symbol: str):
     This function initializes the database adapter and uses the Symbol class to retrieve
     all necessary tables for the specified symbol. It returns a dictionary containing
     the price data, dividends, company fundamentals, annual and quarterly balance sheets,
-    and a default date range (last 6 months) for the price data.
+    and a default date range (last 2 years) for the price data.
 
     Args:
         symbol (str): The stock symbol to load data for.
@@ -23,8 +23,8 @@ def load_symbol_data(symbol: str):
             - company_fundamentals (pd.DataFrame or None): Company fundamentals.
             - annual_balance_sheet (pd.DataFrame or None): Annual balance sheet.
             - quarterly_balance_sheet (pd.DataFrame or None): Quarterly balance sheet.
-            - start_date (str): Start date for the default 6-month range.
-            - end_date (str): End date for the default 6-month range.
+            - start_date (str): Start date for the default 2-year range.
+            - end_date (str): End date for the default 2-year range.
     """
     adapter = CompanyDataManager()
     storage = Symbol(adapter, symbol.upper(), add_price_indicators=True)
@@ -52,7 +52,7 @@ def load_symbol_data(symbol: str):
     income_statement_quarterly = storage.get_table("income_statement_quarterly")
     insider_transactions = storage.get_table("insider_transactions")
     cashflow_statement_quarterly = storage.get_table("cash_flow_quarterly")
-    start_date, end_date = get_last_6_months_range(daily_timeseries)
+    start_date, end_date = get_last_2_years_range(daily_timeseries)
     return {
         "status_message": storage.status_message,
         # Tables converted to JSON-safe records for Dash stores

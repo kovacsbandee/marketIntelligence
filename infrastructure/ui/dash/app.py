@@ -107,6 +107,7 @@ app.layout = dmc.MantineProvider(
                                                 data=[
                                                     {"label": "6M", "value": "6m"},
                                                     {"label": "1Y", "value": "1y"},
+                                                    {"label": "2Y", "value": "2y"},
                                                     {"label": "YTD", "value": "ytd"},
                                                     {"label": "Max", "value": "max"},
                                                 ],
