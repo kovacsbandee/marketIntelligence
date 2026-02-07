@@ -13,6 +13,8 @@ class Ids:
     RANGE_PRESET = "range-preset"
     STATUS_DIV = "status-div"
     MAIN_TABS = "main-tabs"
+    PRICE_OVERLAY_TOGGLE = "price-overlay-toggle"
+    PRICE_CHART = "price-chart"
 
     # Stores
     PRICE_STORE = "price-store"

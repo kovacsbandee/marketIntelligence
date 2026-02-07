@@ -1,6 +1,14 @@
 
 import plotly.graph_objects as go
-from infrastructure.ui.dash.plot_utils import _auto_load_table_descriptions
+from infrastructure.ui.dash.plot_utils import _auto_load_table_descriptions, DEFAULT_PLOTLY_WIDTH, DEFAULT_PLOTLY_HEIGHT
+
+CASHFLOW_LABELS = {
+    "operating_cashflow": "Operating cash flow (cash from core business)",
+    "cashflow_from_investment": "Investing cash flow (cash used for long‑term assets)",
+    "cashflow_from_financing": "Financing cash flow (cash from debt/equity)",
+    "net_income": "Net income (profit after taxes)",
+    "capital_expenditures": "Capital expenditures (cash spent on assets)",
+}
 
 def plot_cash_flow_categories(df):
     """
@@ -45,51 +53,54 @@ def plot_cash_flow_categories(df):
     fig = go.Figure()
     # Operating Cash Flow
     if 'operating_cashflow' in df.columns and df['operating_cashflow'].notnull().any():
+        label = CASHFLOW_LABELS.get("operating_cashflow", descriptions.get('operating_cashflow', 'Operating Cash Flow'))
         fig.add_trace(go.Bar(
             x=x,
             y=df['operating_cashflow'],
-            name=descriptions.get('operating_cashflow', 'Operating Cash Flow'),
+            name=label,
             marker_color='green',
-            hovertemplate=f"<b>{descriptions.get('operating_cashflow', 'Operating Cash Flow')}</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+            hovertemplate=f"<b>{label}</b><br>Date: %{{x|%Y-%m-%d}}<br>Value: %{{y:,.0f}}<extra></extra>"
         ))
     else:
         print("Note: 'operating_cashflow' column missing or empty.")
     # Investing Cash Flow
     if 'cashflow_from_investment' in df.columns and df['cashflow_from_investment'].notnull().any():
+        label = CASHFLOW_LABELS.get("cashflow_from_investment", descriptions.get('cashflow_from_investment', 'Investing Cash Flow'))
         fig.add_trace(go.Bar(
             x=x,
             y=df['cashflow_from_investment'],
-            name=descriptions.get('cashflow_from_investment', 'Investing Cash Flow'),
+            name=label,
             marker_color='red',
-            hovertemplate=f"<b>{descriptions.get('cashflow_from_investment', 'Investing Cash Flow')}</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+            hovertemplate=f"<b>{label}</b><br>Date: %{{x|%Y-%m-%d}}<br>Value: %{{y:,.0f}}<extra></extra>"
         ))
     else:
         print("Note: 'cashflow_from_investment' column missing or empty.")
     # Financing Cash Flow
     if 'cashflow_from_financing' in df.columns and df['cashflow_from_financing'].notnull().any():
+        label = CASHFLOW_LABELS.get("cashflow_from_financing", descriptions.get('cashflow_from_financing', 'Financing Cash Flow'))
         fig.add_trace(go.Bar(
             x=x,
             y=df['cashflow_from_financing'],
-            name=descriptions.get('cashflow_from_financing', 'Financing Cash Flow'),
+            name=label,
             marker_color='blue',
-            hovertemplate=f"<b>{descriptions.get('cashflow_from_financing', 'Financing Cash Flow')}</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+            hovertemplate=f"<b>{label}</b><br>Date: %{{x|%Y-%m-%d}}<br>Value: %{{y:,.0f}}<extra></extra>"
         ))
     else:
         print("Note: 'cashflow_from_financing' column missing or empty.")
     fig.update_layout(
         barmode='group',
         title={
-            "text": "Cash Flow Categories (Operating, Investing, Financing)",
+            "text": "Cash flow categories by period",
             "x": 0.5,
             "xanchor": "center",
             "yanchor": "top",
             "font": {"size": 20}
         },
-        xaxis_title="Period",
-        yaxis_title="Cash Flow (in USD)",
+        xaxis_title="Fiscal period",
+        yaxis_title="Cash flow (USD)",
         template="plotly_white",
-        width=1000,
-        height=500,
+    width=DEFAULT_PLOTLY_WIDTH,
+    height=DEFAULT_PLOTLY_HEIGHT,
         margin=dict(l=50, r=50, t=80, b=50),
         font=dict(size=14),
         showlegend=True
@@ -142,41 +153,43 @@ def plot_operating_vs_net_income(df):
     fig = go.Figure()
     # Operating Cash Flow
     if 'operating_cashflow' in df.columns and df['operating_cashflow'].notnull().any():
+        label = CASHFLOW_LABELS.get("operating_cashflow", descriptions.get('operating_cashflow', 'Operating Cash Flow'))
         fig.add_trace(go.Scatter(
             x=x,
             y=df['operating_cashflow'],
             mode='lines+markers',
-            name=descriptions.get('operating_cashflow', 'Operating Cash Flow'),
+            name=label,
             line=dict(color='green', width=2),
-            hovertemplate=f"<b>{descriptions.get('operating_cashflow', 'Operating Cash Flow')}</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+            hovertemplate=f"<b>{label}</b><br>Date: %{{x|%Y-%m-%d}}<br>Value: %{{y:,.0f}}<extra></extra>"
         ))
     else:
         print("Note: 'operating_cashflow' column missing or empty.")
     # Net Income
     if 'net_income' in df.columns and df['net_income'].notnull().any():
+        label = CASHFLOW_LABELS.get("net_income", descriptions.get('net_income', 'Net Income'))
         fig.add_trace(go.Scatter(
             x=x,
             y=df['net_income'],
             mode='lines+markers',
-            name=descriptions.get('net_income', 'Net Income'),
+            name=label,
             line=dict(color='orange', width=2, dash='dash'),
-            hovertemplate=f"<b>{descriptions.get('net_income', 'Net Income')}</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+            hovertemplate=f"<b>{label}</b><br>Date: %{{x|%Y-%m-%d}}<br>Value: %{{y:,.0f}}<extra></extra>"
         ))
     else:
         print("Note: 'net_income' column missing or empty.")
     fig.update_layout(
         title={
-            "text": "Operating Cash Flow vs Net Income",
+            "text": "Operating cash flow vs net income",
             "x": 0.5,
             "xanchor": "center",
             "yanchor": "top",
             "font": {"size": 20}
         },
-        xaxis_title="Period",
-        yaxis_title="Amount (in USD)",
+        xaxis_title="Fiscal period",
+        yaxis_title="Amount (USD)",
         template="plotly_white",
-        width=1000,
-        height=500,
+    width=DEFAULT_PLOTLY_WIDTH,
+    height=DEFAULT_PLOTLY_HEIGHT,
         margin=dict(l=50, r=50, t=80, b=50),
         font=dict(size=14),
         showlegend=True
@@ -232,23 +245,23 @@ def plot_free_cash_flow(df):
     fig.add_trace(go.Bar(
         x=x,
         y=fcf,
-        name='Free Cash Flow',
+        name="Free cash flow (operating cash flow minus capex)",
         marker_color=colors,
-        hovertemplate=f"<b>Free Cash Flow</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+        hovertemplate="<b>Free cash flow</b><br>Date: %{x|%Y-%m-%d}<br>Value: %{y:,.0f}<extra></extra>"
     ))
     fig.update_layout(
         title={
-            "text": "Free Cash Flow per Period",
+            "text": "Free cash flow by period",
             "x": 0.5,
             "xanchor": "center",
             "yanchor": "top",
             "font": {"size": 20}
         },
-        xaxis_title="Period",
-        yaxis_title="Free Cash Flow (in USD)",
+        xaxis_title="Fiscal period",
+        yaxis_title="Free cash flow (USD)",
         template="plotly_white",
-        width=1000,
-        height=500,
+    width=DEFAULT_PLOTLY_WIDTH,
+    height=DEFAULT_PLOTLY_HEIGHT,
         margin=dict(l=50, r=50, t=80, b=50),
         font=dict(size=14),
         showlegend=True

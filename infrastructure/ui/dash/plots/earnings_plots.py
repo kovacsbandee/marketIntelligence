@@ -50,7 +50,7 @@ def plot_eps_actual_vs_estimate(symbol, data):
         x=x,
         y=actual,
         mode="lines+markers",
-        name=descriptions.get("reported_eps", "Actual EPS"),
+        name="Actual",
         line=dict(color="#228be6", width=3),
         marker=dict(symbol="circle", size=8, color="#228be6"),
         hovertemplate=f"<b>{descriptions.get('reported_eps', 'Actual EPS')}</b><br>{descriptions.get('fiscal_date_ending', 'Date')}: "+"%{x|%Y-%m-%d}<br>"+f"{descriptions.get('reported_eps', 'EPS')}: "+"%{y:.2f}<extra></extra>"
@@ -60,7 +60,7 @@ def plot_eps_actual_vs_estimate(symbol, data):
         x=x,
         y=estimate,
         mode="lines+markers",
-        name=descriptions.get("estimated_eps", "Estimate EPS"),
+        name="Estimate",
         line=dict(color="#fab005", width=3, dash="dash"),
         marker=dict(symbol="diamond", size=8, color="#fab005"),
         hovertemplate=f"<b>{descriptions.get('estimated_eps', 'Estimate EPS')}</b><br>{descriptions.get('fiscal_date_ending', 'Date')}: "+"%{x|%Y-%m-%d}<br>"+f"{descriptions.get('estimated_eps', 'EPS')}: "+"%{y:.2f}<extra></extra>"
@@ -87,10 +87,10 @@ def plot_eps_actual_vs_estimate(symbol, data):
     ))
 
     fig.update_layout(
-        title=f"{symbol.upper()} EPS: {descriptions.get('reported_eps', 'Actual EPS')} vs {descriptions.get('estimated_eps', 'Estimate EPS')} (Quarterly)",
-        xaxis_title=descriptions.get("fiscal_date_ending", "Fiscal Quarter End"),
-        yaxis_title=descriptions.get("reported_eps", "EPS"),
-        legend_title="Legend",
+        title="EPS",
+        xaxis_title="Date",
+        yaxis_title="",
+        legend_title="",
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH,
         height=DEFAULT_PLOTLY_HEIGHT,
@@ -147,7 +147,7 @@ def plot_eps_surprise_percentage(symbol, data):
         x=x,
         y=surprise_pct,
         marker_color=colors,
-        name=descriptions.get("surprise_percentage", "Surprise %"),
+        name="Surprise %",
         hovertemplate=f"<b>{descriptions.get('fiscal_date_ending', 'Date')}</b>: "+"%{x|%Y-%m-%d}<br>"+f"{descriptions.get('surprise_percentage', 'Surprise %')}: "+"%{y:.2f}%<extra></extra>"
     ))
     fig.add_shape(
@@ -158,9 +158,9 @@ def plot_eps_surprise_percentage(symbol, data):
         xref="x", yref="y"
     )
     fig.update_layout(
-        title=f"{symbol.upper()} {descriptions.get('surprise_percentage', 'EPS Surprise Percentage')} (Quarterly)",
-        xaxis_title=descriptions.get("fiscal_date_ending", "Fiscal Quarter End"),
-        yaxis_title=descriptions.get("surprise_percentage", "Surprise (%)"),
+        title="Surprise %",
+        xaxis_title="Date",
+        yaxis_title="",
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH,
         height=DEFAULT_PLOTLY_HEIGHT,
@@ -224,7 +224,7 @@ def plot_eps_actual_vs_estimate_scatter(symbol, data):
                 x=estimate[mask],
                 y=actual[mask],
                 mode="markers",
-                name=f"{descriptions.get('report_time', 'Report Time')}: {rt}",
+                name=str(rt),
                 marker=dict(
                     symbol=marker_symbols[rt],
                     size=14,
@@ -252,15 +252,15 @@ def plot_eps_actual_vs_estimate_scatter(symbol, data):
         y=[min_val, max_val],
         mode="lines",
         line=dict(color="black", width=2, dash="dash"),
-        name="Actual = Estimate",
+        name="Parity",
         showlegend=True,
         hoverinfo="skip"
     ))
     fig.update_layout(
-        title=f"{symbol.upper()} EPS: {descriptions.get('reported_eps', 'Actual EPS')} vs {descriptions.get('estimated_eps', 'Estimate EPS')} Scatter",
-        xaxis_title=descriptions.get("estimated_eps", "Estimated EPS"),
-        yaxis_title=descriptions.get("reported_eps", "Actual EPS"),
-        legend_title=descriptions.get("report_time", "Report Time"),
+        title="EPS Scatter",
+        xaxis_title="Estimate",
+        yaxis_title="",
+        legend_title="",
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH,
         height=DEFAULT_PLOTLY_HEIGHT,

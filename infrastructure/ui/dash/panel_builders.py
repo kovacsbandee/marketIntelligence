@@ -12,13 +12,17 @@ import dash_mantine_components as dmc
 from dash import dcc
 import plotly.graph_objects as go
 
-from infrastructure.ui.dash.app_util import get_last_6_months_range, records_to_df, guard_store, filter_by_date
+from infrastructure.ui.dash.ids import Ids
+from infrastructure.ui.dash.app_util import (
+    get_last_2_years_range,
+    get_default_date_range,
+    records_to_df,
+    guard_store,
+    filter_by_date,
+)
 from infrastructure.ui.dash.plots.company_fundamentals_plots import plot_company_fundamentals_table
 from infrastructure.ui.dash.plots.daily_timeseries_plots import (
-    plot_candlestick_chart,
-    add_moving_averages_to_candlestick,
-    add_bollinger_bands_to_candlestick,
-    plot_candlestick_with_vwap,
+    plot_candlestick_with_overlays,
     plot_rsi,
     plot_macd,
     plot_stochastic,
@@ -85,7 +89,7 @@ def build_price_panel(daily_timeseries: Records, start_date: str, end_date: str)
 
     daily_timeseries_df = records_to_df(daily_timeseries, table="daily_timeseries")
     if not start_date or not end_date:
-        start_date, end_date = get_last_6_months_range(daily_timeseries_df)
+        start_date, end_date = get_last_2_years_range(daily_timeseries_df)
 
     start_dt = pd.to_datetime(start_date)
     end_dt = pd.to_datetime(end_date)
@@ -94,14 +98,14 @@ def build_price_panel(daily_timeseries: Records, start_date: str, end_date: str)
 
     selected_timeseries = filter_by_date(daily_timeseries_df, start_dt, end_dt, "date")
 
-    fig = plot_candlestick_chart(selected_timeseries)
+    overlay_defaults = ["ma"]
+    fig = plot_candlestick_with_overlays(
+        selected_timeseries,
+        show_ma="ma" in overlay_defaults,
+        show_bb="bb" in overlay_defaults,
+        show_vwap="vwap" in overlay_defaults,
+    )
     fig.update_layout(xaxis_range=[start_dt, end_dt])
-    fig_ma = add_moving_averages_to_candlestick(selected_timeseries)
-    fig_ma.update_layout(xaxis_range=[start_dt, end_dt])
-    fig_bb = add_bollinger_bands_to_candlestick(selected_timeseries)
-    fig_bb.update_layout(xaxis_range=[start_dt, end_dt])
-    fig_vwap = plot_candlestick_with_vwap(selected_timeseries)
-    fig_vwap.update_layout(xaxis_range=[start_dt, end_dt])
     fig_rsi = plot_rsi(selected_timeseries)
     fig_rsi.update_layout(xaxis_range=[start_dt, end_dt])
     fig_macd = plot_macd(selected_timeseries)
@@ -111,30 +115,29 @@ def build_price_panel(daily_timeseries: Records, start_date: str, end_date: str)
 
     return dmc.Accordion(
         multiple=True,
-        value=["price", "trend"],
+        value=["price", "momentum"],
         children=[
             dmc.AccordionItem([
                 dmc.AccordionControl("Price"),
                 dmc.AccordionPanel(
                     dmc.Stack([
-                        dmc.Text("Candlestick Chart", fw=600, size="sm"),
-                        dcc.Graph(figure=fig),
+                        dmc.Group([
+                            dmc.Text("", fw=600, size="sm"),
+                            dmc.CheckboxGroup(
+                                id=Ids.PRICE_OVERLAY_TOGGLE,
+                                value=overlay_defaults,
+                                size="sm",
+                                children=[
+                                    dmc.Checkbox(label="Moving averages", value="ma"),
+                                    dmc.Checkbox(label="Bollinger Bands", value="bb"),
+                                    dmc.Checkbox(label="VWAP", value="vwap"),
+                                ],
+                            ),
+                        ], justify="space-between", align="center", wrap="wrap"),
+                        dcc.Graph(id=Ids.PRICE_CHART, figure=fig, config={"displayModeBar": True}),
                     ], gap=8)
                 ),
             ], value="price"),
-            dmc.AccordionItem([
-                dmc.AccordionControl("Moving Averages & Bands"),
-                dmc.AccordionPanel(
-                    dmc.Stack([
-                        dmc.Text("Candlestick with Moving Averages", fw=600, size="sm"),
-                        dcc.Graph(figure=fig_ma),
-                        dmc.Text("Candlestick with Bollinger Bands", fw=600, size="sm", mt=12),
-                        dcc.Graph(figure=fig_bb),
-                        dmc.Text("Candlestick with VWAP", fw=600, size="sm", mt=12),
-                        dcc.Graph(figure=fig_vwap),
-                    ], gap=10)
-                ),
-            ], value="trend"),
             dmc.AccordionItem([
                 dmc.AccordionControl("Momentum"),
                 dmc.AccordionPanel(
@@ -163,12 +166,28 @@ def build_price_panel(daily_timeseries: Records, start_date: str, end_date: str)
     ), False
 
 
-def build_earnings_panel(earnings_data: Records, symbol_input: str | None):
+def build_earnings_panel(
+    earnings_data: Records,
+    start_date: str | None,
+    end_date: str | None,
+    symbol_input: str | None,
+):
     """Render earnings-related plots (EPS vs estimate, surprises)."""
     if (guard := guard_store(earnings_data, "No earnings data loaded.")):
         return guard
 
     earnings_df = records_to_df(earnings_data, table="earnings")
+    date_col = "fiscal_date_ending" if "fiscal_date_ending" in earnings_df.columns else "reported_date"
+    if not start_date or not end_date:
+        start_date, end_date = get_default_date_range(earnings_df, date_col)
+    if start_date and end_date:
+        start_dt = pd.to_datetime(start_date)
+        end_dt = pd.to_datetime(end_date)
+        if start_dt > end_dt:
+            return dmc.Text("Start date must be on or before end date.", c="red"), False
+        earnings_df = filter_by_date(earnings_df, start_date, end_date, date_col)
+        if earnings_df.empty:
+            return dmc.Text("No earnings data in selected date range.", c="red"), False
     symbol = (symbol_input or "").upper()
     fig_eps_vs_est = plot_eps_actual_vs_estimate(symbol, earnings_df)
     fig_surprise_pct = plot_eps_surprise_percentage(symbol, earnings_df)
@@ -183,7 +202,13 @@ def build_earnings_panel(earnings_data: Records, symbol_input: str | None):
     ], gap=16), False
 
 
-def build_income_statement_panel(price_data: Records, income_statement_quarterly: Records, symbol_input: str | None):
+def build_income_statement_panel(
+    price_data: Records,
+    income_statement_quarterly: Records,
+    start_date: str | None,
+    end_date: str | None,
+    symbol_input: str | None,
+):
     """Render income-statement visuals alongside price data."""
     if (guard := guard_store(income_statement_quarterly, "No income statement data loaded.")):
         return guard
@@ -192,6 +217,19 @@ def build_income_statement_panel(price_data: Records, income_statement_quarterly
 
     income_df = records_to_df(income_statement_quarterly, table="income_statement_quarterly")
     price_df = records_to_df(price_data, table="daily_timeseries")
+    date_col = "fiscal_date_ending" if "fiscal_date_ending" in income_df.columns else None
+    if not start_date or not end_date:
+        start_date, end_date = get_default_date_range(price_df, "date")
+    if start_date and end_date:
+        start_dt = pd.to_datetime(start_date)
+        end_dt = pd.to_datetime(end_date)
+        if start_dt > end_dt:
+            return dmc.Text("Start date must be on or before end date.", c="red"), False
+        if date_col:
+            income_df = filter_by_date(income_df, start_date, end_date, date_col)
+        price_df = filter_by_date(price_df, start_date, end_date, "date")
+        if income_df.empty or price_df.empty:
+            return dmc.Text("No income/price data in selected date range.", c="red"), False
     symbol = (symbol_input or "").upper()
     fig_dashboard = plot_key_metrics_dashboard(symbol, income_df, price_df)
     fig_margins = plot_quarterly_profit_margins(symbol, income_df)
@@ -239,6 +277,8 @@ def build_balance_sheet_panel(balance_sheet_quarterly: Records, start_date: str,
         end_dt = pd.to_datetime(end_date)
         if start_dt > end_dt:
             return dmc.Text("Start date must be on or before end date.", c="red"), False
+    else:
+        start_date, end_date = get_default_date_range(balance_sheet_quarterly_df, "fiscal_date_ending")
 
     selected_balance_sheet = filter_by_date(balance_sheet_quarterly_df, start_date, end_date, "fiscal_date_ending")
 
@@ -283,12 +323,15 @@ def build_cash_flow_panel(cashflow_data: Records, start_date: str, end_date: str
     cashflow_df = records_to_df(cashflow_data, table="cashflow_statement_quarterly")
     if cashflow_df.empty:
         return dmc.Text("No cash flow data loaded.", c="red"), False
+    date_col = next((col for col in cashflow_df.columns if 'fiscal_date' in col.lower() or 'date' in col.lower()), None)
     if start_date and end_date:
         start_dt = pd.to_datetime(start_date)
         end_dt = pd.to_datetime(end_date)
         if start_dt > end_dt:
             return dmc.Text("Start date must be on or before end date.", c="red"), False
-    date_col = next((col for col in cashflow_df.columns if 'fiscal_date' in col.lower() or 'date' in col.lower()), None)
+    else:
+        if date_col:
+            start_date, end_date = get_default_date_range(cashflow_df, date_col)
     selected_cashflow = filter_by_date(cashflow_df, start_date, end_date, date_col)
     if selected_cashflow is None or selected_cashflow.empty:
         selected_cashflow = cashflow_df
@@ -325,6 +368,8 @@ def build_insider_panel(insider_transactions: Records, price_data: Records, star
         end_dt = pd.to_datetime(end_date)
         if start_dt > end_dt:
             return dmc.Text("Start date must be on or before end date.", c="dimmed"), False
+    else:
+        start_date, end_date = get_default_date_range(price_df, "date")
 
     insider_df = filter_by_date(insider_df, start_date, end_date, "transaction_date")
     price_df = filter_by_date(price_df, start_date, end_date, "date")

@@ -90,12 +90,16 @@ def plot_quarterly_revenue_net_income_vs_stock_price(symbol: str, income_df: pd.
         else:
             close_prices.append(df_price.iloc[-1]["close"])
     descriptions = _get_column_descriptions("income_statement_quarterly")
+    label_overrides = {
+        "total_revenue": "Total revenue (sales)",
+        "net_income": "Net income (profit after taxes)",
+    }
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=x,
         y=revenue,
         mode="lines+markers",
-        name=descriptions.get("total_revenue", "Total Revenue"),
+        name=label_overrides.get("total_revenue", descriptions.get("total_revenue", "Total Revenue")),
         line=dict(color="#228be6", width=3),
         marker=dict(symbol="circle", size=8, color="#228be6"),
         yaxis="y1"
@@ -104,7 +108,7 @@ def plot_quarterly_revenue_net_income_vs_stock_price(symbol: str, income_df: pd.
         x=x,
         y=net_income,
         mode="lines+markers",
-        name=descriptions.get("net_income", "Net Income"),
+        name=label_overrides.get("net_income", descriptions.get("net_income", "Net Income")),
         line=dict(color="#40c057", width=3),
         marker=dict(symbol="diamond", size=8, color="#40c057"),
         yaxis="y1"
@@ -113,26 +117,26 @@ def plot_quarterly_revenue_net_income_vs_stock_price(symbol: str, income_df: pd.
         x=x,
         y=close_prices,
         mode="lines+markers",
-        name="Stock Price",
+        name="Stock price (close after quarter end)",
         line=dict(color="#fab005", width=3, dash="dash"),
         marker=dict(symbol="square", size=8, color="#fab005"),
         yaxis="y2"
     ))
     fig.update_layout(
-        title=f"{symbol.upper()} Quarterly Revenue, Net Income & Stock Price",
-        xaxis_title=descriptions.get("fiscal_date_ending", "Fiscal Quarter End"),
+        title=f"{symbol.upper()} Revenue, Net Income, and Stock Price by Quarter",
+        xaxis_title="Fiscal quarter end date",
         yaxis=dict(
-            title="Revenue / Net Income",
+            title="Revenue and net income (USD)",
             showgrid=True,
             zeroline=True
         ),
         yaxis2=dict(
-            title="Stock Price",
+            title="Stock price (USD)",
             overlaying="y",
             side="right",
             showgrid=False
         ),
-        legend_title="Metric",
+        legend_title="Series",
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH,
         height=DEFAULT_PLOTLY_HEIGHT,
@@ -193,12 +197,17 @@ def plot_quarterly_profit_margins(symbol: str, income_df: pd.DataFrame) -> go.Fi
     x = pd.to_datetime(df["fiscal_date_ending"])
     # Get column descriptions if available
     descriptions = _get_column_descriptions("income_statement_quarterly") if "_get_column_descriptions" in globals() else {}
+    label_overrides = {
+        "gross_profit": "Gross margin (gross profit / revenue)",
+        "operating_income": "Operating margin (operating income / revenue)",
+        "net_income": "Net margin (net income / revenue)",
+    }
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=x,
         y=gross_margin,
         mode="lines+markers",
-        name=descriptions.get("gross_profit", "Gross Profit Margin"),
+        name=label_overrides.get("gross_profit", descriptions.get("gross_profit", "Gross Profit Margin")),
         line=dict(color="#228be6", width=3),
         marker=dict(symbol="circle", size=8, color="#228be6"),
         hovertemplate="%{y:.2f}%<br>%{x|%Y-%m-%d}<extra>Gross Margin</extra>"
@@ -207,7 +216,7 @@ def plot_quarterly_profit_margins(symbol: str, income_df: pd.DataFrame) -> go.Fi
         x=x,
         y=operating_margin,
         mode="lines+markers",
-        name=descriptions.get("operating_income", "Operating Profit Margin"),
+        name=label_overrides.get("operating_income", descriptions.get("operating_income", "Operating Profit Margin")),
         line=dict(color="#40c057", width=3),
         marker=dict(symbol="diamond", size=8, color="#40c057"),
         hovertemplate="%{y:.2f}%<br>%{x|%Y-%m-%d}<extra>Operating Margin</extra>"
@@ -216,16 +225,16 @@ def plot_quarterly_profit_margins(symbol: str, income_df: pd.DataFrame) -> go.Fi
         x=x,
         y=net_margin,
         mode="lines+markers",
-        name=descriptions.get("net_income", "Net Profit Margin"),
+        name=label_overrides.get("net_income", descriptions.get("net_income", "Net Profit Margin")),
         line=dict(color="#fa5252", width=3),
         marker=dict(symbol="square", size=8, color="#fa5252"),
         hovertemplate="%{y:.2f}%<br>%{x|%Y-%m-%d}<extra>Net Margin</extra>"
     ))
     fig.update_layout(
-        title=f"{symbol.upper()} Quarterly Profit Margins",
-        xaxis_title=descriptions.get("fiscal_date_ending", "Fiscal Quarter End"),
-        yaxis_title="Profit Margin (%)",
-        legend_title="Margin Type",
+        title=f"{symbol.upper()} Profit Margins by Quarter",
+        xaxis_title="Fiscal quarter end date",
+        yaxis_title="Margin (% of revenue)",
+        legend_title="Margin type",
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH if 'DEFAULT_PLOTLY_WIDTH' in globals() else 900,
         height=DEFAULT_PLOTLY_HEIGHT if 'DEFAULT_PLOTLY_HEIGHT' in globals() else 500,
@@ -272,9 +281,16 @@ def plot_expense_breakdown_vs_revenue(symbol: str, income_df: pd.DataFrame) -> g
     n = len(expense_cols)
     ncols = 2
     nrows = math.ceil(n / ncols)
+    expense_titles = {
+        "cost_of_revenue": "Cost of revenue (% of revenue)",
+        "cost_of_goods_and_services_sold": "Cost of goods & services sold (% of revenue)",
+        "selling_general_and_administrative": "Selling, general & admin (% of revenue)",
+        "research_and_development": "Research & development (% of revenue)",
+        "operating_expenses": "Operating expenses (% of revenue)",
+    }
     fig = make_subplots(
         rows=nrows, cols=ncols,
-        subplot_titles=[col.replace('_', ' ').title() for col in expense_cols],
+        subplot_titles=[expense_titles.get(col, col.replace('_', ' ').title()) for col in expense_cols],
         shared_xaxes=False,
         vertical_spacing=0.13,
         horizontal_spacing=0.13
@@ -291,7 +307,7 @@ def plot_expense_breakdown_vs_revenue(symbol: str, income_df: pd.DataFrame) -> g
             go.Bar(
                 x=x,
                 y=pct,
-                name=descriptions.get(col, col.replace('_', ' ').title()),
+                name=expense_titles.get(col, descriptions.get(col, col.replace('_', ' ').title())),
                 marker_color="#fa5252",
                 hovertemplate="%{y:.2f}%<br>%{x|%Y-%m-%d}<extra>Expense % of Revenue</extra>"
             ),
@@ -303,7 +319,7 @@ def plot_expense_breakdown_vs_revenue(symbol: str, income_df: pd.DataFrame) -> g
                 x=x,
                 y=total_revenue,
                 mode="lines+markers",
-                name=descriptions.get("total_revenue", "Total Revenue"),
+                name="Total revenue (USD)",
                 line=dict(color="#228be6", width=2, dash="dash"),
                 marker=dict(symbol="circle", size=6, color="#228be6"),
                 yaxis=f"y{i+1}2",
@@ -313,17 +329,17 @@ def plot_expense_breakdown_vs_revenue(symbol: str, income_df: pd.DataFrame) -> g
         )
         # Add secondary y-axis for revenue
         fig.update_yaxes(
-            title_text="Expense % of Revenue",
+            title_text="Expense as % of revenue",
             row=row, col=colnum,
             ticksuffix="%"
         )
         fig.update_yaxes(
-            title_text="Total Revenue",
+            title_text="Total revenue (USD)",
             row=row, col=colnum,
             secondary_y=True
         )
     fig.update_layout(
-        title=f"{symbol.upper()} Expense Breakdown vs Revenue (Quarterly)",
+        title=f"{symbol.upper()} Expense Share of Revenue by Quarter",
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH if 'DEFAULT_PLOTLY_WIDTH' in globals() else 1200,
         height=400 * nrows,
@@ -331,6 +347,7 @@ def plot_expense_breakdown_vs_revenue(symbol: str, income_df: pd.DataFrame) -> g
         font=dict(size=14),
         showlegend=False
     )
+    fig.update_annotations(font_size=16)
     return fig
 
 def plot_income_statement_waterfall(symbol: str, income_df: pd.DataFrame) -> go.Figure:
@@ -369,7 +386,18 @@ def plot_income_statement_waterfall(symbol: str, income_df: pd.DataFrame) -> go.
     values = []
     descriptions = _get_column_descriptions("income_statement_quarterly") if "_get_column_descriptions" in globals() else {}
     # Start with total revenue
-    labels.append(descriptions.get("total_revenue", "Total Revenue"))
+    label_overrides = {
+        "total_revenue": "Total revenue (sales)",
+        "cost_of_revenue": "Cost of revenue (expense)",
+        "operating_expenses": "Operating expenses (expense)",
+        "investment_income_net": "Investment income (adds to profit)",
+        "net_interest_income": "Net interest income (adds to profit)",
+        "other_non_operating_income": "Other non‑operating income (adds to profit)",
+        "income_tax_expense": "Income tax (reduces profit)",
+        "interest_and_debt_expense": "Interest & debt expense (reduces profit)",
+        "net_income": "Net income (profit after taxes)",
+    }
+    labels.append(label_overrides.get("total_revenue", descriptions.get("total_revenue", "Total Revenue")))
     values.append(row["total_revenue"])
     steps.append("absolute")
     # Add/subtract each step
@@ -378,15 +406,15 @@ def plot_income_statement_waterfall(symbol: str, income_df: pd.DataFrame) -> go.
             val = row[col]
             # For income items, add; for expenses, subtract
             if col in ["investment_income_net", "net_interest_income", "other_non_operating_income"]:
-                labels.append(descriptions.get(col, col.replace('_', ' ').title()))
+                labels.append(label_overrides.get(col, descriptions.get(col, col.replace('_', ' ').title())))
                 values.append(val)
                 steps.append("relative")
             else:
-                labels.append(descriptions.get(col, col.replace('_', ' ').title()))
+                labels.append(label_overrides.get(col, descriptions.get(col, col.replace('_', ' ').title())))
                 values.append(-val)
                 steps.append("relative")
     # End with net income
-    labels.append(descriptions.get("net_income", "Net Income"))
+    labels.append(label_overrides.get("net_income", descriptions.get("net_income", "Net Income")))
     values.append(row["net_income"])
     steps.append("total")
     # Build waterfall chart
@@ -404,7 +432,7 @@ def plot_income_statement_waterfall(symbol: str, income_df: pd.DataFrame) -> go.
         hovertemplate = "%{label}: %{y:,.0f}<extra></extra>"
     ))
     fig.update_layout(
-        title=f"{symbol.upper()} Income Statement Waterfall (Most Recent Quarter)",
+        title=f"{symbol.upper()} How Revenue Becomes Net Income (Latest Quarter)",
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH if 'DEFAULT_PLOTLY_WIDTH' in globals() else 1200,
         height=600,
@@ -439,12 +467,17 @@ def plot_operating_profit_ebit_ebitda_trends(symbol: str, income_df: pd.DataFram
     ebitda = pd.to_numeric(df["ebitda"], errors="coerce")
     # Get column descriptions if available
     descriptions = _get_column_descriptions("income_statement_quarterly") if "_get_column_descriptions" in globals() else {}
+    label_overrides = {
+        "operating_income": "Operating income (profit from core operations)",
+        "ebit": "EBIT (earnings before interest & taxes)",
+        "ebitda": "EBITDA (before interest, taxes, depreciation & amortization)",
+    }
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=x,
         y=operating_income,
         mode="lines+markers",
-        name=descriptions.get("operating_income", "Operating Income"),
+        name=label_overrides.get("operating_income", descriptions.get("operating_income", "Operating Income")),
         line=dict(color="#228be6", width=3),
         marker=dict(symbol="circle", size=8, color="#228be6"),
         hovertemplate="%{y:,.0f}<br>%{x|%Y-%m-%d}<extra>Operating Income</extra>"
@@ -453,7 +486,7 @@ def plot_operating_profit_ebit_ebitda_trends(symbol: str, income_df: pd.DataFram
         x=x,
         y=ebit,
         mode="lines+markers",
-        name=descriptions.get("ebit", "EBIT"),
+        name=label_overrides.get("ebit", descriptions.get("ebit", "EBIT")),
         line=dict(color="#fab005", width=3),
         marker=dict(symbol="diamond", size=8, color="#fab005"),
         hovertemplate="%{y:,.0f}<br>%{x|%Y-%m-%d}<extra>EBIT</extra>"
@@ -462,16 +495,16 @@ def plot_operating_profit_ebit_ebitda_trends(symbol: str, income_df: pd.DataFram
         x=x,
         y=ebitda,
         mode="lines+markers",
-        name=descriptions.get("ebitda", "EBITDA"),
+        name=label_overrides.get("ebitda", descriptions.get("ebitda", "EBITDA")),
         line=dict(color="#40c057", width=3),
         marker=dict(symbol="square", size=8, color="#40c057"),
         hovertemplate="%{y:,.0f}<br>%{x|%Y-%m-%d}<extra>EBITDA</extra>"
     ))
     fig.update_layout(
-        title=f"{symbol.upper()} Operating Profit, EBIT & EBITDA Trends",
-        xaxis_title=descriptions.get("fiscal_date_ending", "Fiscal Quarter End"),
-        yaxis_title="Value",
-        legend_title="Metric",
+        title=f"{symbol.upper()} Operating Income, EBIT, and EBITDA by Quarter",
+        xaxis_title="Fiscal quarter end date",
+        yaxis_title="Amount (USD)",
+        legend_title="Profit measure",
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH if 'DEFAULT_PLOTLY_WIDTH' in globals() else 900,
         height=DEFAULT_PLOTLY_HEIGHT if 'DEFAULT_PLOTLY_HEIGHT' in globals() else 500,
@@ -541,6 +574,12 @@ def plot_expense_growth_scatter(symbol: str, income_df: pd.DataFrame) -> go.Figu
     expense_labels = []
     revenue_growth = []  # for reference line
     descriptions = _get_column_descriptions("income_statement_quarterly") if "_get_column_descriptions" in globals() else {}
+    expense_labels_map = {
+        "selling_general_and_administrative": "Selling, general & admin",
+        "research_and_development": "Research & development",
+        "operating_expenses": "Operating expenses",
+        "cost_of_goods_and_services_sold": "Cost of goods & services sold",
+    }
     for i in range(1, len(df)):
         prev = df.iloc[i-1]
         curr = df.iloc[i]
@@ -560,7 +599,7 @@ def plot_expense_growth_scatter(symbol: str, income_df: pd.DataFrame) -> go.Figu
             x_growth.append(rel_growth)
             y_growth.append(abs_growth)
             bubble_size.append(size)
-            labels.append(descriptions.get(col, col.replace('_', ' ').title()))
+            labels.append(expense_labels_map.get(col, descriptions.get(col, col.replace('_', ' ').title())))
             quarter_labels.append(str(curr["fiscal_date_ending"]))
             expense_labels.append(col)
     # Build scatter plot
@@ -598,7 +637,7 @@ def plot_expense_growth_scatter(symbol: str, income_df: pd.DataFrame) -> go.Figu
     for i, rev_g in enumerate(revenue_growth):
         fig.add_annotation(
             x=rev_g, y=max(y_growth) if y_growth else 0,
-            text=f"Revenue Growth ({quarter_labels[i]})",
+            text=f"Revenue growth reference ({quarter_labels[i]})",
             showarrow=True,
             arrowhead=2,
             ax=40, ay=-40,
@@ -607,15 +646,15 @@ def plot_expense_growth_scatter(symbol: str, income_df: pd.DataFrame) -> go.Figu
             opacity=0.7
         )
     fig.update_layout(
-        title=f"{symbol.upper()} Expense Growth vs Revenue (Quarterly)",
-        xaxis_title="Expense Growth Rate (%)",
-        yaxis_title="Expense Absolute Growth ($)",
+        title=f"{symbol.upper()} Expense Growth vs Revenue Growth (Quarterly)",
+        xaxis_title="Expense growth rate vs prior quarter (%)",
+        yaxis_title="Expense change vs prior quarter (USD)",
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH if 'DEFAULT_PLOTLY_WIDTH' in globals() else 900,
         height=DEFAULT_PLOTLY_HEIGHT if 'DEFAULT_PLOTLY_HEIGHT' in globals() else 500,
         margin=dict(l=50, r=50, t=60, b=50),
         font=dict(size=14),
-        legend_title="Item"
+        legend_title="Expense category"
     )
     fig.update_xaxes(zeroline=True, zerolinewidth=2, zerolinecolor="#228be6")
     fig.update_yaxes(zeroline=True, zerolinewidth=2, zerolinecolor="#228be6")
@@ -665,26 +704,31 @@ def plot_tax_and_interest_effects(symbol: str, income_df: pd.DataFrame) -> go.Fi
     other = other.clip(lower=0)
     # Get column descriptions if available
     descriptions = _get_column_descriptions("income_statement_quarterly") if "_get_column_descriptions" in globals() else {}
+    label_overrides = {
+        "interest_and_debt_expense": "Interest & debt expense",
+        "income_tax_expense": "Income tax expense",
+        "net_income": "Net income",
+    }
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     # Stacked bars: Interest, Tax, Other
     fig.add_trace(go.Bar(
         x=x,
         y=interest_exp,
-        name=descriptions.get("interest_and_debt_expense", "Interest & Debt Expense"),
+    name=label_overrides.get("interest_and_debt_expense", descriptions.get("interest_and_debt_expense", "Interest & Debt Expense")),
         marker_color="#fa5252",
         hovertemplate="Interest: %{y:,.0f}<br>%{x|%Y-%m-%d}<extra></extra>"
     ), secondary_y=False)
     fig.add_trace(go.Bar(
         x=x,
         y=tax_exp,
-        name=descriptions.get("income_tax_expense", "Income Tax Expense"),
+    name=label_overrides.get("income_tax_expense", descriptions.get("income_tax_expense", "Income Tax Expense")),
         marker_color="#fab005",
         hovertemplate="Tax: %{y:,.0f}<br>%{x|%Y-%m-%d}<extra></extra>"
     ), secondary_y=False)
     fig.add_trace(go.Bar(
         x=x,
         y=other,
-        name="Other Pre-Tax Income",
+    name="Other pre‑tax income",
         marker_color="#40c057",
         hovertemplate="Other: %{y:,.0f}<br>%{x|%Y-%m-%d}<extra></extra>"
     ), secondary_y=False)
@@ -693,7 +737,7 @@ def plot_tax_and_interest_effects(symbol: str, income_df: pd.DataFrame) -> go.Fi
         x=x,
         y=net_income,
         mode="lines+markers",
-        name=descriptions.get("net_income", "Net Income"),
+    name=label_overrides.get("net_income", descriptions.get("net_income", "Net Income")),
         line=dict(color="#228be6", width=3),
         marker=dict(symbol="circle", size=8, color="#228be6"),
         hovertemplate="Net Income: %{y:,.0f}<br>%{x|%Y-%m-%d}<extra></extra>",
@@ -714,11 +758,11 @@ def plot_tax_and_interest_effects(symbol: str, income_df: pd.DataFrame) -> go.Fi
             )
     fig.update_layout(
         barmode="stack",
-        title=f"{symbol.upper()} Interest & Tax Effects on Pre-Tax and Net Income (Quarterly)",
-        xaxis_title=descriptions.get("fiscal_date_ending", "Fiscal Quarter End"),
-        yaxis_title="Income Before Tax Breakdown ($)",
-        yaxis2_title="Net Income ($)",
-        legend_title="Component",
+    title=f"{symbol.upper()} How Interest and Taxes Reduce Pre‑Tax Income",
+    xaxis_title="Fiscal quarter end date",
+    yaxis_title="Pre‑tax income components (USD)",
+    yaxis2_title="Net income (USD)",
+    legend_title="Component",
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH if 'DEFAULT_PLOTLY_WIDTH' in globals() else 900,
         height=DEFAULT_PLOTLY_HEIGHT if 'DEFAULT_PLOTLY_HEIGHT' in globals() else 500,
@@ -822,15 +866,15 @@ def plot_metric_vs_future_stock_return(symbol: str, income_df: pd.DataFrame, pri
         except Exception:
             pass
     fig.update_layout(
-        title=f"{symbol.upper()} {metric_label} vs Future Stock Return (Quarterly)",
-        xaxis_title=metric_label,
-        yaxis_title="Future Quarterly Return (%)",
+        title=f"{symbol.upper()} {metric_label} vs Next‑Quarter Stock Return",
+        xaxis_title=f"{metric_label} (quarterly value)",
+        yaxis_title="Next‑quarter stock return (%)",
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH if 'DEFAULT_PLOTLY_WIDTH' in globals() else 900,
         height=DEFAULT_PLOTLY_HEIGHT if 'DEFAULT_PLOTLY_HEIGHT' in globals() else 500,
         margin=dict(l=50, r=50, t=60, b=50),
         font=dict(size=14),
-        legend_title="Legend"
+        legend_title="Quarter"
     )
     fig.update_yaxes(zeroline=True, zerolinewidth=2, zerolinecolor="#228be6")
     return fig
@@ -878,6 +922,14 @@ def plot_key_metrics_dashboard(symbol: str, income_df: pd.DataFrame, price_df: p
     prev_row = df_income.iloc[-2]
     # Get column descriptions if available
     descriptions = _get_column_descriptions("income_statement_quarterly") if "_get_column_descriptions" in globals() else {}
+    label_overrides = {
+        "total_revenue": "Total revenue (sales)",
+        "gross_profit": "Gross profit (revenue minus cost of revenue)",
+        "operating_income": "Operating income (profit from core business)",
+        "net_income": "Net income (profit after taxes)",
+        "ebit": "EBIT (earnings before interest & taxes)",
+        "ebitda": "EBITDA (earnings before interest, taxes, depreciation & amortization)",
+    }
     # Prepare cards for each metric
     cards = []
     for m in metrics:
@@ -888,7 +940,7 @@ def plot_key_metrics_dashboard(symbol: str, income_df: pd.DataFrame, price_df: p
         color = "green" if not np.isnan(pct) and pct > 0 else ("red" if not np.isnan(pct) and pct < 0 else "gray")
         cards.append(dict(
             metric=m,
-            label=descriptions.get(m, m.replace('_', ' ').title()),
+            label=label_overrides.get(m, descriptions.get(m, m.replace('_', ' ').title())),
             value=f"{val:,.0f}" if not np.isnan(val) else "N/A",
             delta=f"{delta:+,.0f}" if not np.isnan(delta) else "N/A",
             pct=f"{pct:+.1f}%" if not np.isnan(pct) else "N/A",
@@ -914,7 +966,7 @@ def plot_key_metrics_dashboard(symbol: str, income_df: pd.DataFrame, price_df: p
     price_pct = (price_delta / price_prev_val * 100) if price_prev_val and not np.isnan(price_delta) and price_prev_val != 0 else np.nan
     # Build dashboard as a table
     import plotly.graph_objects as go
-    header = ["Metric", "Value", "Δ", "%Δ"]
+    header = ["Metric", "Latest quarter value", "Change vs prior quarter", "Percent change"]
     values = [
         [c["label"] for c in cards],
         [c["value"] for c in cards],
@@ -922,8 +974,22 @@ def plot_key_metrics_dashboard(symbol: str, income_df: pd.DataFrame, price_df: p
         [c["pct"] for c in cards],
     ]
     # Add margins and stock price
-    header += ["Gross Margin", "Operating Margin", "Net Margin", "Stock Price", "Δ", "%Δ"]
-    values[0] += ["Gross Margin", "Operating Margin", "Net Margin", "Stock Price", "", ""]
+    header += [
+        "Gross margin (% of revenue)",
+        "Operating margin (% of revenue)",
+        "Net margin (% of revenue)",
+        "Stock price (close)",
+        "Stock change",
+        "Stock percent change",
+    ]
+    values[0] += [
+        "Gross margin (% of revenue)",
+        "Operating margin (% of revenue)",
+        "Net margin (% of revenue)",
+        "Stock price (close)",
+        "",
+        "",
+    ]
     values[1] += [f"{gross_margin:.1f}%" if not np.isnan(gross_margin) else "N/A",
                  f"{operating_margin:.1f}%" if not np.isnan(operating_margin) else "N/A",
                  f"{net_margin:.1f}%" if not np.isnan(net_margin) else "N/A",
@@ -951,7 +1017,7 @@ def plot_key_metrics_dashboard(symbol: str, income_df: pd.DataFrame, price_df: p
     ))
     fig.update_layout(
         title={
-            "text": f"Key Metrics Dashboard: {symbol.upper()}",
+            "text": f"Income Statement Key Metrics: {symbol.upper()}",
             "x": 0.5,
             "xanchor": "center",
             "font": {"size": 22, "family": "Inter, sans-serif", "color": "#1c7ed6"}

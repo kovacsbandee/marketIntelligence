@@ -19,7 +19,6 @@ from plotly.colors import qualitative
 from infrastructure.ui.dash.plot_utils import (
     DEFAULT_PLOTLY_WIDTH,
     DEFAULT_PLOTLY_HEIGHT,
-    _get_column_descriptions,
 )
 
 def plot_candlestick_chart(data):
@@ -48,7 +47,17 @@ def plot_candlestick_chart(data):
     Returns:
         go.Figure: Plotly Figure object containing the candlestick chart and volume bars.
     """
-    descriptions = _get_column_descriptions("daily_timeseries")
+    descriptions = {
+        "date": "Date",
+        "open": "Open",
+        "high": "High",
+        "low": "Low",
+        "close": "Close",
+        "volume": "Volume",
+        "price": "Price",
+        "candlestick": "Price (OHLC)",
+    "candlestick_title": "",
+    }
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     if data.empty or not all(col in data.columns for col in ["open", "high", "low", "close"]):
@@ -73,7 +82,7 @@ def plot_candlestick_chart(data):
         shared_xaxes=True,
         vertical_spacing=0.03,
         row_heights=row_heights,
-        subplot_titles=[descriptions.get("candlestick", "Price (OHLC)")] + ([descriptions.get("volume", "Volume")] if has_volume else [])
+        subplot_titles=["Price"] + (["Volume"] if has_volume else []),
     )
 
     # Candlestick trace
@@ -98,6 +107,7 @@ def plot_candlestick_chart(data):
             decreasing_line_color="#fa5252",
             showlegend=False,
             hovertext=hovertext,
+            hoverinfo="text",
         ),
         row=1, col=1
     )
@@ -121,19 +131,19 @@ def plot_candlestick_chart(data):
             ),
             row=2, col=1
         )
-        fig.update_yaxes(title_text=descriptions.get("volume", "Volume"), row=2, col=1)
+    fig.update_yaxes(title_text="", row=2, col=1)
 
     # Layout
     fig.update_layout(
         title={
-            "text": descriptions.get("candlestick_title", "Candlestick Chart"),
+            "text": descriptions.get("candlestick_title", ""),
             "x": 0.5,
             "xanchor": "center",
             "yanchor": "top",
             "font": {"size": 20}
         },
-        xaxis_title=descriptions.get("date", "Date"),
-        yaxis_title=descriptions.get("price", "Price"),
+        xaxis_title="",
+        yaxis_title="",
         xaxis_rangeslider_visible=False,
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH,
@@ -142,8 +152,114 @@ def plot_candlestick_chart(data):
         font=dict(size=14),
         showlegend=True
     )
-    fig.update_yaxes(title_text=descriptions.get("price", "Price"), row=1, col=1)
+    fig.update_annotations(font_size=16)
+    fig.update_yaxes(title_text="", row=1, col=1)
+    fig.update_xaxes(title_text=descriptions.get("date", "Date"), row=2 if has_volume else 1, col=1)
     # For overlays: future indicators can be added as additional traces to row=1, col=1
+    return fig
+
+def plot_candlestick_with_overlays(data, show_ma: bool = True, show_bb: bool = True, show_vwap: bool = True):
+    """
+    Plot a candlestick chart and optionally overlay moving averages, Bollinger Bands, and VWAP on the price panel.
+
+    Args:
+        data (pd.DataFrame): OHLCV dataframe (expects open/high/low/close and optional volume/date columns).
+        show_ma (bool): Whether to overlay all moving average columns (contains 'sma').
+        show_bb (bool): Whether to overlay Bollinger Band columns (upper/middle/lower).
+        show_vwap (bool): Whether to overlay the first VWAP column found.
+
+    Returns:
+        go.Figure: Candlestick chart with requested overlays added to row=1, col=1.
+    """
+    if not isinstance(data, pd.DataFrame):
+        raise ValueError("Input data must be a pandas DataFrame.")
+
+    df = data.copy()
+    fig = plot_candlestick_chart(df)
+    x = df["date"] if "date" in df.columns else df.index
+
+    # Moving averages (produced by Symbol via add_indicators_to_price_data: sma_win_len_<window>)
+    if show_ma:
+        sma_cols = [col for col in df.columns if col.lower().startswith("sma_win_len_")]
+        if sma_cols:
+            color_cycle = qualitative.Plotly + qualitative.D3 + qualitative.Set1 + qualitative.Set2
+            for i, col in enumerate(sma_cols):
+                window = col.split("sma_win_len_")[-1]
+                label = f"SMA {window}" if window else "SMA"
+                fig.add_trace(
+                    go.Scatter(
+                        x=x,
+                        y=df[col],
+                        mode="lines",
+                        name=label,
+                        line=dict(color=color_cycle[i % len(color_cycle)], width=1.6),
+                        hovertemplate=f"<b>{label}</b><br>Date: %{{x|%Y-%m-%d}}<br>Value: %{{y:.2f}}<extra></extra>",
+                    ),
+                    row=1,
+                    col=1,
+                )
+
+    # Bollinger Bands (default names from indicator calc)
+    if show_bb:
+        bb_middle = next((c for c in df.columns if c.startswith("bollinger_bands_middle")), None)
+        bb_upper = next((c for c in df.columns if c.startswith("bollinger_bands_upper")), None)
+        bb_lower = next((c for c in df.columns if c.startswith("bollinger_bands_lower")), None)
+
+        if bb_middle and bb_upper and bb_lower:
+            fig.add_trace(
+                go.Scatter(
+                    x=x,
+                    y=df[bb_upper],
+                    mode="lines",
+                    name="BB Upper",
+                    line=dict(color="#636EFA", width=1, dash="dot"),
+                    hovertemplate="<b>BB Upper</b><br>Date: %{x|%Y-%m-%d}<br>Value: %{y:.2f}<extra></extra>",
+                ),
+                row=1,
+                col=1,
+            )
+            fig.add_trace(
+                go.Scatter(
+                    x=x,
+                    y=df[bb_middle],
+                    mode="lines",
+                    name="BB Middle",
+                    line=dict(color="#00CC96", width=1, dash="dash"),
+                    hovertemplate="<b>BB Middle</b><br>Date: %{x|%Y-%m-%d}<br>Value: %{y:.2f}<extra></extra>",
+                ),
+                row=1,
+                col=1,
+            )
+            fig.add_trace(
+                go.Scatter(
+                    x=x,
+                    y=df[bb_lower],
+                    mode="lines",
+                    name="BB Lower",
+                    line=dict(color="#EF553B", width=1, dash="dot"),
+                    hovertemplate="<b>BB Lower</b><br>Date: %{x|%Y-%m-%d}<br>Value: %{y:.2f}<extra></extra>",
+                ),
+                row=1,
+                col=1,
+            )
+
+    # VWAP
+    if show_vwap:
+        vwap_col = "vwap" if "vwap" in df.columns else None
+        if vwap_col:
+            fig.add_trace(
+                go.Scatter(
+                    x=x,
+                    y=df[vwap_col],
+                    mode="lines",
+                    name="VWAP",
+                    line=dict(color="purple", width=2, dash="solid"),
+                    hovertemplate="<b>VWAP</b><br>Date: %{x|%Y-%m-%d}<br>VWAP: %{y:.2f}<extra></extra>",
+                ),
+                row=1,
+                col=1,
+            )
+
     return fig
 
 def add_moving_averages_to_candlestick(data):
@@ -206,26 +322,17 @@ def add_moving_averages_to_candlestick(data):
     return fig
 
 def add_bollinger_bands_to_candlestick(data):
-    """
-    Plots a candlestick chart with overlaid Bollinger Bands (upper, middle, lower) using existing columns.
-    """
+    """Plots a candlestick chart with overlaid Bollinger Bands (upper, middle, lower) using Symbol-standard columns."""
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
-    # Try to find columns for Bollinger Bands
-    bb_middle = (
-        [col for col in df.columns if 'bb_middle' in col][0]
-        if any('bb_middle' in col for col in df.columns) else None
-    )
-    bb_upper = (
-        [col for col in df.columns if 'bb_upper' in col][0]
-        if any('bb_upper' in col for col in df.columns) else None
-    )
-    bb_lower = (
-        [col for col in df.columns if 'bb_lower' in col][0]
-        if any('bb_lower' in col for col in df.columns) else None
-    )
+
+    bb_middle = next((c for c in df.columns if c.startswith("bollinger_bands_middle")), None)
+    bb_upper = next((c for c in df.columns if c.startswith("bollinger_bands_upper")), None)
+    bb_lower = next((c for c in df.columns if c.startswith("bollinger_bands_lower")), None)
+
     if not (bb_middle and bb_upper and bb_lower):
+        # If Bollinger Band columns are missing, return the base candlestick chart
         return plot_candlestick_chart(df)
     fig = plot_candlestick_chart(df)
     x = df["date"] if "date" in df.columns else df.index
@@ -338,10 +445,12 @@ def plot_rsi(data):
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
-    # Try to find RSI column (case-insensitive)
-    rsi_cols = [col for col in df.columns if 'rsi' in col.lower()]
+    # Try to find RSI column (Symbol adds rsi_win_len_<window>)
+    rsi_cols = [col for col in df.columns if col.startswith('rsi_win_len_')]
     if not rsi_cols:
-        raise ValueError("No RSI column found in input data. Please compute RSI before plotting.")
+        fig = go.Figure()
+        fig.update_layout(title="RSI not available for this dataset.")
+        return fig
     rsi_col = rsi_cols[0]
     x = df['date'] if 'date' in df.columns else df.index
     fig = go.Figure()
@@ -361,7 +470,7 @@ def plot_rsi(data):
             x=x,
             y=[70]*len(x),
             mode="lines",
-            name="Overbought (70)",
+            name="Overbought 70",
             line=dict(color="red", width=1, dash="dash"),
             hoverinfo="skip",
             showlegend=True
@@ -372,7 +481,7 @@ def plot_rsi(data):
             x=x,
             y=[30]*len(x),
             mode="lines",
-            name="Oversold (30)",
+            name="Oversold 30",
             line=dict(color="green", width=1, dash="dash"),
             hoverinfo="skip",
             showlegend=True
@@ -380,14 +489,14 @@ def plot_rsi(data):
     )
     fig.update_layout(
         title={
-            "text": "Relative Strength Index (RSI)",
+            "text": "RSI",
             "x": 0.5,
             "xanchor": "center",
             "yanchor": "top",
             "font": {"size": 20}
         },
         xaxis_title="Date",
-        yaxis_title="RSI",
+        yaxis_title="",
         yaxis=dict(range=[0, 100]),
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH,
@@ -424,9 +533,9 @@ def plot_macd(data):
         data = pd.DataFrame(data)
     df = data.copy()
 
-    macd_line_col = next((col for col in df.columns if 'macd' in col.lower() and 'hist' not in col.lower() and 'signal' not in col.lower()), None)
-    signal_line_col = next((col for col in df.columns if 'macd_signal' in col.lower() or 'signal' in col.lower()), None)
-    hist_col = next((col for col in df.columns if 'macd_hist' in col.lower() or 'hist' in col.lower()), None)
+    macd_line_col = next((col for col in df.columns if col.startswith('macd_f_')), None)
+    signal_line_col = next((col for col in df.columns if col.startswith('macd_signal_')), None)
+    hist_col = next((col for col in df.columns if col.startswith('macd_hist_')), None)
     if not (macd_line_col and signal_line_col and hist_col):
         return go.Figure()
     x = df['date'] if 'date' in df.columns else df.index
@@ -455,7 +564,7 @@ def plot_macd(data):
         go.Bar(
             x=x,
             y=df[hist_col],
-            name="MACD Histogram",
+            name="Histogram",
             marker_color="#00CC96",
             opacity=0.5,
             hovertemplate=f"<b>MACD Histogram</b><br>Date: %{{x|%Y-%m-%d}}<br>Value: %{{y:.2f}}<extra></extra>"
@@ -466,7 +575,7 @@ def plot_macd(data):
             x=x,
             y=[0]*len(x),
             mode="lines",
-            name="Zero Line",
+            name="Zero",
             line=dict(color="gray", width=1, dash="dot"),
             hoverinfo="skip",
             showlegend=True
@@ -474,14 +583,14 @@ def plot_macd(data):
     )
     fig.update_layout(
         title={
-            "text": "MACD (Moving Average Convergence Divergence)",
+            "text": "MACD",
             "x": 0.5,
             "xanchor": "center",
             "yanchor": "top",
             "font": {"size": 20}
         },
         xaxis_title="Date",
-        yaxis_title="MACD",
+        yaxis_title="",
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH,
         height=400,
@@ -515,9 +624,9 @@ def plot_stochastic(data):
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
-    # Only use precomputed columns
-    k_col = next((col for col in df.columns if '%k' in col.lower()), None)
-    d_col = next((col for col in df.columns if '%d' in col.lower()), None)
+    # Only use precomputed columns from Symbol indicator calc
+    k_col = next((col for col in df.columns if col.startswith('stochastic_oscillator_%K')), None)
+    d_col = next((col for col in df.columns if col.startswith('stochastic_oscillator_%D')), None)
     if not (k_col and d_col):
         return go.Figure()
     x = df['date'] if 'date' in df.columns else df.index
@@ -547,7 +656,7 @@ def plot_stochastic(data):
             x=x,
             y=[80]*len(x),
             mode="lines",
-            name="Overbought (80)",
+            name="Overbought 80",
             line=dict(color="red", width=1, dash="dash"),
             hoverinfo="skip",
             showlegend=True
@@ -558,7 +667,7 @@ def plot_stochastic(data):
             x=x,
             y=[20]*len(x),
             mode="lines",
-            name="Oversold (20)",
+            name="Oversold 20",
             line=dict(color="green", width=1, dash="dash"),
             hoverinfo="skip",
             showlegend=True
@@ -566,14 +675,14 @@ def plot_stochastic(data):
     )
     fig.update_layout(
         title={
-            "text": "Stochastic Oscillator (%K, %D)",
+            "text": "Stochastic",
             "x": 0.5,
             "xanchor": "center",
             "yanchor": "top",
             "font": {"size": 20}
         },
         xaxis_title="Date",
-        yaxis_title="Stochastic",
+        yaxis_title="",
         yaxis=dict(range=[0, 100]),
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH,
@@ -606,7 +715,7 @@ def plot_obv(data):
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
-    obv_col = next((col for col in df.columns if 'obv' in col.lower()), None)
+    obv_col = 'obv' if 'obv' in df.columns else None
     if not obv_col:
         return go.Figure()
     x = df['date'] if 'date' in df.columns else df.index
@@ -623,14 +732,14 @@ def plot_obv(data):
     )
     fig.update_layout(
         title={
-            "text": "On-Balance Volume (OBV)",
+            "text": "OBV",
             "x": 0.5,
             "xanchor": "center",
             "yanchor": "top",
             "font": {"size": 20}
         },
         xaxis_title="Date",
-        yaxis_title="OBV",
+        yaxis_title="",
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH,
         height=400,
@@ -666,9 +775,9 @@ def plot_adx(data):
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
-    adx_col = next((col for col in df.columns if 'adx' in col.lower()), None)
-    plus_di_col = next((col for col in df.columns if '+di' in col.lower() or 'plus_di' in col.lower()), None)
-    minus_di_col = next((col for col in df.columns if '-di' in col.lower() or 'minus_di' in col.lower()), None)
+    adx_col = next((col for col in df.columns if col.startswith('adx_win_')), None)
+    plus_di_col = next((col for col in df.columns if col.startswith('plus_di_win_')), None)
+    minus_di_col = next((col for col in df.columns if col.startswith('minus_di_win_')), None)
     if not (adx_col and plus_di_col and minus_di_col):
         return go.Figure()
     x = df['date'] if 'date' in df.columns else df.index
@@ -708,7 +817,7 @@ def plot_adx(data):
             x=x,
             y=[20]*len(x),
             mode="lines",
-            name="Weak Trend (20)",
+            name="Weak 20",
             line=dict(color="gray", width=1, dash="dash"),
             hoverinfo="skip",
             showlegend=True
@@ -719,7 +828,7 @@ def plot_adx(data):
             x=x,
             y=[40]*len(x),
             mode="lines",
-            name="Strong Trend (40)",
+            name="Strong 40",
             line=dict(color="black", width=1, dash="dash"),
             hoverinfo="skip",
             showlegend=True
@@ -727,14 +836,14 @@ def plot_adx(data):
     )
     fig.update_layout(
         title={
-            "text": "Average Directional Index (ADX)",
+            "text": "ADX",
             "x": 0.5,
             "xanchor": "center",
             "yanchor": "top",
             "font": {"size": 20}
         },
         xaxis_title="Date",
-        yaxis_title="ADX / DI",
+        yaxis_title="",
         yaxis=dict(range=[0, 100]),
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH,

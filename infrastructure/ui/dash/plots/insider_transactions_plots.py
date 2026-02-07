@@ -4,6 +4,8 @@ from plotly.colors import qualitative
 
 import pandas as pd
 
+from infrastructure.ui.dash.plot_utils import DEFAULT_PLOTLY_WIDTH, DEFAULT_PLOTLY_HEIGHT
+
 def prepare_insider_data(insider_df: pd.DataFrame) -> pd.DataFrame:
     """
     Prepare raw insider Form 4 data for plotting.
@@ -60,11 +62,17 @@ def plot_insider_price_chart(price_df: pd.DataFrame, insider_df: pd.DataFrame) -
     the stock chart:contentReference[oaicite:9]{index=9} for visual pattern analysis.
     """
     # --- Example outline (implementation details may vary) ---
+    price_df = price_df.copy()
+    if "date" in price_df.columns:
+        price_df["date"] = pd.to_datetime(price_df["date"])
+    price_df["close"] = pd.to_numeric(price_df["close"], errors="coerce")
+    price_df = price_df.sort_values("date")
+
     fig = go.Figure()
     # Add the stock price line
     fig.add_trace(go.Scatter(
-        x=price_df['date'], y=price_df['close'], 
-        mode='lines', name='Close Price',
+        x=price_df['date'], y=price_df['close'],
+        mode='lines', name='Price',
         line=dict(color='black')
     ))
     # Loop over each officer category and trade type to add markers
@@ -75,25 +83,42 @@ def plot_insider_price_chart(price_df: pd.DataFrame, insider_df: pd.DataFrame) -
             df_tt = df_cat[df_cat['trade_type'] == trade_type]
             if df_tt.empty:
                 continue
+            size_scale = df_tt['shares'].max() if df_tt['shares'].max() > 0 else 1
             fig.add_trace(go.Scatter(
-                x=df_tt['transaction_date'], 
-                y=[price_df.loc[price_df['date']==d, 'close'].values[0] 
-                   if d in set(price_df['date']) else None 
+                x=df_tt['transaction_date'],
+                y=[price_df.loc[price_df['date'] == d, 'close'].values[0]
+                   if d in set(price_df['date']) else None
                    for d in df_tt['transaction_date']],
                 mode='markers',
                 name=f"{category} {trade_type}",
                 marker=dict(
-                    symbol='triangle-up' if trade_type=='Buy' else 'triangle-down',
+                    symbol='triangle-up' if trade_type == 'Buy' else 'triangle-down',
                     color=color,
-                    size=df_tt['shares'] / df_tt['shares'].max() * 20 + 5  # scale size
+                    size=df_tt['shares'] / size_scale * 20 + 5
                 ),
+                customdata=df_tt['shares'],
                 hovertemplate=(
-                    f"{category} {trade_type}<br>Date: {{x|%Y-%m-%d}}<br>"
-                    f"Shares: {{marker.size:.0f}}"
+                    f"<b>{category} {trade_type}</b><br>Date: %{{x|%Y-%m-%d}}<br>"
+                    "Price: %{y:.2f}<br>Shares: %{customdata:,.0f}<extra></extra>"
                 )
             ))
-    fig.update_layout(title="Stock Price with Insider Trades",
-                      xaxis_title="Date", yaxis_title="Price")
+    price_min = price_df["close"].min()
+    price_max = price_df["close"].max()
+    padding = (price_max - price_min) * 0.08 if pd.notnull(price_min) and pd.notnull(price_max) else 0
+
+    fig.update_layout(
+        title="Insider trades on price",
+        xaxis_title="Date",
+        yaxis_title="Price (USD)",
+        template="plotly_white",
+        width=DEFAULT_PLOTLY_WIDTH,
+        height=DEFAULT_PLOTLY_HEIGHT,
+        margin=dict(l=50, r=50, t=80, b=50),
+        font=dict(size=14),
+        showlegend=True
+    )
+    if pd.notnull(price_min) and pd.notnull(price_max):
+        fig.update_yaxes(range=[price_min - padding, price_max + padding])
     return fig
 
 
@@ -114,21 +139,32 @@ def plot_insider_transactions_over_time(insider_df: pd.DataFrame) -> go.Figure:
         df_tt = insider_df[insider_df['trade_type'] == trade_type]
         if df_tt.empty:
             continue
+        size_scale = df_tt['shares'].max() if df_tt['shares'].max() > 0 else 1
         fig.add_trace(go.Scatter(
-            x=df_tt['transaction_date'], 
-            y=df_tt['share_price'], 
+            x=df_tt['transaction_date'],
+            y=df_tt['share_price'],
             mode='markers',
             name=trade_type,
             marker=dict(
                 color=color,
-                size=df_tt['shares'] / df_tt['shares'].max() * 20 + 5  # scale by share count
+                size=df_tt['shares'] / size_scale * 20 + 5
             ),
+            customdata=df_tt['shares'],
             hovertemplate="Date: %{x|%Y-%m-%d}<br>"
                           "Price: %{y:.2f}<br>"
-                          "Shares: %{marker.size:.0f}<br>"
-                          "Category: %{text}",
+                          "Shares: %{customdata:,.0f}<br>"
+                          "Role: %{text}<extra></extra>",
             text=df_tt['officer_category']
         ))
-    fig.update_layout(title="Insider Transaction Prices Over Time",
-                      xaxis_title="Date", yaxis_title="Trade Price")
+    fig.update_layout(
+        title="Insider trade prices",
+        xaxis_title="Date",
+        yaxis_title="Trade price (USD)",
+        template="plotly_white",
+        width=DEFAULT_PLOTLY_WIDTH,
+        height=DEFAULT_PLOTLY_HEIGHT,
+        margin=dict(l=50, r=50, t=80, b=50),
+        font=dict(size=14),
+        showlegend=True
+    )
     return fig
