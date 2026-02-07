@@ -212,20 +212,20 @@ def add_bollinger_bands_to_candlestick(data):
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
-    # Try to find columns for Bollinger Bands
-    bb_middle = (
-        [col for col in df.columns if 'bb_middle' in col][0]
-        if any('bb_middle' in col for col in df.columns) else None
-    )
-    bb_upper = (
-        [col for col in df.columns if 'bb_upper' in col][0]
-        if any('bb_upper' in col for col in df.columns) else None
-    )
-    bb_lower = (
-        [col for col in df.columns if 'bb_lower' in col][0]
-        if any('bb_lower' in col for col in df.columns) else None
-    )
+    # Try to find columns for Bollinger Bands (supports legacy bb_* and new bollinger_bands_* naming)
+    def _find_col(substrs):
+        for sub in substrs:
+            matches = [col for col in df.columns if sub in col]
+            if matches:
+                return matches[0]
+        return None
+
+    bb_middle = _find_col(["bb_middle", "bollinger_bands_middle"])
+    bb_upper = _find_col(["bb_upper", "bollinger_bands_upper"])
+    bb_lower = _find_col(["bb_lower", "bollinger_bands_lower"])
+
     if not (bb_middle and bb_upper and bb_lower):
+        # If Bollinger Band columns are missing, return the base candlestick chart
         return plot_candlestick_chart(df)
     fig = plot_candlestick_chart(df)
     x = df["date"] if "date" in df.columns else df.index

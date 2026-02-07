@@ -123,19 +123,6 @@ def build_price_panel(daily_timeseries: Records, start_date: str, end_date: str)
                 ),
             ], value="price"),
             dmc.AccordionItem([
-                dmc.AccordionControl("Moving Averages & Bands"),
-                dmc.AccordionPanel(
-                    dmc.Stack([
-                        dmc.Text("Candlestick with Moving Averages", fw=600, size="sm"),
-                        dcc.Graph(figure=fig_ma),
-                        dmc.Text("Candlestick with Bollinger Bands", fw=600, size="sm", mt=12),
-                        dcc.Graph(figure=fig_bb),
-                        dmc.Text("Candlestick with VWAP", fw=600, size="sm", mt=12),
-                        dcc.Graph(figure=fig_vwap),
-                    ], gap=10)
-                ),
-            ], value="trend"),
-            dmc.AccordionItem([
                 dmc.AccordionControl("Momentum"),
                 dmc.AccordionPanel(
                     dmc.Stack([
@@ -148,6 +135,19 @@ def build_price_panel(daily_timeseries: Records, start_date: str, end_date: str)
                     ], gap=10)
                 ),
             ], value="momentum"),
+            dmc.AccordionItem([
+                dmc.AccordionControl("Moving Averages & Bands"),
+                dmc.AccordionPanel(
+                    dmc.Stack([
+                        dmc.Text("Candlestick with Moving Averages", fw=600, size="sm"),
+                        dcc.Graph(figure=fig_ma),
+                        dmc.Text("Candlestick with Bollinger Bands", fw=600, size="sm", mt=12),
+                        dcc.Graph(figure=fig_bb),
+                        dmc.Text("Candlestick with VWAP", fw=600, size="sm", mt=12),
+                        dcc.Graph(figure=fig_vwap),
+                    ], gap=10)
+                ),
+            ], value="trend"),
             dmc.AccordionItem([
                 dmc.AccordionControl("Volume & Trend Strength"),
                 dmc.AccordionPanel(
