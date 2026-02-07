@@ -12,13 +12,11 @@ import dash_mantine_components as dmc
 from dash import dcc
 import plotly.graph_objects as go
 
+from infrastructure.ui.dash.ids import Ids
 from infrastructure.ui.dash.app_util import get_last_6_months_range, records_to_df, guard_store, filter_by_date
 from infrastructure.ui.dash.plots.company_fundamentals_plots import plot_company_fundamentals_table
 from infrastructure.ui.dash.plots.daily_timeseries_plots import (
-    plot_candlestick_chart,
-    add_moving_averages_to_candlestick,
-    add_bollinger_bands_to_candlestick,
-    plot_candlestick_with_vwap,
+    plot_candlestick_with_overlays,
     plot_rsi,
     plot_macd,
     plot_stochastic,
@@ -94,14 +92,14 @@ def build_price_panel(daily_timeseries: Records, start_date: str, end_date: str)
 
     selected_timeseries = filter_by_date(daily_timeseries_df, start_dt, end_dt, "date")
 
-    fig = plot_candlestick_chart(selected_timeseries)
+    overlay_defaults = ["ma"]
+    fig = plot_candlestick_with_overlays(
+        selected_timeseries,
+        show_ma="ma" in overlay_defaults,
+        show_bb="bb" in overlay_defaults,
+        show_vwap="vwap" in overlay_defaults,
+    )
     fig.update_layout(xaxis_range=[start_dt, end_dt])
-    fig_ma = add_moving_averages_to_candlestick(selected_timeseries)
-    fig_ma.update_layout(xaxis_range=[start_dt, end_dt])
-    fig_bb = add_bollinger_bands_to_candlestick(selected_timeseries)
-    fig_bb.update_layout(xaxis_range=[start_dt, end_dt])
-    fig_vwap = plot_candlestick_with_vwap(selected_timeseries)
-    fig_vwap.update_layout(xaxis_range=[start_dt, end_dt])
     fig_rsi = plot_rsi(selected_timeseries)
     fig_rsi.update_layout(xaxis_range=[start_dt, end_dt])
     fig_macd = plot_macd(selected_timeseries)
@@ -111,14 +109,26 @@ def build_price_panel(daily_timeseries: Records, start_date: str, end_date: str)
 
     return dmc.Accordion(
         multiple=True,
-        value=["price", "trend"],
+        value=["price", "momentum"],
         children=[
             dmc.AccordionItem([
                 dmc.AccordionControl("Price"),
                 dmc.AccordionPanel(
                     dmc.Stack([
-                        dmc.Text("Candlestick Chart", fw=600, size="sm"),
-                        dcc.Graph(figure=fig),
+                        dmc.Group([
+                            dmc.Text("Candlestick Chart", fw=600, size="sm"),
+                            dmc.CheckboxGroup(
+                                id=Ids.PRICE_OVERLAY_TOGGLE,
+                                value=overlay_defaults,
+                                size="sm",
+                                children=[
+                                    dmc.Checkbox(label="Moving averages", value="ma"),
+                                    dmc.Checkbox(label="Bollinger Bands", value="bb"),
+                                    dmc.Checkbox(label="VWAP", value="vwap"),
+                                ],
+                            ),
+                        ], justify="space-between", align="center", wrap="wrap"),
+                        dcc.Graph(id=Ids.PRICE_CHART, figure=fig, config={"displayModeBar": True}),
                     ], gap=8)
                 ),
             ], value="price"),
@@ -135,19 +145,6 @@ def build_price_panel(daily_timeseries: Records, start_date: str, end_date: str)
                     ], gap=10)
                 ),
             ], value="momentum"),
-            dmc.AccordionItem([
-                dmc.AccordionControl("Moving Averages & Bands"),
-                dmc.AccordionPanel(
-                    dmc.Stack([
-                        dmc.Text("Candlestick with Moving Averages", fw=600, size="sm"),
-                        dcc.Graph(figure=fig_ma),
-                        dmc.Text("Candlestick with Bollinger Bands", fw=600, size="sm", mt=12),
-                        dcc.Graph(figure=fig_bb),
-                        dmc.Text("Candlestick with VWAP", fw=600, size="sm", mt=12),
-                        dcc.Graph(figure=fig_vwap),
-                    ], gap=10)
-                ),
-            ], value="trend"),
             dmc.AccordionItem([
                 dmc.AccordionControl("Volume & Trend Strength"),
                 dmc.AccordionPanel(

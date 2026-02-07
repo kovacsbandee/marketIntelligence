@@ -13,13 +13,14 @@ Notes on guards & filtering:
 
 import dash
 import pandas as pd
+from typing import Any
 from dash import Output, Input, State, no_update
 import dash_mantine_components as dmc
 from dash.development.base_component import Component
 
 from infrastructure.ui.dash.data_service import load_symbol_data
 
-from infrastructure.ui.dash.app_util import empty_load, Records, records_to_df
+from infrastructure.ui.dash.app_util import empty_load, Records, records_to_df, get_last_6_months_range, filter_by_date
 from infrastructure.ui.dash.ids import Ids, Tabs
 from infrastructure.ui.dash.panel_builders import (
     build_balance_sheet_panel,
@@ -30,6 +31,7 @@ from infrastructure.ui.dash.panel_builders import (
     build_insider_panel,
     build_price_panel,
 )
+from infrastructure.ui.dash.plots.daily_timeseries_plots import plot_candlestick_with_overlays
 
 def register_callbacks(app: dash.Dash) -> None:
 
@@ -144,6 +146,55 @@ def register_callbacks(app: dash.Dash) -> None:
             return build_price_panel(daily_timeseries, start_date, end_date)
         except Exception as e:
             return dmc.Text(f"Error generating plot: {e}", c="red"), False
+
+    @app.callback(
+        Output(Ids.PRICE_CHART, "figure"),
+        Input(Ids.MAIN_TABS, "value"),
+        Input(Ids.START_DATE_PICKER, "value"),
+        Input(Ids.END_DATE_PICKER, "value"),
+        Input(Ids.PRICE_STORE, "data"),
+        Input(Ids.PRICE_OVERLAY_TOGGLE, "value"),
+        prevent_initial_call=True
+    )
+    def update_price_chart_overlays(
+        tab: str,
+        start_date: str,
+        end_date: str,
+        daily_timeseries: Records,
+        overlays: list[str] | None,
+    ) -> Any:
+        """Toggle overlays on the primary price chart without removing other panels."""
+        if tab != Tabs.PRICE_INDICATOR:
+            return no_update
+
+        overlays = overlays or []
+        if not daily_timeseries:
+            return {"data": [], "layout": {"title": "No price data loaded."}}
+
+        df = records_to_df(daily_timeseries, table="daily_timeseries")
+        if df.empty:
+            return {"data": [], "layout": {"title": "No price data loaded."}}
+
+        if not start_date or not end_date:
+            start_date, end_date = get_last_6_months_range(df)
+
+        start_dt = pd.to_datetime(start_date)
+        end_dt = pd.to_datetime(end_date)
+        if start_dt > end_dt:
+            return {"data": [], "layout": {"title": "Start date must be on or before end date."}}
+
+        selected_timeseries = filter_by_date(df, start_dt, end_dt, "date")
+        if selected_timeseries.empty:
+            return {"data": [], "layout": {"title": "No price data in selected date range."}}
+
+        fig = plot_candlestick_with_overlays(
+            selected_timeseries,
+            show_ma="ma" in overlays,
+            show_bb="bb" in overlays,
+            show_vwap="vwap" in overlays,
+        )
+        fig.update_layout(xaxis_range=[start_dt, end_dt])
+        return fig
 
     @app.callback(
         Output(Ids.EARNINGS_CONTENT, "children"),

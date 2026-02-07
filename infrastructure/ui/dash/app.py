@@ -16,7 +16,8 @@ from infrastructure.ui.dash.components import tab_panel
 
 app = dash.Dash(
     __name__,
-    external_stylesheets=["https://unpkg.com/@mantine/ds@latest/styles.css"]
+    external_stylesheets=["https://unpkg.com/@mantine/ds@latest/styles.css"],
+    suppress_callback_exceptions=True,
 )
 
 # --- Mantine Default Theme ---
@@ -53,6 +54,7 @@ app.layout = dmc.MantineProvider(
                                                     dmc.TextInput(
                                                         id=Ids.SYMBOL_INPUT,
                                                         placeholder="Enter symbol (e.g. MSFT)",
+                                                        value="DELL",
                                                         debounce=True,
                                                         style={"width": 220},
                                                         withAsterisk=True,

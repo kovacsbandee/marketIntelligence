@@ -146,6 +146,109 @@ def plot_candlestick_chart(data):
     # For overlays: future indicators can be added as additional traces to row=1, col=1
     return fig
 
+
+def plot_candlestick_with_overlays(data, show_ma: bool = True, show_bb: bool = True, show_vwap: bool = True):
+    """
+    Plot a candlestick chart and optionally overlay moving averages, Bollinger Bands, and VWAP on the price panel.
+
+    Args:
+        data (pd.DataFrame): OHLCV dataframe (expects open/high/low/close and optional volume/date columns).
+        show_ma (bool): Whether to overlay all moving average columns (contains 'sma').
+        show_bb (bool): Whether to overlay Bollinger Band columns (upper/middle/lower).
+        show_vwap (bool): Whether to overlay the first VWAP column found.
+
+    Returns:
+        go.Figure: Candlestick chart with requested overlays added to row=1, col=1.
+    """
+    if not isinstance(data, pd.DataFrame):
+        raise ValueError("Input data must be a pandas DataFrame.")
+
+    df = data.copy()
+    fig = plot_candlestick_chart(df)
+    x = df["date"] if "date" in df.columns else df.index
+
+    # Moving averages (produced by Symbol via add_indicators_to_price_data: sma_win_len_<window>)
+    if show_ma:
+        sma_cols = [col for col in df.columns if col.lower().startswith("sma_win_len_")]
+        if sma_cols:
+            color_cycle = qualitative.Plotly + qualitative.D3 + qualitative.Set1 + qualitative.Set2
+            for i, col in enumerate(sma_cols):
+                fig.add_trace(
+                    go.Scatter(
+                        x=x,
+                        y=df[col],
+                        mode="lines",
+                        name=col.replace("_", " ").upper(),
+                        line=dict(color=color_cycle[i % len(color_cycle)], width=1.6),
+                        hovertemplate=f"<b>{col}</b><br>Date: %{{x|%Y-%m-%d}}<br>Value: %{{y:.2f}}<extra></extra>",
+                    ),
+                    row=1,
+                    col=1,
+                )
+
+    # Bollinger Bands (default names from indicator calc)
+    if show_bb:
+        bb_middle = next((c for c in df.columns if c.startswith("bollinger_bands_middle")), None)
+        bb_upper = next((c for c in df.columns if c.startswith("bollinger_bands_upper")), None)
+        bb_lower = next((c for c in df.columns if c.startswith("bollinger_bands_lower")), None)
+
+        if bb_middle and bb_upper and bb_lower:
+            fig.add_trace(
+                go.Scatter(
+                    x=x,
+                    y=df[bb_upper],
+                    mode="lines",
+                    name="BB Upper",
+                    line=dict(color="#636EFA", width=1, dash="dot"),
+                    hovertemplate="<b>BB Upper</b><br>Date: %{x|%Y-%m-%d}<br>Value: %{y:.2f}<extra></extra>",
+                ),
+                row=1,
+                col=1,
+            )
+            fig.add_trace(
+                go.Scatter(
+                    x=x,
+                    y=df[bb_middle],
+                    mode="lines",
+                    name="BB Middle",
+                    line=dict(color="#00CC96", width=1, dash="dash"),
+                    hovertemplate="<b>BB Middle</b><br>Date: %{x|%Y-%m-%d}<br>Value: %{y:.2f}<extra></extra>",
+                ),
+                row=1,
+                col=1,
+            )
+            fig.add_trace(
+                go.Scatter(
+                    x=x,
+                    y=df[bb_lower],
+                    mode="lines",
+                    name="BB Lower",
+                    line=dict(color="#EF553B", width=1, dash="dot"),
+                    hovertemplate="<b>BB Lower</b><br>Date: %{x|%Y-%m-%d}<br>Value: %{y:.2f}<extra></extra>",
+                ),
+                row=1,
+                col=1,
+            )
+
+    # VWAP
+    if show_vwap:
+        vwap_col = "vwap" if "vwap" in df.columns else None
+        if vwap_col:
+            fig.add_trace(
+                go.Scatter(
+                    x=x,
+                    y=df[vwap_col],
+                    mode="lines",
+                    name="VWAP",
+                    line=dict(color="purple", width=2, dash="solid"),
+                    hovertemplate="<b>VWAP</b><br>Date: %{x|%Y-%m-%d}<br>VWAP: %{y:.2f}<extra></extra>",
+                ),
+                row=1,
+                col=1,
+            )
+
+    return fig
+
 def add_moving_averages_to_candlestick(data):
     """
     Plots a candlestick chart with overlaid moving average lines (e.g. 50-day and 200-day SMA).
@@ -206,23 +309,14 @@ def add_moving_averages_to_candlestick(data):
     return fig
 
 def add_bollinger_bands_to_candlestick(data):
-    """
-    Plots a candlestick chart with overlaid Bollinger Bands (upper, middle, lower) using existing columns.
-    """
+    """Plots a candlestick chart with overlaid Bollinger Bands (upper, middle, lower) using Symbol-standard columns."""
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
-    # Try to find columns for Bollinger Bands (supports legacy bb_* and new bollinger_bands_* naming)
-    def _find_col(substrs):
-        for sub in substrs:
-            matches = [col for col in df.columns if sub in col]
-            if matches:
-                return matches[0]
-        return None
 
-    bb_middle = _find_col(["bb_middle", "bollinger_bands_middle"])
-    bb_upper = _find_col(["bb_upper", "bollinger_bands_upper"])
-    bb_lower = _find_col(["bb_lower", "bollinger_bands_lower"])
+    bb_middle = next((c for c in df.columns if c.startswith("bollinger_bands_middle")), None)
+    bb_upper = next((c for c in df.columns if c.startswith("bollinger_bands_upper")), None)
+    bb_lower = next((c for c in df.columns if c.startswith("bollinger_bands_lower")), None)
 
     if not (bb_middle and bb_upper and bb_lower):
         # If Bollinger Band columns are missing, return the base candlestick chart
@@ -338,10 +432,12 @@ def plot_rsi(data):
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
-    # Try to find RSI column (case-insensitive)
-    rsi_cols = [col for col in df.columns if 'rsi' in col.lower()]
+    # Try to find RSI column (Symbol adds rsi_win_len_<window>)
+    rsi_cols = [col for col in df.columns if col.startswith('rsi_win_len_')]
     if not rsi_cols:
-        raise ValueError("No RSI column found in input data. Please compute RSI before plotting.")
+        fig = go.Figure()
+        fig.update_layout(title="RSI not available for this dataset.")
+        return fig
     rsi_col = rsi_cols[0]
     x = df['date'] if 'date' in df.columns else df.index
     fig = go.Figure()
@@ -424,9 +520,9 @@ def plot_macd(data):
         data = pd.DataFrame(data)
     df = data.copy()
 
-    macd_line_col = next((col for col in df.columns if 'macd' in col.lower() and 'hist' not in col.lower() and 'signal' not in col.lower()), None)
-    signal_line_col = next((col for col in df.columns if 'macd_signal' in col.lower() or 'signal' in col.lower()), None)
-    hist_col = next((col for col in df.columns if 'macd_hist' in col.lower() or 'hist' in col.lower()), None)
+    macd_line_col = next((col for col in df.columns if col.startswith('macd_f_')), None)
+    signal_line_col = next((col for col in df.columns if col.startswith('macd_signal_')), None)
+    hist_col = next((col for col in df.columns if col.startswith('macd_hist_')), None)
     if not (macd_line_col and signal_line_col and hist_col):
         return go.Figure()
     x = df['date'] if 'date' in df.columns else df.index
@@ -515,9 +611,9 @@ def plot_stochastic(data):
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
-    # Only use precomputed columns
-    k_col = next((col for col in df.columns if '%k' in col.lower()), None)
-    d_col = next((col for col in df.columns if '%d' in col.lower()), None)
+    # Only use precomputed columns from Symbol indicator calc
+    k_col = next((col for col in df.columns if col.startswith('stochastic_oscillator_%K')), None)
+    d_col = next((col for col in df.columns if col.startswith('stochastic_oscillator_%D')), None)
     if not (k_col and d_col):
         return go.Figure()
     x = df['date'] if 'date' in df.columns else df.index
@@ -606,7 +702,7 @@ def plot_obv(data):
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
-    obv_col = next((col for col in df.columns if 'obv' in col.lower()), None)
+    obv_col = 'obv' if 'obv' in df.columns else None
     if not obv_col:
         return go.Figure()
     x = df['date'] if 'date' in df.columns else df.index
@@ -666,9 +762,9 @@ def plot_adx(data):
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
     df = data.copy()
-    adx_col = next((col for col in df.columns if 'adx' in col.lower()), None)
-    plus_di_col = next((col for col in df.columns if '+di' in col.lower() or 'plus_di' in col.lower()), None)
-    minus_di_col = next((col for col in df.columns if '-di' in col.lower() or 'minus_di' in col.lower()), None)
+    adx_col = next((col for col in df.columns if col.startswith('adx_win_')), None)
+    plus_di_col = next((col for col in df.columns if col.startswith('plus_di_win_')), None)
+    minus_di_col = next((col for col in df.columns if col.startswith('minus_di_win_')), None)
     if not (adx_col and plus_di_col and minus_di_col):
         return go.Figure()
     x = df['date'] if 'date' in df.columns else df.index
