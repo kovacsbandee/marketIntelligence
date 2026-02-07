@@ -6,6 +6,27 @@ import dash_mantine_components as dmc
 
 from infrastructure.ui.dash.plot_utils import _find_row_by_date, _flatten_group, _auto_load_table_descriptions, DEFAULT_PLOTLY_WIDTH, DEFAULT_PLOTLY_HEIGHT
 
+BALANCE_LABELS = {
+    "total_assets": "Total assets (everything the company owns)",
+    "total_liabilities": "Total liabilities (everything the company owes)",
+    "total_shareholder_equity": "Shareholder equity (assets minus liabilities)",
+    "total_current_assets": "Current assets (cash + near‑term items)",
+    "total_current_liabilities": "Current liabilities (due within 1 year)",
+    "cash_and_cash_equivalents": "Cash and cash equivalents",
+    "property_plant_equipment": "Property, plant & equipment",
+    "inventory": "Inventory",
+    "current_net_receivables": "Accounts receivable (money owed to the company)",
+    "goodwill": "Goodwill (intangible value from acquisitions)",
+    "long_term_debt": "Long‑term debt",
+    "Assets": "Assets (things the company owns)",
+    "Liabilities": "Liabilities (things the company owes)",
+    "Current Assets": "Current assets (turn into cash within 1 year)",
+    "Non-Current Assets": "Long‑term assets (used over many years)",
+    "Current Liabilities": "Current liabilities (due within 1 year)",
+    "Non-Current Liabilities": "Long‑term liabilities (due after 1 year)",
+    "Shareholder Equity": "Shareholder equity (assets minus liabilities)",
+}
+
 def plot_balance_sheet_time_series(
     balance_df: pd.DataFrame,
     columns: list = None,
@@ -49,20 +70,21 @@ def plot_balance_sheet_time_series(
     for col in columns:
         y = pd.to_numeric(balance_df[col], errors="coerce") if col in balance_df.columns else pd.Series([float('nan')] * len(x))
         # Plot empty line if all NaN
+        label = BALANCE_LABELS.get(col, descriptions.get(col, col))
         fig.add_trace(
             go.Scatter(
                 x=x,
                 y=y,
                 mode="lines+markers",
-                name=descriptions.get(col, col),
-                hovertemplate=f"<b>{descriptions.get(col, col)}</b><br>Date: %{x}<br>Value: %{y}<extra></extra>"
+                name=label,
+                hovertemplate=f"<b>{label}</b><br>Date: %{{x|%Y-%m-%d}}<br>Value: %{{y:,.0f}}<extra></extra>"
             )
         )
 
     fig.update_layout(
-        title="Balance Sheet Time Series",
-        xaxis_title="Fiscal Date Ending",
-        yaxis_title="Value",
+        title="Balance sheet metrics over time",
+        xaxis_title="Fiscal quarter end date",
+        yaxis_title="Amount (USD)",
         legend_title="Metric",
         hovermode="x unified",
         template="plotly_white",
@@ -123,17 +145,17 @@ def plot_balance_sheet_stacked_area(balance_df: pd.DataFrame, stack_groups: dict
                         y=y,
                         mode="lines",
                         stackgroup="one",
-                        name=parent_name + descriptions.get(col, col),
+                        name=parent_name + BALANCE_LABELS.get(col, descriptions.get(col, col)),
                         line=dict(width=0.5, color=color_list[color_idx % len(color_list)]),
-                        hovertemplate=f"<b>{descriptions.get(col, col)}</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+                        hovertemplate=f"<b>{BALANCE_LABELS.get(col, descriptions.get(col, col))}</b><br>Date: %{{x|%Y-%m-%d}}<br>Value: %{{y:,.0f}}<extra></extra>"
                     )
                 )
                 color_idx += 1
     add_area_traces(stack_groups)
     fig.update_layout(
-        title="Balance Sheet Stacked Area",
-        xaxis_title="Fiscal Date Ending",
-        yaxis_title="Value",
+        title="Balance sheet composition over time",
+        xaxis_title="Fiscal quarter end date",
+        yaxis_title="Amount (USD)",
         legend_title="Component",
         hovermode="x unified",
         template="plotly_white",
@@ -179,21 +201,22 @@ def plot_balance_sheet_bar(balance_df: pd.DataFrame, group_columns: dict = None,
     for group_name, group in group_columns.items():
         cols = _flatten_group(group)
         y = balance_df[cols].sum(axis=1, numeric_only=True) if cols else pd.Series([float('nan')] * len(x))
+        label = BALANCE_LABELS.get(group_name, descriptions.get(group_name, group_name))
         fig.add_trace(
             go.Bar(
                 x=x,
                 y=y,
-                name=descriptions.get(group_name, group_name),
+                name=label,
                 marker_color=color_list[color_idx % len(color_list)],
-                hovertemplate=f"<b>{descriptions.get(group_name, group_name)}</b><br>Date: %{{x}}<br>Value: %{{y:,.0f}}<extra></extra>"
+                hovertemplate=f"<b>{label}</b><br>Date: %{{x|%Y-%m-%d}}<br>Value: %{{y:,.0f}}<extra></extra>"
             )
         )
         color_idx += 1
     fig.update_layout(
         barmode="group",
-        title="Balance Sheet Bar Chart",
-        xaxis_title="Fiscal Date Ending",
-        yaxis_title="Value",
+        title="Balance sheet categories by quarter",
+        xaxis_title="Fiscal quarter end date",
+        yaxis_title="Amount (USD)",
         legend_title="Group",
         hovermode="x unified",
         template="plotly_white",
@@ -248,15 +271,15 @@ def plot_balance_sheet_pie(balance_df: pd.DataFrame, date: str, columns: list = 
         raise ValueError("DataFrame must contain 'fiscal_date_ending' column.")
     row = _find_row_by_date(balance_df, date)
     values = [row[col] if col in row else 0 for col in columns]
-    labels = [descriptions.get(col, col) for col in columns]
+    labels = [BALANCE_LABELS.get(col, descriptions.get(col, col)) for col in columns]
     fig = go.Figure(go.Pie(
         labels=labels,
         values=values,
         hole=0.4,
-        hovertemplate="<b>%{label}</b><br>Value: %{value:,.0f}<extra></extra>"
+        hovertemplate="<b>%{label}</b><br>%{value:,.0f}<extra></extra>"
     ))
     fig.update_layout(
-        title=f"Balance Sheet Breakdown ({row['fiscal_date_ending'].date()})",
+        title=f"Balance sheet snapshot ({row['fiscal_date_ending'].date()})",
         template="plotly_white",
         width=DEFAULT_PLOTLY_WIDTH,
         height=DEFAULT_PLOTLY_HEIGHT,
@@ -308,10 +331,11 @@ def render_balance_sheet_metric_cards(balance_df: pd.DataFrame, date: str, metri
     for metric in metrics:
         value = row[metric] if metric in row else None
         formatted = f"${value:,.0f}" if value is not None and pd.notnull(value) else "N/A"
+        label = BALANCE_LABELS.get(metric, descriptions.get(metric, metric))
         cards.append(
             dmc.Paper(
                 [
-                    dmc.Text(descriptions.get(metric, metric), size="sm", c="dimmed"),
+                    dmc.Text(label, size="sm", c="dimmed"),
                     dmc.Text(formatted, size="xl", fw=700)
                 ],
                 p="md",

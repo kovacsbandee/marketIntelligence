@@ -1,2 +1,126 @@
-2026-02-07 13:38:55,690 - dash.dash - INFO - dash.py:2340 - Dash is running on http://127.0.0.1:8050/
+2026-02-07 14:58:45,424 - dash.dash - INFO - dash.py:2340 - Dash is running on http://127.0.0.1:8050/
 
+2026-02-07 14:58:50,950 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 1 filtered rows from company_fundamentals
+2026-02-07 14:58:50,974 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 20 filtered rows from balance_sheet_annual
+2026-02-07 14:58:50,978 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'balance_sheet_annual' with 20 rows.
+2026-02-07 14:58:50,986 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 20 filtered rows from cash_flow_annual
+2026-02-07 14:58:50,991 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'cash_flow_annual' with 20 rows.
+2026-02-07 14:58:50,995 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 12 filtered rows from earnings_annual
+2026-02-07 14:58:50,997 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'earnings_annual' with 12 rows.
+2026-02-07 14:58:51,003 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 20 filtered rows from income_statement_annual
+2026-02-07 14:58:51,006 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'income_statement_annual' with 20 rows.
+2026-02-07 14:58:51,008 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 1 filtered rows from company_fundamentals
+2026-02-07 14:58:51,011 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'company_fundamentals' with 1 rows.
+2026-02-07 14:58:51,046 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 1791 filtered rows from daily_timeseries
+2026-02-07 14:58:51,069 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'daily_timeseries' with 1791 rows.
+2026-02-07 14:58:51,074 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 17 filtered rows from dividends
+2026-02-07 14:58:51,080 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'dividends' with 17 rows.
+2026-02-07 14:58:51,093 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 606 filtered rows from insider_transactions
+2026-02-07 14:58:51,104 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'insider_transactions' with 606 rows.
+2026-02-07 14:58:51,112 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 51 filtered rows from balance_sheet_quarterly
+2026-02-07 14:58:51,116 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'balance_sheet_quarterly' with 51 rows.
+2026-02-07 14:58:51,125 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 51 filtered rows from cash_flow_quarterly
+2026-02-07 14:58:51,129 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'cash_flow_quarterly' with 51 rows.
+2026-02-07 14:58:51,136 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 37 filtered rows from earnings_quarterly
+2026-02-07 14:58:51,138 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'earnings_quarterly' with 37 rows.
+2026-02-07 14:58:51,148 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 51 filtered rows from income_statement_quarterly
+2026-02-07 14:58:51,151 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'income_statement_quarterly' with 51 rows.
+2026-02-07 14:58:51,155 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 1 filtered rows from stock_splits
+2026-02-07 14:58:51,156 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'stock_splits' with 1 rows.
+2026-02-07 14:58:51,176 - db_load_from_db_runner - INFO - symbol.py:209 - Adjusted daily_timeseries for splits.
+2026-02-07 14:58:51,270 - db_load_from_db_runner - INFO - symbol.py:347 - All price indicators added to daily_timeseries.
+2026-02-07 14:58:51,274 - db_load_from_db_runner - INFO - symbol.py:124 - Latest date in DB: 2026-02-06 00:00:00, Last workday: 2026-02-06 00:00:00
+2026-02-07 14:58:51,274 - db_load_from_db_runner - INFO - symbol.py:282 - Data loaded for symbol 'DELL'.
+2026-02-07 14:59:35,225 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 1 filtered rows from company_fundamentals
+2026-02-07 14:59:35,239 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 20 filtered rows from balance_sheet_annual
+2026-02-07 14:59:35,243 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'balance_sheet_annual' with 20 rows.
+2026-02-07 14:59:35,251 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 20 filtered rows from cash_flow_annual
+2026-02-07 14:59:35,254 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'cash_flow_annual' with 20 rows.
+2026-02-07 14:59:35,258 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 31 filtered rows from earnings_annual
+2026-02-07 14:59:35,259 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'earnings_annual' with 31 rows.
+2026-02-07 14:59:35,266 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 20 filtered rows from income_statement_annual
+2026-02-07 14:59:35,269 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'income_statement_annual' with 20 rows.
+2026-02-07 14:59:35,271 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 1 filtered rows from company_fundamentals
+2026-02-07 14:59:35,275 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'company_fundamentals' with 1 rows.
+2026-02-07 14:59:35,558 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 6607 filtered rows from daily_timeseries
+2026-02-07 14:59:35,655 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'daily_timeseries' with 6607 rows.
+2026-02-07 14:59:35,660 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 89 filtered rows from dividends
+2026-02-07 14:59:35,665 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'dividends' with 89 rows.
+2026-02-07 14:59:35,675 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 385 filtered rows from insider_transactions
+2026-02-07 14:59:35,682 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'insider_transactions' with 385 rows.
+2026-02-07 14:59:35,688 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 82 filtered rows from balance_sheet_quarterly
+2026-02-07 14:59:35,694 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'balance_sheet_quarterly' with 82 rows.
+2026-02-07 14:59:35,700 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 82 filtered rows from cash_flow_quarterly
+2026-02-07 14:59:35,705 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'cash_flow_quarterly' with 82 rows.
+2026-02-07 14:59:35,715 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 120 filtered rows from earnings_quarterly
+2026-02-07 14:59:35,718 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'earnings_quarterly' with 120 rows.
+2026-02-07 14:59:35,725 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 82 filtered rows from income_statement_quarterly
+2026-02-07 14:59:35,729 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'income_statement_quarterly' with 82 rows.
+2026-02-07 14:59:35,734 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 2 filtered rows from stock_splits
+2026-02-07 14:59:35,736 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'stock_splits' with 2 rows.
+2026-02-07 14:59:35,751 - db_load_from_db_runner - INFO - symbol.py:209 - Adjusted daily_timeseries for splits.
+2026-02-07 14:59:35,955 - db_load_from_db_runner - INFO - symbol.py:347 - All price indicators added to daily_timeseries.
+2026-02-07 14:59:35,961 - db_load_from_db_runner - INFO - symbol.py:124 - Latest date in DB: 2026-02-06 00:00:00, Last workday: 2026-02-06 00:00:00
+2026-02-07 14:59:35,961 - db_load_from_db_runner - INFO - symbol.py:282 - Data loaded for symbol 'MSFT'.
+2026-02-07 14:59:46,069 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 1 filtered rows from company_fundamentals
+2026-02-07 14:59:46,091 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 20 filtered rows from balance_sheet_annual
+2026-02-07 14:59:46,095 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'balance_sheet_annual' with 20 rows.
+2026-02-07 14:59:46,103 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 20 filtered rows from cash_flow_annual
+2026-02-07 14:59:46,105 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'cash_flow_annual' with 20 rows.
+2026-02-07 14:59:46,109 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 31 filtered rows from earnings_annual
+2026-02-07 14:59:46,111 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'earnings_annual' with 31 rows.
+2026-02-07 14:59:46,116 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 20 filtered rows from income_statement_annual
+2026-02-07 14:59:46,119 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'income_statement_annual' with 20 rows.
+2026-02-07 14:59:46,121 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 1 filtered rows from company_fundamentals
+2026-02-07 14:59:46,125 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'company_fundamentals' with 1 rows.
+2026-02-07 14:59:46,231 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 6607 filtered rows from daily_timeseries
+2026-02-07 14:59:46,310 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'daily_timeseries' with 6607 rows.
+2026-02-07 14:59:46,315 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 89 filtered rows from dividends
+2026-02-07 14:59:46,320 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'dividends' with 89 rows.
+2026-02-07 14:59:46,327 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 385 filtered rows from insider_transactions
+2026-02-07 14:59:46,333 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'insider_transactions' with 385 rows.
+2026-02-07 14:59:46,339 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 82 filtered rows from balance_sheet_quarterly
+2026-02-07 14:59:46,343 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'balance_sheet_quarterly' with 82 rows.
+2026-02-07 14:59:46,350 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 82 filtered rows from cash_flow_quarterly
+2026-02-07 14:59:46,355 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'cash_flow_quarterly' with 82 rows.
+2026-02-07 14:59:46,360 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 120 filtered rows from earnings_quarterly
+2026-02-07 14:59:46,363 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'earnings_quarterly' with 120 rows.
+2026-02-07 14:59:46,371 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 82 filtered rows from income_statement_quarterly
+2026-02-07 14:59:46,375 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'income_statement_quarterly' with 82 rows.
+2026-02-07 14:59:46,379 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 2 filtered rows from stock_splits
+2026-02-07 14:59:46,380 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'stock_splits' with 2 rows.
+2026-02-07 14:59:46,396 - db_load_from_db_runner - INFO - symbol.py:209 - Adjusted daily_timeseries for splits.
+2026-02-07 14:59:46,604 - db_load_from_db_runner - INFO - symbol.py:347 - All price indicators added to daily_timeseries.
+2026-02-07 14:59:46,610 - db_load_from_db_runner - INFO - symbol.py:124 - Latest date in DB: 2026-02-06 00:00:00, Last workday: 2026-02-06 00:00:00
+2026-02-07 14:59:46,611 - db_load_from_db_runner - INFO - symbol.py:282 - Data loaded for symbol 'MSFT'.
+2026-02-07 15:00:06,402 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 1 filtered rows from company_fundamentals
+2026-02-07 15:00:06,413 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 20 filtered rows from balance_sheet_annual
+2026-02-07 15:00:06,417 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'balance_sheet_annual' with 20 rows.
+2026-02-07 15:00:06,425 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 20 filtered rows from cash_flow_annual
+2026-02-07 15:00:06,428 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'cash_flow_annual' with 20 rows.
+2026-02-07 15:00:06,431 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 12 filtered rows from earnings_annual
+2026-02-07 15:00:06,433 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'earnings_annual' with 12 rows.
+2026-02-07 15:00:06,439 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 20 filtered rows from income_statement_annual
+2026-02-07 15:00:06,442 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'income_statement_annual' with 20 rows.
+2026-02-07 15:00:06,444 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 1 filtered rows from company_fundamentals
+2026-02-07 15:00:06,447 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'company_fundamentals' with 1 rows.
+2026-02-07 15:00:06,483 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 1791 filtered rows from daily_timeseries
+2026-02-07 15:00:06,505 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'daily_timeseries' with 1791 rows.
+2026-02-07 15:00:06,509 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 17 filtered rows from dividends
+2026-02-07 15:00:06,513 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'dividends' with 17 rows.
+2026-02-07 15:00:06,525 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 606 filtered rows from insider_transactions
+2026-02-07 15:00:06,535 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'insider_transactions' with 606 rows.
+2026-02-07 15:00:06,541 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 51 filtered rows from balance_sheet_quarterly
+2026-02-07 15:00:06,544 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'balance_sheet_quarterly' with 51 rows.
+2026-02-07 15:00:06,552 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 51 filtered rows from cash_flow_quarterly
+2026-02-07 15:00:06,557 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'cash_flow_quarterly' with 51 rows.
+2026-02-07 15:00:06,561 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 37 filtered rows from earnings_quarterly
+2026-02-07 15:00:06,564 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'earnings_quarterly' with 37 rows.
+2026-02-07 15:00:06,572 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 51 filtered rows from income_statement_quarterly
+2026-02-07 15:00:06,576 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'income_statement_quarterly' with 51 rows.
+2026-02-07 15:00:06,580 - infrastructure.databases.company.postgre_manager.company_data_manager - INFO - company_data_manager.py:470 - Loaded 1 filtered rows from stock_splits
+2026-02-07 15:00:06,582 - db_load_from_db_runner - INFO - symbol.py:228 - Loaded table 'stock_splits' with 1 rows.
+2026-02-07 15:00:06,595 - db_load_from_db_runner - INFO - symbol.py:209 - Adjusted daily_timeseries for splits.
+2026-02-07 15:00:06,690 - db_load_from_db_runner - INFO - symbol.py:347 - All price indicators added to daily_timeseries.
+2026-02-07 15:00:06,694 - db_load_from_db_runner - INFO - symbol.py:124 - Latest date in DB: 2026-02-06 00:00:00, Last workday: 2026-02-06 00:00:00
+2026-02-07 15:00:06,695 - db_load_from_db_runner - INFO - symbol.py:282 - Data loaded for symbol 'DELL'.

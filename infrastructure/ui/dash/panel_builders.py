@@ -116,7 +116,7 @@ def build_price_panel(daily_timeseries: Records, start_date: str, end_date: str)
                 dmc.AccordionPanel(
                     dmc.Stack([
                         dmc.Group([
-                            dmc.Text("Candlestick Chart", fw=600, size="sm"),
+                            dmc.Text("", fw=600, size="sm"),
                             dmc.CheckboxGroup(
                                 id=Ids.PRICE_OVERLAY_TOGGLE,
                                 value=overlay_defaults,
