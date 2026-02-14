@@ -178,14 +178,20 @@ def plot_candlestick_with_overlays(data, show_ma: bool = True, show_bb: bool = T
     fig = plot_candlestick_chart(df)
     x = df["date"] if "date" in df.columns else df.index
 
-    # Moving averages (produced by Symbol via add_indicators_to_price_data: sma_win_len_<window>)
+    # Moving averages (produced by Symbol via add_indicators_to_price_data: sma_win_len_<window>, ema_win_len_<window>)
     if show_ma:
         sma_cols = [col for col in df.columns if col.lower().startswith("sma_win_len_")]
-        if sma_cols:
+        ema_cols = [col for col in df.columns if col.lower().startswith("ema_win_len_")]
+        ma_cols = sma_cols + ema_cols
+        if ma_cols:
             color_cycle = qualitative.Plotly + qualitative.D3 + qualitative.Set1 + qualitative.Set2
-            for i, col in enumerate(sma_cols):
-                window = col.split("sma_win_len_")[-1]
-                label = f"SMA {window}" if window else "SMA"
+            for i, col in enumerate(ma_cols):
+                if col.lower().startswith("sma_win_len_"):
+                    window = col.split("sma_win_len_")[-1]
+                    label = f"SMA {window}" if window else "SMA"
+                else:
+                    window = col.split("ema_win_len_")[-1]
+                    label = f"EMA {window}" if window else "EMA"
                 fig.add_trace(
                     go.Scatter(
                         x=x,

@@ -303,10 +303,15 @@ class QuantitativeAnalyst:
             f"{values}\n\n"
             f"Refer to the following article describing how to interpret this indicator:\n"
             f"{article}\n\n"
+            "I want you to focus on the recent trends from the last week and month, but you can consider the whole series.  "
+            "Look for patterns such as sustained increases or decreases, extreme values, or recent reversals.  "
+            "Consider how these patterns relate to the article's guidance on what constitutes underpriced or overpriced signals.\n\n"
             "Based on the values and the article, output a single continuous "
             "number between -1 and 1 representing how underpriced (-1) or "
             "overpriced (+1) the company appears according to this indicator. "
             "After the number, provide a brief explanation of your reasoning."
+            "Based on your analysis I want to be able to decide if this indicator is signaling a potential buying opportunity (close to -1), "
+            "a selling opportunity (close to +1), or if it's neutral (close to 0)."
         )
         self.rate_limiter.record_call()
         try:
