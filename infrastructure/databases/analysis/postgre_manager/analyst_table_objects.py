@@ -43,6 +43,7 @@ class AnalystQuantitativeBase(Base):
     bollinger_bands_used = Column(Integer, nullable=False, default=0)
     sma_used = Column(Integer, nullable=False, default=0)
     ema_used = Column(Integer, nullable=False, default=0)
+    adx_used = Column(Integer, nullable=False, default=0)
     analysis_run_timestamp = Column(BigInteger, nullable=True)
     analysis_run_datetime = Column(DateTime, nullable=True)
     warnings = Column(String, nullable=True)
@@ -80,6 +81,7 @@ class AnalystQuantitativeScore(Base):
     bollinger_bands = Column(Float, nullable=True)
     sma = Column(Float, nullable=True)
     ema = Column(Float, nullable=True)
+    adx = Column(Float, nullable=True)
 
 class AnalystQuantitativeExplanation(Base):
     """
@@ -110,6 +112,7 @@ class AnalystQuantitativeExplanation(Base):
     bollinger_bands = Column(String, nullable=True)
     sma = Column(String, nullable=True)
     ema = Column(String, nullable=True)
+    adx = Column(String, nullable=True)
 
 analyst_table_name_to_class = {
     "analyst_quantitative_base": AnalystQuantitativeBase,

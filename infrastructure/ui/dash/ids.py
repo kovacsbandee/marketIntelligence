@@ -16,6 +16,27 @@ class Ids:
     PRICE_OVERLAY_TOGGLE = "price-overlay-toggle"
     PRICE_CHART = "price-chart"
 
+    # Indicator charts
+    RSI_CHART = "rsi-chart"
+    MACD_CHART = "macd-chart"
+    STOCHASTIC_CHART = "stochastic-chart"
+    OBV_CHART = "obv-chart"
+    ADX_CHART = "adx-chart"
+
+    # Quantitative analysis
+    ANALYZE_BUTTON = "analyze-btn"
+    ANALYSIS_CLICKED_DATE = "analysis-clicked-date"
+    ANALYSIS_INTERVAL = "analysis-interval"
+    ANALYSIS_RUN_ID = "analysis-run-id"
+    AGGREGATE_SCORE_CARD = "aggregate-score-card"
+    ANALYSIS_SCORES_CONTAINER = "analysis-scores-container"
+    ANALYSIS_DATE_DISPLAY = "analysis-date-display"
+    # Per-indicator score card containers (keyed by indicator name)
+    SCORE_CARD_PREFIX = "score-card-"  # e.g. "score-card-rsi"
+
+    # All chart IDs that should get a vertical marker line
+    ALL_CHART_IDS = ["price-chart", "rsi-chart", "macd-chart", "stochastic-chart", "obv-chart", "adx-chart"]
+
     # Stores
     PRICE_STORE = "price-store"
     DIVIDENDS_STORE = "dividends-store"
@@ -26,6 +47,7 @@ class Ids:
     Q_INCOME_STORE = "q_income-store"
     CASHFLOW_STORE = "cashflow-store"
     INSIDER_STORE = "insider-transactions-store"
+    ANALYSIS_STORE = "analysis-store"
 
     # Content + loading overlays
     COMPANY_BASE_CONTENT = "company-base-content"
