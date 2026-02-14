@@ -74,7 +74,8 @@ ARTICLE_PATHS = {
     'stochastic_oscillator': PDF_PATH + 'What Is the Stochastic Oscillator and How Is It Used_.pdf',
     'bollinger_bands': PDF_PATH + 'Understanding Bollinger Bands_ A Key Technical Analysis Tool for Investors.pdf',
     'sma': PDF_PATH + 'Simple Moving Average (SMA) Explained_ Definition and Calculation Formula.pdf',
-    'ema': PDF_PATH + 'Exponential Moving Average (EMA)_ Definition, Formula, and Usage.pdf'
+    'ema': PDF_PATH + 'Exponential Moving Average (EMA)_ Definition, Formula, and Usage.pdf',
+    'adx': PDF_PATH + 'ADX Explained_ How to Measure and Trade Trend Strength.pdf'
 }
 
 @dataclass
@@ -231,13 +232,18 @@ class QuantitativeAnalyst:
     # ------------------------------------------------------------------
     # Data preparation
     # ------------------------------------------------------------------
-    def _get_last_year_data(self) -> pd.DataFrame:
+    def _get_last_year_data(self, cutoff_date: str | None = None) -> pd.DataFrame:
         """Return a slice of the ``daily_timeseries`` from the last year.
 
         The ``daily_timeseries`` DataFrame is expected to have a ``date``
         column convertible to datetime.  The slice includes all rows
-        where the ``date`` is within 365 days of the most recent
-        observation.
+        where the ``date`` is within 365 days of ``cutoff_date`` (or
+        the most recent observation when *cutoff_date* is ``None``).
+
+        Args:
+            cutoff_date: Optional end-date for the 1-year window
+                (ISO string or datetime).  When ``None`` the latest
+                date in the data is used.
         """
         df = getattr(self.symbol, "daily_timeseries", None)
         if df is None or df.empty:
@@ -249,7 +255,12 @@ class QuantitativeAnalyst:
             # If no explicit date column exists, use the index as a date
             data = data.reset_index().rename(columns={"index": "date"})
             data["date"] = pd.to_datetime(data["date"])
-        max_date = data["date"].max()
+        if cutoff_date is not None:
+            max_date = pd.to_datetime(cutoff_date)
+            # Only keep rows up to the cutoff date
+            data = data[data["date"] <= max_date]
+        else:
+            max_date = data["date"].max()
         cutoff = max_date - pd.Timedelta(days=365)
         return data[data["date"] >= cutoff]
 
@@ -292,23 +303,29 @@ class QuantitativeAnalyst:
             f"{values}\n\n"
             f"Refer to the following article describing how to interpret this indicator:\n"
             f"{article}\n\n"
+            "I want you to focus on the recent trends from the last week and month, but you can consider the whole series.  "
+            "Look for patterns such as sustained increases or decreases, extreme values, or recent reversals.  "
+            "Consider how these patterns relate to the article's guidance on what constitutes underpriced or overpriced signals.\n\n"
             "Based on the values and the article, output a single continuous "
             "number between -1 and 1 representing how underpriced (-1) or "
             "overpriced (+1) the company appears according to this indicator. "
             "After the number, provide a brief explanation of your reasoning."
+            "Based on your analysis I want to be able to decide if this indicator is signaling a potential buying opportunity (close to -1), "
+            "a selling opportunity (close to +1), or if it's neutral (close to 0)."
         )
         self.rate_limiter.record_call()
         try:
             # openai>=1.0.0 API: use client object
             chat_completion = self._client.chat.completions.create(
-                model="gpt-4.1-nano",
+                model="gpt-5",
                 messages=[
                     {"role": "system", "content": "You are a senior financial analyst, responsible for evaluating stock price indicators."},
                     {"role": "user", "content": prompt},
                 ],
-                temperature=0.3,
-                max_tokens=200,
+                # temperature=0.3,
+                # max_tokens=200,
             )
+            print(chat_completion)
             reply = chat_completion.choices[0].message.content.strip()
         except Exception as exc:
             self.logger.error("Error calling language model for %s: %s", indicator, exc)
@@ -325,9 +342,14 @@ class QuantitativeAnalyst:
                 score = None
         return score, reply
 
-    def evaluate_indicator(self, indicator: str) -> Tuple[Optional[float], str]:
-        """Evaluate a single indicator and return its score and explanation."""
-        df = self._get_last_year_data()
+    def evaluate_indicator(self, indicator: str, cutoff_date: str | None = None) -> Tuple[Optional[float], str]:
+        """Evaluate a single indicator and return its score and explanation.
+
+        Args:
+            indicator: Name of the indicator to evaluate.
+            cutoff_date: Optional end-date for the 1-year lookback window.
+        """
+        df = self._get_last_year_data(cutoff_date=cutoff_date)
         column_name = self._find_indicator_column(df, indicator)
         if not column_name:
             self.logger.warning("No column found in data for indicator '%s'", indicator)
@@ -340,13 +362,14 @@ class QuantitativeAnalyst:
         article = self._article_texts.get(indicator, "")
         return self._call_language_model(indicator, values_list, article)
 
-    def run_analysis(self, store_in_db: bool = False, db_manager=None):
+    def run_analysis(self, store_in_db: bool = False, db_manager=None, cutoff_date: str | None = None):
         """
         Run the analysis for all configured indicators and return extended metadata.
         If store_in_db is True, store the result in the analyst database using ORM objects.
         Args:
             store_in_db (bool): If True, store the result in the database.
             db_manager: Optional AnalystDataManager instance. If None and store_in_db is True, a new one will be created.
+            cutoff_date: Optional end-date for the 1-year lookback window (ISO string).
         Returns:
             dict: The analysis result as before.
         """
@@ -361,7 +384,7 @@ class QuantitativeAnalyst:
         indicators_evaluated: List[str] = []
         # Get the last year data and epoch
         try:
-            df = self._get_last_year_data()
+            df = self._get_last_year_data(cutoff_date=cutoff_date)
             num_data_points = len(df)
             if "date" in df.columns:
                 last_date = df["date"].max()
@@ -380,7 +403,7 @@ class QuantitativeAnalyst:
             errors.append(f"Error getting last year data: {exc}")
         for indicator in self.article_paths.keys():
             try:
-                score, explanation = self.evaluate_indicator(indicator)
+                score, explanation = self.evaluate_indicator(indicator, cutoff_date=cutoff_date)
                 scores[indicator] = score
                 explanations[indicator] = explanation
                 indicators_evaluated.append(indicator)
@@ -435,6 +458,7 @@ class QuantitativeAnalyst:
                     "bollinger_bands_used": int("bollinger_bands" in indicators_evaluated),
                     "sma_used": int("sma" in indicators_evaluated),
                     "ema_used": int("ema" in indicators_evaluated),
+                    "adx_used": int("adx" in indicators_evaluated),
                     "analysis_run_timestamp": int(analysis_run_dt.timestamp()),
                     "analysis_run_datetime": analysis_run_dt,
                     "warnings": ",".join(warnings) if warnings else None,
@@ -453,6 +477,7 @@ class QuantitativeAnalyst:
                     "bollinger_bands": scores.get("bollinger_bands"),
                     "sma": scores.get("sma"),
                     "ema": scores.get("ema"),
+                    "adx": scores.get("adx"),
                 }
                 explanation_row = {
                     "symbol": symbol_str,
@@ -465,6 +490,7 @@ class QuantitativeAnalyst:
                     "bollinger_bands": explanations.get("bollinger_bands"),
                     "sma": explanations.get("sma"),
                     "ema": explanations.get("ema"),
+                    "adx": explanations.get("adx"),
                 }
                 manager.insert_new_data(table=AnalystQuantitativeBase, rows=[base_row])
                 manager.insert_new_data(table=AnalystQuantitativeScore, rows=[score_row])

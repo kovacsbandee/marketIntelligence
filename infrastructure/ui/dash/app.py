@@ -229,7 +229,12 @@ app.layout = dmc.MantineProvider(
         dcc.Store(id=Ids.EARNINGS_STORE),
         dcc.Store(id=Ids.Q_INCOME_STORE),
         dcc.Store(id=Ids.CASHFLOW_STORE),
-        dcc.Store(id=Ids.INSIDER_STORE)
+        dcc.Store(id=Ids.INSIDER_STORE),
+        # Quantitative analysis stores
+        dcc.Store(id=Ids.ANALYSIS_STORE),
+        dcc.Store(id=Ids.ANALYSIS_CLICKED_DATE),
+        dcc.Store(id=Ids.ANALYSIS_RUN_ID),
+        dcc.Interval(id=Ids.ANALYSIS_INTERVAL, interval=2000, disabled=True),
     ]
 )
 

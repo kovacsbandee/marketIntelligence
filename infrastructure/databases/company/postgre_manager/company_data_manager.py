@@ -360,9 +360,13 @@ class CompanyDataManager(CompanyTableManager):
         with self.session_scope() as session:
             try:
                 int_cols = [c.key for c in inspect(table).c if isinstance(c.type, (Integer, BigInteger))]
+                date_cols = [c.key for c in inspect(table).c if "date" in str(c.type).lower() or "timestamp" in str(c.type).lower()]
                 for row in rows:
                     for col in int_cols:
                         if col in row and (row[col] in ["-", "", "None", None] or pd.isna(row[col])):
+                            row[col] = None
+                    for col in date_cols:
+                        if col in row and (row[col] is None or pd.isna(row[col])):
                             row[col] = None
                 pk_cols = [c.name for c in inspect(table).primary_key]
                 insert_stmt = insert(table).values(rows)

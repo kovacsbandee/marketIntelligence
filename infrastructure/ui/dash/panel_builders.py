@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import pandas as pd
 import dash_mantine_components as dmc
-from dash import dcc
+from dash import dcc, html
 import plotly.graph_objects as go
 
 from infrastructure.ui.dash.ids import Ids
@@ -62,9 +62,38 @@ from infrastructure.ui.dash.plots.insider_transactions_plots import (
     plot_insider_price_chart,
     plot_insider_transactions_over_time,
 )
+from infrastructure.ui.dash.plots.analysis_gauge import (
+    build_placeholder_score_card,
+    build_placeholder_aggregate_card,
+)
 
 # Shared alias for Dash store payloads
 Records = list[dict] | None
+
+# Ordered list of indicators scored by the QuantitativeAnalyst
+SCORED_INDICATORS = [
+    "obv", "vwap", "macd", "rsi",
+    "stochastic_oscillator", "bollinger_bands", "sma", "ema", "adx",
+]
+
+# Human-readable display names
+INDICATOR_DISPLAY_NAMES = {
+    "obv": "On-Balance Volume (OBV)",
+    "vwap": "VWAP",
+    "macd": "MACD",
+    "rsi": "RSI",
+    "stochastic_oscillator": "Stochastic Oscillator",
+    "bollinger_bands": "Bollinger Bands",
+    "sma": "Simple Moving Average",
+    "ema": "Exponential Moving Average",
+    "adx": "Average Directional Index (ADX)",
+}
+
+# Which indicators have their own standalone plot
+INDICATORS_WITH_PLOTS = {"rsi", "macd", "stochastic_oscillator", "obv", "adx"}
+
+# Overlay-only indicators (shown as score cards without a standalone plot)
+OVERLAY_INDICATORS = {"sma", "ema", "bollinger_bands", "vwap"}
 
 
 def build_company_base_panel(company_fundamentals: Records, symbol_input: str | None):
@@ -83,7 +112,13 @@ def build_company_base_panel(company_fundamentals: Records, symbol_input: str | 
 
 
 def build_price_panel(daily_timeseries: Records, start_date: str, end_date: str):
-    """Render price/indicator plots for the selected date range."""
+    """Render price/indicator plots for the selected date range.
+
+    Includes the QuantitativeAnalyst integration:
+    - An "Analyze" button to trigger LLM-based indicator scoring.
+    - An aggregate score card placeholder at the top.
+    - Per-indicator score cards next to each plot (or grouped for overlay indicators).
+    """
     if (guard := guard_store(daily_timeseries, "No price data loaded.")):
         return guard
 
@@ -109,14 +144,85 @@ def build_price_panel(daily_timeseries: Records, start_date: str, end_date: str)
     fig_rsi = plot_rsi(selected_timeseries)
     fig_rsi.update_layout(xaxis_range=[start_dt, end_dt])
     fig_macd = plot_macd(selected_timeseries)
+    fig_macd.update_layout(xaxis_range=[start_dt, end_dt])
     fig_stoch = plot_stochastic(selected_timeseries)
+    fig_stoch.update_layout(xaxis_range=[start_dt, end_dt])
     fig_obv = plot_obv(selected_timeseries)
+    fig_obv.update_layout(xaxis_range=[start_dt, end_dt])
     fig_adx = plot_adx(selected_timeseries)
+    fig_adx.update_layout(xaxis_range=[start_dt, end_dt])
+
+    # -- Analysis controls and aggregate card --
+    analysis_controls = dmc.Group([
+        dmc.Button(
+            "Run Analysis",
+            id=Ids.ANALYZE_BUTTON,
+            n_clicks=0,
+            variant="gradient",
+            gradient={"from": "teal", "to": "blue", "deg": 60},
+            size="sm",
+            loading=False,
+        ),
+        dmc.Text(
+            "Click a candle on the chart to select a date, then press Run Analysis (or just click Run for latest).",
+            size="xs", c="dimmed", style={"maxWidth": 500},
+        ),
+        html.Div(
+            id=Ids.ANALYSIS_DATE_DISPLAY,
+            children=[],
+            style={"display": "none"},
+        ),
+    ], gap=12, align="center")
+
+    aggregate_card = html.Div(
+        id=Ids.AGGREGATE_SCORE_CARD,
+        children=[build_placeholder_aggregate_card()],
+        style={"display": "none"},  # hidden until analysis runs
+    )
+
+    # -- Helper: build a score-card placeholder div for a specific indicator --
+    def _score_slot(indicator: str) -> html.Div:
+        return html.Div(
+            id=f"{Ids.SCORE_CARD_PREFIX}{indicator}",
+            children=[],
+            style={"display": "none"},
+        )
+
+    # -- Overlay indicator score cards (SMA, EMA, BB, VWAP) --
+    overlay_score_cards = dmc.Group(
+        [_score_slot(ind) for ind in OVERLAY_INDICATORS],
+        gap=12, wrap="wrap",
+    )
+
+    # -- Build per-plot rows with adjacent score card for plotted indicators --
+    def _indicator_row(label: str, graph: dcc.Graph, indicator: str | None) -> list:
+        """Return a plot + optional adjacent score card."""
+        plot_part = dmc.Stack([
+            dmc.Text(label, fw=600, size="sm"),
+            graph,
+        ], gap=4, style={"flex": "1 1 auto", "minWidth": 0})
+
+        if indicator and indicator in SCORED_INDICATORS:
+            score_part = _score_slot(indicator)
+            return [dmc.Group([plot_part, score_part], gap=12, align="flex-start", wrap="wrap")]
+        return [plot_part]
 
     return dmc.Accordion(
         multiple=True,
-        value=["price", "momentum"],
+        value=["analysis", "price", "momentum"],
         children=[
+            # ---------- Analysis section ----------
+            dmc.AccordionItem([
+                dmc.AccordionControl("Quantitative Analysis"),
+                dmc.AccordionPanel(
+                    dmc.Stack([
+                        analysis_controls,
+                        aggregate_card,
+                    ], gap=12)
+                ),
+            ], value="analysis"),
+
+            # ---------- Price ----------
             dmc.AccordionItem([
                 dmc.AccordionControl("Price"),
                 dmc.AccordionPanel(
@@ -135,30 +241,34 @@ def build_price_panel(daily_timeseries: Records, start_date: str, end_date: str)
                             ),
                         ], justify="space-between", align="center", wrap="wrap"),
                         dcc.Graph(id=Ids.PRICE_CHART, figure=fig, config={"displayModeBar": True}),
+                        # Overlay indicator score cards under the price chart
+                        overlay_score_cards,
                     ], gap=8)
                 ),
             ], value="price"),
+
+            # ---------- Momentum ----------
             dmc.AccordionItem([
                 dmc.AccordionControl("Momentum"),
                 dmc.AccordionPanel(
                     dmc.Stack([
-                        dmc.Text("RSI", fw=600, size="sm"),
-                        dcc.Graph(figure=fig_rsi),
-                        dmc.Text("MACD", fw=600, size="sm", mt=12),
-                        dcc.Graph(figure=fig_macd),
-                        dmc.Text("Stochastic Oscillator", fw=600, size="sm", mt=12),
-                        dcc.Graph(figure=fig_stoch),
+                        *_indicator_row("RSI", dcc.Graph(id=Ids.RSI_CHART, figure=fig_rsi), "rsi"),
+                        dmc.Divider(variant="dashed", my=8),
+                        *_indicator_row("MACD", dcc.Graph(id=Ids.MACD_CHART, figure=fig_macd), "macd"),
+                        dmc.Divider(variant="dashed", my=8),
+                        *_indicator_row("Stochastic Oscillator", dcc.Graph(id=Ids.STOCHASTIC_CHART, figure=fig_stoch), "stochastic_oscillator"),
                     ], gap=10)
                 ),
             ], value="momentum"),
+
+            # ---------- Volume & Trend Strength ----------
             dmc.AccordionItem([
                 dmc.AccordionControl("Volume & Trend Strength"),
                 dmc.AccordionPanel(
                     dmc.Stack([
-                        dmc.Text("On-Balance Volume (OBV)", fw=600, size="sm"),
-                        dcc.Graph(figure=fig_obv),
-                        dmc.Text("Average Directional Index (ADX)", fw=600, size="sm", mt=12),
-                        dcc.Graph(figure=fig_adx),
+                        *_indicator_row("On-Balance Volume (OBV)", dcc.Graph(id=Ids.OBV_CHART, figure=fig_obv), "obv"),
+                        dmc.Divider(variant="dashed", my=8),
+                        *_indicator_row("Average Directional Index (ADX)", dcc.Graph(id=Ids.ADX_CHART, figure=fig_adx), "adx"),
                     ], gap=10)
                 ),
             ], value="volume"),

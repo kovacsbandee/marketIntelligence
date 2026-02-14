@@ -1,3 +1,13 @@
-2025-09-13 15:10:42,123 - build_analyst_db - INFO - build_analyst_db.py:35 - Successfully connected to the analyst PostgreSQL database.
-2025-09-13 15:10:42,123 - build_analyst_db - INFO - build_analyst_db.py:43 - Found 3 analyst table classes to create.
-2025-09-13 15:10:42,123 - build_analyst_db - INFO - build_analyst_db.py:47 - Creating table for: AnalystQuantitativeBase
+2025-09-13 15:14:57,581 - build_analyst_db - INFO - build_analyst_db.py:35 - Successfully connected to the analyst PostgreSQL database.
+2025-09-13 15:14:57,581 - build_analyst_db - INFO - build_analyst_db.py:43 - Found 3 analyst table classes to create.
+2025-09-13 15:14:57,581 - build_analyst_db - INFO - build_analyst_db.py:47 - Creating table for: AnalystQuantitativeBase
+2025-09-13 15:14:57,589 - infrastructure.databases.analysis.postgre_manager.analyst_data_manager - INFO - analyst_data_manager.py:208 - Table analyst_quantitative_base dropped
+2025-09-13 15:14:57,607 - infrastructure.databases.analysis.postgre_manager.analyst_data_manager - INFO - analyst_data_manager.py:197 - Table analyst_quantitative_base created
+2025-09-13 15:14:57,608 - build_analyst_db - INFO - build_analyst_db.py:47 - Creating table for: AnalystQuantitativeExplanation
+2025-09-13 15:14:57,609 - infrastructure.databases.analysis.postgre_manager.analyst_data_manager - INFO - analyst_data_manager.py:208 - Table analyst_quantitative_explanation dropped
+2025-09-13 15:14:57,620 - infrastructure.databases.analysis.postgre_manager.analyst_data_manager - INFO - analyst_data_manager.py:197 - Table analyst_quantitative_explanation created
+2025-09-13 15:14:57,620 - build_analyst_db - INFO - build_analyst_db.py:47 - Creating table for: AnalystQuantitativeScore
+2025-09-13 15:14:57,621 - infrastructure.databases.analysis.postgre_manager.analyst_data_manager - INFO - analyst_data_manager.py:208 - Table analyst_quantitative_score dropped
+2025-09-13 15:14:57,632 - infrastructure.databases.analysis.postgre_manager.analyst_data_manager - INFO - analyst_data_manager.py:197 - Table analyst_quantitative_score created
+2025-09-13 15:14:57,633 - build_analyst_db - INFO - build_analyst_db.py:52 - Created 3 analyst tables
+2025-09-13 15:14:57,635 - build_analyst_db - INFO - build_analyst_db.py:55 - Tables currently in the analyst database: ['analyst_quantitative_base', 'analyst_quantitative_explanation', 'analyst_quantitative_score']
