@@ -48,6 +48,15 @@ from analyst.quantitative_analyst.add_indicators_to_price_data import (
     calculate_adx,
 )
 
+from analyst.financial_analyst.add_financial_metrics import (
+    calculate_profitability_margins,
+    calculate_revenue_growth,
+    calculate_liquidity_ratios,
+    calculate_leverage_ratios,
+    calculate_cashflow_metrics,
+    calculate_earnings_metrics,
+)
+
 from utils.logger import get_logger  # <-- Import your project logger
 
 # Set up project-standard logger
@@ -72,7 +81,8 @@ class Symbol:
     def __init__(self, adapter: CompanyDataManager, 
                        symbol: str, 
                        auto_load_if_missing: bool = True,
-                       add_price_indicators: bool = True):
+                       add_price_indicators: bool = True,
+                       add_financial_metrics: bool = True):
         """
         Initialize the DBSymbolStorage.
 
@@ -80,6 +90,8 @@ class Symbol:
             adapter (PostgresAdapter): The database adapter.
             symbol (str): The stock symbol to filter tables by.
             auto_load_if_missing (bool): Whether to attempt to load data if the symbol is missing.
+            add_price_indicators (bool): Whether to compute technical indicators on daily_timeseries.
+            add_financial_metrics (bool): Whether to compute derived financial metrics on quarterly tables.
         """
         self._adapter = adapter
         self._symbol = symbol
@@ -88,6 +100,7 @@ class Symbol:
         self.last_refresh_completed_at = None
         self._refresh_thread = None
         self.add_price_indicators = add_price_indicators
+        self.add_financial_metrics = add_financial_metrics
         self._load_tables(auto_load_if_missing)
 
     def _symbol_exists(self) -> bool:
@@ -233,6 +246,9 @@ class Symbol:
         if self.add_price_indicators:
             self.add_all_price_indicators()
 
+        if self.add_financial_metrics:
+            self.add_all_financial_metrics()
+
     def _load_tables(self, auto_load_if_missing: bool):
         """
         Load all tables for the given symbol. If the symbol is missing and auto_load_if_missing is True,
@@ -348,6 +364,67 @@ class Symbol:
         except Exception as e:
             logger.error("Error adding price indicators: %s", str(e))
             
+
+    def add_all_financial_metrics(self):
+        """
+        Enrich quarterly financial statement DataFrames with derived metrics
+        (margins, ratios, growth rates, etc.).
+
+        Mirrors ``add_all_price_indicators`` for fundamental data.  Each
+        quarterly table is passed through the corresponding pure-function
+        calculator defined in ``analyst/financial_analyst/add_financial_metrics.py``.
+        The enriched DataFrame replaces the original attribute on this instance.
+        """
+        # --- Income statement quarterly: profitability margins & revenue growth ---
+        income_df = getattr(self, "income_statement_quarterly", None)
+        if income_df is not None and not income_df.empty:
+            try:
+                income_df = calculate_profitability_margins(income_df)
+                income_df = calculate_revenue_growth(income_df)
+                setattr(self, "income_statement_quarterly", income_df)
+                logger.info("Financial metrics added to income_statement_quarterly.")
+            except Exception as e:
+                logger.error("Error adding income-statement metrics: %s", str(e))
+
+        # --- Balance sheet quarterly: liquidity & leverage ratios ---
+        balance_df = getattr(self, "balance_sheet_quarterly", None)
+        if balance_df is not None and not balance_df.empty:
+            try:
+                balance_df = calculate_liquidity_ratios(balance_df)
+                balance_df = calculate_leverage_ratios(balance_df)
+                setattr(self, "balance_sheet_quarterly", balance_df)
+                logger.info("Financial metrics added to balance_sheet_quarterly.")
+            except Exception as e:
+                logger.error("Error adding balance-sheet metrics: %s", str(e))
+
+        # --- Cash flow quarterly: FCF, CF quality ---
+        cashflow_df = getattr(self, "cash_flow_quarterly", None)
+        if cashflow_df is not None and not cashflow_df.empty:
+            try:
+                cashflow_df = calculate_cashflow_metrics(cashflow_df)
+                setattr(self, "cash_flow_quarterly", cashflow_df)
+                logger.info("Financial metrics added to cash_flow_quarterly.")
+            except Exception as e:
+                logger.error("Error adding cash-flow metrics: %s", str(e))
+
+        # --- Earnings quarterly: EPS growth, beat flag ---
+        earnings_df = getattr(self, "earnings_quarterly", None)
+        if earnings_df is not None and not earnings_df.empty:
+            try:
+                earnings_df = calculate_earnings_metrics(earnings_df)
+                setattr(self, "earnings_quarterly", earnings_df)
+                logger.info("Financial metrics added to earnings_quarterly.")
+            except Exception as e:
+                logger.error("Error adding earnings metrics: %s", str(e))
+
+    def analyse_symbol_with_all_the_analysts(self):
+        """
+        This is a placeholder for analysing the symbol with all available analysts.
+        """
+        try:
+            raise NotImplementedError("The analyse_symbol_with_all_the_analysts method is not yet implemented.")
+        except NotImplementedError as e:
+            logger.error("An error occurred: %s", str(e))
 
     def hand_over_to_brokerage(self):
         """

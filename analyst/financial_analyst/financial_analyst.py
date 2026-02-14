@@ -1,164 +1,178 @@
 """
-TODO: it is not finished yet
-resarch is needed to derive financial metrics from financial statements based on the literature
-The implementation needs to be recreated having a similar structure to quantitative_analyst.py
-But now this class is just a placeholder.
-"""
-
-"""
 financial_analyst.py
 --------------------
 
-This module defines a ``FinancialAnalyst`` class which parallels the
-``QuantitativeAnalyst`` used for technical indicators, but operates on
-fundamental company data instead of price‑based signals.  It analyzes
-quarterly financial statements (income statements, balance sheets and
-cash flow statements) loaded into a ``Symbol`` instance, retrieves
-accompanying Investopedia articles (stored as PDFs) that explain how
-each metric should be interpreted, and then asks a language model to
-judge whether the company appears undervalued or overvalued relative
-to each metric.  Scores are returned on a continuous scale of
-``[-1, 1]`` with ``-1`` indicating strongly underpriced and ``+1``
-indicating strongly overpriced.  An aggregate score is computed as
-the average of all valid metric scores.
+Concrete ``Analyst`` subclass for fundamental financial analysis.
 
-The typical usage pattern mirrors that of the ``QuantitativeAnalyst``:
+Operates on a ``Symbol`` instance whose quarterly DataFrames
+(``income_statement_quarterly``, ``balance_sheet_quarterly``,
+``cash_flow_quarterly``, ``earnings_quarterly``) have been enriched
+with derived metric columns by ``add_financial_metrics.py`` (margins,
+liquidity/leverage ratios, growth rates, etc.).
 
-```
-from symbol.symbol import Symbol
-from financial_analyst import FinancialAnalyst
+Six analysis categories are evaluated:
 
-storage = Symbol(adapter, symbol="AAPL")
-article_paths = {
-    "total_revenue": "knowledge/investopedia/total_revenue.pdf",
-    "net_income": "knowledge/investopedia/net_income.pdf",
-    # ... add more metric PDFs here
-}
-fa = FinancialAnalyst(storage, article_paths, openai_key=my_key, num_quarters=8)
-scores, agg, details = fa.run_analysis()
-```
+1. **profitability** – gross / operating / net / EBITDA margins
+2. **revenue_growth** – QoQ and YoY revenue trends
+3. **earnings** – EPS trends, beat/miss patterns
+4. **liquidity** – current ratio, quick ratio, cash ratio
+5. **leverage** – debt-to-equity, debt-to-assets, equity ratio
+6. **cash_flow_health** – free cash flow, CF-to-net-income
 
-To customise the analysis window, set ``num_quarters`` to the number
-of most recent quarterly observations you wish to include.  Passing
-``None`` uses the entire available history.  The class will search
-across all loaded quarterly tables for each metric and will use the
-first table that contains the metric.
+Scores are on a continuous ``[-1, 1]`` scale (-1 = underpriced,
++1 = overpriced).  An aggregate score is the mean of all valid
+category scores.
 
-Notes
------
-* The ``Symbol`` class loads database tables as attributes whose
-  names correspond to the table names in the database.  Quarterly
-  statement tables are typically named with the suffix "quarterly"; in
-  some parts of the codebase the word is misspelled as "quaterly".
-  This class is resilient to both conventions: it inspects all
-  attributes of the ``Symbol`` instance and collects any DataFrame
-  whose name contains ``income_statement``, ``balance_sheet`` or
-  ``cash_flow`` and ends with either "quarterly" or "quaterly".  Missing
-  tables are ignored.
-* Investopedia articles must be provided via ``article_paths``; the
-  class will read them from disk using ``PyPDF2``.  No web access is
-  performed at runtime.
-* The language model is called via OpenAI's ChatCompletion API.  A
-  ``RateLimiter`` is employed to avoid exceeding a user‑specified
-  number of API calls per minute.  See ``QuantitativeAnalyst`` for a
-  similar implementation.
+Usage::
+
+    from symbol.symbol import Symbol
+    from analyst.financial_analyst.financial_analyst import FinancialAnalyst
+
+    storage = Symbol(adapter, symbol="AAPL")
+    fa = FinancialAnalyst(storage)
+    result = fa.run_analysis()
+    print(result["aggregate_score"])
 """
 
 from __future__ import annotations
 
+import datetime
 import logging
-import os
-import re
-import time
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import pandas as pd
-from openai import OpenAI
-from PyPDF2 import PdfReader
+from dotenv import load_dotenv
 
 from symbol.symbol import Symbol
+from analyst.analyst import Analyst
+from infrastructure.databases.analysis.postgre_manager.analyst_data_manager import get_analyst_data_handler
+from infrastructure.databases.analysis.postgre_manager.analyst_table_objects import (
+    AnalystFinancialBase,
+    AnalystFinancialScore,
+    AnalystFinancialExplanation,
+)
 
+load_dotenv()
+
+# ---------------------------------------------------------------------------
+# Knowledge-base article paths
+# ---------------------------------------------------------------------------
 PDF_PATH = "./infrastructure/databases/rag_knowledge_base/financial_analyst/"
 
-# Example ARTICLE_PATHS for financial metrics (update with actual PDF names as needed)
-
 ARTICLE_PATHS = {
-    'balance_sheet': PDF_PATH + 'balancesheet_statement/' + 'Breaking Down the Balance Sheet.pdf',
-    'income_statement': PDF_PATH + 'income_statement/' + 'Income Statement_ How to Read and Use It.pdf',
-    'cash_flow': PDF_PATH + 'cashflow_statement/' + 'Cash Flow Statements_ How to Prepare and Read One.pdf',
+    "balance_sheet": PDF_PATH + "balancesheet_statement/Breaking Down the Balance Sheet.pdf",
+    "income_statement": PDF_PATH + "income_statement/Income Statement_ How to Read and Use It.pdf",
+    "cash_flow": PDF_PATH + "cashflow_statement/Cash Flow Statements_ How to Prepare and Read One.pdf",
+    "earnings": PDF_PATH + "earnings_statement/Earnings_ Company Earnings Defined, With Example of Measurements.pdf",
 }
 
-@dataclass
-class RateLimiter:
-    """Simple rate limiter to enforce a maximum number of API calls per minute.
+# ---------------------------------------------------------------------------
+# Category definitions – each maps to a source table and the columns
+# (both raw and pre-computed by add_financial_metrics.py) to include in
+# the LLM prompt, plus the article to attach.
+# ---------------------------------------------------------------------------
+FINANCIAL_CATEGORIES: Dict[str, Dict[str, Any]] = {
+    "profitability": {
+        "source_table": "income_statement_quarterly",
+        "columns": [
+            "gross_profit",
+            "total_revenue",
+            "operating_income",
+            "net_income",
+            "ebitda",
+            "gross_margin",
+            "operating_margin",
+            "net_margin",
+            "ebitda_margin",
+        ],
+        "article_key": "income_statement",
+    },
+    "revenue_growth": {
+        "source_table": "income_statement_quarterly",
+        "columns": [
+            "total_revenue",
+            "cost_of_revenue",
+            "revenue_qoq_growth",
+            "revenue_yoy_growth",
+        ],
+        "article_key": "income_statement",
+    },
+    "earnings": {
+        "source_table": "earnings_quarterly",
+        "columns": [
+            "reported_eps",
+            "estimated_eps",
+            "surprise",
+            "surprise_percentage",
+            "eps_qoq_growth",
+            "earnings_beat",
+            "surprise_abs",
+        ],
+        "article_key": "earnings",
+    },
+    "liquidity": {
+        "source_table": "balance_sheet_quarterly",
+        "columns": [
+            "total_current_assets",
+            "total_current_liabilities",
+            "cash_and_cash_equivalents",
+            "inventory",
+            "current_ratio",
+            "quick_ratio",
+            "cash_ratio",
+        ],
+        "article_key": "balance_sheet",
+    },
+    "leverage": {
+        "source_table": "balance_sheet_quarterly",
+        "columns": [
+            "total_liabilities",
+            "total_assets",
+            "total_shareholder_equity",
+            "debt_to_equity",
+            "debt_to_assets",
+            "equity_ratio",
+        ],
+        "article_key": "balance_sheet",
+    },
+    "cash_flow_health": {
+        "source_table": "cash_flow_quarterly",
+        "columns": [
+            "operating_cashflow",
+            "capital_expenditures",
+            "net_income",
+            "cashflow_from_investment",
+            "cashflow_from_financing",
+            "free_cash_flow",
+            "cf_to_net_income",
+            "capex_to_net_income",
+        ],
+        "article_key": "cash_flow",
+    },
+}
 
-    This is copied from ``analyst.quantitative_analyst.quantitative_analyst`` so
-    that both analyst classes behave consistently.  See that module
-    for additional documentation.
-
-    Attributes
-    ----------
-    max_calls_per_minute: int
-        Maximum number of API calls allowed in a 60‑second window.
-    logger: logging.Logger
-        Logger used to emit informational messages about rate limiting.
-    timestamps: list[float]
-        Internal list of call timestamps (unix epoch seconds).
-    """
-
-    max_calls_per_minute: int = 60
-    logger: logging.Logger = field(default_factory=lambda: logging.getLogger(__name__))
-    timestamps: List[float] = field(default_factory=list)
-
-    def record_call(self) -> None:
-        """Record a call timestamp and sleep if the rate limit is exceeded."""
-        now = time.time()
-        # Remove timestamps older than 60 seconds
-        self.timestamps = [t for t in self.timestamps if now - t < 60]
-        if len(self.timestamps) >= self.max_calls_per_minute:
-            sleep_duration = 60 - (now - self.timestamps[0])
-            if sleep_duration > 0:
-                self.logger.info(
-                    "Rate limit exceeded: sleeping %.2f seconds to respect %d calls/minute",
-                    sleep_duration,
-                    self.max_calls_per_minute,
-                )
-                time.sleep(sleep_duration)
-            # After sleeping, recompute now and trim again
-            now = time.time()
-            self.timestamps = [t for t in self.timestamps if now - t < 60]
-        # Record the current call timestamp
-        self.timestamps.append(time.time())
+SYSTEM_PROMPT = (
+    "You are a senior financial analyst responsible for "
+    "evaluating company fundamentals from quarterly statements."
+)
 
 
-class FinancialAnalyst:
-    """A class to assess whether a company appears under‑ or overpriced based on fundamentals.
+class FinancialAnalyst(Analyst):
+    """Evaluate a company's fundamental health using quarterly financial data.
 
     Parameters
     ----------
     symbol : Symbol
-        Instance containing database tables loaded as attributes.  The
-        quarterly statement tables (income, balance sheet, cash flow) are
-        expected to be present.  The analyst reads from these tables
-        but does not modify them.
-    article_paths : dict[str, str]
-        Mapping from metric names (e.g. ``"total_revenue"``) to PDF file
-        paths relative to the project root.  The class reads these
-        files and passes their content to the language model.  Each
-        metric must have a corresponding entry in this mapping.
-    openai_key : str, optional
-        API key for OpenAI.  If provided, it will be set on the
-        ``openai`` module.  If ``None``, the existing environment
-        variable ``OPENAI_API_KEY`` will be used.
-    rate_limit_per_minute : int, optional
-        Maximum number of OpenAI API calls per minute.  Defaults to 60.
-    num_quarters : int or None, optional
-        Number of most recent quarters to include in each metric's
-        analysis.  If ``None``, the entire available history is used.
-    logger : logging.Logger, optional
-        Logger for informational and error messages.  If omitted, a
-        module‑level logger is used.
+        Instance containing all database tables loaded as attributes.
+    openai_key : str | None
+        Explicit OpenAI key; falls back to ``KEY_FOR_FINANCIAL_ANALYST``.
+    rate_limit_per_minute : int
+        Max OpenAI calls per 60 s.
+    num_quarters : int | None
+        Number of most recent quarters to include (default 8).
+    logger : logging.Logger | None
+    store_in_db : bool
+        Whether to persist results to the analyst database.
     """
 
     def __init__(
@@ -168,452 +182,302 @@ class FinancialAnalyst:
         rate_limit_per_minute: int = 60,
         num_quarters: Optional[int] = 8,
         logger: Optional[logging.Logger] = None,
+        store_in_db: bool = False,
     ) -> None:
-        self.symbol = symbol
-        self.article_paths = ARTICLE_PATHS
-        self.num_quarters = num_quarters
-        self.logger = logger or logging.getLogger(__name__)
-        self.rate_limiter = RateLimiter(max_calls_per_minute=rate_limit_per_minute, logger=self.logger)
-        # Configure OpenAI API key if provided
-        # Create an OpenAI client compatible with openai>=1.0.0
-        try:
-            if openai_key:
-                self._openai_client = OpenAI(api_key=openai_key)
-            else:
-                self._openai_client = OpenAI()
-        except Exception:
-            # Fall back to the old module-level client if OpenAI import isn't available
-            # (this keeps backward compatibility for environments still using openai<1.0)
-            import openai as _old_openai
-
-            if openai_key:
-                _old_openai.api_key = openai_key
-            self._openai_client = None
-        # Containers for article text and embeddings
-        self._article_texts: Dict[str, str] = {}
-        self._article_embeddings: Dict[str, List[float]] = {}
-
-    # ------------------------------------------------------------------
-    # Article loading and embedding
-    # ------------------------------------------------------------------
-    def _read_pdf(self, path: str) -> str:
-        """Read a PDF file and return its concatenated text.
-
-        If the file cannot be read, an error is logged and an empty
-        string is returned.
-        """
-        abs_path = os.path.abspath(path)
-        try:
-            reader = PdfReader(abs_path)
-            text = "".join(page.extract_text() or "" for page in reader.pages)
-            return text
-        except Exception as exc:
-            self.logger.error("Failed to read PDF %s: %s", abs_path, exc)
-            return ""
-
-    def load_articles(self) -> None:
-        """Load all Investopedia article PDFs into memory.
-
-        This method iterates over ``article_paths`` and reads each PDF
-        using :func:`_read_pdf`.  The resulting text is stored in
-        ``_article_texts``.  Existing contents are overwritten.
-        """
-        self._article_texts.clear()
-        for metric, rel_path in self.article_paths.items():
-            text = self._read_pdf(rel_path)
-            if not text:
-                self.logger.warning(
-                    "No text extracted from %s for metric %s", rel_path, metric
-                )
-            self._article_texts[metric] = text
-
-    def embed_articles(self, model: str = "text-embedding-ada-002") -> None:
-        """Create vector embeddings for each loaded article.
-
-        This method will implicitly call :func:`load_articles` if the
-        article texts have not yet been loaded.  Each article text is
-        submitted to OpenAI's embedding endpoint one at a time.  A
-        rate limiter ensures compliance with the configured calls per
-        minute.  Embeddings are stored in ``_article_embeddings``.
-        """
-        if not self._article_texts:
-            self.load_articles()
-        self._article_embeddings.clear()
-        for metric, text in self._article_texts.items():
-            if not text:
-                self._article_embeddings[metric] = []
-                continue
-            self.rate_limiter.record_call()
-            try:
-                if self._openai_client is not None:
-                    response = self._openai_client.embeddings.create(model=model, input=[text])
-                    # new client returns data as objects with .embedding attribute
-                    try:
-                        embedding = response.data[0].embedding
-                    except Exception:
-                        # fallback to dict-like access
-                        embedding = response["data"][0]["embedding"]
-                else:
-                    # old API fallback
-                    import openai as _old_openai
-
-                    response = _old_openai.Embedding.create(input=[text], model=model)
-                    embedding = response["data"][0]["embedding"]
-
-                self._article_embeddings[metric] = embedding
-            except Exception as exc:
-                self.logger.error("Embedding error for %s: %s", metric, exc)
-                self._article_embeddings[metric] = []
-
-    # ------------------------------------------------------------------
-    # Data preparation
-    # ------------------------------------------------------------------
-    def _find_quarterly_tables(self) -> List[pd.DataFrame]:
-        """Return a list of DataFrames corresponding to quarterly statements.
-
-        The ``Symbol`` instance exposes each database table as an
-        attribute whose name matches the underlying table name.  In
-        different parts of the codebase the word *quarterly* is
-        sometimes misspelled as ``quaterly``.  To be resilient to both
-        conventions, this method looks for any attribute on ``self.symbol``
-        that contains ``income_statement``, ``balance_sheet`` or ``cash_flow``
-        and ends with ``quarterly`` or ``quaterly``.  Tables that are
-        present and non‑empty are returned.
-        """
-        tables: List[pd.DataFrame] = []
-        # Possible stems for the three statement types
-        stems = ["income_statement", "balance_sheet", "cash_flow"]
-        for attr_name in dir(self.symbol):
-            # Skip private attributes
-            if attr_name.startswith("_"):
-                continue
-            lower_name = attr_name.lower()
-            # Consider any attribute that includes one of the statement stems.
-            # Historically some tables are named with the suffix "quarterly" (or misspelled
-            # "quaterly") but others are named without that suffix. Accept both,
-            # but apply a small heuristic to avoid picking unrelated DataFrames.
-            if any(stem in lower_name for stem in stems):
-                df = getattr(self.symbol, attr_name, None)
-                if not isinstance(df, pd.DataFrame) or df.empty:
-                    self.logger.debug("Attribute '%s' is not a non-empty DataFrame; skipping", attr_name)
-                    continue
-
-                # Heuristic checks to confirm this DataFrame looks like a quarterly statement:
-                cols = [c.lower() for c in df.columns]
-                looks_like_quarterly = False
-
-                # 1) Named as ...quarterly / ...quaterly -> high confidence
-                if lower_name.endswith("quarterly") or lower_name.endswith("quaterly"):
-                    looks_like_quarterly = True
-
-                # 2) Presence of common fiscal/date columns
-                if not looks_like_quarterly and any(
-                    key in cols for key in ["fiscal_date_ending", "reported_date", "reported_date", "reported_currency"]
-                ):
-                    looks_like_quarterly = True
-                if not looks_like_quarterly and any("date" in c or "fiscal" in c or "quarter" in c or "period" in c for c in cols):
-                    looks_like_quarterly = True
-
-                # 3) Presence of common financial metric columns (balance/income/cashflow hints)
-                if not looks_like_quarterly and any(
-                    key in cols
-                    for key in [
-                        "total_assets",
-                        "total_liabilities",
-                        "net_income",
-                        "total_revenue",
-                        "operating_cashflow",
-                        "cashflow_from_operations",
-                    ]
-                ):
-                    looks_like_quarterly = True
-
-                if looks_like_quarterly:
-                    tables.append(df)
-                else:
-                    self.logger.debug("Attribute '%s' looks like a DataFrame but not a quarterly statement; skipping", attr_name)
-        return tables
-
-    def _find_quarterly_table_info(self) -> List[tuple]:
-        """Return a list of (attribute_name, DataFrame) for quarterly statement tables.
-
-        This mirrors :meth:`_find_quarterly_tables` but also returns the
-        attribute name so callers can infer which statement type the table
-        represents (balance_sheet, income_statement, cash_flow).
-        """
-        tables = []
-        stems = ["income_statement", "balance_sheet", "cash_flow"]
-        for attr_name in dir(self.symbol):
-            if attr_name.startswith("_"):
-                continue
-            lower_name = attr_name.lower()
-            if any(stem in lower_name for stem in stems):
-                df = getattr(self.symbol, attr_name, None)
-                if not isinstance(df, pd.DataFrame) or df.empty:
-                    continue
-                # same heuristics as in _find_quarterly_tables
-                cols = [c.lower() for c in df.columns]
-                looks_like_quarterly = False
-                if lower_name.endswith("quarterly") or lower_name.endswith("quaterly"):
-                    looks_like_quarterly = True
-                if not looks_like_quarterly and any(
-                    key in cols for key in ["fiscal_date_ending", "reported_date", "reported_currency"]
-                ):
-                    looks_like_quarterly = True
-                if not looks_like_quarterly and any("date" in c or "fiscal" in c or "quarter" in c or "period" in c for c in cols):
-                    looks_like_quarterly = True
-                if not looks_like_quarterly and any(
-                    key in cols
-                    for key in [
-                        "total_assets",
-                        "total_liabilities",
-                        "net_income",
-                        "total_revenue",
-                        "operating_cashflow",
-                        "cashflow_from_operations",
-                    ]
-                ):
-                    looks_like_quarterly = True
-
-                if looks_like_quarterly:
-                    tables.append((attr_name, df))
-        return tables
-
-    def _get_quarter_series(self, metric: str) -> Optional[pd.Series]:
-        """Retrieve a time series of values for a given metric from quarterly tables.
-
-        This method searches across the available quarterly statement
-        DataFrames for a column matching the provided metric name.  If
-        found, it extracts the series of values and aligns it with a
-        date or fiscal period column.  The return value is sorted by
-        date ascending, and optionally truncated to the last
-        ``num_quarters`` entries.  If the metric cannot be found in
-        any quarterly table, ``None`` is returned.
-        """
-        print("DEBUG quarterly tables:", self._find_quarterly_tables())
-        for table in self._find_quarterly_tables():
-            # perform case-insensitive column matching: map lowercase name -> actual column name
-            cols_map = {c.lower(): c for c in table.columns}
-            metric_l = metric.lower()
-            if metric_l not in cols_map:
-                continue
-            actual_col = cols_map[metric_l]
-            df = table.copy()
-            # Determine date column name heuristically
-            date_col_candidates = [
-                col
-                for col in df.columns
-                if any(
-                    key in col.lower()
-                    for key in ["date", "fiscal", "quarter", "period"]
-                )
-            ]
-            date_col: Optional[str] = None
-            if date_col_candidates:
-                # Choose the first candidate
-                date_col_candidates.sort()
-                date_col = date_col_candidates[0]
-            # Create a date index
-            if date_col and date_col in df.columns:
-                try:
-                    df[date_col] = pd.to_datetime(df[date_col])
-                except Exception:
-                    # Fall back to using the index as date if parsing fails
-                    df.reset_index(inplace=True)
-                    date_col = "index"
-                    df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
-            else:
-                # Use the index as a date surrogate
-                df.reset_index(inplace=True)
-                date_col = "index"
-                df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
-            # Sort by date ascending and drop rows with NaT
-            df = df.dropna(subset=[date_col])
-            df = df.sort_values(date_col)
-            series = df[actual_col].copy()
-            series.index = df[date_col]
-            # If num_quarters is specified, take the last num_quarters observations
-            if self.num_quarters is not None and self.num_quarters > 0:
-                series = series.tail(self.num_quarters)
-            return series
-        # Metric not found in any table
-        self.logger.warning("Metric '%s' not found in quarterly tables", metric)
-        return None
-
-    def _discover_metrics(self) -> List[str]:
-        """Return a sorted list of metric column names discovered in quarterly tables.
-
-        Excludes obvious non-metric columns such as symbol/date/reporting currency.
-        """
-        exclude = {"symbol", "fiscal_date_ending", "reported_currency", "reported_date", "index"}
-        metrics = set()
-        for attr_name, df in self._find_quarterly_table_info():
-            for col in df.columns:
-                col_l = col.lower()
-                if col_l in exclude:
-                    continue
-                # skip columns that are clearly date-like or identifiers
-                if any(x in col_l for x in ("date", "fiscal", "period", "quarter")):
-                    continue
-                metrics.add(col_l)
-        return sorted(metrics)
-
-    # ------------------------------------------------------------------
-    # Metric evaluation
-    # ------------------------------------------------------------------
-    def _call_language_model(
-        self, 
-        metric: str, 
-        values: List[float], 
-        article: str
-    ) -> Tuple[Optional[float], str]:
-        """Invoke the OpenAI chat model to score a metric.
-
-        The prompt instructs the model to produce a continuous value in
-        ``[-1, 1]`` and to explain its reasoning.  The first numeric
-        value found in the response is parsed as the score.  If the
-        call fails or no number is present, ``None`` is returned for
-        the score.
-        """
-        # Compose the user prompt
-        if self.num_quarters is None:
-            period_desc = "historical"
-        else:
-            period_desc = f"the last {self.num_quarters} quarters"
-        prompt = (
-            f"You are a financial analyst assessing the {metric} values "
-            f"for a company over {period_desc}.\n"
-            f"Here are the series of {metric} values (most recent last):\n"
-            f"{values}\n\n"
-            f"Refer to the following article describing how to interpret this metric:\n"
-            f"{article}\n\n"
-            "Based on the values and the article, output a single continuous "
-            "number between -1 and 1 representing how underpriced (-1) or "
-            "overpriced (+1) the company appears according to this metric. "
-            "After the number, provide a brief explanation of your reasoning."
+        super().__init__(
+            symbol=symbol,
+            article_paths=ARTICLE_PATHS,
+            openai_key=openai_key,
+            env_key_name="KEY_FOR_FINANCIAL_ANALYST",
+            model="gpt-4o-mini",
+            system_prompt=SYSTEM_PROMPT,
+            rate_limit_per_minute=rate_limit_per_minute,
+            logger=logger,
+            store_in_db=store_in_db,
         )
-        self.rate_limiter.record_call()
-        try:
-            if getattr(self, "_openai_client", None) is not None:
-                # new openai-python client (>=1.0.0)
-                response = self._openai_client.chat.completions.create(
-                    model="gpt-4o-mini",
-                    messages=[
-                        {"role": "system", "content": "You are a helpful financial analyst."},
-                        {"role": "user", "content": prompt},
-                    ],
-                    temperature=0.3,
-                    max_tokens=200,
-                )
-                # try object-style access then fallback to dict-like
-                try:
-                    reply = response.choices[0].message.content.strip()
-                except Exception:
-                    reply = response["choices"][0]["message"]["content"].strip()
-            else:
-                # fallback to older openai library interface
-                import openai as _old_openai
+        self.num_quarters = num_quarters
 
-                response = _old_openai.ChatCompletion.create(
-                    model="gpt-4-nano",
-                    messages=[
-                        {"role": "system", "content": "You are a helpful financial analyst."},
-                        {"role": "user", "content": prompt},
-                    ],
-                    temperature=0.3,
-                    max_tokens=200,
-                )
-                reply = response["choices"][0]["message"]["content"].strip()
-        except Exception as exc:
-            self.logger.error("Error calling language model for %s: %s", metric, exc)
-            return None, ""
-        # Extract first floating point number from the response
-        match = re.search(r"-?\d*\.\d+|-?\d+", reply)
-        score: Optional[float] = None
-        if match:
-            try:
-                score = float(match.group())
-                # Clip to [-1, 1] as a safety measure
-                score = max(min(score, 1.0), -1.0)
-            except ValueError:
-                score = None
-        return score, reply
+    # ------------------------------------------------------------------
+    # Data extraction helpers
+    # ------------------------------------------------------------------
+    def _get_quarterly_df(self, table_name: str) -> Optional[pd.DataFrame]:
+        """Return a quarterly DataFrame from the Symbol, sorted by date, last N quarters.
 
-    def evaluate_metric(self, metric: str, article_override: Optional[str] = None) -> Tuple[Optional[float], str]:
-        """Evaluate a single metric and return its score and explanation.
-
-        If ``article_override`` is provided it will be used instead of the
-        per-metric article text loaded from disk.
+        The DataFrame is expected to already contain any derived metric
+        columns added by ``Symbol.add_all_financial_metrics()``.
         """
-        series = self._get_quarter_series(metric)
-        if series is None or series.empty:
-            return None, "No data available"
-        values_list = series.tolist()
-        if article_override is not None:
-            article = article_override
-        else:
-            # prefer exact per-metric article if available, else empty string
-            article = self._article_texts.get(metric, "")
-        return self._call_language_model(metric, values_list, article)
+        df = getattr(self.symbol, table_name, None)
+        if df is None or not isinstance(df, pd.DataFrame) or df.empty:
+            self.logger.warning("Table '%s' not available on Symbol", table_name)
+            return None
+        df = df.copy()
+        # Resolve date column
+        date_col = None
+        for candidate in ("fiscal_date_ending", "reported_date"):
+            if candidate in df.columns:
+                date_col = candidate
+                break
+        if date_col is None:
+            for c in df.columns:
+                if "date" in c.lower() or "fiscal" in c.lower():
+                    date_col = c
+                    break
+        if date_col is None:
+            self.logger.warning("No date column found in %s", table_name)
+            return None
+        df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
+        df = df.dropna(subset=[date_col]).sort_values(date_col)
+        if self.num_quarters is not None and self.num_quarters > 0:
+            df = df.tail(self.num_quarters)
+        df = df.reset_index(drop=True)
+        df["_date"] = df[date_col]
+        return df
 
-    def run_analysis(self) -> Tuple[Dict[str, Optional[float]], Optional[float], Dict[str, str]]:
-        """Run the analysis for all configured metrics.
+    # ------------------------------------------------------------------
+    # Category data preparation
+    # ------------------------------------------------------------------
+    def _prepare_category_data(self, category: str) -> Optional[pd.DataFrame]:
+        """Collect the relevant columns for a category from the Symbol's
+        pre-enriched quarterly DataFrame.
+
+        Returns ``None`` if the source table is missing.
+        """
+        cfg = FINANCIAL_CATEGORIES[category]
+        df = self._get_quarterly_df(cfg["source_table"])
+        if df is None:
+            return None
+
+        result_cols = ["_date"]
+        for col_name in cfg["columns"]:
+            col_map = {c.lower(): c for c in df.columns}
+            actual = col_map.get(col_name.lower())
+            if actual and actual in df.columns:
+                df[actual] = pd.to_numeric(df[actual], errors="coerce")
+                if actual != col_name:
+                    df[col_name] = df[actual]
+                result_cols.append(col_name)
+
+        available = [c for c in result_cols if c in df.columns]
+        if len(available) <= 1:
+            return None
+        return df[available]
+
+    def _format_category_summary(self, category: str, df: pd.DataFrame) -> str:
+        """Create a human-readable text summary of a category's quarterly data."""
+        lines = [f"=== {category.upper().replace('_', ' ')} ==="]
+        lines.append(f"Quarters: {len(df)}")
+        lines.append("")
+
+        date_col = "_date" if "_date" in df.columns else None
+        for col in df.columns:
+            if col == "_date":
+                continue
+            vals = df[col].tolist()
+            if date_col:
+                dates = df[date_col].dt.strftime("%Y-%m-%d").tolist()
+                paired = [f"  {d}: {v}" for d, v in zip(dates, vals)]
+                lines.append(f"{col}:")
+                lines.extend(paired)
+            else:
+                lines.append(f"{col}: {vals}")
+            lines.append("")
+
+        numeric_cols = [c for c in df.columns if c != "_date"]
+        if numeric_cols:
+            lines.append("Summary statistics:")
+            for col in numeric_cols:
+                series = pd.to_numeric(df[col], errors="coerce").dropna()
+                if len(series) > 1:
+                    latest = series.iloc[-1]
+                    trend = "improving" if series.iloc[-1] > series.iloc[-2] else "declining"
+                    lines.append(
+                        f"  {col}: latest={latest:.4f}, mean={series.mean():.4f}, "
+                        f"std={series.std():.4f}, trend={trend}"
+                    )
+        return "\n".join(lines)
+
+    # ------------------------------------------------------------------
+    # Category evaluation
+    # ------------------------------------------------------------------
+    def _build_category_prompt(self, category: str, data_summary: str, article: str) -> str:
+        """Compose the user prompt for a single financial category evaluation."""
+        period_desc = (
+            f"the last {self.num_quarters} quarters"
+            if self.num_quarters
+            else "available history"
+        )
+        return (
+            f"You are a senior financial analyst evaluating a company's "
+            f"**{category.replace('_', ' ')}** based on {period_desc} of "
+            f"quarterly financial data.\n\n"
+            f"### Data\n{data_summary}\n\n"
+            f"### Reference article\n{article}\n\n"
+            "### Instructions\n"
+            "1. Analyse the trends, absolute levels, and any red flags.\n"
+            "2. Consider what these numbers imply about the company being "
+            "underpriced or overpriced.\n"
+            "3. Output a single continuous number between -1 and 1:\n"
+            "   -1 = strongly underpriced (buy signal)\n"
+            "    0 = fairly priced\n"
+            "   +1 = strongly overpriced (sell signal)\n"
+            "4. After the number, provide a 2-4 sentence explanation.\n"
+            "5. Focus on the most recent trends (last 1-2 quarters) while "
+            "keeping historical context.\n"
+        )
+
+    def evaluate_category(
+        self, category: str
+    ) -> Tuple[Optional[float], str, Optional[pd.DataFrame]]:
+        """Evaluate a single financial category.
+
+        Returns ``(score, explanation, prepared_dataframe)``.
+        """
+        df = self._prepare_category_data(category)
+        if df is None or df.empty:
+            return None, "No data available", None
+
+        summary = self._format_category_summary(category, df)
+        article_key = FINANCIAL_CATEGORIES[category]["article_key"]
+        article = self._article_texts.get(article_key, "")
+
+        prompt = self._build_category_prompt(category, summary, article)
+        reply = self._call_llm(user_prompt=prompt)
+        score = self._parse_score(reply) if reply else None
+        return score, reply, df
+
+    # ------------------------------------------------------------------
+    # DB storage
+    # ------------------------------------------------------------------
+    def _store_results(self, result: dict) -> None:
+        """Persist financial analysis results to the analyst DB."""
+        try:
+            manager = get_analyst_data_handler()
+            symbol_str = result["symbol"]
+            epoch = result["epoch"]
+            categories_evaluated = result["categories_evaluated"]
+            scores = result["category_scores"]
+            explanations = result["explanations"]
+
+            base_row = {
+                "symbol": symbol_str,
+                "epoch": epoch,
+                "last_date": pd.to_datetime(result["last_date"]) if result["last_date"] else None,
+                "num_quarters": result["num_quarters"],
+                "profitability_used": int("profitability" in categories_evaluated),
+                "revenue_growth_used": int("revenue_growth" in categories_evaluated),
+                "earnings_used": int("earnings" in categories_evaluated),
+                "liquidity_used": int("liquidity" in categories_evaluated),
+                "leverage_used": int("leverage" in categories_evaluated),
+                "cash_flow_health_used": int("cash_flow_health" in categories_evaluated),
+                "analysis_run_timestamp": result["analysis_run_timestamp"],
+                "analysis_run_datetime": pd.to_datetime(result["analysis_run_datetime"]),
+                "warnings": ",".join(result["warnings"]) if result["warnings"] else None,
+                "errors": ",".join(result["errors"]) if result["errors"] else None,
+                "aggregate_score": result["aggregate_score"],
+            }
+            score_row = {
+                "symbol": symbol_str,
+                "epoch": epoch,
+                "aggregate_score": result["aggregate_score"],
+                **{cat: scores.get(cat) for cat in FINANCIAL_CATEGORIES},
+            }
+            explanation_row = {
+                "symbol": symbol_str,
+                "epoch": epoch,
+                **{cat: explanations.get(cat) for cat in FINANCIAL_CATEGORIES},
+            }
+
+            manager.insert_new_data(table=AnalystFinancialBase, rows=[base_row])
+            manager.insert_new_data(table=AnalystFinancialScore, rows=[score_row])
+            manager.insert_new_data(table=AnalystFinancialExplanation, rows=[explanation_row])
+            self.logger.info(
+                "Financial analysis stored in DB for symbol %s, epoch %s",
+                symbol_str, epoch,
+            )
+        except Exception as exc:
+            self.logger.error("Failed to store financial analysis in DB: %s", exc, exc_info=True)
+
+    # ------------------------------------------------------------------
+    # Main entry point
+    # ------------------------------------------------------------------
+    def run_analysis(self, store_in_db: bool | None = None) -> dict:
+        """Run financial analysis across all categories.
+
+        Parameters
+        ----------
+        store_in_db : bool | None
+            Override the instance-level ``store_in_db`` flag.
 
         Returns
         -------
-        metric_scores : dict[str, float or None]
-            Per‑metric continuous score in ``[-1, 1]``.  If a metric
-            could not be scored due to missing data or API failure, its
-            value will be ``None``.
-        aggregate_score : float or None
-            The average of all numeric metric scores.  ``None`` if no
-            metric produced a numeric score.
-        explanations : dict[str, str]
-            Full language‑model responses (reasoning) keyed by metric.
+        dict
         """
-        # Ensure articles are loaded; embeddings are optional but may
-        # improve prompt quality in future iterations
+        should_store = store_in_db if store_in_db is not None else self.store_in_db
+
         if not self._article_texts:
             self.load_articles()
 
-        # Discover concrete metric columns from the loaded quarterly tables
-        metrics = self._discover_metrics()
-        if not metrics:
-            self.logger.warning("No metric columns discovered in quarterly tables; falling back to configured article keys")
-            metrics = list(self.article_paths.keys())
-
         scores: Dict[str, Optional[float]] = {}
         explanations: Dict[str, str] = {}
+        category_data: Dict[str, Optional[pd.DataFrame]] = {}
+        warnings: List[str] = []
+        errors: List[str] = []
+        categories_evaluated: List[str] = []
 
-        # Evaluate each discovered metric. If we don't have a per-metric
-        # article, pick a fallback article based on the statement type where
-        # the metric was found (balance_sheet / income_statement / cash_flow).
-        for metric in metrics:
-            # try to find which table contains this metric to choose an article
-            article_text = None
-            for attr_name, df in self._find_quarterly_table_info():
-                if metric in (c.lower() for c in df.columns):
-                    lname = attr_name.lower()
-                    if "balance_sheet" in lname:
-                        article_text = self._article_texts.get("balance_sheet", None)
-                    elif "income_statement" in lname:
-                        article_text = self._article_texts.get("income_statement", None)
-                    elif "cash_flow" in lname or "cashflow" in lname:
-                        article_text = self._article_texts.get("cash_flow", None)
-                    break
+        for category in FINANCIAL_CATEGORIES:
+            try:
+                score, explanation, df = self.evaluate_category(category)
+                scores[category] = score
+                explanations[category] = explanation
+                category_data[category] = df
+                categories_evaluated.append(category)
+                if explanation == "No data available":
+                    warnings.append(f"No data for category: {category}")
+                elif score is None:
+                    warnings.append(f"No score returned for category: {category}")
+            except Exception as exc:
+                self.logger.error("Error evaluating category '%s': %s", category, exc)
+                errors.append(f"Error evaluating {category}: {exc}")
 
-            # If we still don't have an article, see if there's a per-metric article
-            if article_text is None:
-                article_text = self._article_texts.get(metric, "")
+        aggregate = self._compute_aggregate(scores)
+        symbol_str = self._resolve_symbol_str()
 
-            score, explanation = self.evaluate_metric(metric, article_override=article_text)
-            scores[metric] = score
-            explanations[metric] = explanation
-        # Compute aggregate as mean of valid numeric scores
-        numeric_scores = [s for s in scores.values() if isinstance(s, (int, float))]
-        aggregate: Optional[float] = None
-        if numeric_scores:
-            aggregate = sum(numeric_scores) / len(numeric_scores)
-            # Again clip to [-1, 1]
-            aggregate = max(min(aggregate, 1.0), -1.0)
-        return scores, aggregate, explanations
+        # Determine last fiscal date across all category data
+        last_date = None
+        for df in category_data.values():
+            if df is not None and "_date" in df.columns:
+                candidate = df["_date"].max()
+                if last_date is None or candidate > last_date:
+                    last_date = candidate
+        last_epoch = int(last_date.timestamp()) if last_date is not None else None
+        last_date_str = (
+            last_date.strftime("%Y-%m-%d") if last_date is not None else None
+        )
+
+        analysis_run_dt = datetime.datetime.now()
+        result = {
+            "symbol": symbol_str,
+            "epoch": last_epoch,
+            "last_date": last_date_str,
+            "num_quarters": self.num_quarters,
+            "categories_evaluated": categories_evaluated,
+            "analysis_run_timestamp": int(analysis_run_dt.timestamp()),
+            "analysis_run_datetime": analysis_run_dt.strftime("%Y-%m-%d %H:%M:%S"),
+            "warnings": warnings,
+            "errors": errors,
+            "category_scores": scores,
+            "aggregate_score": aggregate,
+            "explanations": explanations,
+        }
+
+        self.logger.info(
+            "Financial analysis complete for %s - aggregate=%.3f, categories=%s",
+            symbol_str,
+            aggregate if aggregate is not None else float("nan"),
+            categories_evaluated,
+        )
+
+        if should_store:
+            self._store_results(result)
+
+        return result

@@ -114,8 +114,109 @@ class AnalystQuantitativeExplanation(Base):
     ema = Column(String, nullable=True)
     adx = Column(String, nullable=True)
 
+# --- Financial Analyst Tables ---
+class AnalystFinancialBase(Base):
+    """
+    ORM osztály a pénzügyi elemzői összesített eredmények tárolására.
+
+    Elsődleges kulcs:
+        - symbol (String): A vállalat tőzsdei jelzése.
+        - epoch (BigInteger): Az elemzés időpontja (Unix epoch).
+
+    Mezők:
+        - last_date (DateTime, nullable=True): Az utolsó adat dátuma.
+        - num_quarters (Integer, nullable=True): Felhasznált negyedévek száma.
+        - profitability_used (Integer, nullable=False): Jövedelmezőség kategória használva (1/0).
+        - revenue_growth_used (Integer, nullable=False): Bevételi növekedés kategória használva (1/0).
+        - earnings_used (Integer, nullable=False): Nyereség kategória használva (1/0).
+        - liquidity_used (Integer, nullable=False): Likviditás kategória használva (1/0).
+        - leverage_used (Integer, nullable=False): Tőkeáttétel kategória használva (1/0).
+        - cash_flow_health_used (Integer, nullable=False): Pénzforgalmi egészség kategória használva (1/0).
+        - analysis_run_timestamp (BigInteger, nullable=True): Elemzés futtatásának időbélyege.
+        - analysis_run_datetime (DateTime, nullable=True): Elemzés futtatásának dátuma.
+        - warnings (String, nullable=True): Figyelmeztetések (JSON string vagy vesszővel elválasztott).
+        - errors (String, nullable=True): Hibák (JSON string vagy vesszővel elválasztott).
+        - aggregate_score (Float, nullable=True): Az összesített pénzügyi pontszám.
+    """
+    __tablename__ = 'analyst_financial_base'
+    symbol = Column(String, primary_key=True, nullable=False)
+    epoch = Column(BigInteger, primary_key=True, nullable=False)
+    last_date = Column(DateTime, nullable=True)
+    num_quarters = Column(Integer, nullable=True)
+    profitability_used = Column(Integer, nullable=False, default=0)
+    revenue_growth_used = Column(Integer, nullable=False, default=0)
+    earnings_used = Column(Integer, nullable=False, default=0)
+    liquidity_used = Column(Integer, nullable=False, default=0)
+    leverage_used = Column(Integer, nullable=False, default=0)
+    cash_flow_health_used = Column(Integer, nullable=False, default=0)
+    analysis_run_timestamp = Column(BigInteger, nullable=True)
+    analysis_run_datetime = Column(DateTime, nullable=True)
+    warnings = Column(String, nullable=True)
+    errors = Column(String, nullable=True)
+    aggregate_score = Column(Float, nullable=True)
+
+
+class AnalystFinancialScore(Base):
+    """
+    ORM osztály a pénzügyi elemzői kategória pontszámok tárolására.
+
+    Elsődleges kulcs:
+        - symbol (String): A vállalat tőzsdei jelzése.
+        - epoch (BigInteger): Az elemzés időpontja (Unix epoch).
+
+    Mezők:
+        - aggregate_score (Float, nullable=True): Az összesített pénzügyi pontszám.
+        - profitability (Float, nullable=True): Jövedelmezőség pontszám.
+        - revenue_growth (Float, nullable=True): Bevételi növekedés pontszám.
+        - earnings (Float, nullable=True): Nyereség pontszám.
+        - liquidity (Float, nullable=True): Likviditás pontszám.
+        - leverage (Float, nullable=True): Tőkeáttétel pontszám.
+        - cash_flow_health (Float, nullable=True): Pénzforgalmi egészség pontszám.
+    """
+    __tablename__ = 'analyst_financial_score'
+    symbol = Column(String, primary_key=True, nullable=False)
+    epoch = Column(BigInteger, primary_key=True, nullable=False)
+    aggregate_score = Column(Float, nullable=True)
+    profitability = Column(Float, nullable=True)
+    revenue_growth = Column(Float, nullable=True)
+    earnings = Column(Float, nullable=True)
+    liquidity = Column(Float, nullable=True)
+    leverage = Column(Float, nullable=True)
+    cash_flow_health = Column(Float, nullable=True)
+
+
+class AnalystFinancialExplanation(Base):
+    """
+    ORM osztály a pénzügyi elemzői kategória magyarázatok tárolására.
+
+    Elsődleges kulcs:
+        - symbol (String): A vállalat tőzsdei jelzése.
+        - epoch (BigInteger): Az elemzés időpontja (Unix epoch).
+
+    Mezők:
+        - profitability (String, nullable=True): Jövedelmezőség magyarázat.
+        - revenue_growth (String, nullable=True): Bevételi növekedés magyarázat.
+        - earnings (String, nullable=True): Nyereség magyarázat.
+        - liquidity (String, nullable=True): Likviditás magyarázat.
+        - leverage (String, nullable=True): Tőkeáttétel magyarázat.
+        - cash_flow_health (String, nullable=True): Pénzforgalmi egészség magyarázat.
+    """
+    __tablename__ = 'analyst_financial_explanation'
+    symbol = Column(String, primary_key=True, nullable=False)
+    epoch = Column(BigInteger, primary_key=True, nullable=False)
+    profitability = Column(String, nullable=True)
+    revenue_growth = Column(String, nullable=True)
+    earnings = Column(String, nullable=True)
+    liquidity = Column(String, nullable=True)
+    leverage = Column(String, nullable=True)
+    cash_flow_health = Column(String, nullable=True)
+
+
 analyst_table_name_to_class = {
     "analyst_quantitative_base": AnalystQuantitativeBase,
     "analyst_quantitative_score": AnalystQuantitativeScore,
     "analyst_quantitative_explanation": AnalystQuantitativeExplanation,
+    "analyst_financial_base": AnalystFinancialBase,
+    "analyst_financial_score": AnalystFinancialScore,
+    "analyst_financial_explanation": AnalystFinancialExplanation,
 }
